@@ -1,0 +1,243 @@
+define('MAF.views.AboutBox', function () {
+	return new MAF.Class({
+		ClassName: 'AboutBoxView',
+		Extends: MAF.system.SidebarView,
+
+		config: {
+			BackButtonTitle: 'About',
+			pages: [
+				{id: 'copyright', name: 'Copyright'}, 
+				{id: 'tos', name: 'Terms of Service'}, 
+				{id: 'privacy', name: 'Privacy'}]
+		},
+
+		createView: function () {
+			var providedPages = ['copyright', 'tos', 'privacy'];
+			var buttonHeight = parseInt(Theme.getStyles('ControlTextButton', 'normal').height, 10) || 51;
+			
+			var backButton = new MAF.control.BackButton({
+				label: this.config.BackButtonTitle
+			}).appendTo(this);
+
+			var list = [];
+
+			if (typeOf(this.config.pages) === 'array') {
+				this.config.pages.forEach(function (page) {
+					if (providedPages.indexOf(page.id) > -1) {
+						if (!('srcString' in page)) {
+							try {
+								page.srcString = filesystem.readFile('About/' + widget.locale + '/' + page.id + '.txt', true);
+							} catch (e) {
+								page.srcString = '';
+							}
+						}
+						list.splice(0, 0, page);
+					} else {
+						list.push(page);
+					}
+				});
+				list.length = (list.length > 5) ? 5 : list.length;
+			} else {
+				this.config.pages = [];
+			}
+
+			var menuHeight = buttonHeight * list.length;
+			var contentHeight = this.height - (menuHeight + backButton.height);
+
+			var contentContainer = new MAF.element.Container({
+				styles: {
+					width: this.width,
+					height: contentHeight,
+					vOffset: backButton.height
+				}
+			}).appendTo(this);
+			
+			var metadataName = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataName',
+				label: widget.name
+			}).appendTo(contentContainer);
+
+			var metadataDescription = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataDescription',
+				label: widget.description,
+				styles: {
+					vOffset: metadataName.height + metadataName.vOffset
+				}
+			}).appendTo(contentContainer);
+
+			var PAD = Theme.storage.get('AboutBoxViewMetadataAuthorNote', 'PAD_TOP');
+
+			var metadataAuthorNote = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataAuthorNote',
+				label: /*KONtx.utility.INTL.get(*/'WIDGET_BY'/*)*/ + '...',
+				styles: {
+					vOffset: metadataDescription.height + metadataDescription.vOffset + PAD
+				}
+			}).appendTo(contentContainer);
+
+			var metadataAuthor = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataAuthor',
+				label: ((!widget.author) || widget.author.length === 0 || (widget.author === widget.company) ? (widget.company||'') : widget.author + ', ' + (widget.company||'')),
+				styles: {
+					vOffset: metadataAuthorNote.height + metadataAuthorNote.vOffset
+				}
+			}).appendTo(contentContainer);
+
+			var metadataVersion = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataVersion',
+				label: widget.version,
+				styles: {
+					vOffset: metadataAuthor.height + metadataAuthor.vOffset
+				}
+			}).appendTo(contentContainer);
+
+			if (widget.authorURL || widget.url) {
+				PAD = Theme.storage.get('AboutBoxViewMetadataUrlNote', 'PAD_TOP');
+
+				var metadataUrlNote = new MAF.element.Text({
+					ClassName: 'AboutBoxViewMetadataUrlNote',
+					label: /*KONtx.utility.INTL.get(*/'MORE_INFO'/*)*/ + '...',
+					styles: {
+						vOffset: metadataVersion.height + metadataVersion.vOffset + PAD
+					}
+				}).appendTo(contentContainer);
+
+				var metadataUrl = new MAF.element.Text({
+					ClassName: 'AboutBoxViewMetadataUrl',
+					label: widget.authorURL || widget.url,
+					styles: {
+						vOffset: metadataUrlNote.height + metadataUrlNote.vOffset
+					}
+				}).appendTo(contentContainer);
+			}
+
+			PAD = Theme.storage.get('AboutBoxViewMetadataCopyright', 'PAD_BOTTOM');
+
+			var metadataCopyright = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataCopyright',
+				label: /*KONtx.utility.INTL.get(*/'COPYRIGHT'/*)*/ + ' ' + widget.copyright,
+				styles: {
+					vOffset: contentContainer.height - PAD
+				}
+			}).appendTo(contentContainer);
+
+			PAD = Theme.storage.get('AboutBoxViewMetadataReserved', 'PAD_BOTTOM');
+
+			var metadataReserved = new MAF.element.Text({
+				ClassName: 'AboutBoxViewMetadataReserved',
+				label: /*KONtx.utility.INTL.get(*/'RIGHTS_RESERVED',//),
+				styles: {
+					vOffset: contentContainer.height - PAD
+				}
+			}).appendTo(contentContainer);
+
+			// Pages
+			if (list.length) {
+				var button = null;
+				var buttonContainer = new MAF.element.Core({
+					styles: {
+						width: this.width,
+						height: (buttonHeight * list.length),
+						vAlign: 'bottom'
+					}
+				}).appendTo(this);
+
+				list.forEach(function (page) {
+					if (page instanceof MAF.element.Button) {
+						button = page;
+					} else {
+						button = new MAF.control.TextButton({
+							label: page.name,
+							value: page.srcString,
+							styles: {
+								vOffset: button ? button.outerHeight : 0
+							},
+							events: {
+								onSelect: function () {
+									var viewConfig = {
+										id: this._classID+'AboutDocView',
+										data: {
+											backLabel: this.config.label,
+											value: this.config.value
+										},
+										viewClass: MAF.system.AboutDocView
+									};
+									MAF.application.addViewConfig(viewConfig);
+									MAF.application.loadView(viewConfig.id, {
+										documentText: this.config.value
+									});
+								}
+							}
+						});
+					}
+					button.appendTo(buttonContainer);
+				});
+			}
+		}
+	});
+}, {
+	'AboutBoxViewMetadataName': {
+		styles: {
+			width: 'calc(100% - 10px)',
+			truncation: "end",
+			hOffset: 5,
+			vOffset: 67,
+			fontSize: 32
+		}
+	},
+	'AboutBoxViewMetadataDescription': {
+		styles: {
+			truncation: 'end',
+			width: 'calc(100% - 10px)',
+			hOffset: 5,
+			fontSize: 18,
+			fontWeight: 'bold'
+		}
+	},
+	'AboutBoxViewMetadataAuthorNote': {
+		'PAD_TOP': 20,
+		styles: {
+			hOffset: 5,
+			fontSize: 18
+		}
+	},
+	'AboutBoxViewMetadataAuthor': {
+		styles: {
+			hOffset: 5,
+			fontSize: 18
+		}
+	},
+	'AboutBoxViewMetadataVersion': {
+		styles: {
+			hOffset: 5,
+			fontSize: 18
+		}
+	},
+	'AboutBoxViewMetadataUrlNote': {
+		'PAD_TOP': 20,
+		styles: {
+			hOffset: 5,
+			fontSize: 18
+		}
+	},
+	'AboutBoxViewMetadataUrl': {
+		styles: {
+			hOffset: 5,
+			fontSize: 18
+		}
+	},
+	'AboutBoxViewMetadataCopyright': {
+		'PAD_BOTTOM': 40,
+		styles: {
+			hOffset: 5,
+			fontSize: 15
+		}
+	},
+	'AboutBoxViewMetadataReserved': {
+		PAD_BOTTOM: 20,
+		styles: {
+			hOffset: 5,
+			fontSize: 15
+		}
+	}
+});

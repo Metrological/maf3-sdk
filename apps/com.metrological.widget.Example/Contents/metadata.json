@@ -1,0 +1,22 @@
+{
+	"identifier": "com.metrological.widget.Example",
+	"name": "Example Widget",
+	"version": "1.0.0",
+	"author": "Metrological Developer",
+	"organization": "Metrological Widgets",
+	"copyright": "Copyright 2013 Metrological",
+	"description": "Example Widget",
+	"scripts": "Javascript/init.js",
+	"images": {
+		"header": {
+			"normal": "Images/header.png",
+			"focused": "Images/header-focused.png"
+		},
+		"about": "Images/about.png",
+		"icon": {
+			"200x200": "Images/icon.png",
+			"280x166": "Images/snippet.png",
+			"500x500": "Images/promo.png"
+		}
+	}
+}
