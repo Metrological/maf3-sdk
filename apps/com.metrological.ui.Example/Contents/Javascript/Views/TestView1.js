@@ -11,6 +11,7 @@ var TestView1 = new MAF.Class({
 	dataHasChanged: function (event) {
 		if (event.payload.value) {
 			this.controls.grid1.changeDataset(event.payload.value);
+			this.elements.tab2.setValue('3');
 		}
 	},
 
@@ -117,34 +118,24 @@ var TestView1 = new MAF.Class({
 		}).appendTo(this);
 
 		this.elements.tab2 = new MAF.control.FixedTab({
+			options: [{
+				label: 'Show demo type',
+				value: 1
+			},{
+				label: 'Show prod type',
+				value: 2
+			},{
+				label: 'Show all',
+				value: 3
+			}],
 			styles: {
 				vOffset: this.elements.tab1.outerHeight + 1
 			},
+			textStyles: {
+				fontSize: 18,
+				fontWeight: 'bold'
+			},
 			events: {
-				onTabInitialized: function (event) {
-					var view = this.getView();
-					var grid = view.controls.grid1;
-					switch (event.payload.index) {
-						case 0:
-							grid.setFilter(function (value,key) {
-								if (value.type === 'demo')
-									return value;
-							});
-							break;
-						case 1:
-							grid.setFilter(function (value,key) {
-								if (value.type === 'prod')
-									return value;
-							});
-							break;
-						case 2:
-							grid.setFilter(function (value,key) {
-								if (value.type !== 'all')
-									return value;
-							});
-							break;
-					}
-				},
 				onTabChanged: function (event) {
 					var view = this.getView();
 					var grid = view.controls.grid1;
@@ -168,7 +159,7 @@ var TestView1 = new MAF.Class({
 							});
 							break;
 					}
-					grid.focus();
+					//grid.focus();
 				}
 			}
 		}).appendTo(this);
@@ -257,7 +248,17 @@ var TestView1 = new MAF.Class({
 		metaData.attachToSource(this.controls.grid1);
 	},
 
+	dialogCallback: function (event) {
+		log('dialogCallback', event);
+	},
+
 	updateView: function () {
+		new MAF.dialogs.Alert({
+			buttons: [
+				{ label: 'Close', callback: this.dialogCallback },
+				{ label: 'Continues', callback: this.dialogCallback }
+			]
+		}).show();
 		this.elements.tab1.initTabs([{
 			label: 'Show demo type',
 			value: '1'
@@ -268,16 +269,16 @@ var TestView1 = new MAF.Class({
 			label: 'Show all',
 			value: '3'
 		}]);
-		this.elements.tab2.initTabs([{
+		/*this.elements.tab2.initTabs([{
 			label: 'Show demo type',
-			value: '1'
+			value: 1
 		},{
 			label: 'Show prod type',
-			value: '2'
+			value: 2
 		},{
 			label: 'Show all',
-			value: '3'
-		}]);
+			value: 3
+		}]);*/
 		getPagingData({}, true);
 	}
 });

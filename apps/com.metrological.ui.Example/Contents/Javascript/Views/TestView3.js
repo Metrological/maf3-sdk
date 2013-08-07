@@ -178,6 +178,17 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		var testList = new MAF.element.Container({
+			element: List,
+			styles: {
+				width: 200,
+				height: 51,
+				backgroundColor: 'red',
+				hOffset: (this.width - 200) / 2,
+				vOffset: button15.outerHeight + 1
+			}
+		}).appendTo(this);
+
 		var button16 = new MAF.control.TextButton({
 			label: 'AboutBox View',
 			styles: {
