@@ -107,24 +107,17 @@ var loadTemplate = (function () {
 		} else {
 			template.frozen = false;
 		}
+		if (!getElementById(id)) {
+			new View({
+				id: id,
+				frozen: true,
+				styles: type === 'sidebar' ? { top: 64 } : null
+			}).appendTo(template);
+		}
 		current = type;
-		return template;
 	};
 }());
 
-widget.handleLoadView = function (id, type) {
-	//log('handleLoadView', id, type);
-	var app = this,
-		template = loadTemplate.call(app, type, id);
-	if (!app.widget.getElementById(id)) {
-		new View({
-			id: id,
-			frozen: true,
-			styles: type === 'sidebar' ? { top: 64 } : null
-		}).appendTo(template);
-	}
-	return true;
-}
 
 widget.handleChildEvent = function (event) {
 	//log('handleChildEvent', event.subject, event);
@@ -138,6 +131,9 @@ widget.handleChildEvent = function (event) {
 				warn('Load view triggered from a non active App: ' + event.id);
 				return false;
 			}
+			var data = event.getData();
+			loadTemplate.call(this, data.type, data.id);
+			break;
 		default:
 			break;
 	}
@@ -147,10 +143,20 @@ widget.handleChildEvent = function (event) {
 widget.handleHostEvent = function (event) {
 	//log('handleHostEvent', event.subject, event);
 	switch(event.subject) {
+		case 'onActivateSnippet':
+			if (event.id !== widget.identifier) {
+				document.body.frozen = true;
+			}
+			var result = event.getResult();
+			loadTemplate.call(this, result.type, result.id);
+			break;
 		case 'onAppFin':
 			if (event.error) {
 				warn('Their are issues closing your App, please check your code');
 				return false;
+			}
+			if (event.id !== widget.identifier) {
+				document.body.frozen = false;
 			}
 			break;
 		default:
