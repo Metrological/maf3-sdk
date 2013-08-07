@@ -5,15 +5,15 @@ define('MAF.control.FixedTab', function () {
 
 		Protected: {
 			createContent: function () {
-				this.parent();
-
 				this.right = new MAF.element.Text({
 					anchorStyle: 'leftCenter',
-					styles: {
+					styles: Object.merge({
 						height: this.height,
 						opacity: 0.7
-					}
+					}, this.config.textStyles || {})
 				}).appendTo(this);
+				this.parent();
+				this.arrows.right.setStyle('hAlign', 'left');
 			},
 
 			alignArrows: function (curpage, pagecount) {
@@ -24,7 +24,7 @@ define('MAF.control.FixedTab', function () {
 
 				this.text.setStyles({
 					width: ts.width,
-					hOffset: this.arrows.left.hOffset + 10 + this.config.arrowPadding
+					hOffset: this.arrows.left.outerWidth + 10 + this.config.arrowPadding
 				});
 				this.arrows.right.hOffset = this.text.outerWidth + this.config.arrowPadding;
 				this.right.setStyles({

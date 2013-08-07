@@ -35,15 +35,13 @@ define('MAF.control.SingleTab', function () {
 				this.text = new MAF.element.Text({
 					ClassName: (this.config.ClassName || this.ClassName) + 'Text',
 					label: this.config.label,
-					styles: {
+					styles: Object.merge({
 						width: this.width - 80,
 						height: this.height,
-						color: this.config.textColor || 'white',
-						fontSize: this.config.textSize,
 						hOffset: 40,
 						anchorStyle: 'center',
 						truncation: (this.ClassName === 'SingleTab') ? 'end' : null
-					}
+					},this.config.textStyles || {})
 				}).appendTo(this);
 
 				this.arrows = {
@@ -53,8 +51,9 @@ define('MAF.control.SingleTab', function () {
 						src: ss['<'],
 						styles: {
 							left: this.config.arrowPadding,
+							height: 1,
 							vAlign: 'center',
-							vOffset: this.height / 2,
+							marginTop: '-8px',
 							visible: !this.config.focusArrows
 						}
 					}).appendTo(this),
@@ -64,14 +63,19 @@ define('MAF.control.SingleTab', function () {
 						autoShow: !this.config.focusArrows,
 						src: ss['>'],
 						styles: {
-							right: this.config.arrowPadding,
-							left: 'auto',
+							hAlign: 'right',
+							hOffset: this.config.arrowPadding,
+							height: 1,
 							vAlign: 'center',
-							vOffset: this.height / 2,
+							marginTop: '-8px',
 							visible: !this.config.focusArrows
 						}
 					}).appendTo(this)
 				};
+				var options = this.getOptions();
+
+				this.setValue(this.config.value || (options && options.length > 0) ? options[0].value : '');
+				delete this.config.value;
 			},
 
 			updateArrows: function (curpage, pagecount) {
@@ -111,21 +115,17 @@ define('MAF.control.SingleTab', function () {
 				this.setOptions(this.config.options);
 				delete this.config.options;
 			}
-
-			this.setValue(this.config.value || '');
-			delete this.config.value;
-
 		},
 
 		getValue: function () {
-			return String(this.retrieve('value')||'');
+			return String(this.retrieve('value') || '');
 		},
 
 		setValue: function (value) {
 			var firstblush = this.retrieve('value') === undefined,
-				stringvalue = value === null ? '' : String(value);
+				stringvalue = value === undefined ? '' : String(value);
 
-			if ((this.retrieve('value') || '') === stringvalue) {
+			if ((this.retrieve('value') || '') === stringvalue && !firstblush) {
 				return '';
 			}
 
@@ -150,7 +150,7 @@ define('MAF.control.SingleTab', function () {
 		initTabs: function (values, labels, reset) {
 			this.setOptions(values, labels, reset);
 			if (this.getValue().length === 0 || reset) {
-				this.setValue(this.getOptions()[0].value);
+				this.setValue(this.config.value || this.getOptions()[0].value);
 			}
 		},
 
@@ -160,7 +160,7 @@ define('MAF.control.SingleTab', function () {
 				var o = typeof value == 'object',
 					l = labels && labels.length || 0;
 				return value ? {
-					value: o && 'value' in value ? value.value : value,
+					value: o && 'value' in value ? String(value.value) : String(value),
 					label: l > v ? labels[v] : o && 'label' in value ? value.label : value
 				} : value;
 			});
@@ -254,7 +254,6 @@ define('MAF.control.SingleTab', function () {
 	ControlSingleTab: 'ControlPageIndicator',
 	ControlSingleTabArrowleft: {
 		styles: {
-			vOffset: 10,
 			borderTop: '8px solid transparent',
 			borderBottom: '8px solid transparent',
 			borderRight: '8px solid white'
@@ -262,7 +261,6 @@ define('MAF.control.SingleTab', function () {
 	},
 	ControlSingleTabArrowright: {
 		styles: {
-			vOffset: 10,
 			borderTop: '8px solid transparent',
 			borderBottom: '8px solid transparent',
 			borderLeft: '8px solid white'

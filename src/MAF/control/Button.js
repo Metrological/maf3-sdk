@@ -30,7 +30,10 @@ define('MAF.control.Button', function () {
 
 		Protected: {
 			onThemeNeeded: function (event) {
-				switch(event.type){
+				if (event.defaultPrevented) {
+					return;
+				}
+				switch(event.type) {
 					case 'onFocus':
 						this.renderSkin('focused');
 						break;

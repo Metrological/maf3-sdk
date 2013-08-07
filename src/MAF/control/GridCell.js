@@ -10,7 +10,7 @@ define('MAF.control.GridCell', function () {
 					return;
 				}
 				var cc = this.getCellCoordinates();
-				switch(event.type){
+				switch(event.type) {
 					case 'onFocus':
 						this.element.addClass('focused');
 						//this.renderSkin('focused', cc);
