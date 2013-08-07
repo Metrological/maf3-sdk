@@ -32,7 +32,7 @@ var TestView1 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					this.elements.tab1.initTabs([{
+					this.owner.elements.tab1.initTabs([{
 						label: 'Show demo type',
 						value: '1',
 						src: 'Images/tv.png'
@@ -78,7 +78,7 @@ var TestView1 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					this.elements.tab1.initTabs([]);
+					this.owner.elements.tab1.initTabs([]);
 				}
 			}
 		}).appendTo(this);
