@@ -186,7 +186,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					}
 				}).appendTo(this.overlay);
 
-				this.formContainer.element.addClass('view');
+				this.formContainer.element.store('type', 'view');
 
 				var clearStyles = Theme.storage.get('ControlTextEntryOverlayClearButton') || {};
 

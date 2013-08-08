@@ -934,7 +934,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var grabKeyAt = function (row, key) {
 		var k = NavMap[row] && NavMap[row][key];
 		if (typeOf(k) === 'number' && k > 0) {
-			return internals.body.firstChild.childNodes.item(k - 1);
+			return internals[this._classID].body.firstChild.childNodes.item(k - 1);
 		}
 		
 	};
@@ -1033,7 +1033,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 		character_ids.push('action-closeextendedpanel');
 
-		overlay.addClass('view');
+		overlay.store('type', 'view');
 		overlay.addClass('extendedOverlay');
 		overlay.store('focusTarget', key.retrieve('key').key || 0);
 		overlay.appendChild(new List());
@@ -1188,7 +1188,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		Extends: MAF.element.Core,
 
 		config: {
-			element: internals.body,
 			controlSize: 'standard',
 			autoAdjust: true,
 			allowSpace: true,
@@ -1224,21 +1223,21 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			//log('---ReuseKeyboard Internals----', internals);
 			setAvailableLayouts.call(this, this.config.availableLayouts);
 
-			internals[this._classID].body.addEventListener('focus', onBodyGainFocus);
-			internals[this._classID].body.addEventListener('blur', onBodyLoseFocus);
-			internals[this._classID].body.addEventListener('keydown', onBodyKeyDown, this);
-			internals[this._classID].body.addEventListener('keyup', onBodyKeyUp, this);
+			var internal = internals[this._classID],
+				body = internal.body;
+			body.addEventListener('focus', onBodyGainFocus);
+			body.addEventListener('blur', onBodyLoseFocus);
+			body.addEventListener('keydown', onBodyKeyDown, this);
+			body.addEventListener('keyup', onBodyKeyUp, this);
 			// Send back navigation to parent if outofbounds
-			internals[this._classID].body.addEventListener('navigateoutofbounds', function(event) {
+			body.addEventListener('navigateoutofbounds', function(event) {
 				if (event.detail && event.detail.direction) {
-					internals.body.navigate(event.detail.direction);
+					body.navigate(event.detail.direction);
 				}
 			});
-			internals[this._classID].body.addEventListener('navigate', function(event) {
-				
+			body.addEventListener('navigate', function(event) {
 				var target = event.target,
 					owner = target.owner;
-
 // TODO: Move this to navigateoutofbounds
 				// Handle wrap navigation
 				if (owner.config.wrapNavigation) {
@@ -1277,7 +1276,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 						}
 						if (isNumber(index)) {
 							event.preventDefault();
-							internals[owner._classID].body.firstChild.childNodes[index].focus();
+							body.firstChild.childNodes[index].focus();
 						}
 
 					}
@@ -1286,18 +1285,19 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			sendSignal.subscribeTo(this, ['shiftselect', 'extendedselect'], this);
 
-			internals[this._classID].extendedOverlay.visible = false;
+			internal.extendedOverlay.visible = false;
 
 			if (this.config.startShifted) {
-				internals[this._classID].state.showShift = true;
+				internal.state.showShift = true;
 			}
 
 			this.setValue(this.config.value);
 
-			this.loadLayout(this.config.layout || internals[this._classID].availableLayouts[0]);
+			this.loadLayout(this.config.layout || internal.availableLayouts[0]);
 
-			if (this.config.startFocused)
+			if (this.config.startFocused) {
 				this.focus();
+			}
 		},
 
 		loadLayout: function (layout, options) {
