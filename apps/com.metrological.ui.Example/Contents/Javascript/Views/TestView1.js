@@ -9,7 +9,7 @@ var TestView1 = new MAF.Class({
 	},
 
 	dataHasChanged: function (event) {
-		if (event.payload.value) {
+		if (!this.frozen && event.payload.key === 'dataSet' && event.payload.value) {
 			this.controls.grid1.changeDataset(event.payload.value);
 			this.elements.tab2.setValue('3');
 		}
@@ -190,6 +190,12 @@ var TestView1 = new MAF.Class({
 					events: {
 						onSelect: function () {
 							var data = this.getCellDataItem();
+							new MAF.dialogs.Alert({
+								buttons: [
+									{ label: 'Close', callback: this.dialogCallback },
+									{ label: 'Continues', callback: this.dialogCallback }
+								]
+							}).show();
 						},
 						onFocus: function () {
 							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
@@ -253,12 +259,6 @@ var TestView1 = new MAF.Class({
 	},
 
 	updateView: function () {
-		new MAF.dialogs.Alert({
-			buttons: [
-				{ label: 'Close', callback: this.dialogCallback },
-				{ label: 'Continues', callback: this.dialogCallback }
-			]
-		}).show();
 		this.elements.tab1.initTabs([{
 			label: 'Show demo type',
 			value: '1'

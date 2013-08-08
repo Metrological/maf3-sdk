@@ -6,26 +6,9 @@ define('MAF.system.FullscreenView', function () {
 
 		viewType: 'FULLSCREEN',
 
-		Protected: {
-			onHideView: function (event) {
-				this.hide();
-				this.backParams = {};
-			},
-			onUnselectView: function (event) {
-				this.parent(event);
-				if (this.fire("onHideView")) {
-					this.hideView();
-				}
-			}
-		},
-
 		config: {
 			showPassthroughVideo: false
-		},
-
-		initialize: function () {
-			this.parent();
-		},
+		}/*,
 
 		setTVViewportSize: function(x, y, width, height) {
 			MAF.mediaplayer.setViewportBounds(x, y, width, height);
@@ -33,7 +16,7 @@ define('MAF.system.FullscreenView', function () {
 
 		getTVViewportSize: function() {
 			return MAF.mediaplayer.getViewportBounds();
-		}
+		}*/
 	});
 }, {
 	FullscreenView: {

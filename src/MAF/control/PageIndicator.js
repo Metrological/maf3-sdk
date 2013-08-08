@@ -25,7 +25,7 @@ define('MAF.control.PageIndicator', function () {
 
 				this.text = new MAF.element.Text({
 					ClassName: this.ClassName + 'TextLink'
-				}).appendTo(this);
+				}).freeze().appendTo(this);
 
 				this.arrows = {
 					left: new MAF.element.Image({
@@ -34,7 +34,8 @@ define('MAF.control.PageIndicator', function () {
 						styles: {
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px'
+							marginTop: '-8px',
+							opacity: 0
 						}
 					}).appendTo(this),
 					right: new MAF.element.Image({
@@ -43,7 +44,8 @@ define('MAF.control.PageIndicator', function () {
 						styles: {
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px'
+							marginTop: '-8px',
+							opacity: 0
 						}
 					}).appendTo(this)
 				};
@@ -155,8 +157,9 @@ define('MAF.control.PageIndicator', function () {
 				this.element.wantsFocus = false;
 				this.arrows.left.freeze();
 				this.arrows.right.freeze();
-			} else {
+			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
+				this.text.thaw();
 				this.arrows.left.thaw();
 				this.arrows.right.thaw();
 			}

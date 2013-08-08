@@ -4,16 +4,6 @@ define('MAF.element.GridCell', function () {
 
 		Extends: MAF.element.Container,
 
-		initialize: function () {
-			this.parent();
-
-			if (this.config.content && this.config.content.element) {
-				this.adopt(this.content = this.config.content);
-				this.config.content = null;
-				delete this.config.content;
-			}
-		},
-
 		getCellDimensions: function () {
 			return this.grid && this.grid.getCellDimensions();
 		},

@@ -80,8 +80,10 @@ define('MAF.element.Image', function () {
 		},
 
 		setSources: function (object) {
+			object = object || {};
 			var img = this.element,
-				cfg = this.config;
+				cfg = this.config,
+				src = object.src || object.source;
 
 			if ('missingSrc' in object) {
 				img.missingSrc = cfg.missingSrc = object.missingSrc;
@@ -89,7 +91,11 @@ define('MAF.element.Image', function () {
 			if ('loadingSrc' in object) {
 				img.loadingSrc = cfg.loadingSrc = object.loadingSrc;
 			}
-			if (('source' in object) || ('src' in object)) {
+			if (src !== undefined) {
+				//@TODO workaround for setting the same source
+				if (img.source !== '' && src === cfg.src) {
+					return this;
+				}
 				img.remoteAsync = (cfg.remoteAsync === false) ? false : true;
 				if (cfg.manageWaitIndicator) {
 					MAF.utility.WaitIndicator.up();
@@ -97,7 +103,7 @@ define('MAF.element.Image', function () {
 				if (cfg.hideWhileLoading) {
 					this.hide();
 				}
-				img.source = cfg.src = object['src' || 'source'];
+				img.source = cfg.src = src;
 				delete cfg.source;
 			}
 			return this;

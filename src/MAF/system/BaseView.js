@@ -146,11 +146,15 @@ define('MAF.system.BaseView', function () {
 		},
 
 		registerMessageCenterListenerCallback: function (callback) {
-			messagecenterlisteners[this._classID].push(callback.subscribeTo(MAF.messages, MAF.messages.eventType, this));
+			if (callback && callback.subscribeTo) {
+				messagecenterlisteners[this._classID].push(callback.subscribeTo(MAF.messages, MAF.messages.eventType, this));
+			}
 		},
 
 		registerMessageCenterListenerControl: function (control) {
-			messagecenterlisteners[this._classID].push(control.fire.subscribeTo(MAF.messages, MAF.messages.eventType, control));
+			if (control && control.fire) {
+				messagecenterlisteners[this._classID].push(control.fire.subscribeTo(MAF.messages, MAF.messages.eventType, control));
+			}
 		},
 
 		suicide: function () {

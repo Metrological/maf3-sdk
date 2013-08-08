@@ -50,7 +50,7 @@ define('MAF.system.WindowedView', function () {
 				].concat(types || []));
 			},
 			setInitialFocus: function () {
-				if (this.hasbeenfocused !== true) {
+				if (this.hasbeenfocused !== true || !document.activeElement) {
 					this.parent();
 					this.hasbeenfocused = true;
 					if (!this.element.focusedView) {

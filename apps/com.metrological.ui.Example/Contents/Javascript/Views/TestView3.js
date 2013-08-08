@@ -67,7 +67,7 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button5 = new MAF.control.TextButton({
-			label: 'Button5',
+			label: 'Picasa',
 			styles: {
 				width: (this.width / 3) - 2,
 				hOffset: button4.outerWidth + 1,
@@ -75,7 +75,12 @@ var TestView3 = new MAF.Class({
 			},
 			textStyles: {
 				anchorStyle: 'center'
-			}
+			},
+            events: {
+                onSelect: function () {
+                    MAF.application.loadView('view-TestView5a');
+                }
+            }
 		}).appendTo(this);
 
 		var button6 = new MAF.control.TextButton({

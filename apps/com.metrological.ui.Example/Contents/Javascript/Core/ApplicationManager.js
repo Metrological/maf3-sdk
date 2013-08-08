@@ -1,6 +1,8 @@
 var loadTemplate = (function () {
 	var current;
-	return function (type, id) {
+	return function (data) {
+		var type = data.type,
+			id = data.id;
 		if (!type) {
 			return;
 		}
@@ -20,9 +22,6 @@ var loadTemplate = (function () {
 					home.frozen = false;
 					home.wantsFocus = true;
 				}
-			}
-			if (current) {
-				getElementById('@' + current).frozen = true;
 			}
 		}
 		if (!template) {
@@ -101,11 +100,54 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(app.document.body);
 					break;
+				case 'alert':
+					var currentStyle = getElementById('@' + current).style;
+					template = new Frame({
+						id: '@' + type,
+						styles: {
+							overflow: currentStyle.overflow,
+							backgroundColor: 'rgba(0,0,0,.5)',
+							border: currentStyle.border,
+							borderRadius: currentStyle.borderRadius,
+							width: currentStyle.width,
+							height: currentStyle.height,
+							top: currentStyle.top,
+							left: currentStyle.left
+						}
+					}).appendTo(app.document.body);
+					new Frame({
+						id: '@' + type + '-button',
+						focus: true,
+						styles: {
+							width: 'inherit',
+							height: 51,
+							backgroundColor: 'black',
+						},
+						events: {
+							focus: function () {
+								this.setStyle('backgroundColor', 'red');
+							},
+							blur: function () {
+								this.setStyle('backgroundColor', 'black');
+							},
+							select: function () {
+								this.parentNode.destroy();
+								/*ApplicationManager.fire(identifier, 'onActivateAppButton', {
+									id: this.retrieve('current'),
+									type: 'app-home'
+								});*/
+							},
+						}
+					}).appendTo(template).focus();
+					return;
 				default: 
 					break;
 			}
 		} else {
 			template.frozen = false;
+		}
+		if (current && current !== type) {
+			getElementById('@' + current).frozen = true;
 		}
 		if (!getElementById(id)) {
 			new View({
@@ -131,8 +173,10 @@ widget.handleChildEvent = function (event) {
 				warn('Load view triggered from a non active App: ' + event.id);
 				return false;
 			}
-			var data = event.getData();
-			loadTemplate.call(this, data.type, data.id);
+			loadTemplate.call(this, event.getData());
+			break;
+		case 'showDialog':
+			loadTemplate.call(this, event.getData());
 			break;
 		default:
 			break;
@@ -147,8 +191,7 @@ widget.handleHostEvent = function (event) {
 			if (event.id !== widget.identifier) {
 				document.body.frozen = true;
 			}
-			var result = event.getResult();
-			loadTemplate.call(this, result.type, result.id);
+			loadTemplate.call(this, event.getResult());
 			break;
 		case 'onAppFin':
 			if (event.error) {

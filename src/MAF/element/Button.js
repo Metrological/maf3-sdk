@@ -54,12 +54,11 @@ define('MAF.element.Button', function () {
 		},
 
 		generateStatePacket: function (packet) {
-			packet = packet || {};
 			return Object.merge({
 				focused: this.element.hasFocus,
 				disabled: this.disabled,
 				secure: this.secure
-			}, packet);
+			}, packet || {});
 		},
 
 		inspectStatePacket: function (packet, focusOnly) {
