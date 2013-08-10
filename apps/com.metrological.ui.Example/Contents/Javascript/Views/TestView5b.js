@@ -9,7 +9,7 @@ var TestView5b = new MAF.Class({
 	},
 
 	createView: function () {
-		var photo = new MAF.element.Image({
+		this.elements.photo = new MAF.element.Image({
 			aspect: 'auto',
 			hideWhileLoading: true,
 			loadingSrc: 'Images/1920x1080/LoadingImage.png',
@@ -36,6 +36,7 @@ var TestView5b = new MAF.Class({
 					events: {
 						onFocus: function () {
 							var grid = this.grid,
+								photo = grid.owner.elements.photo,
 								idx = this.getCellDataIndex(),
 								data = this.getCellDataItem();
 							(function (i) {
@@ -69,12 +70,9 @@ var TestView5b = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				if (data && data['media$group']) {
-					if (data['media$group']['media$thumbnail']) {
-						cell.thumb.setSource(data['media$group']['media$thumbnail'][1].url);
-					} else {
-						cell.thumb.setSource(data['media$group']['media$content'][0].url);
-					}
+				var thumbs = data && data['media$group'] && data['media$group']['media$thumbnail'] && data['media$group']['media$thumbnail'];
+				if (thumbs) {
+					cell.thumb.setSource(thumbs[1].url);
 				}
 			},
 			styles: {
@@ -87,6 +85,10 @@ var TestView5b = new MAF.Class({
 
 	updateView: function () {
 		this.controls.pwPhotosGrid5b.changePage(this.persist.page || 0);
+	},
+
+	hideView: function () {
+		this.elements.photo.src = null;
 	},
 
 	focusView: function () {

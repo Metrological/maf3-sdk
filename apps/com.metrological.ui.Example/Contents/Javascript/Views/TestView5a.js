@@ -72,12 +72,9 @@ var TestView5a = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				if (data && data['media$group']) {
-					if (data['media$group']['media$thumbnail']) {
-						cell.thumb.setSource(data['media$group']['media$thumbnail'][1].url);
-					} else {
-						cell.thumb.setSource(data['media$group']['media$content'][0].url);
-					}
+				var thumbs = data && data['media$group'] && data['media$group']['media$thumbnail'] && data['media$group']['media$thumbnail'];
+				if (thumbs) {
+					cell.thumb.setSource(thumbs[1].url);
 				}
 			},
 			styles: {

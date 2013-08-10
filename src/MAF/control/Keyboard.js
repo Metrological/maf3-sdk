@@ -1,4 +1,6 @@
 define('MAF.control.Keyboard', function () {
+	var keyboards = {},
+		repeaters = {};
 	var appendHandler = function (event) {
 		if (this.config.embedded) {
 			var view = this.getView();
@@ -15,20 +17,22 @@ define('MAF.control.Keyboard', function () {
 		KeyboardInput.setRemoteKeyboard(true);
 	};
 	var createKeyboard = function () {
-		this._repeaters = {
-			valueChanged: (function(){
-				this.fire('onValueChanged',{ value: this.getValue() });
+		var repeater = repeaters[this._classID] = {
+			valueChanged: (function () {
+				this.fire('onValueChanged', {
+					value: this.getValue()
+				});
 			}).bindTo(this),
-			maxLengthExceeded: (function(){
+			maxLengthExceeded: (function () {
 				this.fire('onMaxLengthExceeded');
 			}).bindTo(this),
-			keyDown: (function(evt){
+			keyDown: (function (evt) {
 				this.fire('onKeyDown', evt, evt.type ? evt : null);
 			}).bindTo(this)
 		};
 
 		// @TODO replace container with the keyboard
-		this.__keyboard = new MAF.keyboard.ReuseKeyboard({
+		var keyboard = keyboards[this._classID] = new MAF.keyboard.ReuseKeyboard({
 			focus:            this.config.focus,
 			autoAdjust:       true,
 			allowSpace:       this.config.allowSpace,
@@ -42,16 +46,15 @@ define('MAF.control.Keyboard', function () {
 			wrapNavigation:   this.config.wrapNavigation
 		});
 
-		this.__keyboard.element.hAlign = 'center';
-		this.__keyboard.element.owner = this;
-		this.__keyboard.appendTo(this.element);
-		this.setStyle('height', this.__keyboard.element.height);
+		keyboard.element.hAlign = 'center';
+		keyboard.element.owner = this;
+		keyboard.appendTo(this.element);
+		this.setStyle('height', keyboard.element.height);
 
-		this.__keyboard.onValueChanged = this._repeaters.valueChanged;
-		this.__keyboard.onMaxLengthExceeded = this._repeaters.maxLengthExceeded;
-		this.__keyboard.onKeyDown = this._repeaters.keyDown;
+		keyboard.onValueChanged = repeater.valueChanged;
+		keyboard.onMaxLengthExceeded = repeater.maxLengthExceeded;
+		keyboard.onKeyDown = repeater.keyDown;
 	};
-
 	return new MAF.Class({
 		ClassName: 'ControlKeyboard',
 		Extends: MAF.element.Container,
@@ -69,42 +72,30 @@ define('MAF.control.Keyboard', function () {
 
 		Protected: {
 			dispatcher: function (nodeEvent, payload) {
-				switch(nodeEvent.type) {
+				switch (nodeEvent.type) {
 					case 'focus':
-						if (this.config.embedded) {
-							//KeyboardInput.setRemoteKeyboard(true);
-						}
-						//this.element.wantsFocus = false;
-						//this.toggleShift();
 						this.focus();
-
-						break;
-					case 'blur':
-						if (this.config.embedded) {
-							//KeyboardInput.setRemoteKeyboard(false);
-						}
 						break;
 				}
 			},
 			generateStatePacket: function (packet) {
-				return Object.merge({ value: this.getValue(), focused: this.__keyboard.element.hasFocus }, packet);
+				return Object.merge({
+					value: this.getValue(),
+					focused: keyboards[this._classID].element.hasFocus
+				}, packet);
 			},
 			inspectStatePacket: function (packet, focusOnly) {
 				if (!this.config.guid) {
 					return packet;
 				}
-				
 				if (packet && !(this.config.guid in packet)) {
 					return packet;
 				}
-
 				var data = packet && packet[this.config.guid],
-					type = typeof data;
-				
-				if (type == 'null' || type == 'undefined') {
+					type = typeOf(data);
+				if (type === 'null' || type === 'undefined') {
 					return packet;
 				}
-				
 				if (focusOnly) {
 					if (data.focused) {
 						this.focus();
@@ -127,7 +118,6 @@ define('MAF.control.Keyboard', function () {
 							break;
 					}
 				}
-				
 				return data;
 			}
 		},
@@ -149,80 +139,81 @@ define('MAF.control.Keyboard', function () {
 			delete this.config.value;
 
 			if (this.config.autoAdjust) {
-				this.setStyle('height', this.__keyboard.element.height);
+				this.setStyle('height', keyboards[this._classID].element.height);
 			}
 
 			appendHandler.subscribeTo(this, 'onAppend', this);
 		},
 
 		getValue: function () {
-			return this.__keyboard.getValue();
+			return keyboards[this._classID].getValue();
 		},
 
 		setValue: function (value) {
-			return this.__keyboard.setValue(value);
+			return keyboards[this._classID].setValue(value);
 		},
 
 		appendToValue: function (characters) {
-			return this.__keyboard.appendToValue(characters);
+			return keyboards[this._classID].appendToValue(characters);
 		},
 
 		deleteFromValue: function (count) {
-			return this.__keyboard.deleteFromValue(count);
+			return keyboards[this._classID].deleteFromValue(count);
 		},
 
 		clearValue: function () {
-			return this.__keyboard.clearValue();
+			return keyboards[this._classID].clearValue();
 		},
 
 		loadLayout: function (layout, options) {
-			return this.__keyboard.loadLayout(layout, options);
+			return keyboards[this._classID].loadLayout(layout, options);
 		},
 
 		focus: function () {
-			return this.__keyboard.focus();
+			return keyboards[this._classID].focus();
 		},
 
 		resetFocus: function () {
-			return this.__keyboard.resetFocus();
+			return keyboards[this._classID].resetFocus();
 		},
 
 		reset: function () {
-			return this.__keyboard.reset();
+			return keyboards[this._classID].reset();
 		},
 
 		getShiftState: function () {
-			return this.__keyboard.getShiftState();
+			return keyboards[this._classID].getShiftState();
 		},
 
 		setShiftState: function (state) {
-			return this.__keyboard.setShiftState(state);
+			return keyboards[this._classID].setShiftState(state);
 		},
 
 		toggleShift: function () {
-			return this.__keyboard.toggleShift();
+			return keyboards[this._classID].toggleShift();
 		},
 
 		getExtendedState: function () {
-			return this.__keyboard.getExtendedState();
+			return keyboards[this._classID].getExtendedState();
 		},
 
 		setExtendedState: function (state) {
-			return this.__keyboard.setExtendedState(state);
+			return keyboards[this._classID].setExtendedState(state);
 		},
 
 		toggleExtendedState: function () {
-			return this.__keyboard.toggleExtended();
+			return keyboards[this._classID].toggleExtended();
 		},
 
 		toggleKey: function (key) {
-			this.__keyboard.toggleKey(key);
+			keyboards[this._classID].toggleKey(key);
 		},
 
 		suicide: function () {
-			this.__keyboard.suicide();
-			delete this.__keyboard;
-			delete this._repeaters;
+			var classId = this._classID;
+			keyboards[classId].suicide();
+			delete keyboards[classId];
+			delete repeaters[classId];
 			this.parent();
 		}
 	});

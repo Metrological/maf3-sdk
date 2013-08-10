@@ -11,12 +11,12 @@ define('MAF.system.AboutDocView', function () {
 
 		createView: function () {
 			this.controls.backButton = new MAF.control.BackButton({
-				guid: this._classId + '.BackButton',
+				guid: this._classID + '.BackButton',
 				label: this.config.data.backLabel
 			}).appendTo(this);
 
 			this.controls.pageIndicator = new MAF.control.PageIndicator({
-				guid: this._classId + '.PageIndicator',
+				guid: this._classID + '.PageIndicator',
 				styles: {
 					width: this.width,
 					vAlign: 'bottom'

@@ -566,6 +566,7 @@ define('MAF.element.Grid', function () {
 					column: focused.column
 				}
 			});
+			return this;
 		},
 
 		blurCell: function (target) {
@@ -574,6 +575,7 @@ define('MAF.element.Grid', function () {
 			if (index > -1 && this.cells[index]) {
 				this.cells[index].fire('onBlur');
 			}
+			return this;
 		},
 
 		getCellDimensions: function () {

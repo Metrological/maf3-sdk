@@ -55,11 +55,11 @@ define('MAF.utility.Pager', function () {
 			filter: null
 		},
 		initialize: function (pagesize, fetchsize, fetchcallback, fetchscope, buffersize) {
-			classIndex[this._classID] = {};
-			classIndex[this._classID].pageSize = pagesize || 1;
-			classIndex[this._classID].fetchSize = fetchsize || 48;
-			classIndex[this._classID].loadFactor = buffersize;
-			classIndex[this._classID].storage = new HashMap();
+			var internal = classIndex[this._classID] = {};
+			internal.pageSize = pagesize || 1;
+			internal.fetchSize = fetchsize || 48;
+			internal.loadFactor = buffersize;
+			internal.storage = new HashMap();
 
 			if (fetchcallback) {
 				fetch = { func: fetchcallback, obj: fetchscope };
@@ -71,18 +71,19 @@ define('MAF.utility.Pager', function () {
 			if (!data) return false;
 
 			// TODO: For dynamic paging loading 
-			classIndex[this._classID].curIndex = 0;
-			classIndex[this._classID].nextIndex = 0;
-			classIndex[this._classID].leftIndex = 0;
-			classIndex[this._classID].rightIndex = 0;
+			var internal = classIndex[this._classID];
+			internal.curIndex = 0;
+			internal.nextIndex = 0;
+			internal.leftIndex = 0;
+			internal.rightIndex = 0;
 
 			paramsMap = {};
 
 			data.forEach(function (value, key) {
-				classIndex[this._classID].storage.set(key, value);
+				internal.storage.set(key, value);
 			}, this);
 
-			classIndex[this._classID].dataSize = total || data.length || 0;
+			internal.dataSize = total || data.length || 0;
 
 			this.filterItems(this.config.filter);
 		},
@@ -97,8 +98,9 @@ define('MAF.utility.Pager', function () {
 		},
 
 		getItem: function (index) {
-			var filterindex = classIndex[this._classID].storage.get('filter')[index];
-			return classIndex[this._classID].storage.get(filterindex);
+			var internal = classIndex[this._classID],
+				filterindex = internal.storage.get('filter')[index];
+			return internal.storage.get(filterindex);
 		},
 
 		getItems: function () {
@@ -139,12 +141,14 @@ define('MAF.utility.Pager', function () {
 		},
 
 		getNumPages: function () {
-			return classIndex[this._classID].dataSize > 0 ? Math.ceil(classIndex[this._classID].dataSize/classIndex[this._classID].pageSize) : 0;
+			var internal = classIndex[this._classID];
+			return internal.dataSize > 0 ? Math.ceil(internal.dataSize/internal.pageSize) : 0;
 		},
 
 		getPage: function (index, wrap, pagesize, quiet) {
+			var internal = classIndex[this._classID];
 			index = index || 0;
-			pagesize = pagesize || classIndex[this._classID].pageSize || 0;
+			pagesize = pagesize || internal.pageSize || 0;
 
 			var items = this.getData(index, pagesize, true);
 			if (items && items.length > 0) {
@@ -158,14 +162,14 @@ define('MAF.utility.Pager', function () {
 
 				return page;
 			} else {
-				var pn = Math.floor(index / classIndex[this._classID].fetchSize);
-				var pp = Math.max(pagesize, classIndex[this._classID].fetchSize);
+				var pn = Math.floor(index / internal.fetchSize);
+				var pp = Math.max(pagesize, internal.fetchSize);
 				var key = ''+Date.now()+Math.random();
 				var entry = {
 					index: index,
 					wrap: wrap,
-					add_index: pn * classIndex[this._classID].fetchSize,
-					page_size: pagesize || classIndex[this._classID].pageSize,
+					add_index: pn * internal.fetchSize,
+					page_size: pagesize || internal.pageSize,
 					quiet: quiet
 				};
 				var params = {
@@ -190,18 +194,19 @@ define('MAF.utility.Pager', function () {
 
 			paramsMap[params.key] = null;
 
+			var internal = classIndex[this._classID];
 			arrData.forEach(function (value, key) {
-				classIndex[this._classID].storage.set(entry.add_index + key, value);
+				internal.storage.set(entry.add_index + key, value);
 			}, this);
 			this.filterItems(this.config.filter);
 
 			if (total !== null) {
-				classIndex[this._classID].dataSize = total;
+				internal.dataSize = total;
 			}
 
 			var results = this.getData(entry.index, entry.page_size);//this._items && this._items.slice(entry.index, entry.index+entry.page_size) || false;
 			var page = new MAF.utility.PagerStorageClass({data: results});
-		
+
 			entry.quiet || this.fire(this._eventType, { data:page, index:entry.index, wrap:entry.wrap });
 			return true;
 		},

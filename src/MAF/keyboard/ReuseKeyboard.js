@@ -1234,6 +1234,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			// Send back navigation to parent if outofbounds
 			body.addEventListener('navigateoutofbounds', function(event) {
 				if (event.detail && event.detail.direction) {
+					event.stopPropagation();
+					event.preventDefault();
 					body.navigate(event.detail.direction);
 				}
 			});

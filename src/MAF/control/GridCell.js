@@ -9,16 +9,14 @@ define('MAF.control.GridCell', function () {
 				if (event.defaultPrevented) {
 					return;
 				}
-				var cc = this.getCellCoordinates();
+				var coords = this.getCellCoordinates();
 				switch(event.type) {
 					case 'onFocus':
-						this.element.addClass('focused');
-						//this.renderSkin('focused', cc);
+						this.renderSkin('focused', coords);
 						break;
 					case 'onBlur':
 					case 'onAppend':
-						this.element.removeClass('focused');
-						//this.renderSkin('normal', cc);
+						this.renderSkin('normal', coords);
 						break;
 				}
 			}
@@ -26,25 +24,19 @@ define('MAF.control.GridCell', function () {
 
 		initialize: function () {
 			this.parent();
-			this.onThemeNeeded.subscribeTo(this, ['onAppend','onFocus','onBlur'], this);
+			this.onThemeNeeded.subscribeTo(this, ['onAppend', 'onFocus', 'onBlur'], this);
 		}
 	});
 }, {
 	ControlGridCell: {
-		normal: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+		renderSkin: function (state, w, h, args, theme) {
+			var ff = new Frame();
+			theme.applyLayer('BaseGlow', ff);
+			if (state === 'focused') {
+				theme.applyLayer('BaseFocus', ff);
 			}
-		},
-		focused: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
-			}
-		},
-		highlight: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseActive', 'backgroundColor')
-			}
+			theme.applyLayer('BaseHighlight', ff);
+			return ff;
 		}
 	}
 });

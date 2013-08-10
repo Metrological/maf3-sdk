@@ -50,9 +50,8 @@ define('MAF.control.InputButton', function () {
 		Protected: {
 			dispatcher: function (nodeEvent, payload) {
 				if (nodeEvent.type === 'select') {
-					if (DEBUG) {
-						log('dispatcher', nodeEvent, payload, this);
-					}
+					nodeEvent.stopPropagation();
+					nodeEvent.preventDefault();
 					return onValueNeeded.call(this);
 				}
 				this.parent(nodeEvent, payload);

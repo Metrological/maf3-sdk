@@ -10,7 +10,7 @@ var TestView1 = new MAF.Class({
 
 	dataHasChanged: function (event) {
 		if (!this.frozen && event.payload.key === 'dataSet' && event.payload.value) {
-			this.controls.grid1.changeDataset(event.payload.value);
+			this.elements.grid1.changeDataset(event.payload.value);
 			this.elements.tab2.setValue('3');
 		}
 	},
@@ -91,7 +91,7 @@ var TestView1 = new MAF.Class({
 			events: {
 				onTabSelect: function (event) {
 					var view = this.getView();
-					var grid = view.controls.grid1;
+					var grid = view.elements.grid1;
 					switch (event.payload.index) {
 						case 0:
 							grid.setFilter(function (value,key) {
@@ -138,7 +138,7 @@ var TestView1 = new MAF.Class({
 			events: {
 				onTabChanged: function (event) {
 					var view = this.getView();
-					var grid = view.controls.grid1;
+					var grid = view.elements.grid1;
 					switch (event.payload.index) {
 						case 0:
 							grid.setFilter(function (value,key) {
@@ -180,7 +180,7 @@ var TestView1 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		this.controls.grid1 = new MAF.element.Grid({
+		this.elements.grid1 = new MAF.element.Grid({
 			rows: 2,
 			columns: 2,
 			carousel: true,
@@ -250,8 +250,8 @@ var TestView1 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		pageindicator.attachToSource(this.controls.grid1);
-		metaData.attachToSource(this.controls.grid1);
+		pageindicator.attachToSource(this.elements.grid1);
+		metaData.attachToSource(this.elements.grid1);
 	},
 
 	dialogCallback: function (event) {

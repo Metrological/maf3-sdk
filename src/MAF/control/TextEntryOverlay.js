@@ -18,7 +18,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			},
 			initValueManager: function () {
 				var maxlength,
-					ValueManager = ValueManagers[this._classId];
+					ValueManager = ValueManagers[this._classID];
 				if (!ValueManager) {
 					if (this.config.creator) {
 						if (this.config.creator.config && this.config.creator.config.keyboard) {
@@ -31,7 +31,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					if (!maxlength) {
 						maxlength = this.config.maxLength;
 					}
-					ValueManager = ValueManagers[this._classId] = new MAF.keyboard.KeyboardValueManager({
+					ValueManager = ValueManagers[this._classID] = new MAF.keyboard.KeyboardValueManager({
 						maxLength: maxlength
 					});
 					this.onValueManagerEvent.subscribeTo(ValueManager, ['cursormoved', 'valuechanged'], this);
@@ -63,7 +63,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			},
 			onValueManagerEvent: function (event) {
 				var el = this._keyOutput.element || false,
-					ValueManager = ValueManagers[this._classId],
+					ValueManager = ValueManagers[this._classID],
 					nativeCursor = el && el.editable || false,
 					cursor = false,
 					value, 
@@ -106,7 +106,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			},
 
 			onClearButtonSelect: function () {
-				ValueManagers[this._classId].value = '';
+				ValueManagers[this._classID].value = '';
 			},
 
 			maskValue: function (value) {
@@ -142,7 +142,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			},
 			createContent: function () {
 				var view = this.config.creator.getView(),
-					ValueManager = ValueManagers[this._classId];
+					ValueManager = ValueManagers[this._classID];
 
 				var bound = {
 					cancel: (function () {
@@ -218,14 +218,14 @@ define('MAF.control.TextEntryOverlay', function () {
 							ValueManager.cursorPosition = event.payload.caret || 0;
 						},
 						onNavigate: function (event) {
-							var ValueManager = ValueManagers[this._classId];
+							var ValueManager = ValueManagers[this._classID];
 							if (event.payload.direction === 'right' && ValueManager.cursorPosition === ValueManager.value.length) {
 								event.preventDefault();
 								this._clearButton.focus();
 							}
 						}.bindTo(this),
 						onKeyDown: function (event) {
-							var ValueManager = ValueManagers[this._classId];
+							var ValueManager = ValueManagers[this._classID];
 							if (['left', 'right', 'up', 'down'].indexOf(event.payload.key) < 0) {
 								event.payload.layout = this._keycaps.config.layout;
 								event.preventDefault();
@@ -258,7 +258,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					textStyles: buttonStyles,
 					events: {
 						onSelect: function (event) {
-							var ValueManager = ValueManagers[this._classId],
+							var ValueManager = ValueManagers[this._classID],
 								payload = {
 									value: ValueManager.value,
 									cursorPosition: ValueManager.cursorPosition,
@@ -286,7 +286,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					},
 					events: {
 						onKeyDown: function (event) {
-							var ValueManager = ValueManagers[this._classId];
+							var ValueManager = ValueManagers[this._classID];
 							event.preventDefault();
 							event.stopPropagation();
 							event.payload.layout = this._keycaps.config.layout;
@@ -334,7 +334,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			this.createContent();
 			this.initValueManager();
 
-			var ValueManager = ValueManagers[this._classId];
+			var ValueManager = ValueManagers[this._classID];
 			ValueManager.value = this.config.creator.getValue();
 			if (ValueManager.value.length) {
 				ValueManager.cursorPosition = ValueManager.value.length;
@@ -342,11 +342,11 @@ define('MAF.control.TextEntryOverlay', function () {
 		},
 
 		getValue: function () {
-			return ValueManagers[this._classId].value;
+			return ValueManagers[this._classID].value;
 		},
 
 		setValue: function (value) {
-			ValueManagers[this._classId].value = value;
+			ValueManagers[this._classID].value = value;
 		},
 
 		show: function () {
@@ -361,8 +361,8 @@ define('MAF.control.TextEntryOverlay', function () {
 			var view = this.config.creator.getView();
 			delete this.config.creator;
 			view.element.allowNavigation = true;
-			ValueManagers[this._classId].suicide();
-			delete ValueManagers[this._classId];
+			ValueManagers[this._classID].suicide();
+			delete ValueManagers[this._classID];
 			this._clearButton.suicide();
 			this._keyOutput.suicide();
 			this._keycaps.suicide();

@@ -111,8 +111,7 @@ define('MAF.control.TextEntryButton', function () {
 		},
 		styles: {
 			width: 'inherit',
-			height: 102,
-			color: 'white'
+			height: 102
 		}
 	},
 	ControlTextEntryButtonLabel: {
@@ -131,7 +130,7 @@ define('MAF.control.TextEntryButton', function () {
 			padding: '5px',
 			border: '2px solid white',
 			borderRadius: '10px',
-			backgroundColor: 'grey',
+			backgroundColor: 'rgba(150,150,150,.5)',
 			truncation: 'end',
 			opacity: 0.9
 		}
