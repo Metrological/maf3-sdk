@@ -23,7 +23,7 @@ define('MAF.dialogs.VerifyPin', function () {
 			return {
 				type: 'pin',
 				conf: {
-					key: this._key,
+					key: this.retrieve('key'),
 					title: this.config.title,
 					message: this.config.message,
 					errorMessage: this.config.errorMessage,

@@ -58,6 +58,9 @@ define('MAF.element.Text', function () {
 			if (this.config.anchorStyle) {
 				this.anchorStyle = this.config.anchorStyle;
 			}
+			if (this.config.visibleLines) {
+				this.visibleLines = this.config.visibleLines;
+			}
 			this.data = this.config.data || this.config.text || this.config.label;
 		},
 

@@ -71,7 +71,7 @@ define('MAF.control.Button', function () {
 		},
 		styles: {
 			width: 'inherit',
-			height: '51px'
+			height: 51
 		}
 	},
 	SecureButtonIndicator: {

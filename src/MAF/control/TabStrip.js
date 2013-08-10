@@ -130,16 +130,10 @@ define('MAF.control.TabStrip', function () {
 			},
 			inspectStatePacket: function (packet, focusOnly) {
 				if (!this.config.guid) {
-					if (DEBUG) {
-						warn(':: _inspectStatePacket - I have no config.guid to match against');
-					}
 					return packet;
 				}
 				
 				if (packet && !(this.config.guid in packet)) {
-					if (DEBUG) {
-						warn(':: _inspectStatePacket - this packet has nothing interesting for me');
-					}
 					return packet;
 				}
 				var data = packet && packet[this.config.guid],
@@ -266,7 +260,7 @@ define('MAF.control.TabStrip', function () {
 		styles: {
 			borderBottom: '2px solid grey',
 			width: 'inherit',
-			height: '51px'
+			height: 51
 		}
 	},
 	ControlTabStripBody: {

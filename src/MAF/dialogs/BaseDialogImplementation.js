@@ -1,15 +1,27 @@
 define('MAF.dialogs.BaseDialogImplementation', function () {
 	return new MAF.Class({
 		ClassName: 'BaseDialogImplementation',
-		
+
+		Implements: [
+			Library.Storage
+		],
+
+		Protected: {
+			removeHandler: function() {
+				if(this._boundDispatcher) {
+					this._boundDispatcher.unsubscribeFrom(MAF.application, ['onDialogDone', 'onDialogCancelled', 'onHideView']);
+					this._boundDispatcher = null;
+				}
+			}
+		},
+
 		config: {
 			focusOnCompletion: null,
 			isModal: false
 		},
 		
 		initialize: function () {
-			//this._key = md5(typeof(this) + '100');
-			//animator.milliseconds.toString());
+			this.store('key', md5(this._classID));
 		},
 		
 		show: function() {
@@ -26,11 +38,8 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 		},
 		
 		hide: function() {
-			// we aren't using this method right now
-			this._removeHandler();
+			this.removeHandler();
 			MAF.HostEventManager.send('hideDialog', this.getDialogConfig());
-			// don't need this in here since we are responding to the onDialogDone/Cancelled events the dock send back as a result of this
-			//this._resumeKeyboardState();
 		},
 
 		_keyboardWasActive: false,
@@ -61,34 +70,28 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			}
 		},
 		
-		_removeHandler: function() {
-			if(this._boundDispatcher) {
-				this._boundDispatcher.unsubscribeFrom(MAF.application, ['onDialogDone', 'onDialogCancelled', 'onHideView']);
-				this._boundDispatcher = null;
-			}
-		},
-		
 		dispatcher: function(event) {
 			this._resumeKeyboardState(event.type);
-			
+			log('dispatcher', event.payload);
 			if(event.type == "onHideView") {
-				if(this._viewId != event.payload.viewId) {
+				if(this._viewId !== event.payload.viewId) {
 					return;
 				}
-				log("We got a onHideView from the dock before we got an onDialogDone. Concider this dialog 'aborted'");
-				this._removeHandler();
+				log("We got a onHideView from the UI before we got an onDialogDone. Concider this dialog 'aborted'");
+				this.removeHandler();
 				return;
 			}
-			if(event.payload.key != this._key) {
-				log('this._key vs. event.payload.key',this._key,'/',event.payload.key);
+			if(event.payload.key !==  this.retrieve('key')) {
+				log('key compared to event.payload.key', this.retrieve('key'),'/',event.payload.key);
 				return;
 			}
-			this._removeHandler();
-			if (event.type=='onDialogCancelled') event.payload.cancelled = true;
-			this.handleCallback(event.payload);
+			this.removeHandler();
+			if (event.type === 'onDialogCancelled') event.payload.cancelled = true;
+			
 			if(this.config.focusOnCompletion && this.config.focusOnCompletion.focus && this.config.focusOnCompletion.focus.call) {
 				this.config.focusOnCompletion.focus();
 			}
+			this.handleCallback(event.payload);
 		},
 		
 		getDialogConfig: function() {

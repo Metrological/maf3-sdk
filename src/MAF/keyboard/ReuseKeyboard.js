@@ -859,7 +859,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		if (label) {
 			var labelEl = keyframe.retrieve('label');
 			if (!labelEl) {
-				labelEl = keyframe.appendChild(new Text());
+				labelEl = (new Text()).inject(keyframe);
 				labelEl.addClass('ReuseKeyboardLabel');
 				keyframe.store('label', labelEl);
 			}
@@ -868,9 +868,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			internal.indexing['key-' + code] = keyinfo && keyinfo.key || 0;
 
 			if (label === 'space') {
-				// @TODO: Translate
-				//keyframe._label.data = KONtx.utility.INTL.get(label);
-				labelEl.data = label;
+				labelEl.data = widget.getLocalizedString('SPACE');
 			} else {
 				labelEl.data = label;
 			}
@@ -905,7 +903,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 		var labelEl = keyframe.retrieve('label');
 		if (!labelEl) {
-			labelEl = keyframe.appendChild(new Text());
+			labelEl = (new Text()).inject(keyframe);
 			labelEl.addClass('ReuseKeyboardLabel');
 			keyframe.store('label', labelEl);
 		}
@@ -1026,9 +1024,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	};
 
 	var generateExtendedOverlay = function (key) {
-		var overlay = internals[this._classID].extendedOverlay || new Frame(),
+		var internal = internals[this._classID], 
+			overlay = internal.extendedOverlay || new Frame(),
 			//dims = getDimensions,
-			definition = key.retrieve('definition')[internals[this._classID].state.showShift ? 'shiftextended' : 'extended'] || [],
+			definition = key.retrieve('definition')[internal.state.showShift ? 'shiftextended' : 'extended'] || [],
 			character_ids = definition.slice();
 
 		character_ids.push('action-closeextendedpanel');
@@ -1036,37 +1035,38 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		overlay.store('type', 'view');
 		overlay.addClass('extendedOverlay');
 		overlay.store('focusTarget', key.retrieve('key').key || 0);
-		overlay.appendChild(new List());
+		var list = (new List()).inject(overlay),
+			fragement = createDocumentFragment();
 
 		character_ids.forEach(function (char_id, c) {
 			var keyframe = new Item({ focus: true }),
 			//	className = this.ClassName+getClassnameByKeyId(value.keyid),
 			//	styles = Theme.getStyles(className) || {},
 				row_height = 0;
-			
 			keyframe.addClass('ReuseKeyboardkey');
 			keyframe.addEventListener('select', onBodySelectEvent, this);
 			keyframe.owner = key.owner;
-			overlay.lastChild.appendChild(keyframe);
-
+			fragement.appendChild(keyframe);
 			updateExtendedKeyframe.call(this, keyframe, char_id);
 		}, this);
 
+		list.appendChild(fragement);
+
 		var keyBounds = key.getBounds(),
 			keyinfo = key.retrieve('key'),
-			posClass = key.owner && key.owner.owner && key.owner.owner,
+			posClass = this,
 			classBounds = posClass.element.getBounds(),
 			voffsetC = classBounds.top,
 			hoffsetC = classBounds.left,
 			spillover = Math.min(0, (keyinfo.keysonrow - keyinfo.column) - character_ids.length),
-			keyWidth = internals[this._classID].body.width / keyinfo.keysonrow;
+			keyWidth = internal.body.width / keyinfo.keysonrow;
 
-		overlay.hOffset = keyBounds.left - hoffsetC - (posClass.width - internals[this._classID].body.width) + (spillover * keyWidth) || 0;
+		overlay.hOffset = keyBounds.left - hoffsetC - (posClass.width - internal.body.width) + (spillover * keyWidth) || 0;
 		overlay.vOffset = keyBounds.top - voffsetC || 0;
-		overlay.lastChild.width = keyWidth * character_ids.length;
-		internals[this._classID].body.appendChild(overlay);
-
-		internals[this._classID].body.firstChild.allowNavigation = false;
+		overlay.width = list.width = keyWidth * character_ids.length;
+		list.height = Theme.getStyles('extendedOverlay', 'height');
+		internal.body.appendChild(overlay);
+		internal.body.firstChild.allowNavigation = false;
 		overlay.visible = true;
 		focusNewKey.call(this, overlay.lastChild.firstChild);
 	};
@@ -1098,16 +1098,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	};
 
 	var onBodySelectEvent = function (event) {
-		var current  = event.target || internals[this.owner._classID].state.current_focused_key,
-			classId  = this.owner._classID || event.target.owner._classID, 
+		var internal = internals[this.owner._classID || event.target.owner._classID],
+			current  = event.target || internal.state.current_focused_key,
 			keydef   = current.retrieve('definition')||current._characterDefinition,
 			verb     = String(current.retrieve('keyid')||current._charDefId).split('-')[0],
 			subject  = String(current.retrieve('keyid')||current._charDefId).split('-')[1],
-			shift    = internals[classId].state.showShift,
+			shift    = internal.state.showShift,
 			chardef  = null,
 			refocus  = null,
 			coords   = null,
-			extended = internals[classId].state.showExtended;
+			extended = internal.state.showExtended;
 
 		//log('onBodySelectEvent',current.retrieve('key'), keydef, verb, subject, shift, chardef, coords, extended);
 		switch (verb) {
@@ -1117,23 +1117,23 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					generateExtendedOverlay.call(this.owner, current);
 					current.owner.fire('extendedselect');
 				} else {
-					chardef = getCharacterDefinitionById(keydef[ shift ? "shift" : "normal" ]);
+					chardef = getCharacterDefinitionById(keydef[ shift ? 'shift' : 'normal' ]);
 					current.owner.appendToValue(chardef.value || '');
 					generateKeyDown.call(current.owner, verb, chardef.value, shift);
 				}
 				break;
 			case 'char':
-				refocus = internals[classId].extendedOverlay.retrieve('focusTarget');
-
+				refocus = internal.extendedOverlay.retrieve('focusTarget');
 				current.owner.appendToValue(keydef.value || '');
-				generateKeyDown.call(current.owner, verb, chardef.value, shift);
+				generateKeyDown.call(current.owner, verb, keydef.value, shift);
 				current.owner.toggleExtended();
-				if (shift)
+				if (shift) {
 					current.owner.toggleShift();
-
+				}
 				removeExendedOverlay.call(this.owner);
-				if (isNumber(refocus))
-					internals[classId].body.firstChild.childNodes[refocus].focus();
+				if (isNumber(refocus)) {
+					internal.body.firstChild.childNodes[refocus].focus();
+				}
 				break;
 			case 'action':
 				switch (subject) {
@@ -1151,12 +1151,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 						current.owner.loadLayout(getNextLayout.call(this.owner), { focusTarget: current.retrieve('key').key });
 						break;
 					case 'closeextendedpanel':
-						refocus = internals[classId].extendedOverlay.retrieve('focusTarget');
+						refocus = internal.extendedOverlay.retrieve('focusTarget');
 						current.owner.toggleExtended();
-						
 						removeExendedOverlay.call(this.owner);
-						if (isNumber(refocus))
+						if (isNumber(refocus)) {
 							internals[classId].body.firstChild.childNodes[refocus].focus();
+						}
 						break;
 				}
 				break;
@@ -1165,16 +1165,18 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 	var sendSignal = function (event) {
 		//log('sendSignal', this, event.type, event.target);
-		var el = internals[this._classID].body.firstChild.childNodes[0];
+		var el = internals[this._classID].body.firstChild.firstChild;
 		do {
-			updateKeyframe.call(this, el, el.retrieve('keyid'), event.type === 'shiftselect' ? 'shift' : 'extended');
+			if (el.nodeType === 1) {
+				updateKeyframe.call(this, el, el.retrieve('keyid'), event.type === 'shiftselect' ? 'shift' : 'extended');
+			}
 			el = el.nextSibling;
-		} while (el && el.nodeType === 1);
+		} while (el);
 	};
 
 	var EventMap = {
 		space:              'onSpace',
-		keydown:			'onKeyDown',
+		keydown:            'onKeyDown',
 		backspace:          'onBackspace',
 		valuechanged:       'onValueChanged',
 		layoutchanged:      'onLayoutChanged',
@@ -1219,7 +1221,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			this.body = new List();
 
-			this.element.appendChild(this.body);
+			this.body.inject(this.element);
 			//log('---ReuseKeyboard Internals----', internals);
 			setAvailableLayouts.call(this, this.config.availableLayouts);
 
@@ -1299,7 +1301,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				this.focus();
 			}
 		},
-
+		appendTo: function (node) {
+			if (node) {
+				internals[this._classID].body.inject(node);
+			}
+			return this;
+		},
 		loadLayout: function (layout, options) {
 			var internal = internals[this._classID];
 
@@ -1318,7 +1325,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			var currentBody = internal.body.firstChild;
 			if (currentBody) {
-				this.body = internal.body.appendChild(new List());
+				this.body = (new List()).inject(internal.body);
 				currentBody.destroy(true);
 			}
 
@@ -1473,28 +1480,30 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (USE_INPUT_METHOD) return;
 			return this.setValue('');
 		},
-
 		setShiftState: function (state) {
-			return internals[this._classID].state.showShift === Boolean(state) ? internals[this._classID].state.showShift : this.toggleShift();
+			var internal = internals[this._classID];
+			return internal.state.showShift === Boolean(state) ? internal.state.showShift : this.toggleShift();
 		},
 		getShiftState: function () {
 			return internals[this._classID].state.showShift;
 		},
 		toggleShift: function () {
-			internals[this._classID].state.showShift = !internals[this._classID].state.showShift;
+			var internal = internals[this._classID];
+			internal.state.showShift = !internal.state.showShift;
 			this.fire('shiftselect');
 		},
 		setExtendedState: function (state) {
-			return internals[this._classID].state.showExtended === Boolean(state) ? internals[this._classID].state.showExtended : this.toggleExtended();
+			var internal = internals[this._classID];
+			return internal.state.showExtended === Boolean(state) ? internal.state.showExtended : this.toggleExtended();
 		},
 		getExtendedState: function () {
 			return internals[this._classID].state.showExtended;
 		},
 		toggleExtended: function () {
-			internals[this._classID].state.showExtended = !internals[this._classID].state.showExtended;
+			var internal = internals[this._classID];
+			internal.state.showExtended = !internal.state.showExtended;
 			this.fire('extendedselect');
 		},
-
 		focus: function () {
 			onBodyGainFocus.call(this);
 		},
@@ -1502,7 +1511,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		clearFocus: function () {
 			internals[this._classID].state.current_focused_key = null;
 		},
-
 		fireEvent: function (type) {
 			var args = Array.slice(arguments,1);
 			this.fire(arguments);
@@ -1660,10 +1668,11 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	extendedOverlay: {
 		styles: {
+			height: 67/*,
 			background: 'url(' + Image.WHITE + ')',
 			backgroundSize: '90% 50%',
 			backgroundPosition: 'center',
-			backgroundRepeat: 'no-repeat'
+			backgroundRepeat: 'no-repeat'*/
 		}
 	}
 });

@@ -2,9 +2,9 @@
 	"identifier": "com.metrological.widget.Example",
 	"name": "Example Widget",
 	"version": "1.0.0",
-	"author": "Metrological Developer",
-	"organization": "Metrological Widgets",
-	"copyright": "Copyright 2013 Metrological",
+	"author": "Metrological Development",
+	"company": "Metrological Widgets BV",
+	"copyright": "Metrological Widgets BV",
 	"description": "Example Widget",
 	"scripts": "Javascript/init.js",
 	"images": {

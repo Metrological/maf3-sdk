@@ -9,7 +9,6 @@ var TestView2 = new MAF.Class({
 
 	createView: function () {
 		var button1 = new MAF.control.BackButton({
-			label: 'Back'
 		}).appendTo(this);
 
 		var button2 = new MAF.control.TextButton({

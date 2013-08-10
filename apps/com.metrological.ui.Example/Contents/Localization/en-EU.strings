@@ -1,2 +1,8 @@
 "OK" = "OK";
+"BACK" = "BACK";
 "PAGE" = "PAGE %s OF %s";
+"WIDGET_BY" = "App by";
+"MORE_INFO" = "More information";
+"COPYRIGHT" = "Copyright &copy; %s";
+"RIGHTS_RESERVED" = "All rights reserved";
+"SPACE" = "SPACE";

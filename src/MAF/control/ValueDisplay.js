@@ -163,9 +163,10 @@ define('MAF.control.ValueDisplay', function () {
 }, {
 	ControlValueContainerText: {
 		styles: {
-			width: 'calc(100% - 20px)',
+			width: '100%',
 			height: 'inherit',
-			hOffset: 10,
+			paddingLeft: 10,
+			paddingRight: 10,
 			anchorStyle: 'rightCenter',
 			opacity: '0.7'
 		}

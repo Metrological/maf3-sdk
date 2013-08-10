@@ -242,14 +242,14 @@ define('MAF.element.Grid', function () {
 					this._state.focusIndex = -1;
 				}
 				this.cells.forEach(function(c) {
-					c.freeze();
+					c.hide();
 				});
 				this.generateCells(data.length);
 				for (var i = 0; i < data.length; i++) {
 					var cell = this.cells[i];
 					if (cell) {
 						this.updateCell(cell, data[i]);
-						cell.thaw();
+						cell.show();
 					}
 				}
 				this.updateState({
@@ -642,11 +642,9 @@ define('MAF.element.Grid', function () {
 
 		inspectStatePacket: function (packet, focusOnly) {
 			if (!this.config.guid) {
-				warn(this.ClassName, 'inspectStatePacket - I have no config.guid to match against');
 				return packet;
 			}
 			if (packet && !(this.config.guid in packet)) {
-				warn(this.ClassName, 'inspectStatePacket - this packet has nothing interesting for me');
 				return packet;
 			}
 			var data = packet && packet[this.config.guid],

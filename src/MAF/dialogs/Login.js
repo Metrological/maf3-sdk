@@ -16,7 +16,7 @@ define('MAF.dialogs.Login', function () {
 		},
 		
 		getDialogConfig: function() {
-			return { type: 'login', conf: { 'ignoreBackKey': this.config.isModal, key: this._key, title: this.config.title, message: this.config.message } };
+			return { type: 'login', conf: { 'ignoreBackKey': this.config.isModal, key: this.retrieve('key'), title: this.config.title, message: this.config.message } };
 		},
 
 		handleCallback: function (response) {

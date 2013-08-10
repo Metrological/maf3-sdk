@@ -34,7 +34,7 @@ define('MAF.control.PageIndicator', function () {
 						styles: {
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px',
+							vOffset: -8,
 							opacity: 0
 						}
 					}).appendTo(this),
@@ -44,7 +44,7 @@ define('MAF.control.PageIndicator', function () {
 						styles: {
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px',
+							vOffset: -8,
 							opacity: 0
 						}
 					}).appendTo(this)

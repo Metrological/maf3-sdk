@@ -16,7 +16,7 @@ define('MAF.dialogs.TextEntry', function () {
 		},
 		
 		getDialogConfig: function() {
-			return { type: 'textentry', conf: { 'ignoreBackKey': this.config.isModal, key: this._key, title: this.config.title, message: this.config.message } };
+			return { type: 'textentry', conf: { 'ignoreBackKey': this.config.isModal, key: this.retrieve('key'), title: this.config.title, message: this.config.message } };
 		},
 
 		handleCallback: function (response) {

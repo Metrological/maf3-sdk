@@ -114,9 +114,10 @@ define('MAF.control.MetadataDisplay', function () {
 	},
 	ControlMetadataDisplayText: {
 		styles: {
-			width: 'calc(100% - 10px)',
+			width: '100%',
 			height: 'inherit',
-			hOffset: 5,
+			paddingLeft: 5,
+			paddingRight: 5,
 			anchorStyle: 'center',
 			truncation: 'end'
 		}

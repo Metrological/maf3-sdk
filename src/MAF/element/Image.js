@@ -13,18 +13,18 @@ define('MAF.element.Image', function () {
 						if (this.config.autoShow) {
 							this.show();
 						}
-						if (this.config.manageWaitIndicator) {
-							MAF.utility.WaitIndicator.down();
-						}
+						//if (this.config.manageWaitIndicator) {
+						//	MAF.utility.WaitIndicator.down();
+						//}
 						break;
 					case 'error':
 						this.fire('onError', payload, nodeEvent);
 						if (this.config.autoShow) {
 							this.show();
 						}
-						if (this.config.manageWaitIndicator) {
-							MAF.utility.WaitIndicator.down();
-						}
+						//if (this.config.manageWaitIndicator) {
+						//	MAF.utility.WaitIndicator.down();
+						//}
 						break;
 					default:
 						break;
@@ -39,6 +39,7 @@ define('MAF.element.Image', function () {
 			proxyProperties: function (propnames) {
 				this.parent([
 					'source',
+					'aspect',
 					'srcWidth',
 					'srcHeight',
 					'colorize',
@@ -68,6 +69,9 @@ define('MAF.element.Image', function () {
 			this.parent();
 			this.remoteAsync = (this.config.remoteAsync === false) ? false : true;
 			delete this.config.remoteAsync;
+			if (this.config.aspect) {
+				this.aspect = this.config.aspect;
+			}
 			this.setSources(this.config);
 		},
 
@@ -97,9 +101,9 @@ define('MAF.element.Image', function () {
 					return this;
 				}
 				img.remoteAsync = (cfg.remoteAsync === false) ? false : true;
-				if (cfg.manageWaitIndicator) {
-					MAF.utility.WaitIndicator.up();
-				}
+				//if (cfg.manageWaitIndicator) {
+				//	MAF.utility.WaitIndicator.up();
+				//}
 				if (cfg.hideWhileLoading) {
 					this.hide();
 				}

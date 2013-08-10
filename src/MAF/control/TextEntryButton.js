@@ -3,18 +3,18 @@ define('MAF.control.TextEntryButton', function () {
 		this._TextEntryOverlay = new MAF.control.TextEntryOverlay({
 			creator: this
 		}).appendTo(this.getView());
-		
-		this._TextEntryOverlay.show();
 	};
 
 	return new MAF.Class({
 		ClassName: 'ControlTextEntryButton',
+
 		Extends: MAF.control.InputButton,
 
 		Protected: {
 			onThemeNeeded: function (event) {
-				if (event.type === 'onAppend')
+				if (event.type === 'onAppend') {
 					event.payload.skip = true;
+				}
 				this.parent(event);
 			}
 		},
@@ -28,13 +28,13 @@ define('MAF.control.TextEntryButton', function () {
 			keyboard: {
 				layout: 'alphanumeric'
 			},
-			animate: false,//KONtx.config.animationEnabled,
+			animate: false,//MAF.config.animationEnabled,
 			animation: {
 	//			duration: 400,
 	//			fade: false,
 	//			slide: true
 			},
-			overlayBackgroundColor: 'rgba(26,26,26,.80)',
+			overlayBackgroundColor: 'rgba(0,0,0,.7)',
 			formBackgroundColor:    'black'
 		},
 		createContent: function () {
@@ -44,16 +44,18 @@ define('MAF.control.TextEntryButton', function () {
 			}).appendTo(this);
 
 			this.valueDisplay = new MAF.element.Text({
-				ClassName: 'ControlTextEntryButtonValue'
+				ClassName: 'ControlTextEntryButtonValue',
+				styles: {
+					width: this.width - (Theme.getStyles('ControlTextEntryButtonValue', 'margin') * 2)
+				}
 			}).appendTo(this);
 			
-			this.valueDisplay._updateContent = (function(event){
+			this.valueDisplay._updateContent = (function (event) {
 				var value = event.payload.value,
 					target = this.valueDisplay;
-				
 				target.setText(this.getDisplayValue(value));
 			}).subscribeTo(this, ['onValueInitialized','onValueChanged','onValueEdited'], this);
-			
+
 			this.valueDisplay._updateContent({payload:{value:this.getValue()}});
 		},
 
@@ -87,12 +89,9 @@ define('MAF.control.TextEntryButton', function () {
 			}
 			return output;
 		},
-		_destroyOverlay: function () {
-			this._TextEntryOverlay._destroyOverlay();
-			//this._TextEntryOverlay.element.removeFromParentNode();
+		destroyOverlay: function () {
 			this._TextEntryOverlay.suicide();
 			delete this._TextEntryOverlay;
-			
 			this.focus();
 		},
 		changeValue: function (change_callback, current_value) {
@@ -125,15 +124,16 @@ define('MAF.control.TextEntryButton', function () {
 	},
 	ControlTextEntryButtonValue: {
 		styles: {
-			width: 'calc(100% - 32px)',
+			display: 'block',
+			margin: 10,
+			minHeight: '40px',
+			height: '1.9em',
+			padding: '5px',
 			border: '2px solid white',
 			borderRadius: '10px',
 			backgroundColor: 'grey',
-			padding: 5,
 			truncation: 'end',
-			hOffset: 10,
-			vOffset: 10,
-			opacity: '0.9'
+			opacity: 0.9
 		}
 	}
 });

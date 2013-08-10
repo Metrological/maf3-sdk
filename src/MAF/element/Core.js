@@ -37,6 +37,10 @@ define('MAF.element.Core', function () {
 				if (this.config.id) {
 					this.id = this.config.id;
 				}
+
+				if (this.config.frozen === true) {
+					this.freeze();
+				}
 			},
 			proxyProperties: function (propnames) {
 				propnames = [

@@ -8,13 +8,34 @@ var TestView1 = new MAF.Class({
 	},
 
 	createView: function () {
-		var button1 = new MAF.control.TextButton({
+		this.elements.button1 = new MAF.control.TextButton({
 			label: 'Close App',
 			events: {
 				onSelect: function () {
-					MAF.application.exit();
+					this.owner.dialog();
 				}
 			}
 		}).appendTo(this);
+	},
+
+	dialog: function () {
+		log('dialogclick',this);
+		new MAF.dialogs.TextEntry({
+			title: 'Alert Dialog',
+			message: 'Do you want to close the app?',
+			focusOnCompletion: this.elements.button1,
+			buttons: [
+				{ label: 'Ok', callback: this.dialogCallback },
+				{ label: 'Cancel', callback: this.dialogCallback }
+			]
+		}).show();
+	},
+
+	dialogCallback: function (event) {
+		switch (event.selected.label) {
+			case 'Ok':
+				MAF.application.exit();
+				break;
+		}
 	}
 });

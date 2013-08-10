@@ -53,7 +53,7 @@ define('MAF.control.SingleTab', function () {
 							left: this.config.arrowPadding,
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px',
+							vOffset: -8,
 							visible: !this.config.focusArrows
 						}
 					}).appendTo(this),
@@ -67,7 +67,7 @@ define('MAF.control.SingleTab', function () {
 							hOffset: this.config.arrowPadding,
 							height: 1,
 							vAlign: 'center',
-							marginTop: '-8px',
+							vOffset: -8,
 							visible: !this.config.focusArrows
 						}
 					}).appendTo(this)

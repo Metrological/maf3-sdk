@@ -20,9 +20,10 @@ define('MAF.control.TextButton', function () {
 	ControlTextButton: 'ControlButton',
 	ControlTextButtonText: {
 		styles: {
-			width: 'calc(100% - 20px)',
+			width: '100%',
 			height: 'inherit',
-			hOffset: 10,
+			paddingLeft: 10,
+			paddingRight: 10,
 			anchorStyle: 'leftCenter',
 			truncation: 'end'
 		}

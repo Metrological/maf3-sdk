@@ -27,7 +27,7 @@ define('MAF.control.BackButton', function () {
 				}).appendTo(this),
 				new MAF.element.Text({
 					ClassName: (this.config.ClassName || this.ClassName) + 'Text',
-					label: this.config.label,
+					label: this.config.label || widget.getLocalizedString('BACK'),
 					styles: this.config.textStyles
 				}).appendTo(this)
 			];
@@ -50,9 +50,9 @@ define('MAF.control.BackButton', function () {
 	},
 	ControlBackButtonText: {
 		styles: {
-			width: 'calc(100% - 60px)',
+			width: 'inherit',
 			height: 'inherit',
-			hOffset: 60,
+			paddingLeft: 60,
 			fontSize: 24,
 			anchorStyle: 'leftCenter',
 			truncation: 'end'

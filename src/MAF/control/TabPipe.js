@@ -26,11 +26,11 @@ define('MAF.control.TabPipe', function () {
 	ControlTabPipeBody: 'ControlTabStripBody',
 	ControlTabPipeContainer: {
 		styles: {
-			left: '18px',
-			top: '6px',
-			right: '18px',
-			width: 'calc(100% - 36px)',
-			height: '51px'
+			width: '100%',
+			height: '100%',
+			paddingTop: 6,
+			paddingLeft: 18,
+			paddingRight: 18
 		}
 	}
 });

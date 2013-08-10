@@ -9,6 +9,20 @@ var TestView5b = new MAF.Class({
 	},
 
 	createView: function () {
+		var photo = new MAF.element.Image({
+			aspect: 'auto',
+			hideWhileLoading: true,
+			loadingSrc: 'Images/1920x1080/LoadingImage.png',
+			missingSrc: 'Images/1920x1080/NoImage.png',
+			styles: {
+				width: this.width - 200,
+				height: this.height - 200,
+				hAlign: 'center',
+				vAlign: 'center',
+				vOffset: -50,
+			}
+		}).appendTo(this);
+
 		this.controls.pwPhotosGrid5b = new MAF.element.Grid({
 			guid: 'pwPhotosGrid5b',
 			rows: 1,
@@ -21,13 +35,21 @@ var TestView5b = new MAF.Class({
 					styles: this.getCellDimensions(),
 					events: {
 						onFocus: function () {
+							var grid = this.grid,
+								idx = this.getCellDataIndex(),
+								data = this.getCellDataItem();
+							(function (i) {
+								var current = grid ? (grid.getCurrentPage() * grid.getCellCount()) + grid.getFocusIndex() : -1;
+								if (current === i && data && data['media$group'] && photo) {
+									photo.setSource(data['media$group']['media$content'][0].url);
+								}
+							}).delay(500, null, [idx]);
 							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
 						},
 						onBlur: function () {
 							this.setStyle('backgroundColor', null);
 						},
 						onSelect: function () {
-							log('toe slideshow, starting with this image');
 						}
 					}
 				});
@@ -48,10 +70,11 @@ var TestView5b = new MAF.Class({
 			},
 			cellUpdater: function (cell, data) {
 				if (data && data['media$group']) {
-					if (data['media$group']['media$thumbnail'])
+					if (data['media$group']['media$thumbnail']) {
 						cell.thumb.setSource(data['media$group']['media$thumbnail'][1].url);
-					else
+					} else {
 						cell.thumb.setSource(data['media$group']['media$content'][0].url);
+					}
 				}
 			},
 			styles: {

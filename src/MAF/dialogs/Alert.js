@@ -13,34 +13,36 @@ define('MAF.dialogs.Alert', function () {
 		
 		initialize: function () {
 			this.parent();
-			this._callbacks = {};
-			this._buttons   = [];
-			this._configs = {};
-			
-			var self = this;
+			var buttons = [];
+			var configs = {};
+
 			if (this.config.buttons && this.config.buttons instanceof Array) {
 				[].concat(this.config.buttons).forEach(function(button) {
 					var value = md5(button.label + '100');//animator.milliseconds.toString());
 					if (button.callback && button.callback.call) {
-						self._callbacks[value] = button.callback;
+						this.store(value, button.callback);
 					}
-					self._buttons.push({ value: value, label: button.label });
-					self._configs[value] = button;
-				});
+					buttons.push({ value: value, label: button.label });
+					configs[value] = button;
+				}, this);
+
+				this.store('configs', configs);
+				this.store('buttons', buttons);
 			} else {
 				throw new Error("Can't create an alert without any buttons");
 			}
+			delete this.config.buttons;
 		},
 		
 		getDialogConfig: function() {
-			return { 'type': 'alert', 'conf': { 'ignoreBackKey': this.config.isModal, 'key': this._key, 'title': this.config.title, 'message': this.config.message, 'buttons': this._buttons } };
+			return { 'type': 'alert', 'conf': { 'ignoreBackKey': this.config.isModal, 'key': this.retrieve('key'), 'title': this.config.title, 'message': this.config.message, 'buttons': this.retrieve('buttons') } };
 		},
 		
 		handleCallback: function (response) {
 			var selectedValue = response.selectedValue,
-				callback = this._callbacks[selectedValue],
-				config = this._configs[selectedValue],
-				packet = { selected: config };
+				callback = this.retrieve(selectedValue),
+				config = this.retrieve('configs'),
+				packet = { selected: config[selectedValue] || {} };
 
 			if (response.cancelled) {
 				if (this.config.cancelCallback && this.config.cancelCallback.call) {

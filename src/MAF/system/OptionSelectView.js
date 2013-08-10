@@ -124,12 +124,12 @@ define('MAF.system.OptionSelectView', function () {
 }, {
 	ControlOptionSelectCellText: {
 		styles: {
-			width: 'calc(100% - 10px)',
+			width: '100%',
 			height: 'inherit',
 			//wrap: true,  			With this it doesn't center anymore
 			//truncation: 'end',	With this the innerText gets a max-width of 1px
-			paddingLeft: 5,
-			paddingRight: 5,
+			paddingLeft: 10,
+			paddingRight: 10,
 			anchorStyle: 'leftCenter'
 		}
 	}

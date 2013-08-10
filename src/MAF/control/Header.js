@@ -46,9 +46,10 @@ define('MAF.control.Header', function () {
 	},
 	ControlHeaderTextSmall: {
 		styles: {
-			width: 'calc(100% - 20px)',
+			width: '100%',
 			height: 'inherit',
-			hOffset: 10,
+			paddingLeft: 10,
+			paddingRight: 10,
 			fontSize: 18,
 			anchorStyle: 'leftCenter',
 			truncation: 'end'
@@ -56,9 +57,10 @@ define('MAF.control.Header', function () {
 	},
 	ControlHeaderTextLarge: {
 		styles: {
-			width: 'calc(100% - 20px)',
+			width: '100%',
 			height: 'inherit',
-			hOffset: 10,
+			paddingLeft: 10,
+			paddingRight: 10,
 			fontSize: 24,
 			anchorStyle: 'leftCenter',
 			truncation: 'end'

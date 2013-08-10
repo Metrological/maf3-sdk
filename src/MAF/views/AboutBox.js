@@ -1,14 +1,11 @@
 define('MAF.views.AboutBox', function () {
 	return new MAF.Class({
 		ClassName: 'AboutBoxView',
+
 		Extends: MAF.system.SidebarView,
 
 		config: {
-			BackButtonTitle: 'About',
-			pages: [
-				{id: 'copyright', name: 'Copyright'}, 
-				{id: 'tos', name: 'Terms of Service'}, 
-				{id: 'privacy', name: 'Privacy'}]
+			BackButtonTitle: 'About'
 		},
 
 		createView: function () {
@@ -69,7 +66,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataAuthorNote = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataAuthorNote',
-				label: /*KONtx.utility.INTL.get(*/'WIDGET_BY'/*)*/ + '...',
+				label: widget.getLocalizedString('WIDGET_BY') + '...',
 				styles: {
 					vOffset: metadataDescription.height + metadataDescription.vOffset + PAD
 				}
@@ -77,7 +74,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataAuthor = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataAuthor',
-				label: ((!widget.author) || widget.author.length === 0 || (widget.author === widget.company) ? (widget.company||'') : widget.author + ', ' + (widget.company||'')),
+				label: ((!widget.author) || widget.author.length === 0 || (widget.author === widget.company) ? (widget.company || '') : widget.author + ', ' + (widget.company || '')),
 				styles: {
 					vOffset: metadataAuthorNote.height + metadataAuthorNote.vOffset
 				}
@@ -96,7 +93,7 @@ define('MAF.views.AboutBox', function () {
 
 				var metadataUrlNote = new MAF.element.Text({
 					ClassName: 'AboutBoxViewMetadataUrlNote',
-					label: /*KONtx.utility.INTL.get(*/'MORE_INFO'/*)*/ + '...',
+					label: widget.getLocalizedString('MORE_INFO') + '...',
 					styles: {
 						vOffset: metadataVersion.height + metadataVersion.vOffset + PAD
 					}
@@ -115,7 +112,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataCopyright = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataCopyright',
-				label: /*KONtx.utility.INTL.get(*/'COPYRIGHT'/*)*/ + ' ' + widget.copyright,
+				label: widget.getLocalizedString('COPYRIGHT', (new Date).getFullYear()) + ' ' + widget.copyright,
 				styles: {
 					vOffset: contentContainer.height - PAD
 				}
@@ -125,7 +122,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataReserved = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataReserved',
-				label: /*KONtx.utility.INTL.get(*/'RIGHTS_RESERVED',//),
+				label: widget.getLocalizedString('RIGHTS_RESERVED'),
 				styles: {
 					vOffset: contentContainer.height - PAD
 				}
@@ -176,64 +173,67 @@ define('MAF.views.AboutBox', function () {
 		}
 	});
 }, {
-	'AboutBoxViewMetadataName': {
+	AboutBoxView: 'SidebarView',
+	AboutBoxViewMetadataName: {
 		styles: {
-			width: 'calc(100% - 10px)',
-			truncation: "end",
-			hOffset: 5,
+			width: '100%',
+			paddingLeft: 5,
+			paddingRight: 5,
+			truncation: 'end',
 			vOffset: 67,
 			fontSize: 32
 		}
 	},
-	'AboutBoxViewMetadataDescription': {
+	AboutBoxViewMetadataDescription: {
 		styles: {
+			width: '100%',
+			paddingLeft: 5,
+			paddingRight: 5,
 			truncation: 'end',
-			width: 'calc(100% - 10px)',
-			hOffset: 5,
 			fontSize: 18,
 			fontWeight: 'bold'
 		}
 	},
-	'AboutBoxViewMetadataAuthorNote': {
+	AboutBoxViewMetadataAuthorNote: {
 		'PAD_TOP': 20,
 		styles: {
 			hOffset: 5,
 			fontSize: 18
 		}
 	},
-	'AboutBoxViewMetadataAuthor': {
+	AboutBoxViewMetadataAuthor: {
 		styles: {
 			hOffset: 5,
 			fontSize: 18
 		}
 	},
-	'AboutBoxViewMetadataVersion': {
+	AboutBoxViewMetadataVersion: {
 		styles: {
 			hOffset: 5,
 			fontSize: 18
 		}
 	},
-	'AboutBoxViewMetadataUrlNote': {
+	AboutBoxViewMetadataUrlNote: {
 		'PAD_TOP': 20,
 		styles: {
 			hOffset: 5,
 			fontSize: 18
 		}
 	},
-	'AboutBoxViewMetadataUrl': {
+	AboutBoxViewMetadataUrl: {
 		styles: {
 			hOffset: 5,
 			fontSize: 18
 		}
 	},
-	'AboutBoxViewMetadataCopyright': {
+	AboutBoxViewMetadataCopyright: {
 		'PAD_BOTTOM': 40,
 		styles: {
 			hOffset: 5,
 			fontSize: 15
 		}
 	},
-	'AboutBoxViewMetadataReserved': {
+	AboutBoxViewMetadataReserved: {
 		PAD_BOTTOM: 20,
 		styles: {
 			hOffset: 5,

@@ -2,9 +2,9 @@
 	"identifier": "com.metrological.ui.Example",
 	"name": "Example UI",
 	"version": "1.0.0",
-	"author": "Metrological Developer",
-	"organization": "Metrological Widgets BV",
-	"copyright": "Copyright 2013 Metrological",
+	"author": "Metrological Development",
+	"company": "Metrological Widgets BV",
+	"copyright": "Metrological Widgets BV",
 	"description": "Example UI",
 	"scripts": "Javascript/init.js",
 	"images": {

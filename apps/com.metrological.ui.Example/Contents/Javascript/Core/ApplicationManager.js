@@ -27,7 +27,7 @@ var loadTemplate = (function () {
 		if (!template) {
 			switch(type) {
 				case 'sidebar':
-					template = new Frame({
+					template = new View({
 						id: '@' + type,
 						styles: {
 							overflow: 'visible',
@@ -92,7 +92,7 @@ var loadTemplate = (function () {
 					}).appendTo(template).store('id', id);
 					break;
 				case 'fullscreen':
-					template = new Frame({
+					template = new View({
 						id: '@' + type,
 						styles: {
 							width: 1920,
@@ -100,9 +100,30 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(app.document.body);
 					break;
-				case 'alert':
+				case 'dialog':
 					var currentStyle = getElementById('@' + current).style;
-					template = new Frame({
+					var buttons = [];
+
+					switch (id) {
+						case 'login':
+							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
+							buttons.push({ value: '$back', label: widget.getLocalizedString('back'), opacity: 0 });
+							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							break;
+						case 'textentry':
+						case 'pincreation':
+							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
+							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							break;
+						case 'pindialog':
+							buttons.push({ value: '$forgot', label: widget.getLocalizedString('forgot_pin') });
+							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							break;
+					}
+					
+					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
+
+					template = new View({
 						id: '@' + type,
 						styles: {
 							overflow: currentStyle.overflow,
@@ -113,32 +134,146 @@ var loadTemplate = (function () {
 							height: currentStyle.height,
 							top: currentStyle.top,
 							left: currentStyle.left
-						}
-					}).appendTo(app.document.body);
-					new Frame({
-						id: '@' + type + '-button',
-						focus: true,
-						styles: {
-							width: 'inherit',
-							height: 51,
-							backgroundColor: 'black',
 						},
 						events: {
-							focus: function () {
-								this.setStyle('backgroundColor', 'red');
+							select: function (event) {
+								log('select', event, event.target.owner);
+								//log(getElementById('@' + type + '-keyboard').getValue());
+								var target = event.target,
+									selectedValue = target.retrieve('value'),
+									dialogKey = this.retrieve('key');
+								if (target.id.indexOf('button')) {
+									event.preventDefault();
+									switch (selectedValue) {
+										case '$cancel':
+											log('cancel',selectedValue);
+											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+											break;
+										default:
+											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
+											break;
+
+									}
+									var keyboard = getElementById('@' + type + '-keyboard');
+									if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
+										keyboard.firstChild.owner.suicide();
+									}
+									this.destroy();
+								}
 							},
-							blur: function () {
-								this.setStyle('backgroundColor', 'black');
-							},
-							select: function () {
-								this.parentNode.destroy();
-								/*ApplicationManager.fire(identifier, 'onActivateAppButton', {
-									id: this.retrieve('current'),
-									type: 'app-home'
-								});*/
-							},
+							back: function (event) {
+								var dialogKey = this.retrieve('key');
+								event.preventDefault();
+								ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+								this.destroy();
+							}
 						}
-					}).appendTo(template).focus();
+					}).appendTo(app.document.body);
+
+					// Keeps track of which dialog send this.
+					template.store('key', dialogConfig.key);
+
+					var contentFrame = new Frame({
+						styles: {
+							width: 568,
+							height: 666,
+							hAlign: 'center',
+							vAlign: 'center',
+							borderRadius: '15px',
+							border: '2px solid #FFFFFF',
+							backgroundColor: 'black'
+						}
+					}).appendTo(template);
+
+					new Text({
+						id: '@' + type + '-title',
+						label: widget.getLocalizedString(dialogConfig.title || ''),
+						styles: {
+							borderBottom: '2px solid grey',
+							width: 'inherit',
+							height: 64
+						}
+					}).appendTo(contentFrame);
+
+					new Text({
+						id: '@' + type + '-message',
+						label: widget.getLocalizedString(dialogConfig.message || ''),
+						styles: {
+							width: 'inherit',
+							height: 80,
+							hOffset: 52,
+							vOffset: 66,
+							wrap: true
+						}
+					}).appendTo(contentFrame);
+
+					var keyboardContainer = new Frame({
+						id: '@' + type + '-keyboard',
+						styles: {
+							width: 'inherit',
+							height: 0,
+							vOffset: 146
+						},
+						events: {
+							focus: function (event) {
+								if (this.firstChild && this.firstChild.owner && this.firstChild.owner.focus && this.firstChild.owner.focus.call) {
+									this.firstChild.owner.focus();
+								}
+							}
+						}
+					}).appendTo(contentFrame);
+
+					dialogConfig.buttons.forEach(function(btnConfig, key){
+						var button = new Text({
+							label: widget.getLocalizedString(btnConfig.label),
+							id: '@' + type + '-button'+key,
+							focus: true,
+							styles: {
+								width: 'inherit',
+								height: 51,
+								vAlign: 'bottom',
+								vOffset: ((dialogConfig.buttons.length-1) - key) * 56,
+								backgroundColor: 'black',
+							},
+							events: {
+								focus: function () {
+									this.setStyle('backgroundColor', 'red');
+								},
+								blur: function () {
+									this.setStyle('backgroundColor', 'black');
+								}
+							}
+						}).appendTo(contentFrame).store('value', btnConfig.value);			
+					});
+
+					var keyboard, focusEl;
+					switch (id) {
+						case 'textentry':
+						case 'pincreation':
+						case 'pindialog':
+							keyboard = new MAF.keyboard.ReuseKeyboard({
+								maxLength: 10,
+								controlSize: "small",
+								layout: 'alphanumeric'
+							}).appendTo(keyboardContainer);
+							keyboardContainer.wantsFocus = true;
+							keyboardContainer.setStyle('height', keyboard.height || 0);
+							focusEl = getElementById('@' + type + '-keyboard');
+							break;
+						case 'alert':
+							focusEl = getElementById('@' + type + '-button0');
+							break;
+					}
+
+					var height = (dialogConfig.buttons.length * 56) + 66 + 80 + keyboardContainer.height;
+					contentFrame.setStyle('height', height);
+
+					if (focusEl && focusEl.focus && focusEl.focus.call) {
+						focusEl.focus();
+					} else {
+						// Blur focus on view?
+						warn('Did not find a element to focus!');
+					}
 					return;
 				default: 
 					break;
@@ -176,7 +311,10 @@ widget.handleChildEvent = function (event) {
 			loadTemplate.call(this, event.getData());
 			break;
 		case 'showDialog':
-			loadTemplate.call(this, event.getData());
+			var data = event.getData();
+			data.id = data.type;
+			data.type = 'dialog'; 
+			loadTemplate.call(this, data);
 			break;
 		default:
 			break;
