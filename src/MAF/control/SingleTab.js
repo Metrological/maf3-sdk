@@ -1,6 +1,7 @@
 define('MAF.control.SingleTab', function () {
 	return new MAF.Class({
 		ClassName: 'ControlSingleTab',
+
 		Extends: MAF.control.Button,
 
 		Protected: {
@@ -238,13 +239,7 @@ define('MAF.control.SingleTab', function () {
 			delete this.text;
 			Object.forEach(this.arrows, function (key, obj) {
 				delete this.arrows[key];
-				if (obj && obj.suicide) {
-					try {
-						obj.suicide();
-					} catch(err) {
-						error(obj, err);
-					}
-				}
+				obj.suicide();
 			}, this);
 			delete this.arrows;
 			this.parent();

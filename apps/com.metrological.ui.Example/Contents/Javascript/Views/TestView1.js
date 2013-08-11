@@ -194,7 +194,8 @@ var TestView1 = new MAF.Class({
 								buttons: [
 									{ label: 'Close', callback: this.dialogCallback },
 									{ label: 'Continues', callback: this.dialogCallback }
-								]
+								],
+								focusOnCompletion: this.grid
 							}).show();
 						},
 						onFocus: function () {
@@ -269,16 +270,6 @@ var TestView1 = new MAF.Class({
 			label: 'Show all',
 			value: '3'
 		}]);
-		/*this.elements.tab2.initTabs([{
-			label: 'Show demo type',
-			value: 1
-		},{
-			label: 'Show prod type',
-			value: 2
-		},{
-			label: 'Show all',
-			value: 3
-		}]);*/
 		getPagingData({}, true);
 	}
 });

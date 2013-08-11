@@ -1,9 +1,13 @@
 define('MAF.control.Header', function () {
 	var createContent = function () {
+		var config = this.config,
+			className = (config.ClassName || this.ClassName),
+			headerStyle = config.headerStyle && config.headerStyle.capitalize() || '';
+		this.element.addClass(className + headerStyle);
 		this.content = new MAF.element.Text({
-			ClassName: (this.config.ClassName || this.ClassName) + 'Text' + this.config.headerStyle.capitalize(),
-			label: this.config.label,
-			styles: this.config.textStyles
+			ClassName: className + 'Text' + headerStyle,
+			label: config.label,
+			styles: config.textStyles
 		}).appendTo(this);
 	};
 
@@ -19,7 +23,6 @@ define('MAF.control.Header', function () {
 		initialize: function () {
 			delete this.config.focus;
 			this.parent();
-			this.element.addClass((this.config.ClassName || this.ClassName) + this.config.headerStyle.capitalize());
 			createContent.call(this);
 		},
 

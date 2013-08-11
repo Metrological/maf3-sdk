@@ -42,7 +42,6 @@ define('MAF.element.Image', function () {
 					'aspect',
 					'srcWidth',
 					'srcHeight',
-					'colorize',
 					'remoteAsync'
 				].concat(propnames || []));
 
@@ -184,11 +183,6 @@ define('MAF.element.Image', function () {
 		fillParent: function () {
 			var pn = this.element && this.element.parentNode;
 			return pn ? this.aspectSizeMin(Math.max(pn.width, pn.height)) : null;
-		},
-
-		colorizeToTheme: function () {
-//			this.colorize = Theme.getColors().colorize;
-			return this;
 		}
 	});
 });

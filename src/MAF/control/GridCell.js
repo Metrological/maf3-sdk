@@ -30,13 +30,13 @@ define('MAF.control.GridCell', function () {
 }, {
 	ControlGridCell: {
 		renderSkin: function (state, w, h, args, theme) {
-			var ff = new Frame();
-			theme.applyLayer('BaseGlow', ff);
+			var frame = new Frame();
+			theme.applyLayer('BaseGlow', frame);
 			if (state === 'focused') {
-				theme.applyLayer('BaseFocus', ff);
+				theme.applyLayer('BaseFocus', frame);
 			}
-			theme.applyLayer('BaseHighlight', ff);
-			return ff;
+			theme.applyLayer('BaseHighlight', frame);
+			return frame;
 		}
 	}
 });

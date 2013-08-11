@@ -1,7 +1,4 @@
 var getRestaurants = function () {
-
-	log('---> getRestaurants ');
-
 	var lat = '47.3686498';
 	var lng = '8.539182499999999';
 	var Cat = 'Restaurant';
@@ -9,7 +6,6 @@ var getRestaurants = function () {
 	var secret = 'A-x&Vq92';
 	var url = 'http://tel.search.ch/api/?rubrik=' + Cat + '&preferbizlinks=0&center=' + lat.toString() + ',' + lng.toString() + '&radius=' + Radius.toString() + '&maxnum=200&pos=1&lang=de&key=c272f0474f5a002a2798fe83098ee1c7';
 	var calcHmac = sha1.hex(secret, url);
-
 
 	new Request({
 		url: url,
@@ -21,14 +17,13 @@ var getRestaurants = function () {
 		},
 		onSuccess: function (json) {
 			log('Restaurant feed : ', { 'jsonFeed': json });
-
 			MAF.messages.store('RestaurantData', json.feed.entry || []);
 		},
 		onFailure: function (response) {
-			log('onFailure   response : ', response);
+			log('failure', response);
 		},
 		onError: function (response) {
-			log('onError    response : ', response);
+			log('eror', response);
 		}
 	}).get();
 };
@@ -98,11 +93,11 @@ var getPicasaPhotos = function (fetchParams, albumType, albumID, userID) {
 //			MAF.utility.WaitIndicator.down();
 		},
 		onFailure: function (error) {
-			console.log('error:', error);
+			log('failure', error);
 //			//MAF.utility.WaitIndicator.down();
 		},
 		onError: function (error) {
-			console.log('error:', error);
+			log('error', error);
 //			MAF.utility.WaitIndicator.down();
 		}
 	}).get();

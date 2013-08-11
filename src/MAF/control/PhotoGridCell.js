@@ -1,21 +1,18 @@
 define('MAF.control.PhotoGridCell', function () {
+	var fitPhoto = function () {
+		var cw = this.width,
+			ch = this.height,
+			sz = Math.min(cw, ch) - (this.config.cellPadding || 0) * 2;
+		this.photo.aspectSizeMax(sz);
+		this.photo.show();
+	};
+
 	return new MAF.Class({
 		ClassName: 'ControlPhotoGridCell',
+
 		Extends: MAF.control.GridCell,
 
-		Protected: {
-			fitPhoto: function () {
-				var cw = this.width,
-					ch = this.height,
-					sz = Math.min(cw, ch) - (this.config.cellPadding || 0) * 2;
-
-				this.photo.aspectSizeMax(sz);
-				this.photo.show();
-			}
-		},
-
 		config: {
-			shadow: false,
 			cellPadding: 16
 		},
 
@@ -32,7 +29,7 @@ define('MAF.control.PhotoGridCell', function () {
 				}
 			}).appendTo(this);
 
-			this.fitPhoto.subscribeTo(this.photo,'onLoaded',this);
+			fitPhoto.subscribeTo(this.photo, 'onLoaded', this);
 			this.photo.setSources(this.config);
 		},
 

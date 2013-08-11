@@ -1,13 +1,13 @@
 define('MAF.element.Button', function () {
 	var onSecureNeeded = function (nodeEvent) {
-		var conf = this.config,
-			methodName = 'verifySecure',
+		var config = this.config,
+			method = 'verifySecure',
 			callback = onSecureCallback.bindTo(this);
 		callback.__event__ = nodeEvent;
-		if (conf[methodName] && conf[methodName].call) {
-			conf[methodName].call(this, callback);
+		if (config[method] && config[method].call) {
+			config[method].call(this, callback);
 		} else {
-			this[methodName](callback);
+			this[method](callback);
 		}
 	};
 
@@ -21,18 +21,10 @@ define('MAF.element.Button', function () {
 
 		Extends: MAF.element.Container,
 
-		config: {
-			focus: true,
-			secure: false
-		},
-
 		Protected: {
 			dispatcher: function (nodeEvent, payload) {
 				switch(nodeEvent.type) {
 					case 'select':
-						if (this.disabled) { 
-							return false;
-						}
 						if (this.secure) {
 							return onSecureNeeded.call(this, nodeEvent);
 						}
@@ -42,10 +34,15 @@ define('MAF.element.Button', function () {
 			}
 		},
 
+		config: {
+			focus: true,
+			secure: false
+		},
+
 		initialize: function () {
 			this.parent();
 
-			this.setDisabled(this.config.enabled === false || this.config.disabled);
+			this.setDisabled(this.config.enabled === false || this.config.disabled === true);
 			delete this.config.enabled;
 			delete this.config.disabled;
 
@@ -112,24 +109,19 @@ define('MAF.element.Button', function () {
 		},
 
 		setDisabled: function (value) {
-			if (value === true) {
-				if (this.disabled) {
-					return;
-				}
+			if (value === true && this.disabled !== true) {
 				this.disabled = true;
-				this.element.wantsFocus = false;
-				this.setStyle('opacity', 0.35);
+				this.setStyle('opacity', 0.5);
 				this.fire('onDisable');
-				this.fire('onChangeDisabled', { disabled: true });
-			} else {
-				if (!this.disabled) {
-					return;
-				}
+				this.fire('onChangeDisabled', {disabled: true});
+			} else if (value === false && this.disabled !== false) {
 				this.disabled = false;
-				this.element.wantsFocus = true;
-				this.setStyle('opacity', 1);
+				this.setStyle('opacity', null);
 				this.fire('onEnable');
-				this.fire('onChangeDisabled', { disabled: false });
+				this.fire('onChangeDisabled', {disabled: false});
+			}
+			if (this.disabled === this.element.wantsFocus && this.config.focus) {
+				this.element.wantsFocus = !this.disabled;
 			}
 			return this;
 		},

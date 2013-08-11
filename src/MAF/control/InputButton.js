@@ -1,29 +1,29 @@
 define('MAF.control.InputButton', function () {
 	var onValueNeeded = function (event) {
-		var conf = this.config,
-			methodName = 'changeValue',
+		var config = this.config,
+			method = 'changeValue',
 			callback = onValueCallback.bindTo(this),
 			value = this.getValue();
 		callback.__event__ = event;
-		if (conf[methodName] && conf[methodName].apply) {
-			conf[methodName].apply(this, [change_callback, value]);
+		if (config[method] && config[method].apply) {
+			config[method].apply(this, [callback, value]);
 		} else {
-			this[methodName](callback, value);
+			this[method](callback, value);
 		}
 	};
 	var onValueCallback = function (value) {
-		this.setValue(value);
 		var nodeEvent = arguments.callee.caller.__event__ || null;
+		this.setValue(value);
 		this.fire('onSelect', null, nodeEvent);
 	};
 	var createValueDisplay = function () {
-		var dispval = this.getDisplayValue();
+		var dispayValue = this.getDisplayValue();
 		if (this.config.valueOnSubline) {
 			this.valueDisplay = new MAF.element.Text({
 				ClassName: 'ControlValueContainerSubline',
-				label: dispval
+				label: dispayValue
 			}).appendTo(this);
-			/*@TODO: not required? this.valueDisplay._updateContent = */(function () {
+			(function () {
 				this.valueDisplay.data = this.getDisplayValue();
 			}).subscribeTo(this, ['onValueInitialized', 'onValueChanged'], this);
 		} else {
@@ -35,17 +35,10 @@ define('MAF.control.InputButton', function () {
 			}).appendTo(this);
 		}
 	};
-
 	return new MAF.Class({
 		ClassName: 'ControlInputButton',
 
 		Extends: MAF.control.TextButton,
-
-		config: {
-			options: [],
-			value: null,
-			valueOnSubline: false
-		},
 
 		Protected: {
 			dispatcher: function (nodeEvent, payload) {
@@ -61,15 +54,17 @@ define('MAF.control.InputButton', function () {
 				switch (event.type) {
 					case 'onAppend':
 						if (!this.config.valueOnSubline && this.ClassName !== 'ImageToggleButton' && this.valueDisplay && !event.payload.skip) {
-							this.valueDisplay.setStyle('width', this.width);
-							//@TODO: Still required?
-							/*if (this.valueDisplay.adjustContent) {
-								this.valueDisplay.adjustContent();
-							}*/
+							this.valueDisplay.width = this.width;
 						}
 						break;
 				}
 			}
+		},
+
+		config: {
+			options: [],
+			value: null,
+			valueOnSubline: false
 		},
 
 		initialize: function () {
@@ -86,48 +81,51 @@ define('MAF.control.InputButton', function () {
 		},
 
 		adjustAccessories: function () {
-			var max_right = this.width;
+			var maxRight = this.width;
 			if (this.secureIndicator && this.secure) {
-				max_right = this.secureIndicator.hOffset - this.secureIndicator.width;
+				maxRight = this.secureIndicator.hOffset - this.secureIndicator.width;
 			}
 			if (this.valueDisplay && this.valueDisplay.config && this.valueDisplay.config.styles && (this.valueDisplay.config.styles.hAlign === 'right')) {
 				this.valueDisplay.setStyles({
-					hOffset: max_right
+					hOffset: maxRight
 				});
 			}
 		},
 
 		createContent: function () {
-			var dispval = this.getDisplayValue(),
-				subline = this.config.valueOnSubline,
-				textkey = subline ? 'ControlValueContainerMainline' : 'ControlTextButtonText',
-				textsts = Object.clone(this.config.textStyles || Theme.getStyles(textkey) || {});
-			
-			delete textsts.width;
+			var dispayValue = this.getDisplayValue(),
+				config = this.config,
+				onSubline = config.valueOnSubline || false,
+				textKey = onSubline ? 'ControlValueContainerMainline' : 'ControlTextButtonText',
+				textStyles = Object.clone(config.textStyles || Theme.getStyles(textKey) || {});
+
+			delete textStyles.width;
 
 			this.content = new MAF.element.Text({
-				ClassName: textkey,
-				label:  this.config.label,
-				styles: textsts
+				ClassName: textKey,
+				label:  config.label,
+				styles: textStyles
 			}).appendTo(this);
-			
+
 			createValueDisplay.call(this);
 		},
 
 		getValue: function () {
-			return String(this.retrieve('value')||'');
+			return String(this.retrieve('value') || '');
 		},
 
 		setValue: function (value) {
-			var firstblush = this.retrieve('value') === null,
-				stringvalue = value === null ? '' : String(value);
+			var firstBlush = this.retrieve('value') === null,
+				stringValue = value === null ? '' : String(value);
 
-			if ((this.retrieve('value') || '') === stringvalue) {
+			if ((this.retrieve('value') || '') === stringValue) {
 				return '';
 			}
 
-			this.store('value', stringvalue);
-			this.fire( firstblush ? 'onValueInitialized' : 'onValueChanged', { value: stringvalue } );
+			this.store('value', stringValue);
+			this.fire(firstBlush ? 'onValueInitialized' : 'onValueChanged', {
+				value: stringValue
+			});
 			return this.getValue();
 		},
 
@@ -138,7 +136,7 @@ define('MAF.control.InputButton', function () {
 		getDisplayValue: function (value) {
 			value = value || this.getValue();
 			var label = value;
-			this.getOptions().forEach(function(option){
+			this.getOptions().forEach(function (option) {
 				if (option.value == value) {
 					label = option.label;
 				}
@@ -147,9 +145,9 @@ define('MAF.control.InputButton', function () {
 		},
 
 		setOptions: function (values, labels) {
-			values = (values instanceof Array) ? values : [values];
-			var options = values.map(function(value, v){
-				var o = typeof value == 'object',
+			values = [].concat(values);
+			var options = values.map(function (value, v) {
+				var o = typeOf(value) === 'object',
 					l = labels && labels.length || 0;
 				return value ? {
 					value: o && 'value' in value ? value.value : value,
@@ -157,7 +155,9 @@ define('MAF.control.InputButton', function () {
 				} : value;
 			});
 			this.store('options', options);
-			this.fire('onOptionsChanged', { options: this.getOptions() });
+			this.fire('onOptionsChanged', {
+				options: this.getOptions()
+			});
 		},
 
 		getOptions: function () {
@@ -165,13 +165,13 @@ define('MAF.control.InputButton', function () {
 		},
 
 		getOptionValues: function () {
-			return this.getOptions().map(function(option) {
+			return this.getOptions().map(function (option) {
 				return option.value;
 			});
 		},
 
 		getOptionLabels: function () {
-			return this.getOptions().map(function(option) {
+			return this.getOptions().map(function (option) {
 				return option.label;
 			});
 		},
@@ -186,7 +186,6 @@ define('MAF.control.InputButton', function () {
 		inspectStatePacket: function (packet, focusOnly) {
 			var data = this.parent(packet, focusOnly),
 				type = typeOf(data);
-				
 			if (focusOnly) {
 				return;
 			}

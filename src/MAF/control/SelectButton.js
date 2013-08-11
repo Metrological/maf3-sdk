@@ -1,41 +1,36 @@
 define('MAF.control.SelectButton', function () {
-	var buildOptionView = function (current_value) {
+	var buildOptionView = function (value) {
 		var viewClass = this.config.optionViewClass;
-
 		if (DEBUG && (!viewClass || !viewClass.inheritsFrom || !viewClass.inheritsFrom(MAF.system.SidebarView))) {
 			warn(this.ClassName, 'buildOptionView', 'no usable view class in config.optionViewClass');
 		}
-
 		var viewConfig = {
-			id: this.config.optionListViewId || this._classID + '.' + viewClass.prototype.ClassName + '.' + 0,//animator.milliseconds,
+			id: this.config.optionListViewId || this._classID + '.' + viewClass.prototype.ClassName,
 			data: {
 				guid: this.config.guid,
 				backLabel: this.config.label,
 				options: this.getOptions(),
-				value: current_value,
+				value: value,
 				optionGridRows: this.config.optionGridRows,
 				optionGridColumns: this.config.optionGridColumns,
 				cancelDialog: this.config.cancelDialog
 			},
 			viewClass: viewClass
 		};
-
 		this.optionListViewId = viewConfig.id;
-		
 		MAF.application.addViewConfig(viewConfig);
 		MAF.application.loadView(viewConfig.id);
 	};
 	var destroyOptionView = function (viewId) {
 		if (!viewId) {
-			return viewId;
+			return;
 		}
 		MAF.application.removeView(viewId);
-
-		this.optionListViewId = null;
+		delete this.optionListViewId;
 	};
-
 	return new MAF.Class({
 		ClassName: 'ControlSelectButton',
+
 		Extends: MAF.control.InputButton,
 
 		config: {
@@ -46,8 +41,8 @@ define('MAF.control.SelectButton', function () {
 			optionGridColumns: 1
 		},
 
-		changeValue: function (change_callback, current_value) {
-			buildOptionView.call(this, current_value);
+		changeValue: function (callback, value) {
+			buildOptionView.call(this, value);
 		},
 
 		inspectStatePacket: function (packet, focusOnly) {
@@ -60,7 +55,6 @@ define('MAF.control.SelectButton', function () {
 				if (data.optionViewId) {
 					destroyOptionView.call(this, data.optionViewId);
 				}
-
 				switch (data.cancelType) {
 					case 'onActivateHomeButton':
 						appmethod = MAF.application.loadDefaultView;
@@ -70,10 +64,13 @@ define('MAF.control.SelectButton', function () {
 						break;
 				}
 			}
-			if (appmethod) {
-				appmethod();
+			try {
+				return data;
+			} finally {
+				if (appmethod) {
+					appmethod();
+				}
 			}
-			return data;
 		}
 	});
 }, {

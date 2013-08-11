@@ -171,7 +171,7 @@ define('MAF.control.PageIndicator', function () {
 			}
 
 			if (this.config.autoDisableWhenEmpty) {
-				this.setDisabled(pageCount <= 1);
+				this.setDisabled((pageCount < 2));
 			}
 
 			return this;
@@ -187,13 +187,7 @@ define('MAF.control.PageIndicator', function () {
 			delete this.text;
 			Object.forEach(this.arrows, function (key, obj) {
 				delete this.arrows[key];
-				if (obj && obj.suicide) {
-					try {
-						obj.suicide();
-					} catch(err) {
-						error(obj, err);
-					}
-				}
+				obj.suicide();
 			}, this);
 			delete this.arrows;
 			this.parent();

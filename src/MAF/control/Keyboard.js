@@ -1,21 +1,6 @@
 define('MAF.control.Keyboard', function () {
 	var keyboards = {},
 		repeaters = {};
-	var appendHandler = function (event) {
-		if (this.config.embedded) {
-			var view = this.getView();
-			if (view && view.owner) {
-				handleKeyboardInputHide.subscribeTo(this, 'onHideView', this);
-				handleKeyboardInputUpdate.subscribeTo(this, 'onUpdateView', this);
-			}
-		}
-	};
-	var handleKeyboardInputHide = function () {
-		KeyboardInput.setRemoteKeyboard(false);
-	};
-	var handleKeyboardInputUpdate = function () {
-		KeyboardInput.setRemoteKeyboard(true);
-	};
 	var createKeyboard = function () {
 		var repeater = repeaters[this._classID] = {
 			valueChanged: (function () {
@@ -141,8 +126,6 @@ define('MAF.control.Keyboard', function () {
 			if (this.config.autoAdjust) {
 				this.setStyle('height', keyboards[this._classID].element.height);
 			}
-
-			appendHandler.subscribeTo(this, 'onAppend', this);
 		},
 
 		getValue: function () {

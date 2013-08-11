@@ -7,37 +7,37 @@ define('MAF.control.MetadataDisplay', function () {
 		Protected: {
 			createContent: function () {
 				this.content = new MAF.element.Text({
-					ClassName: this.ClassName+'Text',
+					ClassName: this.ClassName + 'Text',
 					styles: this.config.textStyles || {}
 				}).appendTo(this);
 			},
 			updateContent: function (state) {
-				var start     = state && parseInt(state.startIndex, 10) > -1 ? state.startIndex : this.source.getStartIndex(),
-					focused   = state && parseInt(state.focusIndex, 10) > -1 ? state.focusIndex : this.source.getFocusIndex(),
-					dataindex = parseInt(start, 10) > -1 && parseInt(focused, 10) > -1 ? start + focused : false,
-					dataitem  = dataindex !== false && this.getSourceDataItem( dataindex );
-				if (dataitem) {
+				var start   = state && parseInt(state.startIndex, 10) > -1 ? state.startIndex : this.source.getStartIndex(),
+					focused = state && parseInt(state.focusIndex, 10) > -1 ? state.focusIndex : this.source.getFocusIndex(),
+					index   = parseInt(start, 10) > -1 && parseInt(focused, 10) > -1 ? start + focused : false,
+					item    = index !== false && this.getSourceDataItem(index);
+				if (item) {
 					var updater = this.config.updateMethod || this.updateMethod;
-					if (updater && typeOf(updater) === 'function') {
-						updater.call(this, dataitem);
+					if (updater && updater.call) {
+						updater.call(this, item);
 					}
 				}
 			},
-			updateMethod: function (dataitem) {
-				var text = "";
-				switch (typeof dataitem) {
+			updateMethod: function (item) {
+				var text = '';
+				switch (typeOf(item)) {
 					case 'string':
-						text = dataitem;
+						text = item;
 						break;
 					case 'object':
 						var map = this.config.metadataMap;
 						if (map) {
 							var key = map.label || map.text;
-							text = dataitem[key];
-						} else if ('label' in dataitem) {
-							text = dataitem.label;
-						} else if ('text' in dataitem) {
-							text = dataitem.text;
+							text = item[key];
+						} else if ('label' in item) {
+							text = item.label;
+						} else if ('text' in item) {
+							text = item.text;
 						}
 						break;
 				}
@@ -80,7 +80,7 @@ define('MAF.control.MetadataDisplay', function () {
 				return this.update();
 			}
 			this.source = source;
-			this.onSourceUpdated.subscribeTo(this.source, ['onStateUpdated','onFocus','onBlur'], this);
+			this.onSourceUpdated.subscribeTo(this.source, ['onStateUpdated', 'onFocus', 'onBlur'], this);
 			return this.updateContent();
 		},
 
@@ -97,7 +97,7 @@ define('MAF.control.MetadataDisplay', function () {
 		},
 
 		setText: function (text) {
-			this.content.data = text || "";
+			this.content.data = text || '';
 		},
 
 		suicide: function () {
