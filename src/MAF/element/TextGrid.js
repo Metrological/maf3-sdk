@@ -5,14 +5,14 @@ define('MAF.element.TextGrid', function () {
 		Extends: MAF.element.Text,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				if (nodeEvent.type === 'layoutchange') {
+			dispatcher: function (event, payload) {
+				if (event.type === 'layoutchange') {
 					this.fire('onStateUpdated', {
 						currentPage: this.getCurrentPage(),
 						pageCount: this.getPageCount()
-					}, nodeEvent);
+					}, event);
 				}
-				this.parent(nodeEvent, payload);
+				this.parent(event, payload);
 			},
 			elementEvents: function (eventTypes) {
 				this.parent([

@@ -5,21 +5,21 @@ define('MAF.control.SingleTab', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				switch(nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				switch(event.type) {
 					case 'focus':
 					case 'blur':
 						if (this.arrows && this.config.focusArrows === true) {
-							this.arrows.left.visible = this.arrows.right.visible = (nodeEvent.type === 'focus') ? true : false;
+							this.arrows.left.visible = this.arrows.right.visible = (event.type === 'focus') ? true : false;
 						}
 						break;
 					case 'navigate':
-						if (nodeEvent.detail && nodeEvent.detail.direction) {
-							switch (nodeEvent.detail.direction) {
+						if (event.detail && event.detail.direction) {
+							switch (event.detail.direction) {
 								case 'left':
 								case 'right':
-									nodeEvent.preventDefault();
-									this.shiftSource(nodeEvent.detail.direction);
+									event.preventDefault();
+									this.shiftSource(event.detail.direction);
 									break;
 								default:
 									break;
@@ -27,7 +27,7 @@ define('MAF.control.SingleTab', function () {
 						}
 						break;
 				}
-				this.parent(nodeEvent, payload);
+				this.parent(event, payload);
 			},
 			createContent: function () {
 				var arrowClass = 'ControlPageIndicator',

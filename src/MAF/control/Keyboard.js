@@ -56,8 +56,8 @@ define('MAF.control.Keyboard', function () {
 		},
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				switch (nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				switch (event.type) {
 					case 'focus':
 						this.focus();
 						break;

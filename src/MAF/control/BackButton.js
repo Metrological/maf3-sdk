@@ -5,15 +5,15 @@ define('MAF.control.BackButton', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				switch(nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				switch(event.type) {
 					case 'select':
-						if (this.fire('onSelect', payload, nodeEvent)) {
+						if (this.fire('onSelect', payload, event)) {
 							MAF.application.previousView();
 						}
 						break;
 					default:
-						this.parent(nodeEvent, payload);
+						this.parent(event, payload);
 						break;
 				}
 			}

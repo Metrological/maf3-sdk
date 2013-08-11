@@ -32,14 +32,14 @@ define('MAF.system.WindowedView', function () {
 		Extends: MAF.system.BaseView,
 
 		Protected: {
-			dispatcher: function (nodeEvent) {
-				this.parent(nodeEvent);
-				switch (nodeEvent.type) {
+			dispatcher: function (event) {
+				this.parent(event);
+				switch (event.type) {
 					case 'navigate':
-						this.fire('onNavigate', nodeEvent.detail, nodeEvent);
+						this.fire('onNavigate', event.detail, event);
 						break;
 					case 'navigateoutofbounds':
-						this.fire('onNavigateOutOfBounds', nodeEvent.detail, nodeEvent);
+						this.fire('onNavigateOutOfBounds', event.detail, event);
 						break;
 				}
 			},

@@ -5,14 +5,14 @@ define('MAF.element.Text', function () {
 		Extends: MAF.element.Core,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				this.parent(nodeEvent, payload);
-				switch(nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				this.parent(event, payload);
+				switch(event.type) {
 					case 'change':
-						this.fire('onChange', payload, nodeEvent);
+						this.fire('onChange', payload, event);
 						break;
 					case 'layoutchange':
-						this.fire('onLayoutChange', payload, nodeEvent);
+						this.fire('onLayoutChange', payload, event);
 						break;
 				}
 			},

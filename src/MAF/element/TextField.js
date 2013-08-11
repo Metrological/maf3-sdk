@@ -5,23 +5,23 @@ define('MAF.element.TextField', function () {
 		Extends: MAF.element.Text,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				this.parent(nodeEvent, payload);
-				var type = nodeEvent.type;
+			dispatcher: function (event, payload) {
+				this.parent(event, payload);
+				var type = event.type;
 				switch(type) {
 					case 'navigate':
-						this.fire('onNavigate', nodeEvent.detail, nodeEvent);
+						this.fire('onNavigate', event.detail, event);
 						return;
 					case 'keydown':
-						this.fire('onKeyDown', {keyCode: nodeEvent.keyCode, key: nodeEvent.key, eventPhase: nodeEvent.eventPhase, type: nodeEvent.type}, nodeEvent);
+						this.fire('onKeyDown', {keyCode: event.keyCode, key: event.key, eventPhase: event.eventPhase, type: event.type}, event);
 						return;
 					case 'cursor':
-						this.fire('onCursor', nodeEvent.detail, nodeEvent);
+						this.fire('onCursor', event.detail, event);
 						return;
 					default:
 						break;
 				}
-				this.fire('on' + type.capitalize(), payload, nodeEvent);
+				this.fire('on' + type.capitalize(), payload, event);
 			},
 			elementEvents: function (eventTypes) {
 				this.parent(['focus', 'blur', 'keydown', 'navigate', 'cursor'].concat(eventTypes || []));

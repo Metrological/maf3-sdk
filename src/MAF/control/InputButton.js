@@ -12,9 +12,9 @@ define('MAF.control.InputButton', function () {
 		}
 	};
 	var onValueCallback = function (value) {
-		var nodeEvent = arguments.callee.caller.__event__ || null;
+		var event = arguments.callee.caller.__event__ || null;
 		this.setValue(value);
-		this.fire('onSelect', null, nodeEvent);
+		this.fire('onSelect', null, event);
 	};
 	var createValueDisplay = function () {
 		var dispayValue = this.getDisplayValue();
@@ -41,13 +41,13 @@ define('MAF.control.InputButton', function () {
 		Extends: MAF.control.TextButton,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				if (nodeEvent.type === 'select') {
-					nodeEvent.stopPropagation();
-					nodeEvent.preventDefault();
+			dispatcher: function (event, payload) {
+				if (event.type === 'select') {
+					event.stopPropagation();
+					event.preventDefault();
 					return onValueNeeded.call(this);
 				}
-				this.parent(nodeEvent, payload);
+				this.parent(event, payload);
 			},
 			onThemeNeeded: function (event) {
 				this.parent(event);

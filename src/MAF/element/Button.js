@@ -1,9 +1,9 @@
 define('MAF.element.Button', function () {
-	var onSecureNeeded = function (nodeEvent) {
+	var onSecureNeeded = function (event) {
 		var config = this.config,
 			method = 'verifySecure',
 			callback = onSecureCallback.bindTo(this);
-		callback.__event__ = nodeEvent;
+		callback.__event__ = event;
 		if (config[method] && config[method].call) {
 			config[method].call(this, callback);
 		} else {
@@ -12,8 +12,8 @@ define('MAF.element.Button', function () {
 	};
 
 	var onSecureCallback = function (result) {
-		var nodeEvent = arguments.callee.caller.__event__ || null;
-		this.fire((Boolean(result) ? 'onSelect' : 'onSecureFailed'), null, nodeEvent);
+		var event = arguments.callee.caller.__event__ || null;
+		this.fire((Boolean(result) ? 'onSelect' : 'onSecureFailed'), null, event);
 	};
 
 	return new MAF.Class({
@@ -22,15 +22,15 @@ define('MAF.element.Button', function () {
 		Extends: MAF.element.Container,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				switch(nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				switch(event.type) {
 					case 'select':
 						if (this.secure) {
-							return onSecureNeeded.call(this, nodeEvent);
+							return onSecureNeeded.call(this, event);
 						}
 						break;
 				}
-				this.parent(nodeEvent, payload);
+				this.parent(event, payload);
 			}
 		},
 

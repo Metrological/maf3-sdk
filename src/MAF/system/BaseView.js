@@ -21,17 +21,17 @@ define('MAF.system.BaseView', function () {
 					'blur'
 				].concat(types || []));
 			},
-			dispatcher: function (nodeEvent) {
-				this.parent(nodeEvent);
-				switch (nodeEvent.type) {
+			dispatcher: function (event) {
+				this.parent(event);
+				switch (event.type) {
 					case 'firstdisplay':
-						this.fire('onFirstDisplay', null, nodeEvent);
+						this.fire('onFirstDisplay', null, event);
 						break;
 					case 'focus':
-						this.fire('onFocus', null, nodeEvent);
+						this.fire('onFocus', null, event);
 						break;
 					case 'blur':
-						this.fire('onBlur', null, nodeEvent);
+						this.fire('onBlur', null, event);
 						break;
 					default:
 						break;

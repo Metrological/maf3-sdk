@@ -5,11 +5,11 @@ define('MAF.element.Image', function () {
 		Extends: MAF.element.Core,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				this.parent(nodeEvent, payload);
-				switch (nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				this.parent(event, payload);
+				switch (event.type) {
 					case 'load':
-						this.fire('onLoaded', payload, nodeEvent);
+						this.fire('onLoaded', payload, event);
 						if (this.config.autoShow) {
 							this.show();
 						}
@@ -18,7 +18,7 @@ define('MAF.element.Image', function () {
 						//}
 						break;
 					case 'error':
-						this.fire('onError', payload, nodeEvent);
+						this.fire('onError', payload, event);
 						if (this.config.autoShow) {
 							this.show();
 						}

@@ -5,18 +5,18 @@ define('MAF.control.PageIndicator', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				switch(nodeEvent.type) {
+			dispatcher: function (event, payload) {
+				switch(event.type) {
 					case 'navigate':
-						if (nodeEvent.detail && nodeEvent.detail.direction) {
-							if (nodeEvent.detail.direction === 'left' || nodeEvent.detail.direction === 'right') {
-								nodeEvent.preventDefault();
-								return this.shiftSource(nodeEvent.detail.direction);
+						if (event.detail && event.detail.direction) {
+							if (event.detail.direction === 'left' || event.detail.direction === 'right') {
+								event.preventDefault();
+								return this.shiftSource(event.detail.direction);
 							}
 						}
 						break;
 				}
-				this.parent(nodeEvent, payload);
+				this.parent(event, payload);
 			},
 			createContent: function () {
 				var tk = this.ClassName + 'TextLink',

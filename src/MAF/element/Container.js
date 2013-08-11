@@ -7,20 +7,20 @@ define('MAF.element.Container', function () {
 		Implements: Library.Themes,
 
 		Protected: {
-			dispatcher: function (nodeEvent, payload) {
-				this.parent(nodeEvent, payload);
+			dispatcher: function (event, payload) {
+				this.parent(event, payload);
 
-				var type = nodeEvent.type,
+				var type = event.type,
 					el = this.element;
 
 				switch(type) {
 					case 'navigate':
-						this.fire('onNavigate', nodeEvent.detail, nodeEvent);
+						this.fire('onNavigate', event.detail, event);
 						return;
 					default:
 						break;
 				}
-				this.fire('on' + type.capitalize(), payload, nodeEvent);
+				this.fire('on' + type.capitalize(), payload, event);
 			},
 			elementEvents: function (types) {
 				this.parent(['focus', 'blur', 'select', 'navigate'].concat(types || []));
