@@ -61,7 +61,7 @@ define('MAF.element.Text', function () {
 			if (this.config.visibleLines) {
 				this.visibleLines = this.config.visibleLines;
 			}
-			this.data = this.config.data || this.config.text || this.config.label;
+			this.setText(this.config.data || this.config.text || this.config.label);
 		},
 
 		setText: function (text) {

@@ -23,11 +23,12 @@ define('MAF.system.AboutDocView', function () {
 				}
 			}).appendTo(this);
 
+			var margin = Theme.getStyles('AboutDocViewTextGrid', 'margin');
 			this.elements.textGrid = new MAF.element.TextGrid({
 				ClassName: 'AboutDocViewTextGrid',
 				styles: {
-					width: this.width - 10,
-					height: this.height - (this.controls.pageIndicator.height + this.controls.backButton.height) - 10,
+					width: this.width - (margin * 2),
+					height: this.height - (this.controls.pageIndicator.height + this.controls.backButton.height) - (margin * 2),
 					vOffset: this.controls.backButton.outerHeight,
 					anchorStyle: 'justify'
 				}
@@ -39,11 +40,11 @@ define('MAF.system.AboutDocView', function () {
 		}
 	});
 }, {
-	'AboutDocViewTextGrid': {
+	AboutDocViewTextGrid: {
 		styles: {
 			fontSize: 22,
 			color: '#FFFFFF',
-			padding: 5,
+			margin: 7,
 			wrap: true
 		}
 	}

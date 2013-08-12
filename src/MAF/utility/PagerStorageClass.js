@@ -1,6 +1,7 @@
 define('MAF.utility.PagerStorageClass', function () {
 	return new MAF.Class({
 		ClassName: 'PagerStorageClass',
+
 		initialize: function () {
 			this.items = [];
 			if (this.config.data) {
@@ -19,12 +20,12 @@ define('MAF.utility.PagerStorageClass', function () {
 		},
 
 		remove: function (o, k) {
-			var index;
 			o = [].concat(o);
 			k = k === true ? true : false;
-			for (var i=0,l=o.length;i<l;i++) {
-				index = this.contains(o[i], k);
-				if (index !== false) this.items.splice(itemIndex, 1);
+			for (var i = 0, l = o.length; i < l; i++) {
+				if (this.contains(o[i], k) !== false) {
+					this.items.splice(itemIndex, 1);
+				}
 			}
 		},
 

@@ -152,7 +152,7 @@ define('MAF.views.AboutBox', function () {
 							events: {
 								onSelect: function () {
 									var viewConfig = {
-										id: this._classID+'AboutDocView',
+										id: this._classID + 'AboutDocView',
 										data: {
 											backLabel: this.config.label,
 											value: this.config.value

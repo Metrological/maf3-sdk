@@ -1,74 +1,71 @@
 define('MAF.utility.Pager', function () {
 	var classIndex = {};
-	//var curIndex = 0, nextIndex = 0, leftIndex = 0, rightIndex = 0, dataSize = 0, pageSize = 0, fetchSize = 0, loadFactor = 0,
-	var paramsMap = {},
-		fetch = {},
-		allowFiltering = true,
-		items = [];
-
-	//var storage = new HashMap();
-
 	return new MAF.Class({
 		ClassName: 'Pager',
-		_eventType: 'pageDone',
+
+		eventType: 'pageDone',
+
 		Protected: {
 			filterItems: function (filterFn) {
-				var filterArray = [];
-				classIndex[this._classID].storage.remove('filter');
-				if (allowFiltering)
-					classIndex[this._classID].dataSize = 0;
-				
-				classIndex[this._classID].storage.forEach(function (value, key) {
+				var filterArray = [],
+					internal = classIndex[this._classID];
+				internal.storage.remove('filter');
+				if (internal.allowFiltering) {
+					internal.dataSize = 0;
+				}
+				internal.storage.forEach(function (value, key) {
 					var item = (filterFn && typeOf(filterFn) === 'function') ? filterFn(value, key) : value;
 					if (item) {
-						if (filterFn && typeOf(filterFn) === 'function')
+						if (filterFn && typeOf(filterFn) === 'function') {
 							filterArray.push(key);
-						else
+						} else {
 							filterArray[key] = key;
-						if (allowFiltering)
-							classIndex[this._classID].dataSize++;
+						}
+						if (internal.allowFiltering) {
+							internal.dataSize++;
+						}
 					}
 				}, this);
-
-				classIndex[this._classID].storage.set('filter', filterArray);
+				internal.storage.set('filter', filterArray);
 			},
 			setData: function () {
-
 			},
 			getData: function (index, pagesize, filtered) {
-				index = index || 0,
-				pagesize = pagesize || classIndex[this._classID].dataSize,
+				var internal = classIndex[this._classID];
+				index = index || 0;
+				pagesize = pagesize || internal.dataSize;
 				filtered = (typeOf(this.config.filter) === 'function' && filtered === true) ? true : false;
-
 				var items = [],
-					filters = (classIndex[this._classID].storage.get('filter') || []).slice(index, index + pagesize),
-					i = 0;
-
+					filters = (internal.storage.get('filter') || []).slice(index, index + pagesize);
 				filters.forEach(function (value, key) {
-					items.push(classIndex[this._classID].storage.get(value));
+					items.push(internal.storage.get(value));
 				}, this);
-
 				return items;
 			}
 		},
+
 		config: {
 			filter: null
 		},
+
 		initialize: function (pagesize, fetchsize, fetchcallback, fetchscope, buffersize) {
 			var internal = classIndex[this._classID] = {};
 			internal.pageSize = pagesize || 1;
 			internal.fetchSize = fetchsize || 48;
 			internal.loadFactor = buffersize;
 			internal.storage = new HashMap();
-
 			if (fetchcallback) {
-				fetch = { func: fetchcallback, obj: fetchscope };
-				allowFiltering = false;
+				internal.fetch = { func: fetchcallback, obj: fetchscope };
+				internal.allowFiltering = false;
+			} else {
+				internal.allowFiltering = true;
 			}
 		},
 
 		initItems: function (data, total) {
-			if (!data) return false;
+			if (!data) {
+				return false;
+			}
 
 			// TODO: For dynamic paging loading 
 			var internal = classIndex[this._classID];
@@ -76,8 +73,7 @@ define('MAF.utility.Pager', function () {
 			internal.nextIndex = 0;
 			internal.leftIndex = 0;
 			internal.rightIndex = 0;
-
-			paramsMap = {};
+			internal.paramsMap = {};
 
 			data.forEach(function (value, key) {
 				internal.storage.set(key, value);
@@ -89,7 +85,8 @@ define('MAF.utility.Pager', function () {
 		},
 
 		setFilter: function (fn) {
-			if (typeOf(fn) === 'function' && allowFiltering) {
+			var internal = classIndex[this._classID];
+			if (typeOf(fn) === 'function' && internal.allowFiltering) {
 				this.config.filter = fn;
 				this.filterItems(this.config.filter);
 			} else {
@@ -154,7 +151,7 @@ define('MAF.utility.Pager', function () {
 			if (items && items.length > 0) {
 				var page = new MAF.utility.PagerStorageClass({ data: items });
 
-				this.fire(this._eventType, {
+				this.fire(this.eventType, {
 					data: page,
 					index: index,
 					wrap: wrap
@@ -177,10 +174,12 @@ define('MAF.utility.Pager', function () {
 					per_page: pp,
 					key: key
 				};
-				paramsMap[key] = entry;
-
-				if (fetch && fetch.func) {
-					fetch.func.call(fetch.obj, params);
+				if (!internal.paramsMap) {
+					internal.paramsMap = {};
+				}
+				internal.paramsMap[key] = entry;
+				if (internal.fetch && internal.fetch.func) {
+					internal.fetch.func.call(internal.fetch.obj, params);
 				}
 				return null;
 			}
@@ -188,26 +187,24 @@ define('MAF.utility.Pager', function () {
 		},
 
 		onGotPage: function(params, arrData, total) {
-			var entry = paramsMap[params.key];
-			if (!entry)
+			var internal = classIndex[this._classID],
+				entry = internal.paramsMap[params.key];
+			if (!entry) {
 				return false;
-
-			paramsMap[params.key] = null;
-
-			var internal = classIndex[this._classID];
+			}
+			internal.paramsMap[params.key] = null;
 			arrData.forEach(function (value, key) {
 				internal.storage.set(entry.add_index + key, value);
 			}, this);
 			this.filterItems(this.config.filter);
-
 			if (total !== null) {
 				internal.dataSize = total;
 			}
-
 			var results = this.getData(entry.index, entry.page_size);//this._items && this._items.slice(entry.index, entry.index+entry.page_size) || false;
 			var page = new MAF.utility.PagerStorageClass({data: results});
-
-			entry.quiet || this.fire(this._eventType, { data:page, index:entry.index, wrap:entry.wrap });
+			if (!entry.quiet) {
+				this.fire(this.eventType, { data:page, index:entry.index, wrap:entry.wrap });
+			}
 			return true;
 		},
 

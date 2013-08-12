@@ -221,7 +221,7 @@ define('MAF.element.Grid', function () {
 					payload = event.payload,
 					type = event.type,
 					index = payload && payload.index;
-				if (!payload || type !== this.pager._eventType || !payload.data || !request || index !== request.index) {
+				if (!payload || type !== this.pager.eventType || !payload.data || !request || index !== request.index) {
 					return;
 				}
 				var data = payload.data.items && payload.data.items.length && [].concat(payload.data.items) || [],
@@ -365,7 +365,7 @@ define('MAF.element.Grid', function () {
 
 			this.generateCells(Math.min(this.pager.getDataSize(), this.pager.getPageSize()));
 
-			this.onDataPage.subscribeTo(this.pager, this.pager._eventType, this);
+			this.onDataPage.subscribeTo(this.pager, this.pager.eventType, this);
 			this.updateWaitIndicator.subscribeTo(this, ['onChangePage', 'onPageChanged'], this);
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
 			this.handleSelectEvent.subscribeTo(this, 'onSelect', this);

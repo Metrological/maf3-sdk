@@ -25,7 +25,7 @@ define('MAF.control.PageIndicator', function () {
 
 				this.text = new MAF.element.Text({
 					ClassName: this.ClassName + 'TextLink'
-				}).freeze().appendTo(this);
+				}).appendTo(this);
 
 				this.arrows = {
 					left: new MAF.element.Image({
@@ -162,7 +162,6 @@ define('MAF.control.PageIndicator', function () {
 				this.arrows.right.freeze();
 			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
-				this.text.thaw();
 				this.arrows.left.thaw();
 				this.arrows.right.thaw();
 			}
