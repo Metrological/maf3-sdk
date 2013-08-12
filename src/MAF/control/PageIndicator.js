@@ -111,7 +111,7 @@ define('MAF.control.PageIndicator', function () {
 		initialize: function () {
 			this.parent();
 			if (!this.config.imageSources) {
-				this.config.imageSources = Theme.storage.get('ControlPageIndicator','sources');
+				this.config.imageSources = Theme.storage.get('ControlPageIndicator', 'sources');
 			}
 			var source = this.config.sourceElement || this.config.source;
 			if (source) this.attachToSource(source);
@@ -144,8 +144,11 @@ define('MAF.control.PageIndicator', function () {
 		},
 
 		update: function (state) {
-			var currentPage = (state && isFinite(state.currentPage)) ? state.currentPage : (this.getSourceCurrentPage() || 0),
-				pageCount = (state && isFinite(state.pageCount)) ? state.pageCount : (this.getSourcePageCount() || 1),
+			if (state && (state.pageChanging === false || state.currentPage === undefined)) {
+				return this;
+			}
+			var currentPage = state && state.currentPage ? state.currentPage : this.getSourceCurrentPage() || 0,
+				pageCount = state && state.pageCount ? state.pageCount : this.getSourcePageCount() || 1,
 				useDots = pageCount < (parseInt(this.config.threshold, 10) || 0),
 				build = useDots ? this.buildDots : this.buildText;
 
@@ -182,6 +185,7 @@ define('MAF.control.PageIndicator', function () {
 		},
 
 		suicide: function () {
+			delete this.previousPage;
 			delete this.source;
 			this.text.suicide();
 			delete this.text;

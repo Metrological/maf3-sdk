@@ -694,7 +694,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					{keyid:"numkey-9"}]
 				],
 				controlrow:[
-					{keyid:"numkey-comma"}, //@TODO (MAF.Locale.get('Number.decimal') === ",") ? "numkey-comma" : "numkey-decimal"},
+					{keyid: Number.DECIMAL === "," ? "numkey-comma" : "numkey-decimal"},
 					{keyid:"numkey-0"},
 					{keyid:"action-backspace"}
 				],
@@ -961,18 +961,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		}
 	};
 
-	var checkForFocus = function (key, highlight) {
+	var checkForFocus = function (key) {
 		var internal = internals[this._classID],
 			index = internal.indexing['key-'+key];
 		if (isNumber(index)) {
 			var child = internal.body.firstChild.childNodes[index];
 			if (!child.disabled) {
-				if (highlight) {
-					child.addClass('highlight');
-				} else {
-					child.focus();
-					child.select();
-				}	
+				child.focus();
+				child.select();
 				return true;
 			}
 		}
@@ -991,7 +987,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				case 'shift':
 					if (!internals[target.owner._classID].state.currentLayout.noShift && !internals[target.owner._classID].state.showShift) {
 						target.owner.setShiftState(true);
-						checkForFocus.call(target.owner, event.key, true);
 					}
 					break;
 				case 'back':
@@ -1015,10 +1010,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			var internal = internals[target.owner._classID];
 			if (!internal.state.currentLayout.noShift) {
 				target.owner.setShiftState(false);
-				var index = internal.indexing['key-'+event.key];
-				if (isNumber(index)) {
-					internal.body.firstChild.childNodes[index].removeClass('highlight');
-				}
 			}
 		}
 	};
@@ -1155,7 +1146,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 						current.owner.toggleExtended();
 						removeExendedOverlay.call(this.owner);
 						if (isNumber(refocus)) {
-							internals[classId].body.firstChild.childNodes[refocus].focus();
+							internal.body.firstChild.childNodes[refocus].focus();
 						}
 						break;
 				}
@@ -1200,9 +1191,11 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 
 		initialize: function () {
-			internals[this._classID] = {
+			var internal = internals[this._classID] = {
 				value: [],
-				body: new Frame(),
+				body: new Frame({
+					frozen: true
+				}),
 				extendedOverlay: new Frame(),
 				state: {
 					showShift: false,
@@ -1225,8 +1218,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			//log('---ReuseKeyboard Internals----', internals);
 			setAvailableLayouts.call(this, this.config.availableLayouts);
 
-			var internal = internals[this._classID],
-				body = internal.body;
+			var body = internal.body;
 			body.addEventListener('focus', onBodyGainFocus);
 			body.addEventListener('blur', onBodyLoseFocus);
 			body.addEventListener('keydown', onBodyKeyDown, this);
@@ -1305,7 +1297,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 		appendTo: function (node) {
 			if (node) {
-				internals[this._classID].body.inject(node);
+				var body = internals[this._classID].body;
+				body.inject(node);
+				body.frozen = false;
 			}
 			return this;
 		},
@@ -1325,10 +1319,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			internal.state.currentLayout = layout;
 
-			var currentBody = internal.body.firstChild;
-			if (currentBody) {
-				this.body = (new List()).inject(internal.body);
-				currentBody.destroy(true);
+			if (this.body) {
+				this.body.destroy(true);
+				this.body = (new List()).inject(internal.body, 'top');
 			}
 
 			var row_max = 0,
@@ -1418,21 +1411,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (options.focusTarget) {
 				this.body.childNodes[options.focusTarget].focus();
 			}
-		},
-		toggleKey: function (key) {
-			var internal = internals[this._classID],
-				index = internal.indexing['key-'+key];
-			if (isNumber(index)) {
-				var el = internal.body.firstChild.childNodes[index];
-				if (el && !el.disabled) {
-					var highlight = el.hasClass('highlight');
-					if (!highlight) {
-						el.addClass('highlight');
-						el.removeClass.delay(200, el, ['highlight']);
-					}
-				}
-			}
-			return false;
 		},
 		getValue: function () {
 			if (USE_INPUT_METHOD) {
@@ -1607,11 +1585,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			styles: {
 				opacity: 0.3
 			}
-		},
-		highlight: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseActive', 'backgroundColor')
-			}
 		}
 	},
 	ReuseKeyboardaction: {
@@ -1630,11 +1603,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			styles: {
 				opacity: 0.3
 			}
-		},
-		highlight: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseActive', 'backgroundColor')
-			}
 		}
 	},
 	ReuseKeyboardspace: {
@@ -1652,11 +1620,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		disabled: {
 			styles: {
 				opacity: 0.3
-			}
-		},
-		highlight: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseActive', 'backgroundColor')
 			}
 		}
 	},

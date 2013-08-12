@@ -9,12 +9,10 @@ define('MAF.element.Grid', function () {
 				if (count > 0 && this.cells.length === 0) {
 					var fragment = createDocumentFragment(),
 						dims = this.getCellDimensions();
-					for (var i = this.cells.length; i < count; i++) {
-						this.cells[i] = this.getNewCell();
-						this.cells[i].grid = this;
-						this.cells[i].setStyles(dims);
-						this.layoutCell(this.cells[i], i, count, this.cells.length);
-						fragment.appendChild(this.cells[i].element);
+					for (var i = 0; i < count; i++) {
+						var cell = this.cells[i] = this.getNewCell().setStyles(dims);
+						cell.grid = this;
+						fragment.appendChild(this.layoutCell(cell, i).element);
 					}
 					this.body.element.appendChild(fragment);
 				}
@@ -33,7 +31,7 @@ define('MAF.element.Grid', function () {
 			handleFocusEvent: function (event) {
 				if (this.element.allowNavigation === false) {
 					event.preventDefault();
-					return false;
+					return;
 				}
 				var fc = this._state.focusCoordinates || {row:0,column:0},
 					direction = this.element.currentNavigation || 'down';
@@ -184,7 +182,7 @@ define('MAF.element.Grid', function () {
 					event.preventDefault();
 				} else {
 					var fidx = this.getCellIndex(target);
-					if (fidx > -1 && this.cells[fidx] && this.cells[fidx].visible) {
+					if (fidx > -1 && this.cells[fidx] && !this.cells[fidx].frozen && this.cells[fidx].visible) {
 						event.preventDefault();
 						this.focusCell(target, event);
 					} else {
@@ -204,7 +202,7 @@ define('MAF.element.Grid', function () {
 								for (var i = target.column; i; i--) {
 									target.column = target.column - 1;
 									fidx = this.getCellIndex(target);
-									if (fidx === -1 || !this.cells[fidx] || !this.cells[fidx].visible) {
+									if (fidx === -1 || !this.cells[fidx] || this.cells[fidx].frozen || !this.cells[fidx].visible) {
 										continue;
 									}
 									event.preventDefault();
@@ -219,20 +217,18 @@ define('MAF.element.Grid', function () {
 			},
 			onDataPage: function (event) {
 				var request = this._state.pageRequested,
-					index = event.payload.index;
-				if (event.type != this.pager._eventType || !event.payload.data) {
+					cellUpdater = this.config.cellUpdater,
+					payload = event.payload,
+					type = event.type,
+					index = payload && payload.index;
+				if (!payload || type !== this.pager._eventType || !payload.data || !request || index !== request.index) {
 					return;
 				}
-				if (index != request.index) {
-					return;
-				}
-				if (this.body) {
-					this.body.freeze();
-				}
-				var data = event.payload.data.items.length && [].concat(event.payload.data.items) || [];
-				this._state.dataLength = data.length;
+				var data = payload.data.items && payload.data.items.length && [].concat(payload.data.items) || [],
+					dataLength = data.length;
+				this._state.dataLength = dataLength;
 				if (this.config.focus) {
-					if (data.length === 0) {
+					if (dataLength === 0) {
 						this.element.wantsFocus = false;
 					} else {
 						this.element.wantsFocus = true;
@@ -241,17 +237,18 @@ define('MAF.element.Grid', function () {
 				if (this._state.focusIndex === undefined) {
 					this._state.focusIndex = -1;
 				}
-				this.cells.forEach(function(c) {
-					c.hide();
-				});
-				this.generateCells(data.length);
-				for (var i = 0; i < data.length; i++) {
-					var cell = this.cells[i];
-					if (cell) {
-						this.updateCell(cell, data[i]);
-						cell.show();
-					}
+				this.body.freeze();
+				if (this.generateCells(dataLength) > 0) {
+					this.cells.forEach(function (cell, i) {
+						if (i < dataLength) {
+							cell.thaw();
+							cellUpdater.call(this, cell, data[i]);
+						} else {
+							cell.freeze();
+						}
+					}, this);
 				}
+				this.body.thaw();
 				this.updateState({
 					startIndex: request.index,
 					currentPage: request.index / this.getCellCount()
@@ -260,7 +257,7 @@ define('MAF.element.Grid', function () {
 					fidx = this.getCellIndex(focus);
 				if (focus) {
 					var loop = this.cells.length;
-					while (fidx >= data.length && loop) {
+					while (fidx >= dataLength && loop) {
 						switch (request.options.direction) {
 							case 'right':
 								if (focus.column && focus.row) {
@@ -307,8 +304,9 @@ define('MAF.element.Grid', function () {
 				this.fire('onPageChanged', this.updateState({
 					pageChanging: false
 				}));
-				if (this.body) this.body.thaw();
-				if (fidx !== undefined && fidx > -1) this.focusCell(fidx);
+				if (fidx !== undefined && fidx > -1) {
+					this.focusCell(fidx);
+				}
 			},
 			layoutCell: function (cell, cellIndex) {
 				var h = (cellIndex % this.config.columns),
@@ -319,9 +317,7 @@ define('MAF.element.Grid', function () {
 				if (v > 0) {
 					cell.vOffset = cell.height * v;
 				}
-			},
-			updateCell: function (cell, dataItem) {
-				return this.config.cellUpdater.call(this, cell, dataItem);
+				return cell;
 			}
 		},
 
@@ -349,6 +345,7 @@ define('MAF.element.Grid', function () {
 			this.config.columns = this.config.columns || 1;
 			this.parent();
 			this.cells = [];
+
 			if (this.config.pager) {
 				this.pager = this.config.pager;
 				delete this.config.pager;
@@ -358,22 +355,21 @@ define('MAF.element.Grid', function () {
 				this.pager = new MAF.utility.Pager(ct, (this.config.payloadSize || ct));
 				this.pager.initItems(ds, ds.length);
 			}
-			var dims = {
-				width:  'inherit',
-				height: 'inherit'
-			};
 
 			this.body = new MAF.element.Core({
-				styles: dims
+				styles: {
+					width: 'inherit',
+					height: 'inherit'
+				}
 			}).appendTo(this);
 
 			this.generateCells(Math.min(this.pager.getDataSize(), this.pager.getPageSize()));
 
 			this.onDataPage.subscribeTo(this.pager, this.pager._eventType, this);
-			this.updateWaitIndicator.subscribeTo(this,['onChangePage','onPageChanged'],this);
-			this.handleFocusEvent.subscribeTo(this,['onFocus','onBlur'],this);
-			this.handleSelectEvent.subscribeTo(this,'onSelect',this);
-			this.handleNavEvent.subscribeTo(this,'onNavigate',this);
+			this.updateWaitIndicator.subscribeTo(this, ['onChangePage', 'onPageChanged'], this);
+			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
+			this.handleSelectEvent.subscribeTo(this, 'onSelect', this);
+			this.handleNavEvent.subscribeTo(this, 'onNavigate', this);
 			this._state = {};
 
 			if (this.config.render) {
@@ -519,8 +515,8 @@ define('MAF.element.Grid', function () {
 		},
 
 		getVisibleCellCount: function () {
-			return this.cells && this.cells.filter(function(c) {
-				return c && c.visible;
+			return this.cells && this.cells.filter(function (c) {
+				return c && !c.frozen;
 			}).length || this.cells.length;
 		},
 

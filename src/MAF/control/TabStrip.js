@@ -3,10 +3,10 @@ define('MAF.control.TabStrip', function () {
 		arr = arr || [];
 		var i = Math.max(0, Math.min(idx, arr.length-1));
 		return arr[i];
-	}
-
+	};
 	return new MAF.Class({
 		ClassName: 'ControlTabStrip',
+
 		Extends: MAF.element.Container,
 
 		Protected: {
@@ -20,7 +20,6 @@ define('MAF.control.TabStrip', function () {
 			handleFocusEvent: function (event) {
 				var index  = this.focusIndex || 0,
 					active = parseInt(this.activeIndex, 10) > -1 ? this.activeIndex : -1;
-
 				switch (event.type) {
 					case 'onFocus':
 						if (index === active) {
@@ -41,7 +40,6 @@ define('MAF.control.TabStrip', function () {
 				var index = this.focusIndex,
 					active = this.activeIndex,
 					target = false;
-
 				switch (event.payload.direction) {
 					case 'left':
 						if (index) {
@@ -175,13 +173,9 @@ define('MAF.control.TabStrip', function () {
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
 			this.handleSelectEvent.subscribeTo(this, 'onSelect', this);
 			this.handleNavEvent.subscribeTo(this, 'onNavigate', this);
-
-			// if defaultTab is not provided, it will still end up with a -1 here which is the default everywhere else
 			this.activeIndex = (this.config.defaultTab > 0) ? --this.config.defaultTab : -1;
 			this.focusIndex = this.activeIndex + 1;
-
 			this.parent();
-
 			this.body = new MAF.element.Core({
 				ClassName: (this.config.ClassName || this.ClassName) + 'Body',
 				element: List
@@ -203,9 +197,7 @@ define('MAF.control.TabStrip', function () {
 					noimages = !this.config.tabs.filter(function (t) {
 						return t.src || t.source;
 					}).length;
-
 				this.generateButtons(this.config.tabs.length, noimages);
-
 				this.buttons.forEach(function (button, b) {
 					button.setTabContent(this.config.tabs[b], noimages);
 					button.show();
@@ -218,9 +210,7 @@ define('MAF.control.TabStrip', function () {
 					w += button.width + externalWidth;
 					button.fire(b == this.activeIndex ? 'onActive' : 'onInactive');
 				}, this);
-
 				this.body.width = w || this.width;
-
 				if (this.element.hasFocus) {
 					var fidx = parseInt(this.focusIndex, 10) || 0;
 					this.focusButton(fidx);
