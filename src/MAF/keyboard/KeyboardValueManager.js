@@ -110,6 +110,11 @@ define('MAF.keyboard.KeyboardValueManager', function (config) {
 			this.cursorPosition = this.cursorPosition + (count || 1);
 			return this.cursorPosition;
 		},
+		setMaxLength: function (length) {
+			if (isNumber(length)) {
+				this.config.maxLength = length;
+			}
+		},
 		suicide: function () {
 			delete instances[this._classID];
 		}

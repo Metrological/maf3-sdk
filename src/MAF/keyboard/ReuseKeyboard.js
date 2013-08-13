@@ -1027,7 +1027,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		overlay.addClass('extendedOverlay');
 		overlay.store('focusTarget', key.retrieve('key').key || 0);
 		var list = (new List()).inject(overlay),
-			fragement = createDocumentFragment();
+			fragment = createDocumentFragment();
 
 		character_ids.forEach(function (char_id, c) {
 			var keyframe = new Item({ focus: true }),
@@ -1035,13 +1035,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			//	styles = Theme.getStyles(className) || {},
 				row_height = 0;
 			keyframe.addClass('ReuseKeyboardkey');
+			if (this.config.controlSize === 'small') {
+				keyframe.addClass('small');
+			}
 			keyframe.addEventListener('select', onBodySelectEvent, this);
 			keyframe.owner = key.owner;
-			fragement.appendChild(keyframe);
+			fragment.appendChild(keyframe);
 			updateExtendedKeyframe.call(this, keyframe, char_id);
 		}, this);
 
-		list.appendChild(fragement);
+		list.appendChild(fragment);
 
 		var keyBounds = key.getBounds(),
 			keyinfo = key.retrieve('key'),
@@ -1225,59 +1228,19 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			body.addEventListener('keyup', onBodyKeyUp, this);
 			// Send back navigation to parent if outofbounds
 			body.addEventListener('navigateoutofbounds', function(event) {
-				if (event.detail && event.detail.direction) {
-					event.stopPropagation();
-					event.preventDefault();
-					body.navigate(event.detail.direction);
+				var direction = event.detail && event.detail.direction,
+					target = event.target,
+					bodyBounds = body.getBounds() || {},
+					targetBounds = target.getBounds() || {};
+				switch (direction) {
+					case 'left':
+						target.navigate(direction, [bodyBounds.width || 0, targetBounds.top || 0]);
+						break;
+					case 'right':
+						target.navigate(direction, [bodyBounds.left || 0, targetBounds.top || 0]);
+						break;
 				}
 			});
-			body.addEventListener('navigate', function(event) {
-				var target = event.target,
-					owner = target.owner;
-// TODO: Move this to navigateoutofbounds
-				// Handle wrap navigation
-				if (owner.config.wrapNavigation) {
-					var layout = internals[owner._classID].state.currentLayout,
-						keyinfo = target && target.retrieve && target.retrieve('key'),
-						direction = event.detail && event.detail.direction,
-						index = false;
-
-					if (keyinfo && direction) {
-						if (keyinfo.row === 'control') {
-							if (layout.controlrow && typeOf(layout.controlrow) === 'array') {
-								switch (direction) {
-									case 'left':
-										index = keyinfo.column === 0 ? keyinfo.key + (layout.controlrow.length-1) : false;
-										break;
-									case 'right':
-										index = keyinfo.column === layout.controlrow.length-1 ? keyinfo.key - (layout.controlrow.length-1) : false;
-										break;
-								}
-							}
-						} else {
-							if (layout.keyrows && typeOf(layout.keyrows) === 'array') {
-								var row = layout.keyrows[keyinfo.row];
-								if (row && typeOf(row) === 'array'){
-									switch (direction) {
-										case 'left':
-											index = keyinfo.column === 0 ? keyinfo.key + (row.length-1) : false;
-											break;
-										case 'right':
-											index = keyinfo.column === row.length-1 ? keyinfo.key - (row.length-1) : false;
-											break;
-									}
-								}
-							}
-							
-						}
-						if (isNumber(index)) {
-							event.preventDefault();
-							body.firstChild.childNodes[index].focus();
-						}
-
-					}
-				}
-			}, this);
 
 			sendSignal.subscribeTo(this, ['shiftselect', 'extendedselect'], this);
 
@@ -1327,7 +1290,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			var row_max = 0,
 				column_max = 0,
 				key_idx = 0,
-				fragement = createDocumentFragment();
+				fragment = createDocumentFragment();
 
 			if (this.config.autoAdjust) {
 				var externalStyles = Theme.getStyles('ReuseKeyboard .item'),
@@ -1350,13 +1313,15 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				row.forEach(function (value, columnKey) {
 					var keyframe = new Item({ focus: true }),
 						className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
-						styles = Theme.getStyles(className) || {},
+						styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 						row_height = 0;
-					
 					keyframe.addClass(className);
+					if (this.config.controlSize === 'small') {
+						keyframe.addClass('small');
+					}
 					keyframe.addEventListener('select', onBodySelectEvent, this);
 					keyframe.owner = this;
-					fragement.appendChild(keyframe);
+					fragment.appendChild(keyframe);
 
 					keyframe.store('key', { row: rowKey, column: columnKey, key: key_idx++, keysonrow: row.length || 0 });
 					updateKeyframe.call(this, keyframe, value.keyid);
@@ -1378,13 +1343,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			layout.controlrow.forEach(function (value, columnKey) {
 				var keyframe = new Item({ focus: true }),
 					className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
-					styles = Theme.getStyles(className) || {},
+					styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 					row_height = 0;
 
 				keyframe.addClass(className);
+				if (this.config.controlSize === 'small') {
+					keyframe.addClass('small');
+				}
 				keyframe.addEventListener('select', onBodySelectEvent, this);
 				keyframe.owner = this;
-				fragement.appendChild(keyframe);
+				fragment.appendChild(keyframe);
 
 				keyframe.store('key', { row: 'control', column: columnKey, key: key_idx++ });
 				updateKeyframe.call(this, keyframe, value.keyid);
@@ -1406,7 +1374,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				height: this.config.autoAdjust ? column_max : dims.container.height
 			});
 
-			this.body.appendChild(fragement);
+			this.body.appendChild(fragment);
 
 			if (options.focusTarget) {
 				this.body.childNodes[options.focusTarget].focus();
@@ -1576,6 +1544,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				height: 63
 			}
 		},
+		small: {
+			styles: {
+				width: 54,
+				height: 63
+			}
+		},
 		focused: {
 			styles: {
 				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
@@ -1594,6 +1568,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				height: 63
 			}
 		},
+		small: {
+			styles: {
+				width: 85,
+				height: 63
+			}
+		},
 		focused: {
 			styles: {
 				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
@@ -1609,6 +1589,36 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		normal: {
 			styles: {
 				width: 196,
+				height: 63
+			}
+		},
+		small: {
+			styles: {
+				width: 177,
+				height: 63
+			}
+		},
+		focused: {
+			styles: {
+				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
+			}
+		},
+		disabled: {
+			styles: {
+				opacity: 0.3
+			}
+		}
+	},
+	ReuseKeyboardnumkey: {
+		normal: {
+			styles: {
+				width: 116,
+				height: 63
+			}
+		},
+		small: {
+			styles: {
+				width: 116,
 				height: 63
 			}
 		},

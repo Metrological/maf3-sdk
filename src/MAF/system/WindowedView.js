@@ -57,6 +57,9 @@ define('MAF.system.WindowedView', function () {
 						this.resetFocus();
 					}
 					performControlInspection.call(this, this.getControlData('statePacket', true), true);
+					if (this.fire('onFocusView')) {
+						this.focusView();
+					}
 				}
 			},
 			onSelectView: function(event) {
@@ -86,6 +89,8 @@ define('MAF.system.WindowedView', function () {
 				this.backParams = {};
 			}
 		},
+
+		focusView: emptyFn,
 
 		resetFocus: function () {
 			if (this.element) {

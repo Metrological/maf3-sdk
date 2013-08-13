@@ -103,7 +103,17 @@ var loadTemplate = (function () {
 				case 'dialog':
 					var currentStyle = getElementById('@' + current).style;
 					var buttons = [];
-
+					var KeyboardValueManager = new MAF.keyboard.KeyboardValueManager({
+						events: {
+							cursormoved: function (){
+								log('cursormoved');
+							},
+							onValueChanged: function () {
+								log('valuechanged');
+							}
+						}
+					});
+					// Default buttons
 					switch (id) {
 						case 'login':
 							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
@@ -115,7 +125,7 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
 							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
 							break;
-						case 'pindialog':
+						case 'pin':
 							buttons.push({ value: '$forgot', label: widget.getLocalizedString('forgot_pin') });
 							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
 							break;
@@ -123,7 +133,7 @@ var loadTemplate = (function () {
 					
 					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
 
-					template = new View({
+					template = new Dialog({
 						id: '@' + type,
 						styles: {
 							overflow: currentStyle.overflow,
@@ -137,19 +147,20 @@ var loadTemplate = (function () {
 						},
 						events: {
 							select: function (event) {
-								log('select', event, event.target.owner);
-								//log(getElementById('@' + type + '-keyboard').getValue());
 								var target = event.target,
 									selectedValue = target.retrieve('value'),
 									dialogKey = this.retrieve('key');
-								if (target.id.indexOf('button')) {
+								if (target.id.indexOf('button') > 0) {
+
 									event.preventDefault();
 									switch (selectedValue) {
 										case '$cancel':
-											log('cancel',selectedValue);
+											focusAfterDialog.focus();
 											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+
 											break;
 										default:
+											focusAfterDialog.focus();
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
 											break;
 
@@ -158,6 +169,9 @@ var loadTemplate = (function () {
 									if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
 										keyboard.firstChild.owner.suicide();
 									}
+									focusAfterDialog = null;
+									KeyboardValueManager.suicide();
+									KeyboardValueManager = null;
 									this.destroy();
 								}
 							},
@@ -217,6 +231,7 @@ var loadTemplate = (function () {
 						events: {
 							focus: function (event) {
 								if (this.firstChild && this.firstChild.owner && this.firstChild.owner.focus && this.firstChild.owner.focus.call) {
+									this.wantsFocus = false;
 									this.firstChild.owner.focus();
 								}
 							}
@@ -224,17 +239,22 @@ var loadTemplate = (function () {
 					}).appendTo(contentFrame);
 
 					dialogConfig.buttons.forEach(function(btnConfig, key){
+						var styles = {
+							width: 'inherit',
+							height: 51,
+							vAlign: 'bottom',
+							vOffset: ((dialogConfig.buttons.length-1) - key) * 56,
+							backgroundColor: 'black'
+						};
+						if (dialogConfig.buttons.length - 1 === key) {
+							styles.borderBottomLeftRadius = '15px';
+							styles.borderBottomRightRadius = '15px';
+						}
 						var button = new Text({
 							label: widget.getLocalizedString(btnConfig.label),
 							id: '@' + type + '-button'+key,
 							focus: true,
-							styles: {
-								width: 'inherit',
-								height: 51,
-								vAlign: 'bottom',
-								vOffset: ((dialogConfig.buttons.length-1) - key) * 56,
-								backgroundColor: 'black',
-							},
+							styles: styles,
 							events: {
 								focus: function () {
 									this.setStyle('backgroundColor', 'red');
@@ -249,15 +269,63 @@ var loadTemplate = (function () {
 					var keyboard, focusEl;
 					switch (id) {
 						case 'textentry':
-						case 'pincreation':
-						case 'pindialog':
+							var input = new Text({
+								focus: true,
+								editable: true,
+								styles: {
+									width: 300,
+									display: 'block',
+									margin: 10,
+									minHeight: '40px',
+									height: 'auto',
+									padding: '5px',
+									border: '2px solid white',
+									borderRadius: '10px',
+									backgroundColor: 'rgba(150,150,150,.5)',
+									truncation: 'end',
+									opacity: 0.9
+								}
+							}).appendTo(contentFrame);
+							input.editable = true;
+							
 							keyboard = new MAF.keyboard.ReuseKeyboard({
 								maxLength: 10,
 								controlSize: "small",
-								layout: 'alphanumeric'
+								layout: 'alphanumeric',
+								events: {
+									onKeyDown: function (event) {
+										event.preventDefault();
+										event.stopPropagation();
+										event.payload.layout = this.config.layout;
+										ValueManager.handleExternalKeyInput(event);
+									}
+								}
 							}).appendTo(keyboardContainer);
+							KeyboardValueManager.setMaxLength(10);
 							keyboardContainer.wantsFocus = true;
 							keyboardContainer.setStyle('height', keyboard.height || 0);
+							keyboard.hAlign = 'center';
+							focusEl = getElementById('@' + type + '-keyboard');
+							break;
+						case 'pincreation':
+						case 'pin':
+							keyboard = new MAF.keyboard.ReuseKeyboard({
+								maxLength: 4,
+								controlSize: "small",
+								layout: 'pinentry',
+								events: {
+									onKeyDown: function (event) {
+										event.preventDefault();
+										event.stopPropagation();
+										event.payload.layout = this.config.layout;
+										ValueManager.handleExternalKeyInput(event);
+									}
+								}
+							}).appendTo(keyboardContainer);
+							KeyboardValueManager.setMaxLength(4);
+							keyboardContainer.wantsFocus = true;
+							keyboardContainer.setStyle('height', keyboard.height || 0);
+							keyboard.hAlign = 'center';
 							focusEl = getElementById('@' + type + '-keyboard');
 							break;
 						case 'alert':
@@ -268,6 +336,7 @@ var loadTemplate = (function () {
 					var height = (dialogConfig.buttons.length * 56) + 66 + 80 + keyboardContainer.height;
 					contentFrame.setStyle('height', height);
 
+					var focusAfterDialog = document.activeElement;
 					if (focusEl && focusEl.focus && focusEl.focus.call) {
 						focusEl.focus();
 					} else {

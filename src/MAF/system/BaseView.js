@@ -63,11 +63,15 @@ define('MAF.system.BaseView', function () {
 				}
 			},
 			onSelectView: function () {
-				if (this.fire('onFocusView')) {
-					this.focusView();
+				if (this.fire('onSelectView')) {
+					this.selectView();
 				}
 			},
-			onUnselectView: emptyFn,
+			onUnselectView: function () {
+				if (this.fire('onUnselectView')) {
+					this.unselectView();
+				}
+			},
 			setInitialFocus: emptyFn,
 			unregisterMessageCenterListeners: function () {
 				if (messagecenterlisteners[this._classID].length > 0) {
@@ -133,10 +137,10 @@ define('MAF.system.BaseView', function () {
 
 		// View initialization method to override in subclassed views.
 		initView: emptyFn,
-		updateView: emptyFn,
 		createView: emptyFn,
-		focusView: emptyFn,
-		unfocusView: emptyFn,
+		updateView: emptyFn,
+		selectView: emptyFn,
+		unselectView: emptyFn,
 		destroyView: emptyFn,
 		hideView: emptyFn,
 		favbutton: emptyFn,
