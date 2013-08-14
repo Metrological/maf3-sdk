@@ -205,8 +205,6 @@ var loadTemplate = (function () {
 									if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
 										keyboard.firstChild.owner.suicide();
 									}
-									KeyboardValueManager.suicide();
-									KeyboardValueManager = null;
 									this.destroy();
 									switch (selectedValue) {
 										case '$forgot':
@@ -230,6 +228,8 @@ var loadTemplate = (function () {
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
 											break;
 									}
+									KeyboardValueManager.suicide();
+									KeyboardValueManager = null;
 								}
 							},
 							back: function (event) {
