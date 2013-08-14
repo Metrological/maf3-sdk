@@ -50,7 +50,8 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		var button4 = new MAF.control.TextButton({
+		this.controls.button4 = new MAF.control.TextButton({
+			guid: 'demoApp',
 			label: 'Launch App',
 			styles: {
 				width: this.width / 3,
@@ -65,11 +66,12 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		var button5 = new MAF.control.TextButton({
+		this.controls.button5 = new MAF.control.TextButton({
+			guid: 'picasaApp',
 			label: 'Picasa',
 			styles: {
 				width: (this.width / 3) - 2,
-				hOffset: button4.outerWidth + 1,
+				hOffset: this.controls.button4.outerWidth + 1,
 				vOffset: button2.outerHeight + 1
 			},
 			textStyles: {
@@ -86,7 +88,7 @@ var TestView3 = new MAF.Class({
 			label: 'Button6',
 			styles: {
 				width: this.width / 3,
-				hOffset: button5.outerWidth + 1,
+				hOffset: this.controls.button5.outerWidth + 1,
 				vOffset: button2.outerHeight + 1
 			},
 			textStyles: {
@@ -95,27 +97,75 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button7 = new MAF.control.TextButton({
-			label: 'Button7',
+			label: 'Secured Button',
+			secure: true,
+			verifySecure: function(verify) {
+				new MAF.dialogs.VerifyPin({
+					title: $_('Enter Profile Pin'),
+					message: $_('You must provide a correct PIN to proceed'),
+					errorMessage: 'ERROR!!!',
+					callback: verify,
+					forgotPinCallback: function (result) {
+						log('forgotPinCallback triggered', result);
+					}
+				}).show();
+			},
 			styles: {
 				width: this.width,
-				vOffset: button4.outerHeight + 1
+				vOffset: this.controls.button4.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					new MAF.dialogs.Alert({
+						title: 'Pin result.',
+						message: 'The pin you entered was correct.',
+						buttons: [
+							{ label: 'Ok' }
+						]
+					}).show();
+				}
 			}
 		}).appendTo(this);
 
 		var button8 = new MAF.control.TextButton({
-			label: 'Button8',
+			label: 'Alert Dialog',
 			styles: {
 				width: this.width / 2,
 				vOffset: button7.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					new MAF.dialogs.Alert({
+						title: 'Alert Dialog.',
+						message: 'Select a button from below.',
+						buttons: [
+							{ label: 'Option 1' },
+							{ label: 'Option 2' },
+							{ label: 'Option 3' },
+							{ label: 'Option 4' },
+							{ label: 'Option 5' },
+							{ label: 'Option 6' },
+							{ label: 'Option 7' }
+						]
+					}).show();
+				}
 			}
 		}).appendTo(this);
 
 		var button9 = new MAF.control.TextButton({
-			label: 'Button9',
+			label: 'TextEntry Dialog',
 			styles: {
 				width: (this.width / 2) - 1,
 				hOffset: button8.outerWidth + 1,
 				vOffset: button7.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					new MAF.dialogs.TextEntry({
+						title: 'TextEntry Dialog',
+						message: 'Enter a desired value'
+					}).show();
+				}				
 			}
 		}).appendTo(this);
 

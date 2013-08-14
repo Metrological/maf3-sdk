@@ -19,8 +19,7 @@ var TestView1 = new MAF.Class({
 	},
 
 	dialog: function () {
-		log('dialogclick',this);
-		new MAF.dialogs.TextEntry({
+		new MAF.dialogs.Alert({
 			title: 'Alert Dialog',
 			message: 'Do you want to close the app?',
 			focusOnCompletion: this.elements.button1,

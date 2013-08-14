@@ -43,7 +43,6 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 		},
 
 		dispatcher: function(event) {
-			log('dispatcher', event.payload);
 			if (event.type == "onHideView") {
 				if (this.retrieve('viewId') !== event.payload.viewId) {
 					return;

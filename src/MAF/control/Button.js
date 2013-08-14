@@ -7,16 +7,24 @@ define('MAF.control.Button', function () {
 			bottom = sts && sts.vAlign == 'bottom';
 
 		if (!this.secureIndicator && this.secure) {
-			this.secureIndicator = new MAF.element.Image({
-				src: src,
-				styles: sts
-			}).appendTo(this);
+			if (src) {
+				this.secureIndicator = new MAF.element.Image({
+					src: src,
+					styles: sts
+				}).appendTo(this);
+			} else {
+				this.secureIndicator = new MAF.element.Text({
+					data: '&#128274;',
+					styles: sts
+				}).appendTo(this);
+			}
 		}
 
 		if (this.secureIndicator) {
+			// TODO: lock not defined, will give error when no hAlign/vAlign in theming at the moment
 			this.secureIndicator.setStyles({
-				hOffset: right  ? this.width  - parseInt(sts.marginRight  || 0, 10) : lock.hOffset,
-				vOffset: bottom ? this.height - parseInt(sts.marginBottom || 0, 10) : lock.vOffset,
+				hOffset: right  ? parseInt(sts.marginRight  || 0, 10) : lock.hOffset,
+				vOffset: bottom ? parseInt(sts.marginBottom || 0, 10) : lock.vOffset,
 				visible: this.secure
 			});
 		}
@@ -75,6 +83,15 @@ define('MAF.control.Button', function () {
 		}
 	},
 	SecureButtonIndicator: {
-		source: Image.BLANK
+		source: false,
+		normal: {
+			styles: {
+				visible: false,
+				hAlign: 'right',
+				vAlign: 'bottom',
+				marginRight: 5,
+				marginBottom: 7
+			}
+		}
 	}
 });

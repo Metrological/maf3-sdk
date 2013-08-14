@@ -840,6 +840,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 		if (keyid.indexOf('spacer-') === 0) {
 			keyframe.opacity = 0;
+			keyframe.wantsFocus = false;
 			return;
 		}
 
@@ -1078,6 +1079,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		switch (keytype) {
 			case 'key':
 			case 'numkey':
+				packet.shiftKey = shift;
+				packet.isChar = true;
+				packet.isNumeric = true;
+				packet.key = keyvalue;
+				packet.keyCode = 13;
+				break;
 			case 'char':
 				packet.shiftKey = shift;
 				packet.isChar = true;
@@ -1546,7 +1553,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 		small: {
 			styles: {
-				width: 54,
+				width: 52,
 				height: 63
 			}
 		},
@@ -1570,7 +1577,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 		small: {
 			styles: {
-				width: 85,
+				width: 82,
 				height: 63
 			}
 		},
@@ -1594,7 +1601,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 		small: {
 			styles: {
-				width: 177,
+				width: 171,
 				height: 63
 			}
 		},

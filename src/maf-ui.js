@@ -16,6 +16,9 @@ include('MAF/element/CarouselCell.js');
 include('MAF/keyboard/ReuseKeyboard.js');
 include('MAF/keyboard/KeyboardValueManager.js');
 
+include('MAF/media/PlaylistEntry.js');
+include('MAF/media/Playlist.js');
+
 include('MAF/control/EmptySpace.js');
 include('MAF/control/Header.js');
 include('MAF/control/Keyboard.js');
