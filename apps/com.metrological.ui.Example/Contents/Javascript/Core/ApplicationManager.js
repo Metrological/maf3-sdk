@@ -143,25 +143,21 @@ var loadTemplate = (function () {
 										keyboard.firstChild.owner.suicide();
 									}
 									this.destroy();
+									if (focusAfterDialog) {
+										focusAfterDialog.focus();
+										focusAfterDialog = null;
+									}
 									switch (selectedValue) {
 										case '$forgot':
-											focusAfterDialog.focus();
-											focusAfterDialog = null;
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: false, forgot: true });
 											break;
 										case '$ok':
-											focusAfterDialog.focus();
-											focusAfterDialog = null;
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, response: KeyboardValueManager.value });
 											break;
 										case '$cancel':
-											focusAfterDialog.focus();
-											focusAfterDialog = null;
 											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
 											break;
 										default:
-											focusAfterDialog.focus();
-											focusAfterDialog = null;
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
 											break;
 									}
@@ -175,8 +171,10 @@ var loadTemplate = (function () {
 								var dialogKey = this.retrieve('key');
 								event.preventDefault();
 								this.destroy();
-								focusAfterDialog.focus();
-								focusAfterDialog = null;
+								if (focusAfterDialog) {
+									focusAfterDialog.focus();
+									focusAfterDialog = null;
+								}
 								ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
 								if (KeyboardValueManager) {
 									KeyboardValueManager.suicide();
@@ -283,15 +281,18 @@ var loadTemplate = (function () {
 						var onPinDone = function (authorized) {
 							if (authorized) {
 								var dialogKey = template.retrieve('key');
-								focusAfterDialog.focus();
 								if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
 									keyboard.firstChild.owner.suicide();
 								}
-								KeyboardValueManager.value = '';
-								focusAfterDialog = null;
-								KeyboardValueManager.suicide();
-								KeyboardValueManager = null;
 								template.destroy();
+								if (focusAfterDialog) {
+									focusAfterDialog.focus();
+									focusAfterDialog = null;
+								}
+								if (KeyboardValueManager) {
+									KeyboardValueManager.suicide();
+									KeyboardValueManager = null;
+								}
 								ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: authorized });
 							} else {
 								getElementById('@' + type + '-title').setStyle('backgroundColor', '#610B0B');

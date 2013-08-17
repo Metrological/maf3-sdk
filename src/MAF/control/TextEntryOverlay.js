@@ -10,9 +10,10 @@ define('MAF.control.TextEntryOverlay', function () {
 					event.payload.defaultActionCallback();
 				}
 			};
-		if (cancelType === 'onHideView' && this.getView().config.viewId === event.payload.viewId) {
-			hideOverlay.call(this);
-		}
+		//@TODO this can be removed is already handled later on
+		//if (cancelType === 'onHideView' && this.getView().config.viewId === event.payload.viewId) {
+		//	hideOverlay.call(this);
+		//}
 		event.preventDefault();
 		if (this.config.creator.fire('onCancel', { 
 			event: event, 
@@ -20,7 +21,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			cancelCallback: hideOverlay.bindTo(this), 
 			defaultActionCallback: defaultActionCallback
 		})){
-			cancelCallback();
+			hideOverlay.call(this);
 			defaultActionCallback();
 		}
 	};
