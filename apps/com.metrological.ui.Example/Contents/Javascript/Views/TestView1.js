@@ -191,6 +191,8 @@ var TestView1 = new MAF.Class({
 						onSelect: function () {
 							var data = this.getCellDataItem();
 							new MAF.dialogs.Alert({
+								title: 'Cell ' + this.getCellIndex(),
+								message: 'You have selected a cell in this grid.',
 								buttons: [
 									{ label: 'Close', callback: this.dialogCallback },
 									{ label: 'Continues', callback: this.dialogCallback }

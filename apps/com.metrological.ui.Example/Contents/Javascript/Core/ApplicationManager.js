@@ -8,24 +8,13 @@ var loadTemplate = (function () {
 		}
 		var app = this,
 			identifier = app.widget.identifier,
+			body = app.document.body,
 			getElementById = app.widget.getElementById,
 			template = type && getElementById('@' + type);
 		//log('loadTemplate', type, current, template);
-		if (template) {
-			if (type === 'sidebar') {
-				var home = getElementById('@' + type + '-home');
-				if (home.retrieve('id') === id) {
-					home.wantsFocus = false;
-					home.frozen = true;
-				} else {
-					home.store('current', id);
-					home.frozen = false;
-					home.wantsFocus = true;
-				}
-			}
-		}
 		if (!template) {
-			switch(type) {
+			var fragment = widget.createDocumentFragment();
+			switch (type) {
 				case 'sidebar':
 					template = new View({
 						id: '@' + type,
@@ -47,7 +36,7 @@ var loadTemplate = (function () {
 								}
 							}
 						}
-					}).appendTo(app.document.body);
+					}).appendTo(fragment);
 					app.widget.getImage('header', 'normal').appendTo(template);
 					new Text({
 						id: '@' + type + '-home',
@@ -67,7 +56,7 @@ var loadTemplate = (function () {
 								if (focused) {
 									this.parentNode.firstChild.source = focused;
 								}
-								this.setStyle('color', 'red');
+								this.setStyle('color', Theme.getStyles('BaseFocus', 'backgroundColor'));
 							},
 							blur: function () {
 								var normal = app.widget.getImageSource('header', 'normal');
@@ -90,6 +79,8 @@ var loadTemplate = (function () {
 							}
 						}
 					}).appendTo(template).store('id', id);
+
+					body.appendChild(fragment);
 					break;
 				case 'fullscreen':
 					template = new View({
@@ -98,88 +89,34 @@ var loadTemplate = (function () {
 							width: 1920,
 							height: 1080
 						}
-					}).appendTo(app.document.body);
+					}).appendTo(body);
 					break;
 				case 'dialog':
-					var currentStyle = getElementById('@' + current).style;
-					var buttons = [];
-					var KeyboardValueManager = new MAF.keyboard.KeyboardValueManager();
-					var onPinDone = function (authorized) {
-						if (authorized) {
-							var dialogKey = template.retrieve('key');
-							focusAfterDialog.focus();
-							if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
-								keyboard.firstChild.owner.suicide();
-							}
-							KeyboardValueManager.value = '';
-							focusAfterDialog = null;
-							KeyboardValueManager.suicide();
-							KeyboardValueManager = null;
-							template.destroy();
-							ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: authorized });
-						} else {
-							getElementById('@' + type + '-title').setStyle('backgroundColor', '#610B0B');
-							getElementById('@' + type + '-message').data = data.errorMessage || data.message;
-							var pindotEl = pinDots.firstChild;
-							do {
-								if (pindotEl.nodeType === 1) {
-									pindotEl.data = '';
-								}
-								pindotEl = pindotEl.nextSibling;
-							} while (pindotEl);
-						}
-					};
-					var onValueManagerEvent = function (event) {
-						var payload = event.payload || {};
-						if (event.type === 'valuechanged') {
-							switch (id) {
-								case 'pin':
-									for (var i=0; i<4; i++) {
-										if (payload.value.length > i) {
-											pinDots.childNodes[i].data = '&#9679';
-										} else {
-											pinDots.childNodes[i].data = '';
-										}
-									}
-									if (payload.value.length === 4) {
-										// TODO: Profile/Admin Pin checking
-										if (data.isAdminPIN) {
-											onPinDone.defer(1000, null, true);
-										} else {
-											if (data.profileId) {
-												onPinDone.defer(1000, null, true);
-											} else {
-												onPinDone.defer(1000, null, true);
-											}
-										}
-									}
-									break;
-								case 'textentry':
-									if (input) {
-										input.data = payload.value;
-									}
-									break;
-							}
-						}
-					}.subscribeTo(KeyboardValueManager, ['valuechanged']);
+					var currentStyle = getElementById('@' + current).style,
+						focusAfterDialog = app.document.activeElement,
+						totalHeight = 0,
+						buttons = [],
+						isKeyboard = (id === 'textentry' || id === 'pincreation' || id === 'pin'),
+						KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
+
 					// Default buttons
 					switch (id) {
 						case 'login':
-							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
-							buttons.push({ value: '$back', label: widget.getLocalizedString('back'), opacity: 0 });
-							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							buttons.push({ value: '$ok', label: 'OK' });
+							buttons.push({ value: '$back', label: 'BACK' });
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'textentry':
 						case 'pincreation':
-							buttons.push({ value: '$ok', label: widget.getLocalizedString('ok') });
-							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							buttons.push({ value: '$ok', label: 'OK' });
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'pin':
-							buttons.push({ value: '$forgot', label: widget.getLocalizedString('forgot_pin') });
-							buttons.push({ value: '$cancel', label: widget.getLocalizedString('cancel') });
+							buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 					}
-					
+
 					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
 
 					template = new Dialog({
@@ -228,18 +165,26 @@ var loadTemplate = (function () {
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
 											break;
 									}
-									KeyboardValueManager.suicide();
-									KeyboardValueManager = null;
+									if (KeyboardValueManager) {
+										KeyboardValueManager.suicide();
+										KeyboardValueManager = null;
+									}
 								}
 							},
 							back: function (event) {
 								var dialogKey = this.retrieve('key');
 								event.preventDefault();
-								ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
 								this.destroy();
+								focusAfterDialog.focus();
+								focusAfterDialog = null;
+								ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+								if (KeyboardValueManager) {
+									KeyboardValueManager.suicide();
+									KeyboardValueManager = null;
+								}
 							}
 						}
-					}).appendTo(app.document.body);
+					}).appendTo(fragment);
 
 					// Keeps track of which dialog send this.
 					template.store('key', dialogConfig.key);
@@ -260,191 +205,266 @@ var loadTemplate = (function () {
 						id: '@' + type + '-title',
 						label: widget.getLocalizedString(dialogConfig.title || ''),
 						styles: {
-							borderBottom: '2px solid grey',
-							height: 64
+							width: '100%',
+							height: 64,
+							paddingLeft: 10,
+							paddingRight: 10,
+							anchorStyle: 'leftCenter',
+							borderBottom: '2px solid grey'
 						}
-					}).appendTo(contentFrame).addClass('ControlTextButtonText');
+					}).appendTo(contentFrame);
 
 					new Text({
 						id: '@' + type + '-message',
 						label: widget.getLocalizedString(dialogConfig.message || ''),
 						styles: {
+							width: '100%',
+							paddingLeft: 10,
+							paddingRight: 10,
 							vOffset: 66,
 							wrap: true
 						}
-					}).appendTo(contentFrame).addClass('ControlTextButtonText');
-
-					var keyboardContainer = new Frame({
-						id: '@' + type + '-keyboard',
-						styles: {
-							width: 'inherit',
-							height: 0,
-							vAlign: 'bottom',
-							vOffset: (dialogConfig.buttons.length * 56) + 5
-						},
-						events: {
-							focus: function (event) {
-								if (this.firstChild && this.firstChild.owner && this.firstChild.owner.focus && this.firstChild.owner.focus.call) {
-									this.wantsFocus = false;
-									this.firstChild.owner.focus();
-								}
-							}
-						}
 					}).appendTo(contentFrame);
 
-					dialogConfig.buttons.forEach(function(btnConfig, key){
-						var styles = {
-							height: 51,
-							width: contentFrame.width - 30,
-							borderRadius: '15px',
-							border: '2px solid #FFFFFF',
-							vAlign: 'bottom',
-							hOffset: 15,
-							vOffset: (((dialogConfig.buttons.length-1) - key) * 56) + 5,
-							backgroundColor: 'black'
-						};
+					var keyboardContainer;
+					if (isKeyboard) {
+						keyboardContainer = new Frame({
+							id: '@' + type + '-keyboard',
+							styles: {
+								width: 'inherit',
+								vAlign: 'bottom',
+								vOffset: (dialogConfig.buttons.length * 56) + 5
+							},
+							events: {
+								focus: function (event) {
+									if (this.firstChild && this.firstChild.owner && this.firstChild.owner.focus && this.firstChild.owner.focus.call) {
+										this.wantsFocus = false;
+										this.firstChild.owner.focus();
+									}
+								}
+							}
+						}).appendTo(contentFrame);
+					}
+
+					dialogConfig.buttons.forEach(function (btnConfig, key) {
 						var button = new Text({
 							label: widget.getLocalizedString(btnConfig.label),
-							id: '@' + type + '-button'+key,
+							id: '@' + type + '-button' + key,
 							focus: true,
-							styles: styles,
+							styles: {
+								height: 51,
+								width: contentFrame.width - 30,
+								borderRadius: '15px',
+								border: '2px solid #FFFFFF',
+								vAlign: 'bottom',
+								hOffset: 15,
+								vOffset: (((dialogConfig.buttons.length-1) - key) * 56) + 5,
+								paddingLeft: 10,
+								paddingRight: 10,
+								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor'),
+								anchorStyle: 'leftCenter'
+							},
 							events: {
 								focus: function () {
-									this.setStyle('backgroundColor', 'red');
+									this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
 								},
 								blur: function () {
-									this.setStyle('backgroundColor', 'black');
+									this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
 								}
 							}
-						}).appendTo(contentFrame).addClass('ControlTextButtonText').store('value', btnConfig.value);			
+						}).appendTo(contentFrame).store('value', btnConfig.value);
 					});
 
-					var keyboard, focusEl;
-					switch (id) {
-						case 'textentry':
-							keyboard = new MAF.keyboard.ReuseKeyboard({
-								maxLength: 24,
-								controlSize: "small",
-								layout: 'alphanumeric'
-							}).appendTo(keyboardContainer);
-							KeyboardValueManager.setMaxLength(24);
-							keyboardContainer.wantsFocus = true;
-							keyboardContainer.setStyle('height', keyboard.height || 0);
-							keyboard.hAlign = 'center';
+					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 80;
 
-							var input = new Text({
-								focus: true,
-								editable: true,
-								styles: {
-									vAlign: 'bottom',
-									vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height + 10,
-									width: keyboard.width - 70,
-									display: 'block',
-									hOffset: 10,
-									minHeight: '40px',
-									height: 'auto',
-									padding: '5px',
-									border: '2px solid white',
-									borderRadius: '10px',
-									backgroundColor: 'rgba(150,150,150,.5)',
-									truncation: 'end',
-									opacity: 0.9
+					var dialogFocus = 'button0';
+					if (isKeyboard) {
+						var keyboard;
+						var onPinDone = function (authorized) {
+							if (authorized) {
+								var dialogKey = template.retrieve('key');
+								focusAfterDialog.focus();
+								if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
+									keyboard.firstChild.owner.suicide();
 								}
-							}).appendTo(contentFrame);
-
-							var cleanButton = new Frame({
-								focus: true,
-								styles: {
-									border: '2px solid white',
-									borderRadius: '10px',
-									width: 60,
-									height: 44,
-									hAlign: 'right',
-									vAlign: 'bottom',
-									hOffset: 12,
-									vOffset: input.vOffset - 2
-								},
-								events: {
-									select: function () {
-										KeyboardValueManager.value = '';
-									},
-									focus: function () {
-										this.setStyle('backgroundColor', 'red');
-									},
-									blur: function () {
-										this.setStyle('backgroundColor', 'black');
+								KeyboardValueManager.value = '';
+								focusAfterDialog = null;
+								KeyboardValueManager.suicide();
+								KeyboardValueManager = null;
+								template.destroy();
+								ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: authorized });
+							} else {
+								getElementById('@' + type + '-title').setStyle('backgroundColor', '#610B0B');
+								getElementById('@' + type + '-message').data = data.errorMessage || data.message;
+								var pindotEl = pinDots.firstChild;
+								do {
+									if (pindotEl.nodeType === 1) {
+										pindotEl.data = '';
 									}
-								}
-							}).appendTo(contentFrame);
-
-							new Text({
-								data: '&#8999;',
-								styles: {
-									width: 'inherit',
-									height: 'inherit',
-									anchorStyle: 'center'
-								}
-							}).appendTo(cleanButton);
-
-							focusEl = getElementById('@' + type + '-keyboard');
-							break;
-						case 'pincreation':
-						case 'pin':
-							keyboard = new MAF.keyboard.ReuseKeyboard({
-								maxLength: 4,
-								controlSize: "small",
-								layout: 'pinentry'
-							}).appendTo(keyboardContainer);
-							KeyboardValueManager.setMaxLength(4);
-							keyboardContainer.wantsFocus = true;
-							keyboardContainer.setStyle('height', keyboard.height || 0);
-							keyboard.hAlign = 'center';
-
-							var pinDots = new Frame({
-								styles: {
-									hAlign: 'center',
-									vAlign: 'bottom',
-									width: keyboard.width,
-									height: 88,
-									hOffset: 2,
-									vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height
-								}
-							}).appendTo(contentFrame);
-
-							for (var i = 0; i < 4; i++) {
-								new Text({
-									styles: {
-										fontSize: 60,
-										borderRadius: '15px',
-										backgroundColor: 'grey',
-										border: '2px solid white',
-										width: (pinDots.width/4)-4,
-										height: 84,
-										anchorStyle: 'center',
-										hOffset: (pinDots.width/4) * i
-									}
-								}).appendTo(pinDots);
+									pindotEl = pindotEl.nextSibling;
+								} while (pindotEl);
 							}
-
-							focusEl = getElementById('@' + type + '-keyboard');
-							break;
-						case 'alert':
-							focusEl = getElementById('@' + type + '-button0');
-							break;
-					}
-
-					if (keyboard) {
-						keyboard.onKeyDown = function (event) {
-							var packet = {
-								payload: Object.merge(event, { layout: this.config.layout })
-							};
-							KeyboardValueManager.handleExternalKeyInput(packet);
 						};
-					}
-					var height = (dialogConfig.buttons.length * 56) + 66 + 80 + (pinDots && pinDots.height || 0) + (input && input.height || 0) + keyboardContainer.height;
-					contentFrame.setStyle('height', height);
+						(function (event) {
+							var payload = event.payload || {};
+							if (event.type === 'valuechanged') {
+								switch (id) {
+									case 'pin':
+										for (var i=0; i<4; i++) {
+											if (payload.value.length > i) {
+												pinDots.childNodes[i].data = '&#9679';
+											} else {
+												pinDots.childNodes[i].data = '';
+											}
+										}
+										if (payload.value.length === 4) {
+											// TODO: Profile/Admin Pin checking
+											if (data.isAdminPIN) {
+												onPinDone.defer(1000, null, true);
+											} else {
+												if (data.profileId) {
+													onPinDone.defer(1000, null, true);
+												} else {
+													onPinDone.defer(1000, null, true);
+												}
+											}
+										}
+										break;
+									case 'textentry':
+										if (input) {
+											input.data = payload.value;
+										}
+										break;
+								}
+							}
+						}).subscribeTo(KeyboardValueManager, ['valuechanged']);
 
-					var focusAfterDialog = document.activeElement;
+						switch (id) {
+							case 'textentry':
+								keyboard = new MAF.keyboard.ReuseKeyboard({
+									maxLength: 24,
+									controlSize: "small",
+									layout: 'alphanumeric'
+								}).appendTo(keyboardContainer);
+								KeyboardValueManager.setMaxLength(24);
+								keyboardContainer.wantsFocus = true;
+								keyboardContainer.setStyle('height', keyboard.height || 0);
+								keyboard.hAlign = 'center';
+
+								var input = new Text({
+									editable: true,
+									styles: {
+										vAlign: 'bottom',
+										vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height + 10,
+										width: keyboard.width - 70,
+										display: 'block',
+										hOffset: 10,
+										minHeight: '40px',
+										height: 'auto',
+										padding: '5px',
+										border: '2px solid white',
+										borderRadius: '10px',
+										backgroundColor: 'rgba(150,150,150,.5)',
+										truncation: 'end',
+										opacity: 0.9
+									}
+								}).appendTo(contentFrame);
+
+								var cleanButton = new Frame({
+									focus: true,
+									styles: {
+										border: '2px solid white',
+										borderRadius: '10px',
+										width: 60,
+										height: 44,
+										hAlign: 'right',
+										vAlign: 'bottom',
+										hOffset: 12,
+										vOffset: input.vOffset - 2
+									},
+									events: {
+										select: function () {
+											KeyboardValueManager.value = '';
+										},
+										focus: function () {
+											this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+										},
+										blur: function () {
+											this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
+										}
+									}
+								}).appendTo(contentFrame);
+
+								new Text({
+									data: '&#8999;',
+									styles: {
+										width: 'inherit',
+										height: 'inherit',
+										anchorStyle: 'center'
+									}
+								}).appendTo(cleanButton);
+
+								totalHeight += input.height;
+
+								break;
+							case 'pincreation':
+							case 'pin':
+								keyboard = new MAF.keyboard.ReuseKeyboard({
+									maxLength: 4,
+									controlSize: "small",
+									layout: 'pinentry'
+								}).appendTo(keyboardContainer);
+								KeyboardValueManager.setMaxLength(4);
+								keyboardContainer.wantsFocus = true;
+								keyboardContainer.setStyle('height', keyboard.height || 0);
+								keyboard.hAlign = 'center';
+
+								var pinDots = new Frame({
+									styles: {
+										hAlign: 'center',
+										vAlign: 'bottom',
+										width: keyboard.width,
+										height: 88,
+										hOffset: 2,
+										vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height
+									}
+								}).appendTo(contentFrame);
+
+								for (var i = 0; i < 4; i++) {
+									new Text({
+										styles: {
+											fontSize: 60,
+											borderRadius: '15px',
+											backgroundColor: 'grey',
+											border: '2px solid white',
+											width: (pinDots.width/4)-4,
+											height: 84,
+											anchorStyle: 'center',
+											hOffset: (pinDots.width/4) * i
+										}
+									}).appendTo(pinDots);
+								}
+
+								totalHeight += pinDots.height;
+
+								break;
+						}
+						if (keyboard) {
+							totalHeight += keyboard.height;
+							dialogFocus = 'keyboard';
+							keyboard.onKeyDown = function (event) {
+								var packet = {
+									payload: Object.merge(event, { layout: this.config.layout })
+								};
+								KeyboardValueManager.handleExternalKeyInput(packet);
+							};
+						}
+					}
+
+					contentFrame.height = totalHeight;
+					body.appendChild(fragment);
+
+					var focusEl = getElementById('@' + type + '-' + dialogFocus);
 					if (focusEl && focusEl.focus && focusEl.focus.call) {
 						focusEl.focus();
 					} else {
@@ -456,6 +476,17 @@ var loadTemplate = (function () {
 					break;
 			}
 		} else {
+			if (type === 'sidebar') {
+				var home = getElementById('@' + type + '-home');
+				if (home.retrieve('id') === id) {
+					home.wantsFocus = false;
+					home.frozen = true;
+				} else {
+					home.store('current', id);
+					home.frozen = false;
+					home.wantsFocus = true;
+				}
+			}
 			template.frozen = false;
 		}
 		if (current && current !== type) {

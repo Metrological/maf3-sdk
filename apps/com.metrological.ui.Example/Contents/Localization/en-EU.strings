@@ -1,5 +1,7 @@
 "OK" = "OK";
 "BACK" = "BACK";
+"CANCEL" = "CANCEL";
+"FORGOT_PIN" = "FORGOT PIN?";
 "PAGE" = "PAGE %s OF %s";
 "WIDGET_BY" = "App by";
 "MORE_INFO" = "More information";
