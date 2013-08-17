@@ -49,11 +49,11 @@ define('MAF.control.MetadataDisplay', function () {
 						return this.updateContent(event.payload);
 					case 'onFocus':
 						this.fire('onFocus');
-						this.content.show();
+						this.content.thaw();
 						break;
 					case 'onBlur':
 						this.fire('onBlur');
-						this.content.hide();
+						this.content.freeze();
 						break;
 				}
 			}
@@ -97,7 +97,7 @@ define('MAF.control.MetadataDisplay', function () {
 		},
 
 		setText: function (text) {
-			this.content.data = text || '';
+			this.content.setText(text || '');
 		},
 
 		suicide: function () {

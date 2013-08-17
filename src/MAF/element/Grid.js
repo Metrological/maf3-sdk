@@ -1,27 +1,36 @@
 define('MAF.element.Grid', function () {
+	var layoutCell = function (cell, cellIndex) {
+		var h = (cellIndex % this.config.columns),
+			v = Math.floor(cellIndex / this.config.columns);
+		if (h > 0) {
+			cell.hOffset = cell.width * h;
+		}
+		if (v > 0) {
+			cell.vOffset = cell.height * v;
+		}
+		return cell;
+	};
 	return new MAF.Class({
 		ClassName: 'BaseGrid',
 
 		Extends: MAF.element.Container,
 
 		Protected: {
-			generateCells: function (count) {
+			generateCells: function (count, data) {
 				if (count > 0 && this.cells.length === 0) {
 					var fragment = createDocumentFragment(),
 						dims = this.getCellDimensions();
 					for (var i = 0; i < count; i++) {
-						var cell = this.cells[i] = this.getNewCell().setStyles(dims);
+						var cell = this.config.cellCreator.call(this).setStyles(dims);
 						cell.grid = this;
-						fragment.appendChild(this.layoutCell(cell, i).element);
+						fragment.appendChild(layoutCell.call(this, cell, i).element);
+						this.cells.push(cell);
 					}
 					this.body.element.appendChild(fragment);
 				}
 				return this.cells.length;
 			},
 			updateWaitIndicator: function () {
-			},
-			getNewCell: function () {
-				return this.config.cellCreator.apply(this);
 			},
 			updateState: function (state) {
 				this._state = Object.merge(this._state, state || {});
@@ -307,17 +316,6 @@ define('MAF.element.Grid', function () {
 				if (fidx !== undefined && fidx > -1) {
 					this.focusCell(fidx);
 				}
-			},
-			layoutCell: function (cell, cellIndex) {
-				var h = (cellIndex % this.config.columns),
-					v = Math.floor(cellIndex / this.config.columns);
-				if (h > 0) {
-					cell.hOffset = cell.width * h;
-				}
-				if (v > 0) {
-					cell.vOffset = cell.height * v;
-				}
-				return cell;
 			}
 		},
 
@@ -358,8 +356,8 @@ define('MAF.element.Grid', function () {
 
 			this.body = new MAF.element.Core({
 				styles: {
-					width: 'inherit',
-					height: 'inherit'
+					width: this.width || 'inherit',
+					height: this.height || 'inherit'
 				}
 			}).appendTo(this);
 
