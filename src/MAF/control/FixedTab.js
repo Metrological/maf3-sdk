@@ -1,6 +1,7 @@
 define('MAF.control.FixedTab', function () {
 	return new MAF.Class({
 		ClassName: 'ControlFixedTab',
+
 		Extends: MAF.control.SingleTab,
 
 		Protected: {

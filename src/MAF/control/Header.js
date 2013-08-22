@@ -1,7 +1,7 @@
 define('MAF.control.Header', function () {
 	var createContent = function () {
 		var config = this.config,
-			className = (config.ClassName || this.ClassName),
+			className = config.ClassName || this.ClassName,
 			headerStyle = config.headerStyle && config.headerStyle.capitalize() || '';
 		this.element.addClass(className + headerStyle);
 		this.content = new MAF.element.Text({

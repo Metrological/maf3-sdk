@@ -1,6 +1,6 @@
 var loadTemplate = (function () {
-	var current;
-	return function (data) {
+	var current = {};
+	return function ApplicationManager_loadTemplate(data) {
 		var type = data.type,
 			id = data.id;
 		if (!type) {
@@ -92,7 +92,7 @@ var loadTemplate = (function () {
 					}).appendTo(body);
 					break;
 				case 'dialog':
-					var currentStyle = getElementById('@' + current).style,
+					var currentStyle = getElementById('@' + current[identifier]).style,
 						focusAfterDialog = app.document.activeElement,
 						totalHeight = 0,
 						buttons = [],
@@ -490,8 +490,8 @@ var loadTemplate = (function () {
 			}
 			template.frozen = false;
 		}
-		if (current && current !== type) {
-			getElementById('@' + current).frozen = true;
+		if (current[identifier] && current[identifier] !== type) {
+			getElementById('@' + current[identifier]).frozen = true;
 		}
 		if (!getElementById(id)) {
 			new View({
@@ -500,7 +500,7 @@ var loadTemplate = (function () {
 				styles: type === 'sidebar' ? { top: 64 } : null
 			}).appendTo(template);
 		}
-		current = type;
+		current[identifier] = type;
 	};
 }());
 

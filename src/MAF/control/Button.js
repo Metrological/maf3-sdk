@@ -1,32 +1,10 @@
 define('MAF.control.Button', function () {
 	var updateSecureIndicator = function (event) {
-		var key  = 'SecureButtonIndicator',
-			sts  = Theme.getStyles(key),
-			src  = Theme.storage[key] && Theme.storage[key].source,
-			right  = sts && sts.hAlign == 'right',
-			bottom = sts && sts.vAlign == 'bottom';
-
 		if (!this.secureIndicator && this.secure) {
-			if (src) {
-				this.secureIndicator = new MAF.element.Image({
-					src: src,
-					styles: sts
-				}).appendTo(this);
-			} else {
-				this.secureIndicator = new MAF.element.Text({
-					data: '&#128274;',
-					styles: sts
-				}).appendTo(this);
-			}
-		}
-
-		if (this.secureIndicator) {
-			// TODO: lock not defined, will give error when no hAlign/vAlign in theming at the moment
-			this.secureIndicator.setStyles({
-				hOffset: right  ? parseInt(sts.marginRight  || 0, 10) : lock.hOffset,
-				vOffset: bottom ? parseInt(sts.marginBottom || 0, 10) : lock.vOffset,
-				visible: this.secure
-			});
+			this.secureIndicator = new MAF.element.Text({
+				ClassName: 'SecureButtonIndicator',
+				data: '&#128274;'
+			}).appendTo(this);
 		}
 		this.adjustAccessories();
 	};
@@ -64,7 +42,15 @@ define('MAF.control.Button', function () {
 		},
 
 		createContent: emptyFn,
-		adjustAccessories: emptyFn
+		adjustAccessories: emptyFn,
+
+		suicide: function () {
+			if (this.secureIndicator) {
+				this.secureIndicator.suicide();
+				delete this.secureIndicator;
+			}
+			this.parent();
+		}
 	});
 }, {
 	ControlButton: {
@@ -83,15 +69,11 @@ define('MAF.control.Button', function () {
 		}
 	},
 	SecureButtonIndicator: {
-		source: false,
-		normal: {
-			styles: {
-				visible: false,
-				hAlign: 'right',
-				vAlign: 'bottom',
-				marginRight: 5,
-				marginBottom: 7
-			}
+		styles: {
+			hAlign: 'right',
+			vAlign: 'bottom',
+			hOffset: 5,
+			vOffset: 7
 		}
 	}
 });
