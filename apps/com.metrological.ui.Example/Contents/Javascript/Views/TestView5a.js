@@ -82,11 +82,5 @@ var TestView5a = new MAF.Class({
 				height: this.height - pageindicator.height
 			}
 		}).appendTo(this).attachAccessory(pageindicator);
-	},
-
-	updateView: function () {
-		if (photopgr.getDataSize() === 0) {
-			getPicasaPhotos({});
-		}
 	}
 });

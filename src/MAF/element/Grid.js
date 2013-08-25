@@ -16,9 +16,9 @@ define('MAF.element.Grid', function () {
 			direction  = event && event.payload && event.payload.direction,
 			carousel   = this.config.carousel,
 			shift      = false,
-			page       = 0,
-			lastpage   = Math.max(0, this.getPageCount() - 1),
 			state      = this.getState(),
+			page       = state.currentPage || 0,
+			lastpage   = Math.max(0, this.getPageCount() - 1),
 			items      = state.dataLength,
 			horiz      = this.config.orientation === 'horizontal',
 			cellCoords = cellCl && cellCl.getCellCoordinates(),
@@ -459,6 +459,15 @@ define('MAF.element.Grid', function () {
 
 		getFocusCoordinates: function () {
 			return this.getState().focusCoordinates;
+		},
+
+		focus: function () {
+			if (this.getVisibleCellCount()) {
+				this.updateState({
+					hasFocus: true
+				});
+				this.focusCell({row: 0, column:0});
+			}
 		},
 
 		focusCell: function (target) {
