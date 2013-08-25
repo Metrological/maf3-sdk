@@ -4,6 +4,7 @@ var TestView1 = new MAF.Class({
 	Extends: MAF.system.SidebarView,
 
 	initialize: function () {
+		//log(MAF.Browser);
 		this.parent();
 		this.registerMessageCenterListenerCallback(this.dataHasChanged);
 	},
@@ -188,10 +189,9 @@ var TestView1 = new MAF.Class({
 				var cell = new MAF.element.GridCell({
 					styles: this.getCellDimensions(),
 					events: {
-						onSelect: function () {
-							var data = this.getCellDataItem();
+						onSelect: function (event) {
 							new MAF.dialogs.Alert({
-								title: 'Cell ' + this.getCellIndex(),
+								title: (event.payload && event.payload.dataItem) ? event.payload.dataItem.text.capitalize() : 'Cell ' + this.getCellIndex(),
 								message: 'You have selected a cell in this grid.',
 								buttons: [
 									{ label: 'Close', callback: this.dialogCallback },

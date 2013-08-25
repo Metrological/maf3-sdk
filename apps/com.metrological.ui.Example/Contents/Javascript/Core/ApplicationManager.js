@@ -195,7 +195,8 @@ var loadTemplate = (function () {
 							vAlign: 'center',
 							borderRadius: '15px',
 							border: '2px solid #FFFFFF',
-							backgroundColor: 'black'
+							backgroundColor: 'black',
+							visible: false
 						}
 					}).appendTo(template);
 
@@ -212,7 +213,7 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(contentFrame);
 
-					new Text({
+					var dialogMessage = new Text({
 						id: '@' + type + '-message',
 						label: widget.getLocalizedString(dialogConfig.message || ''),
 						styles: {
@@ -245,22 +246,21 @@ var loadTemplate = (function () {
 					}
 
 					dialogConfig.buttons.forEach(function (btnConfig, key) {
-						var button = new Text({
-							label: widget.getLocalizedString(btnConfig.label),
+						var dialogbutton = new Frame({
 							id: '@' + type + '-button' + key,
 							focus: true,
 							styles: {
 								height: 51,
-								width: contentFrame.width - 30,
+								width: contentFrame.width - 34,
 								borderRadius: '15px',
 								border: '2px solid #FFFFFF',
 								vAlign: 'bottom',
 								hOffset: 15,
 								vOffset: (((dialogConfig.buttons.length-1) - key) * 56) + 5,
-								paddingLeft: 10,
-								paddingRight: 10,
-								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor'),
-								anchorStyle: 'leftCenter'
+								//paddingLeft: 10,
+								//paddingRight: 10,
+								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+								
 							},
 							events: {
 								focus: function () {
@@ -270,10 +270,24 @@ var loadTemplate = (function () {
 									this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
 								}
 							}
-						}).appendTo(contentFrame).store('value', btnConfig.value);
+						}).appendTo(contentFrame);
+
+						dialogbutton.store('value', btnConfig.value);
+
+						new Text({
+							label: widget.getLocalizedString(btnConfig.label),
+							styles: {
+								width: '100%',
+								height: 'inherit',
+								paddingLeft: 10,
+								paddingRight: 10,
+								truncation: 'end',
+								anchorStyle: 'leftCenter'
+							}
+						}).appendTo(dialogbutton);
 					});
 
-					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 80;
+					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 50;
 
 					var dialogFocus = 'button0';
 					if (isKeyboard) {
@@ -405,7 +419,7 @@ var loadTemplate = (function () {
 									}
 								}).appendTo(cleanButton);
 
-								totalHeight += input.height;
+								totalHeight += input.height + 20;
 
 								break;
 							case 'pincreation':
@@ -462,8 +476,10 @@ var loadTemplate = (function () {
 						}
 					}
 
-					contentFrame.height = totalHeight;
+					
 					body.appendChild(fragment);
+					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 1) * dialogMessage.lineHeight);
+					contentFrame.visible = true;
 
 					var focusEl = getElementById('@' + type + '-' + dialogFocus);
 					if (focusEl && focusEl.focus && focusEl.focus.call) {

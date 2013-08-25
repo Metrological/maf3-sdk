@@ -137,7 +137,7 @@ var TestView3 = new MAF.Class({
 				onSelect: function () {
 					new MAF.dialogs.Alert({
 						title: 'Alert Dialog.',
-						message: 'Select a button from below.',
+						message: 'Select a button from below. Select a button from below. Select a button from below. Select a button from below. Select a button from below. Select a button from below. Select a button from below. Select a button from below.',
 						buttons: [
 							{ label: 'Option 1' },
 							{ label: 'Option 2' },
@@ -194,6 +194,7 @@ var TestView3 = new MAF.Class({
 		var button12 = new MAF.control.ToggleButton({
 			label: 'ToggleButton',
 			value: '#00FF00',
+			valueOnSubline: true,
 			options: [{value: "#FF0000", label: "Red"},{value: "#00FF00", label: "Green"}],
 			styles: {
 				vOffset: button11.outerHeight + 1
