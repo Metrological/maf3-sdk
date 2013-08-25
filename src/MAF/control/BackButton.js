@@ -5,7 +5,7 @@ define('MAF.control.BackButton', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				switch(event.type) {
 					case 'select':
 						if (this.fire('onSelect', payload, event)) {

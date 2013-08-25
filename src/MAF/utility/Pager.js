@@ -74,6 +74,7 @@ define('MAF.utility.Pager', function () {
 			internal.leftIndex = 0;
 			internal.rightIndex = 0;
 			internal.paramsMap = {};
+			internal.storage.clear();
 
 			data.forEach(function (value, key) {
 				internal.storage.set(key, value);

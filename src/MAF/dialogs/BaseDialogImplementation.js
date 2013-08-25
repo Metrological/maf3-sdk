@@ -31,7 +31,7 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 				return;
 			}
 			this.store('viewId', MAF.application.getCurrentViewId());
-			boundDispatchers[this._classID] = this.dispatcher.subscribeTo(MAF.application, ['onDialogDone', 'onDialogCancelled', 'onHideView'], this);
+			boundDispatchers[this._classID] = this.dispatchEvents.subscribeTo(MAF.application, ['onDialogDone', 'onDialogCancelled', 'onHideView'], this);
 			// we need this since this is the only place where we activate dialogs
 			// ??? it would be nice if this was responding to an onShowDialog event or something
 			MAF.HostEventManager.send('showDialog', this.getDialogConfig());
@@ -42,7 +42,7 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			MAF.HostEventManager.send('hideDialog', this.getDialogConfig());
 		},
 
-		dispatcher: function(event) {
+		dispatchEvents: function(event) {
 			if (event.type == "onHideView") {
 				if (this.retrieve('viewId') !== event.payload.viewId) {
 					return;

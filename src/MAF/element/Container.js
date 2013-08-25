@@ -7,7 +7,7 @@ define('MAF.element.Container', function () {
 		Implements: Library.Themes,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
 
 				var type = event.type,
@@ -22,7 +22,7 @@ define('MAF.element.Container', function () {
 				}
 				this.fire('on' + type.capitalize(), payload, event);
 			},
-			elementEvents: function (types) {
+			registerEvents: function (types) {
 				this.parent(['focus', 'blur', 'select', 'navigate'].concat(types || []));
 			}
 		},

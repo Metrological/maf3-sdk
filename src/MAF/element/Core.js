@@ -9,8 +9,6 @@ define('MAF.element.Core', function () {
 		],
 
 		Protected: {
-			dispatcher: function () {
-			},
 			initElement: function () {
 				var El = this.config.element;
 				if (El && El.nodeType) {
@@ -32,7 +30,7 @@ define('MAF.element.Core', function () {
 				this.element = El;
 
 				this.proxyProperties();
-				this.elementEvents();
+				this.registerEvents();
 
 				if (this.config.id) {
 					this.id = this.config.id;
@@ -73,11 +71,11 @@ define('MAF.element.Core', function () {
 					return el.setAttribute('id', id);
 				});
 			},
-			elementEvents: function (types) {
+			registerEvents: function (types) {
 				if (!types) {
 					return;
 				}
-				var listener = this.dispatcher.bindTo(this);
+				var listener = this.dispatchEvents.bindTo(this);
 				[].concat(types).forEach(function (type){
 					type = type && type.type ? type.type : type;
 					var phase = type.phase === true;
@@ -86,7 +84,8 @@ define('MAF.element.Core', function () {
 					}
 				}, this);
 			},
-			getViewController: function () {
+			dispatchEvents: emptyFn,
+			getWindow: function () {
 				var el = this.element,
 					win = el && el.window;
 				return win && win.owner;
@@ -104,7 +103,7 @@ define('MAF.element.Core', function () {
 		},
 
 		getView: function () {
-			return this.getViewController();
+			return this.getWindow();
 		},
 
 		show: function () {
@@ -128,22 +127,22 @@ define('MAF.element.Core', function () {
 		},
 
 		getAbsolutePosition: function () {
-			var habs = this.hOffset,
-				vabs = this.vOffset,
-				wind = this.element.window,
-				supr = this.element.parentNode;
+			var hPosition = this.hOffset,
+				vPosition = this.vOffset,
+				cWindow = this.element.window,
+				parent = this.element.parentNode;
 
-			if (wind && supr) {
-				while (supr && wind !== supr) {
-					habs += supr.hOffset;
-					vabs += supr.vOffset;
-					supr =  supr.parentNode;
+			if (cWindow && parent) {
+				while (parent && cWindow !== parent) {
+					hPosition += parent.hOffset;
+					vPosition += parent.vOffset;
+					parent =  parent.parentNode;
 				}
 			}
 
 			return {
-				hOffset: habs,
-				vOffset: vabs
+				hOffset: hPosition,
+				vOffset: vPosition
 			};
 		}
 	});

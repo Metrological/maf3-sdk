@@ -5,7 +5,7 @@ define('MAF.control.PageIndicator', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				switch(event.type) {
 					case 'navigate':
 						if (event.detail && event.detail.direction) {

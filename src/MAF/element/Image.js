@@ -5,7 +5,7 @@ define('MAF.element.Image', function () {
 		Extends: MAF.element.Core,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
 				switch (event.type) {
 					case 'load':
@@ -30,7 +30,7 @@ define('MAF.element.Image', function () {
 						break;
 				}
 			},
-			elementEvents: function (eventTypes) {
+			registerEvents: function (eventTypes) {
 				this.parent([
 					'load',
 					'error'

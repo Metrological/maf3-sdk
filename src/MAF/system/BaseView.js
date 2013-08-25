@@ -14,29 +14,6 @@ define('MAF.system.BaseView', function () {
 					this.element.addClass(proto.constructor.prototype.ClassName);
 				}
 			},
-			elementEvents: function (types) {
-				this.parent([
-//					'firstdisplay', //@TODO add this on first append
-					'focus',
-					'blur'
-				].concat(types || []));
-			},
-			dispatcher: function (event) {
-				this.parent(event);
-				switch (event.type) {
-					case 'firstdisplay':
-						this.fire('onFirstDisplay', null, event);
-						break;
-					case 'focus':
-						this.fire('onFocus', null, event);
-						break;
-					case 'blur':
-						this.fire('onBlur', null, event);
-						break;
-					default:
-						break;
-				}
-			},
 			onLoadView: function () {
 				if (this.fire('onCreateView')) {
 					this.createView();
@@ -100,7 +77,7 @@ define('MAF.system.BaseView', function () {
 			clearControlData: function (key) {
 				delete this.persist.___systemViewData___[key];
 			},
-			getViewController: function () {
+			getWindow: function () {
 				return this;
 			}
 		},

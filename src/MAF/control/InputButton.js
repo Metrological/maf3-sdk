@@ -41,7 +41,7 @@ define('MAF.control.InputButton', function () {
 		Extends: MAF.control.TextButton,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				if (event.type === 'select') {
 					event.stopPropagation();
 					event.preventDefault();
@@ -237,9 +237,42 @@ define('MAF.control.InputButton', function () {
 }, {
 	ControlInputButton: 'ControlButton',
 	ControlInputButtonSubline: {
+		renderSkin: function (state, w, h, args, theme) {
+			var ff = new Frame();
+			theme.applyLayer('BaseGlow', ff);
+			if (state === 'focused') {
+				theme.applyLayer('BaseFocus', ff);
+			}
+			theme.applyLayer('BaseHighlight', ff);
+			return ff;
+		},
 		styles: {
 			width: 'inherit',
 			height: '91px'
+		}
+	},
+	ControlValueContainerMainline: {
+		styles: {
+			width: '100%',
+			height: 'inherit',
+			vOffset: 6,
+			fontSize: 30,
+			paddingLeft: 10,
+			paddingRight: 10,
+			anchorStyle: 'leftTop',
+			truncation: 'end'
+		}
+	},
+	ControlValueContainerSubline: {
+		styles: {
+			width: '100%',
+			height: 'inherit',
+			truncation: 'end',
+			paddingLeft: 10,
+			anchorStyle: 'leftBottom',
+			fontSize: 26,
+			paddingBottom: 2,
+			opacity: 0.7
 		}
 	}
 });

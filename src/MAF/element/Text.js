@@ -5,7 +5,7 @@ define('MAF.element.Text', function () {
 		Extends: MAF.element.Core,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
 				switch(event.type) {
 					case 'change':

@@ -26,5 +26,6 @@ define('MAF.control.PromptButton', function () {
 		}
 	});
 }, {
-	ControlPromptButton: 'ControlButton'
+	ControlPromptButton: 'ControlButton',
+	ControlPromptButtonSubline: 'ControlInputButtonSubline'
 });

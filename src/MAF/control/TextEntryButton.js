@@ -114,6 +114,7 @@ define('MAF.control.TextEntryButton', function () {
 			height: 102
 		}
 	},
+	ControlTextEntryButtonSubline: 'ControlTextEntryButton',
 	ControlTextEntryButtonLabel: {
 		styles: {
 			fontSize: 20,

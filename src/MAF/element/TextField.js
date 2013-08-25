@@ -5,7 +5,7 @@ define('MAF.element.TextField', function () {
 		Extends: MAF.element.Text,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
 				var type = event.type;
 				switch(type) {
@@ -23,7 +23,7 @@ define('MAF.element.TextField', function () {
 				}
 				this.fire('on' + type.capitalize(), payload, event);
 			},
-			elementEvents: function (eventTypes) {
+			registerEvents: function (eventTypes) {
 				this.parent(['focus', 'blur', 'keydown', 'navigate', 'cursor'].concat(eventTypes || []));
 			},
 			proxyProperties: function (propnames) {

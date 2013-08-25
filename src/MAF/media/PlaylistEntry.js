@@ -5,15 +5,16 @@ define('MAF.media.PlaylistEntry', function () {
 			url: null,
 			bitrate: 0,
 			startIndex: 0,
+			asset: null,
 			streams: null
 		},
 
-		initialize: function() {
+		initialize: function () {
 			var startIndex = this.config.startIndex;
-			getter(this, 'startIndex', function() {
+			getter(this, 'startIndex', function () {
 				return startIndex;
 			});
-			setter(this, 'startIndex', function(value) {
+			setter(this, 'startIndex', function (value) {
 				startIndex = value;
 			});
 
@@ -42,11 +43,11 @@ define('MAF.media.PlaylistEntry', function () {
 			});
 		},
 
-		streamsReady: function(callback) {
+		streamsReady: function (callback) {
 			return true;
 		},
 
-		addURL: function(url, bitrate) {
+		addURL: function (url, bitrate) {
 			var streams = playlistStreams[this._classID];
 			if (url) {
 				streams.push({

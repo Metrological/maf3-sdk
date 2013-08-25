@@ -5,7 +5,7 @@ define('MAF.control.SingleTab', function () {
 		Extends: MAF.control.Button,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				switch(event.type) {
 					case 'focus':
 					case 'blur':

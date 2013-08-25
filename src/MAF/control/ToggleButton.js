@@ -15,5 +15,6 @@ define('MAF.control.ToggleButton', function () {
 		}
 	});
 }, {
-	ControlToggleButton: 'ControlButton'
+	ControlToggleButton: 'ControlButton',
+	ControlToggleButtonSubline: 'ControlInputButtonSubline'
 });

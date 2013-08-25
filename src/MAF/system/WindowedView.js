@@ -32,7 +32,7 @@ define('MAF.system.WindowedView', function () {
 		Extends: MAF.system.BaseView,
 
 		Protected: {
-			dispatcher: function (event) {
+			dispatchEvents: function (event) {
 				this.parent(event);
 				switch (event.type) {
 					case 'navigate':
@@ -43,7 +43,7 @@ define('MAF.system.WindowedView', function () {
 						break;
 				}
 			},
-			elementEvents: function (types){
+			registerEvents: function (types){
 				this.parent([
 					'navigate',
 					'navigateoutofbounds'

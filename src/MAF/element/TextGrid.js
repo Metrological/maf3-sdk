@@ -5,7 +5,7 @@ define('MAF.element.TextGrid', function () {
 		Extends: MAF.element.Text,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				if (event.type === 'layoutchange') {
 					this.fire('onStateUpdated', {
 						currentPage: this.getCurrentPage(),
@@ -14,7 +14,7 @@ define('MAF.element.TextGrid', function () {
 				}
 				this.parent(event, payload);
 			},
-			elementEvents: function (eventTypes) {
+			registerEvents: function (eventTypes) {
 				this.parent([
 					'change',
 					'layoutchange'

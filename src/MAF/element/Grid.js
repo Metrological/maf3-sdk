@@ -10,12 +10,101 @@ define('MAF.element.Grid', function () {
 		}
 		return cell;
 	};
+	var handleNavEvent = function (event) {
+		var cellEl     = event && event.Event && event.Event.target,
+			cellCl     = cellEl && cellEl.owner,
+			direction  = event && event.payload && event.payload.direction,
+			carousel   = this.config.carousel,
+			shift      = false,
+			page       = 0,
+			lastpage   = Math.max(0, this.getPageCount() - 1),
+			state      = this.getState(),
+			items      = state.dataLength,
+			horiz      = this.config.orientation === 'horizontal',
+			cellCoords = cellCl && cellCl.getCellCoordinates(),
+			dataSize   = this.pager.getDataSize() || 0,
+			availableRows = Math.ceil(items / this.config.columns);
+
+		switch (direction) {
+			case 'left':
+				if (horiz) {
+					if (cellCoords.column === 0) {
+						if (page || carousel) {
+							shift = true;
+							cellCoords.column = cellCoords.columns - 1;
+						}
+					}
+				}
+				break;
+			case 'right':
+				if (horiz) {
+					if (cellCoords.column == cellCoords.columns - 1) {
+						if (page < lastpage || carousel) {
+							shift = true;
+							cellCoords.column = 0;
+						}
+					}
+				}
+				break;
+			case 'up':
+				if (!horiz) {
+					if (cellCoords.row === 0) {
+						if (page || carousel) {
+							shift = true;
+							if (page === 0 && carousel) {
+								var LastRowItems = Math.ceil(dataSize / this.config.columns) % this.config.rows;
+									LastRowItems = (LastRowItems === 0 )? this.config.rows-1 : LastRowItems-1;
+								cellCoords.row = LastRowItems;
+							} else {
+								cellCoords.row = this.config.rows - 1;
+							}
+						}
+					}
+				}
+				break;
+			case 'down':
+				if (!horiz) {
+					var LastColumn =(dataSize %  (this.config.columns * this.config.rows));
+						LastColumn = ( LastColumn !== 0 ) ? LastColumn : this.config.columns; // last column number of the last row
+					if (availableRows < (cellCoords.row + 2)) {
+						cellCoords.row = (this.config.rows - 1);
+					}
+					if (cellCoords.row === this.config.rows - 1) {
+						if (page < lastpage || carousel) {
+							shift = true;
+							cellCoords.row = 0;
+							if (page  ===  lastpage -1 && cellCoords.column+1 > LastColumn) {
+								cellCoords.column = LastColumn-1;
+							}
+						}
+					}
+				}
+				break;
+		}
+
+		if (shift && !state.animating) {
+			this.shift(direction, {focus: cellCoords});
+			event.preventDefault();
+		}
+	};
+
 	return new MAF.Class({
 		ClassName: 'BaseGrid',
 
 		Extends: MAF.element.Container,
 
 		Protected: {
+			registerEvents: function (types){
+				this.parent(['navigateoutofbounds'].concat(types || []));
+			},
+			dispatchEvents: function (event) {
+				this.parent(event);
+				switch (event.type) {
+					case 'navigateoutofbounds':
+						this.fire('onNavigateOutOfBounds', event.detail, event);
+						break;
+				}
+			},
 			generateCells: function (count, data) {
 				if (count > 0 && this.cells.length === 0) {
 					var fragment = createDocumentFragment(),
@@ -33,199 +122,35 @@ define('MAF.element.Grid', function () {
 			updateWaitIndicator: function () {
 			},
 			updateState: function (state) {
-				this._state = Object.merge(this._state, state || {});
-				this.fire('onStateUpdated', this._state);
-				return this._state;
+				var newState = Object.merge(this.getState(), state || {});
+				this.store('state', newState);
+				this.fire('onStateUpdated', newState);
+				return newState;
 			},
 			handleFocusEvent: function (event) {
-				if (this.element.allowNavigation === false) {
-					event.preventDefault();
-					return;
-				}
-				var fc = this._state.focusCoordinates || {row:0,column:0},
-					direction = this.element.currentNavigation || 'down';
+				var payload = event.payload;
 				switch (event.type) {
 					case 'onFocus':
-						switch (direction) {
-							case 'up':
-								fc.row = this.config.rows - 1;
-								break;
-							case 'down':
-								fc.row = 0;
-								break;
-						}
-						this.focusCell(fc);
+						var newindex = this.getCellIndex(payload || {row:0, column:0});
+						this.updateState({
+							hasFocus: true,
+							focusIndex: newindex,
+							focusCoordinates: {
+								row:    payload.row,
+								column: payload.column
+							}
+						});
 						break;
 					case 'onBlur':
-						this.blurCell(fc);
+						this.updateState({
+							hasFocus: false
+						});
 						break;
-				}
-			},
-			handleSelectEvent: function (event) {
-				var cellIndex = this.getCellIndex(this._state.focusCoordinates || -1),
-					target    = cellIndex > -1 ? this.cells[cellIndex] : false,
-					dataIndex = target && this.getCellDataIndex(target),
-					dataItem  = target && this.getCellDataItem(target);
-				if (target) {
-					target.fire('onSelect', {
-						cellIndex: cellIndex,
-						dataIndex: dataIndex,
-						dataItem:  dataItem
-					});
-				}
-			},
-			handleNavEvent: function (event) {
-				var direction = event.payload.direction,
-					carousel  = this.config.carousel,
-					release   = false,
-					shift     = false,
-					state     = this._state,
-					page      = state.currentPage || 0,
-					lastpage  = Math.max(0, this.getPageCount() - 1),
-					items     = state.dataLength,
-					horiz     = this.config.orientation == 'horizontal',
-					focused   = state.focusCoordinates || {},
-					target    = {
-						row:    focused.row    || 0,
-						column: focused.column || 0
-					},
-					dataSize = this.pager._dataSize,
-					availableRows = Math.ceil(items / this.config.columns);
-				switch (direction) {
-					case 'left':
-						if (horiz) {
-							if (target.column === 0) {
-								if (page || carousel) {
-									shift = true;
-									target.column = this.config.columns - 1;
-								}
-							} else {
-								target.column--;
-							}
-						} else {
-							if (target.column === 0) {
-								release = true;
-							} else {
-								target.column = target.column - 1;
-							}
-						}
-						break;
-					case 'right':
-						if (horiz) {
-							if (target.column == this.config.columns - 1) {
-								if (page < lastpage || carousel) {
-									shift = true;
-									target.column = 0;
-								}
-							} else {
-								target.column++;
-							}
-						} else {
-							var availableCols = (items / availableRows) / (target.column + 1);
-							if (focused.column === this.config.columns - 1) {
-								release = true;
-							} else {
-								target.column = target.column + 1;
-							}
-						}
-						break;
-					case 'up':
-						if (horiz) {
-							if (target.row === 0) release = true;
-							else target.row--;
-						} else {
-							var LastRowItems = Math.ceil(dataSize / this.config.columns) % this.config.rows;
-								LastRowItems = (LastRowItems === 0 )? this.config.rows-1 : LastRowItems-1;
-							
-							if (target.row === 0) {
-								if (page || carousel) {
-									shift = true;
-									if (page === 0 && carousel) {
-										target.row = LastRowItems;
-									} else {
-										target.row = this.config.rows - 1;
-									}
-								}
-							} else {
-								target.row = target.row - 1;
-							}
-						}
-						break;
-					case 'down':
-						if (horiz) {
-							if (target.row == this.config.rows - 1) release = true;
-							else target.row++;
-						} else {
-							var LastColumn =(dataSize %  (this.config.columns * this.config.rows));
-								LastColumn = ( LastColumn !== 0 ) ? LastColumn : this.config.columns; // last column number of the last row
-							if (availableRows < (target.row + 2)) {
-								target.row = (this.config.rows - 1);
-							}
-							if (target.row === this.config.rows - 1) {
-								if (page < lastpage || carousel) {
-									shift = true;
-									target.row = 0;
-									if (page  ===  lastpage -1 && focused.column+1 > LastColumn) {
-										target.column = LastColumn-1;
-									}
-								}
-							} else {
-								var LastItems = items % this.config.columns;
-								if ((items - ((focused.row+1) * this.config.columns)) < this.config.columns && focused.column+1 > (LastItems)) {
-									target.column =  LastItems -1; // end column
-								}
-								target.row = focused.row + 1;
-							}
-						}
-						break;
-				}
-				if (!this.getVisibleCellCount()) {
-					release = true;
-				}
-				if (shift && !state.animating) {
-					this.shift(direction, {focus: target});
-					event.preventDefault();
-				} else if (release) {
-					this.releaseFocus(direction, event);
-				} else if (target.column == focused.column && target.row == focused.row) {
-					event.preventDefault();
-				} else {
-					var fidx = this.getCellIndex(target);
-					if (fidx > -1 && this.cells[fidx] && !this.cells[fidx].frozen && this.cells[fidx].visible) {
-						event.preventDefault();
-						this.focusCell(target, event);
-					} else {
-						switch (direction) {
-							case 'right':
-								if (!target.row) {
-									target.column = 0;
-									this.shift(direction, {focus: target});
-									return;
-								}
-								target.row = target.row - 1;
-								event.preventDefault();
-								this.focusCell(target, event);
-								break;
-							case 'down':
-								var hit = false;
-								for (var i = target.column; i; i--) {
-									target.column = target.column - 1;
-									fidx = this.getCellIndex(target);
-									if (fidx === -1 || !this.cells[fidx] || this.cells[fidx].frozen || !this.cells[fidx].visible) {
-										continue;
-									}
-									event.preventDefault();
-									this.focusCell(target, event);
-									hit = true;
-								}
-								if (hit) this.releaseFocus(direction, event);
-								break;
-						}
-					}
 				}
 			},
 			onDataPage: function (event) {
-				var request = this._state.pageRequested,
+				var state = this.getState(),
+					request = state.pageRequested,
 					cellUpdater = this.config.cellUpdater,
 					payload = event.payload,
 					type = event.type,
@@ -235,7 +160,7 @@ define('MAF.element.Grid', function () {
 				}
 				var data = payload.data.items && payload.data.items.length && [].concat(payload.data.items) || [],
 					dataLength = data.length;
-				this._state.dataLength = dataLength;
+
 				if (this.config.focus) {
 					if (dataLength === 0) {
 						this.element.wantsFocus = false;
@@ -243,28 +168,30 @@ define('MAF.element.Grid', function () {
 						this.element.wantsFocus = true;
 					}
 				}
-				if (this._state.focusIndex === undefined) {
-					this._state.focusIndex = -1;
+				if (state.focusIndex === undefined) {
+					this.updateState({ focusIndex: -1 });
 				}
 				this.body.freeze();
 				if (this.generateCells(dataLength) > 0) {
 					this.cells.forEach(function (cell, i) {
 						if (i < dataLength) {
-							cell.thaw();
+							cell.show();
 							cellUpdater.call(this, cell, data[i]);
 						} else {
-							cell.freeze();
+							cell.hide();
 						}
 					}, this);
 				}
 				this.body.thaw();
 				this.updateState({
 					startIndex: request.index,
-					currentPage: request.index / this.getCellCount()
+					currentPage: request.index / this.getCellCount(),
+					dataLength: dataLength
 				});
 				var focus = request.options.focus,
 					fidx = this.getCellIndex(focus);
-				if (focus) {
+
+				if (focus && state.hasFocus) {
 					var loop = this.cells.length;
 					while (fidx >= dataLength && loop) {
 						switch (request.options.direction) {
@@ -309,13 +236,11 @@ define('MAF.element.Grid', function () {
 						}
 						loop--;
 					}
+					this.focusCell(fidx);
 				}
 				this.fire('onPageChanged', this.updateState({
 					pageChanging: false
 				}));
-				if (fidx !== undefined && fidx > -1) {
-					this.focusCell(fidx);
-				}
 			}
 		},
 
@@ -326,7 +251,6 @@ define('MAF.element.Grid', function () {
 			carousel: false,
 			inverted: false,
 			render: true,
-			focus: true,
 			manageWaitIndicator: false,
 			animate: false, // TODO: Setting from plugin MAF.config.animationEnabled
 			animation: {
@@ -366,9 +290,9 @@ define('MAF.element.Grid', function () {
 			this.onDataPage.subscribeTo(this.pager, this.pager.eventType, this);
 			this.updateWaitIndicator.subscribeTo(this, ['onChangePage', 'onPageChanged'], this);
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
-			this.handleSelectEvent.subscribeTo(this, 'onSelect', this);
-			this.handleNavEvent.subscribeTo(this, 'onNavigate', this);
-			this._state = {};
+			handleNavEvent.subscribeTo(this, 'onNavigateOutOfBounds', this);
+
+			this.store('state', {});
 
 			if (this.config.render) {
 				var st = this.config.state || {},
@@ -396,7 +320,7 @@ define('MAF.element.Grid', function () {
 		appendTo: function (parent) {
 			var appended = this.parent(parent);
 			if (appended && this.getSubscriberCount('onBroadcast')) {
-				var view = this.getViewController();
+				var view = this.getView();
 				if (view) {
 					view.registerMessageCenterListenerControl(this);
 				}
@@ -409,11 +333,11 @@ define('MAF.element.Grid', function () {
 			data_length = data_length && (data_length > data.length) ? data_length : data.length;
 			this.pager.initItems(data, data_length);
 			if (reset) {
-				this._state.focusCoordinates = {row:null, column:null};
+				this.updateState({row:null, column:null});
 			}
-			var state = this._state,
-				focus = this.element.hasFocus && state.focusCoordinates,
-				start = reset ? 0 : this._state.currentPage || 0,
+			var state = this.getState(),
+				focus = state.hasFocus && state.focusCoordinates,
+				start = reset ? 0 : state.currentPage || 0,
 				options = {transition:'none', refresh:true, focus:focus};
 			this.changePage(start, options);
 			this.fire("onDatasetChanged");
@@ -425,7 +349,7 @@ define('MAF.element.Grid', function () {
 		},
 
 		getState: function () {
-			return clone(this._state);
+			return this.retrieve('state');
 		},
 
 		releaseFocus: function (direction, event) {
@@ -433,16 +357,14 @@ define('MAF.element.Grid', function () {
 		},
 
 		shift: function (type, options) {
-			var target = false,
-				current = this._state.currentPage || 0,
+			var target   = false,
+				state    = this.getState(),
+				current  = state.currentPage || 0,
 				lastpage = Math.max(0, this.pager.getNumPages() - 1),
 				carousel = this.config.carousel;
 			options = options || {};
+
 			switch (type) {
-				case 'back':
-				case 'previous':
-					// needs history
-					break;
 				case 'first':
 					target = 0;
 					options.direction = (carousel && current > lastpage / 2) ? 'right' : 'left';
@@ -477,11 +399,12 @@ define('MAF.element.Grid', function () {
 
 		changePage: function (pagenum, options) {
 			var count = this.getCellCount(),
+				state = this.getState(),
 				index = this.normalizeIndex((pagenum || 0) * count);
-			if (pagenum === this._state.currentPage && (options && !options.refresh)) {
+			if (pagenum === state.currentPage && (options && !options.refresh)) {
 				return;
 			}
-			var state = this.updateState({
+			state = this.updateState({
 				pageRequested: {
 					index: index,
 					options: options || {}
@@ -514,7 +437,7 @@ define('MAF.element.Grid', function () {
 
 		getVisibleCellCount: function () {
 			return this.cells && this.cells.filter(function (c) {
-				return c && !c.frozen;
+				return c && c.visible;
 			}).length || this.cells.length;
 		},
 
@@ -523,26 +446,27 @@ define('MAF.element.Grid', function () {
 		},
 
 		getCurrentPage: function () {
-			return this._state.currentPage;
+			return this.getState().currentPage;
 		},
 
 		getStartIndex: function () {
-			return this._state.startIndex;
+			return this.getState().startIndex;
 		},
 
 		getFocusIndex: function () {
-			return this._state.focusIndex;
+			return this.getState().focusIndex;
 		},
 
 		getFocusCoordinates: function () {
-			return this._state.focusCoordinates;
+			return this.getState().focusCoordinates;
 		},
 
 		focusCell: function (target) {
-			var focused  = this._state.focusIndex,
+			var state    = this.getState(),
+				focused  = state.focusIndex,
 				newindex = this.getCellIndex(target || {row:0, column:0}),
 				rendered = this.getVisibleCellCount();
-			if (!rendered || newindex === -1 || !this.element || !this.element.hasFocus) {
+			if (!rendered || newindex === -1 || !state.hasFocus) {
 				return;
 			}
 			newindex = Math.min(rendered-1, newindex);
@@ -551,6 +475,7 @@ define('MAF.element.Grid', function () {
 			}
 			if (newindex > -1) {
 				this.cells[newindex].fire('onFocus');
+				this.cells[newindex].focus();
 			}
 			focused = this.getCellCoordinates(newindex);
 			this.updateState({
@@ -564,7 +489,7 @@ define('MAF.element.Grid', function () {
 		},
 
 		blurCell: function (target) {
-			target = parseInt(target, 10) > -1 ? target : this._state.focusCoordinates;
+			target = parseInt(target, 10) > -1 ? target : this.getState().focusCoordinates;
 			var index = this.getCellIndex(target);
 			if (index > -1 && this.cells[index]) {
 				this.cells[index].fire('onBlur');
@@ -613,7 +538,7 @@ define('MAF.element.Grid', function () {
 		},
 
 		getCellDataIndex: function (c) {
-			var state = this._state,
+			var state = this.getState(),
 				start = state.pageRequested && state.pageRequested.index,
 				index = this.getCellIndex(c);
 			return parseInt(start, 10) > -1 && index > -1 ? start+index : false;
@@ -671,9 +596,10 @@ define('MAF.element.Grid', function () {
 		},
 
 		generateStatePacket: function (packet) {
+			var currentState = this.getState();
 			return Object.merge({
-				state: this._state,
-				focused: this.element.hasFocus
+				state: currentState,
+				focused: currentState.hasFocus
 			}, packet || {});
 		},
 
@@ -685,7 +611,6 @@ define('MAF.element.Grid', function () {
 			this.body.suicide();
 			delete this.body;
 			delete this.pager;
-			delete this._state;
 			this.parent();
 		}
 	});

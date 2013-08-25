@@ -22,7 +22,7 @@ define('MAF.element.Button', function () {
 		Extends: MAF.element.Container,
 
 		Protected: {
-			dispatcher: function (event, payload) {
+			dispatchEvents: function (event, payload) {
 				switch(event.type) {
 					case 'select':
 						if (this.secure) {
@@ -100,7 +100,7 @@ define('MAF.element.Button', function () {
 		appendTo: function (parent) {
 			var appended = this.parent(parent);
 			if (appended && this.getSubscriberCount('onBroadcast')) {
-				var view = this.getViewController();
+				var view = this.getView();
 				if (view) {
 					view.registerMessageCenterListenerControl(this);
 				}
