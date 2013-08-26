@@ -1,6 +1,9 @@
 include('MAF/utility/PagerStorageClass.js');
 include('MAF/utility/Pager.js');
 
+include('MAF/utility/BusyIndicators.js');
+include('MAF/utility/LoadingOverlay.js');
+include('MAF/utility/WaitIndicator.js');
 include('MAF/element/Core.js');
 include('MAF/element/Container.js');
 include('MAF/element/Button.js');

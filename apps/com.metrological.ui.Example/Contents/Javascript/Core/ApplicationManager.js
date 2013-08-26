@@ -40,7 +40,7 @@ var loadTemplate = (function () {
 					app.widget.getImage('header', 'normal').appendTo(template);
 					new Text({
 						id: '@' + type + '-home',
-						label: '&#x238B;',
+						label: FontAwesome.get('home'),
 						frozen: true,
 						styles: {
 							width: 64,
@@ -48,7 +48,7 @@ var loadTemplate = (function () {
 							hAlign: 'right',
 							vOffset: 12,
 							anchorStyle: 'center',
-							fontSize: 34
+							fontSize: 30
 						},
 						events: {
 							focus: function () {
@@ -79,6 +79,22 @@ var loadTemplate = (function () {
 							}
 						}
 					}).appendTo(template).store('id', id);
+
+					new Text({
+						id: '@' + type + '-loading',
+						label: FontAwesome.get('refresh'),
+						frozen: true,
+						styles: {
+							backgroundColor: 'black',
+							opacity: '0.7',
+							zIndex: 1,
+							width: 588,
+							height: 930,
+							vOffset: 64,
+							anchorStyle: 'center',
+							fontSize: 40
+						}
+					}).appendTo(template);
 
 					body.appendChild(fragment);
 					break;
@@ -327,7 +343,7 @@ var loadTemplate = (function () {
 									case 'pin':
 										for (var i=0; i<4; i++) {
 											if (payload.value.length > i) {
-												pinDots.childNodes[i].data = '&#9679';
+												pinDots.childNodes[i].data = FontAwesome.get('circle');
 											} else {
 												pinDots.childNodes[i].data = '';
 											}
@@ -411,10 +427,10 @@ var loadTemplate = (function () {
 								}).appendTo(contentFrame);
 
 								new Text({
-									data: '&#8999;',
+									data: FontAwesome.get('remove'),
 									styles: {
-										width: 'inherit',
-										height: 'inherit',
+										width: '100%',
+										height: '100%',
 										anchorStyle: 'center'
 									}
 								}).appendTo(cleanButton);
@@ -448,7 +464,7 @@ var loadTemplate = (function () {
 								for (var i = 0; i < 4; i++) {
 									new Text({
 										styles: {
-											fontSize: 60,
+											fontSize: 50,
 											borderRadius: '15px',
 											backgroundColor: 'grey',
 											border: '2px solid white',
@@ -540,6 +556,31 @@ widget.handleChildEvent = function (event) {
 			data.id = data.type;
 			data.type = 'dialog'; 
 			loadTemplate.call(this, data);
+			break;
+		case 'setWaitIndicator':
+			var smallSpinner = document.getElementById('@sidebar-home'),
+				largeSpinner = document.getElementById('@sidebar-loading');
+
+			switch (event.data) {
+				case '0':
+					smallSpinner.text = FontAwesome.get('home');
+					largeSpinner.text = FontAwesome.get('refresh');
+					smallSpinner.frozen = (smallSpinner && smallSpinner.focusable) ? false : true;
+					largeSpinner.frozen = true;
+					break;
+				case '1':
+					smallSpinner.text = FontAwesome.get('refresh icon-spin');
+					smallSpinner.frozen = false;
+					break;
+				case '2':
+					largeSpinner.text = FontAwesome.get('refresh icon-spin');
+					largeSpinner.frozen = false;
+					break;
+				case '3':
+					largeSpinner.text = FontAwesome.get('refresh');
+					largeSpinner.frozen = true;
+					break;
+			}
 			break;
 		default:
 			break;

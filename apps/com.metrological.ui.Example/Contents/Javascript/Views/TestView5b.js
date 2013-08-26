@@ -8,6 +8,11 @@ var TestView5b = new MAF.Class({
 		this.setStyle('backgroundColor', 'rgba(0,0,0,.5)');
 	},
 
+	viewBackParams: {
+		photo: 0,
+		page: 0
+	},
+
 	createView: function () {
 		this.elements.photo = new MAF.element.Image({
 			aspect: 'auto',
@@ -89,6 +94,8 @@ var TestView5b = new MAF.Class({
 
 	hideView: function () {
 		this.elements.photo.src = null;
+		this.viewBackParams.photo = this.controls.pwPhotosGrid5b.getFocusIndex();
+		this.viewBackParams.page = this.controls.pwPhotosGrid5b.getCurrentPage();
 	},
 
 	focusView: function () {

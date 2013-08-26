@@ -142,6 +142,7 @@ define('MAF.system.BaseView', function () {
 			delete messagecenterlisteners[this._classID];
 			delete this.persist;
 			delete this.cache;
+			delete this.viewBackParams;
 			Object.forEach(this.elements, function (key, obj) {
 				if (obj && obj.suicide) {
 					delete this.elements[key];

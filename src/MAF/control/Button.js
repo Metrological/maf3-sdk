@@ -3,7 +3,7 @@ define('MAF.control.Button', function () {
 		if (!this.secureIndicator && this.secure) {
 			this.secureIndicator = new MAF.element.Text({
 				ClassName: 'SecureButtonIndicator',
-				data: '&#128274;'
+				label: FontAwesome.get('lock')
 			}).appendTo(this);
 		}
 		this.adjustAccessories();
@@ -72,7 +72,7 @@ define('MAF.control.Button', function () {
 		styles: {
 			hAlign: 'right',
 			vAlign: 'bottom',
-			hOffset: 5,
+			hOffset: 10,
 			vOffset: 7
 		}
 	}

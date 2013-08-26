@@ -19,82 +19,23 @@ define('MAF.control.PageIndicator', function () {
 				this.parent(event, payload);
 			},
 			createContent: function () {
-				var tk = this.ClassName + 'TextLink',
-					ts = Theme.getStyles(tk),
-					ss = this.config.imageSources;
-
-				this.text = new MAF.element.Text({
+				this.content = new MAF.element.Text({
 					ClassName: this.ClassName + 'TextLink'
 				}).appendTo(this);
-
-				this.arrows = {
-					left: new MAF.element.Image({
-						ClassName: this.ClassName + 'Arrowleft',
-						src: ss['<'],
-						styles: {
-							height: 1,
-							vAlign: 'center',
-							vOffset: -8,
-							opacity: 0
-						}
-					}).appendTo(this),
-					right: new MAF.element.Image({
-						ClassName: this.ClassName + 'Arrowright',
-						src: ss['>'],
-						styles: {
-							height: 1,
-							vAlign: 'center',
-							vOffset: -8,
-							opacity: 0
-						}
-					}).appendTo(this)
-				};
 			},
 			buildDots: function (curpage, pagecount, state) {
 				var dots = '';
 				for (var i = 0; i < pagecount; i++) {
-					if (curpage === i) {
-						dots += '&#9675; ';
-					} else {
-						dots += '&#9679; ';
-					}
+					dots += FontAwesome.get(curpage === i ? 'circle-blank' : 'circle') + ' ';
 				}
-				return dots;
+				return dots.trim();
 			},
 			buildText: function (curpage, pagecount, state) {
 				if (this.config.updateText && this.config.updateText.call) {
 					return this.config.updateText(curpage, pagecount, state);
 				} else {
-					return widget.getLocalizedString('PAGE', [parseInt(curpage, 10) + 1, pagecount]);
+					return FontAwesome.get('caret-left') + ' ' + widget.getLocalizedString('PAGE', [parseInt(curpage, 10) + 1, pagecount]) + ' ' + FontAwesome.get('caret-right');
 				}
-			},
-			updateArrows: function (curpage, pagecount) {
-				var on  = {opacity: null},
-					off = {opacity: 0.3},
-					carousel = this.getSourceCarousel(),
-					left  = this.arrows.left,
-					right = this.arrows.right;
-				if (pagecount === 1) {
-					left.setStyles(off);
-					right.setStyles(off);
-				} else if (carousel) {
-					left.setStyles(on);
-					right.setStyles(on);
-				} else {
-					left.setStyles( curpage ? on : off );
-					right.setStyles( curpage + 1 < pagecount ? on : off );
-				}
-				this.alignArrows();
-			},
-			alignArrows: function () {
-				var ts = this.text.element.getTextBounds(),
-					tw = ts.width,
-					pw = this.width,
-					ap = this.config.arrowPadding,
-					al = this.arrows.left,
-					ar = this.arrows.right;
-				al.hOffset = pw / 2 - tw / 2 - al.width - ap;
-				ar.hOffset = al.width + al.hOffset + tw + ap * 2;
 			},
 			onSourceUpdated: function (event) {
 				return this.update(event.payload);
@@ -110,12 +51,10 @@ define('MAF.control.PageIndicator', function () {
 
 		initialize: function () {
 			this.parent();
-			if (!this.config.imageSources) {
-				this.config.imageSources = Theme.storage.get('ControlPageIndicator', 'sources');
-			}
 			var source = this.config.sourceElement || this.config.source;
-			if (source) this.attachToSource(source);
-
+			if (source) {
+				this.attachToSource(source);
+			}
 			this.config.source = null;
 			delete this.config.source;
 			this.config.sourceElement = null;
@@ -144,29 +83,20 @@ define('MAF.control.PageIndicator', function () {
 		},
 
 		update: function (state) {
-			if (state && (state.pageChanging === false || state.currentPage === undefined)) {
-				return this;
-			}
 			var currentPage = state && state.currentPage ? state.currentPage : this.getSourceCurrentPage() || 0,
 				pageCount = state && state.pageCount ? state.pageCount : this.getSourcePageCount() || 1,
 				useDots = pageCount < (parseInt(this.config.threshold, 10) || 0),
 				build = useDots ? this.buildDots : this.buildText;
 
-			if (this.text) {
-				this.text.setText(build.call(this, currentPage, pageCount, state));
-			}
+			this.content.setText(build.call(this, currentPage, pageCount, state));
 
 			if (useDots) {
 				this.element.wantsFocus = false;
-				this.arrows.left.freeze();
-				this.arrows.right.freeze();
+				this.content.setStyle('fontSize', 14);
 			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
-				this.arrows.left.thaw();
-				this.arrows.right.thaw();
+				this.content.setStyle('fontSize', null);
 			}
-
-			this.updateArrows(currentPage, pageCount);
 
 			if (this.config.focus === false) {
 				this.element.wantsFocus = false;
@@ -186,13 +116,6 @@ define('MAF.control.PageIndicator', function () {
 		suicide: function () {
 			delete this.previousPage;
 			delete this.source;
-			this.text.suicide();
-			delete this.text;
-			Object.forEach(this.arrows, function (key, obj) {
-				delete this.arrows[key];
-				obj.suicide();
-			}, this);
-			delete this.arrows;
 			this.parent();
 		}
 	});
@@ -210,10 +133,6 @@ define('MAF.control.PageIndicator', function () {
 		styles: {
 			width: 'inherit',
 			height: '38px'
-		},
-		sources: {
-			'<': Image.WHITE,
-			'>': Image.WHITE
 		}
 	},
 	ControlPageIndicatorTextLink: {
@@ -221,22 +140,6 @@ define('MAF.control.PageIndicator', function () {
 			width: 'inherit',
 			height: 'inherit',
 			anchorStyle: 'center'
-		}
-	},
-	ControlPageIndicatorArrowleft: {
-		styles: {
-			marginLeft: '-12px',
-			borderTop: '8px solid transparent',
-			borderBottom: '8px solid transparent',
-			borderRight: '8px solid white'
-		}
-	},
-	ControlPageIndicatorArrowRight: {
-		styles: {
-			marginLeft: '2px',
-			borderTop: '8px solid transparent',
-			borderBottom: '8px solid transparent',
-			borderLeft: '8px solid white'
 		}
 	}
 });

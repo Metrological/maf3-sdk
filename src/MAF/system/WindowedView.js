@@ -62,12 +62,22 @@ define('MAF.system.WindowedView', function () {
 					}
 				}
 			},
+			onLoadView: function (event) {
+				MAF.utility.LoadingOverlay.show();
+				this.parent(event);
+			},
+			onShowView: function (event) {
+				MAF.utility.LoadingOverlay.show();
+				this.parent(event);
+				
+			},
 			onSelectView: function(event) {
 				this.parent(event);
 				if (!this.element.focusedView) {
 					this.resetFocus();
 				}
 				performControlInspection.call(this, this.getControlData('statePacket'), false);
+				MAF.utility.LoadingOverlay.hide();
 			},
 			onUnselectView: function (event) {
 				this.parent(event);

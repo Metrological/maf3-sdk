@@ -82,5 +82,12 @@ var TestView5a = new MAF.Class({
 				height: this.height - pageindicator.height
 			}
 		}).appendTo(this).attachAccessory(pageindicator);
+	},
+
+	focusView: function () {
+		if (this.backParams && this.backParams.photo) {
+			this.controls.pwPhotosGrid.changePage(this.backParams.page || 0);
+			this.controls.pwPhotosGrid.focusCell(this.backParams.photo || 0);
+		}
 	}
 });

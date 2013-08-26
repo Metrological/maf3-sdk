@@ -7,12 +7,6 @@ define('MAF.control.SingleTab', function () {
 		Protected: {
 			dispatchEvents: function (event, payload) {
 				switch(event.type) {
-					case 'focus':
-					case 'blur':
-						if (this.arrows && this.config.focusArrows === true) {
-							this.arrows.left.visible = this.arrows.right.visible = (event.type === 'focus') ? true : false;
-						}
-						break;
 					case 'navigate':
 						if (event.detail && event.detail.direction) {
 							switch (event.detail.direction) {
@@ -30,11 +24,9 @@ define('MAF.control.SingleTab', function () {
 				this.parent(event, payload);
 			},
 			createContent: function () {
-				var arrowClass = 'ControlPageIndicator',
-					ss = this.config.imageSources || Theme.storage.get(this.ClassName, 'sources');
-				this.text = new MAF.element.Text({
+				this.content = new MAF.element.Text({
 					ClassName: (this.config.ClassName || this.ClassName) + 'Text',
-					label: this.config.label,
+					label: FontAwesome.get('caret-left') + ' ' + this.config.label +  ' ' + FontAwesome.get('caret-right'),
 					styles: Object.merge({
 						width: this.width - 80,
 						height: this.height,
@@ -43,69 +35,18 @@ define('MAF.control.SingleTab', function () {
 						truncation: (this.ClassName === 'SingleTab') ? 'end' : null
 					},this.config.textStyles || {})
 				}).appendTo(this);
-				this.arrows = {
-					left: new MAF.element.Image({
-						ClassName: 'ControlSingleTabArrowleft',
-						autoShow: !this.config.focusArrows,
-						src: ss['<'],
-						styles: {
-							left: this.config.arrowPadding,
-							height: 1,
-							vAlign: 'center',
-							vOffset: -8,
-							visible: !this.config.focusArrows
-						}
-					}).appendTo(this),
-					
-					right: new MAF.element.Image({
-						ClassName: 'ControlSingleTabArrowright',
-						autoShow: !this.config.focusArrows,
-						src: ss['>'],
-						styles: {
-							hAlign: 'right',
-							hOffset: this.config.arrowPadding,
-							height: 1,
-							vAlign: 'center',
-							vOffset: -8,
-							visible: !this.config.focusArrows
-						}
-					}).appendTo(this)
-				};
 				var options = this.getOptions();
 				this.setValue(this.config.value || (options && options.length > 0) ? options[0].value : '');
 				delete this.config.value;
-			},
-			updateArrows: function (curpage, pagecount) {
-				var on  = {opacity: null},
-					off = {opacity: 0.3},
-					carousel = this.config.carousel,
-					left  = this.arrows.left,
-					right = this.arrows.right;
-				if (pagecount === 1) {
-					left.setStyles(off);
-					right.setStyles(off);
-				} else if (carousel) {
-					left.setStyles(on);
-					right.setStyles(on);
-				} else {
-					left.setStyles( curpage ? on : off );
-					right.setStyles( curpage + 1 < pagecount ? on : off );
-				}
-				this.alignArrows(curpage, pagecount);
-			},
-			alignArrows: emptyFn
+			}
 		},
 
 		config: {
-			background: false,
-			arrowPadding: 8,
-			focusArrows: false,
 			carousel: false
 		},
 
 		initialize: function () {
 			this.parent();
-
 			if (this.config.options) {
 				this.setOptions(this.config.options);
 				delete this.config.options;
@@ -211,41 +152,10 @@ define('MAF.control.SingleTab', function () {
 			if (reset === true) {
 				this.setValue(options[0].value);
 			}
-			var curpage = options.map(function (o) {
-					return o.value;
-				}).indexOf(this.getValue()),
-				pagecount = options.length,
-				dispval = this.getDisplayValue();
-			this.text.setText(dispval);
-			curpage = curpage < 0 ? 0 : curpage;
-			this.updateArrows(curpage, pagecount);
-		},
-
-		suicide: function () {
-			this.text.suicide();
-			delete this.text;
-			Object.forEach(this.arrows, function (key, obj) {
-				delete this.arrows[key];
-				obj.suicide();
-			}, this);
-			delete this.arrows;
-			this.parent();
+			var dispval = this.getDisplayValue();
+			this.content.setText(FontAwesome.get('caret-left') + ' ' + dispval +  ' ' + FontAwesome.get('caret-right'));
 		}
 	});
 }, {
-	ControlSingleTab: 'ControlPageIndicator',
-	ControlSingleTabArrowleft: {
-		styles: {
-			borderTop: '8px solid transparent',
-			borderBottom: '8px solid transparent',
-			borderRight: '8px solid white'
-		}
-	},
-	ControlSingleTabArrowright: {
-		styles: {
-			borderTop: '8px solid transparent',
-			borderBottom: '8px solid transparent',
-			borderLeft: '8px solid white'
-		}
-	}
+	ControlSingleTab: 'ControlPageIndicator'
 });

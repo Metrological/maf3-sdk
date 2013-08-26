@@ -119,7 +119,11 @@ define('MAF.element.Grid', function () {
 				}
 				return this.cells.length;
 			},
-			updateWaitIndicator: function () {
+			updateWaitIndicator: function (event) {
+				if (this.config.manageWaitIndicator) {
+					var method = (event.type === 'onPageChanged') ? 'down' : 'up';
+					MAF.utility.WaitIndicator[method]();
+				}
 			},
 			updateState: function (state) {
 				var newState = Object.merge(this.getState(), state || {});
@@ -251,7 +255,7 @@ define('MAF.element.Grid', function () {
 			carousel: false,
 			inverted: false,
 			render: true,
-			manageWaitIndicator: false,
+			manageWaitIndicator: true,
 			animate: false, // TODO: Setting from plugin MAF.config.animationEnabled
 			animation: {
 				duration: 400,
@@ -411,8 +415,9 @@ define('MAF.element.Grid', function () {
 				},
 				pageChanging: true
 			});
-
-			this.fire('onChangePage', state);
+			if (this.getPageCount()) {
+				this.fire('onChangePage', state);
+			}
 			this.pager.getPage(index);
 		},
 

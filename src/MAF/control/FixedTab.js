@@ -7,44 +7,13 @@ define('MAF.control.FixedTab', function () {
 		Protected: {
 			createContent: function () {
 				this.right = new MAF.element.Text({
-					anchorStyle: 'leftCenter',
 					styles: Object.merge({
 						height: this.height,
+						anchorStyle: 'leftCenter',
 						opacity: 0.7
 					}, this.config.textStyles || {})
 				}).appendTo(this);
 				this.parent();
-			},
-
-			alignArrows: function (curpage, pagecount) {
-				var ts = this.text.element.getTextBounds(),
-					options = this.getOptions(),
-					padding = this.config.arrowPadding,
-					arrows = this.arrows;
-				arrows.left.hOffset = padding;
-				this.text.setStyles({
-					width: ts.width,
-					hOffset: arrows.left.outerWidth + 10 + padding
-				});
-				arrows.right.hAlign = null;
-				arrows.right.hOffset = this.text.outerWidth + padding;
-				var rightOffset = arrows.right.outerWidth + 10 + padding;
-				this.right.setStyles({
-					width: this.width - rightOffset,
-					hOffset: rightOffset
-				});
-				var label = '';
-				if (options) {
-					options.forEach(function(option, index) {
-						if (index > curpage)
-							label += option.label + this.textPadding;
-					}, this);
-					options.forEach(function(option, index) {
-						if (index < curpage)
-							label += option.label + this.textPadding;
-					}, this);
-				}
-				this.right.setText(label);
 			}
 		},
 
@@ -55,6 +24,36 @@ define('MAF.control.FixedTab', function () {
 		initialize: function () {
 			this.parent();
 			this.textPadding = this.config.optionsPadding.replace(/(?:(?:^ | $)|( ) )/gm, '&nbsp;');
+		},
+
+		update: function (state) {
+			this.parent(state);
+			var ts = this.content.element.getTextBounds(),
+				options = this.getOptions(),
+				curpage = options.map(function (o) {
+					return o.value;
+				}).indexOf(this.getValue());
+			this.content.setStyles({
+				width: ts.width,
+				hOffset: 10
+			});
+			var offset = this.content.outerWidth + 10;
+			this.right.setStyles({
+				width: this.width - offset - 10,
+				hOffset: offset
+			});
+			var label = '';
+			if (options) {
+				options.forEach(function (option, index) {
+					if (index > curpage)
+						label += option.label + this.textPadding;
+				}, this);
+				options.forEach(function (option, index) {
+					if (index < curpage)
+						label += option.label + this.textPadding;
+				}, this);
+			}
+			this.right.setText(label);
 		},
 
 		suicide: function () {

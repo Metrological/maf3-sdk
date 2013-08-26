@@ -504,7 +504,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				},
 				"action-shift":{
 					code: 'shift',
-					label:"&#8679;",
+					label:FontAwesome.get('arrow-up'),
 					glyph:"shift",
 					event:"shiftselect"
 				},
@@ -513,15 +513,13 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					event:"extendedselect"
 				},
 				"action-backspace":{
-					//label:"del",
 					code: 'back',
-					label:"&#9003;",
+					label:FontAwesome.get('arrow-left'),
 					glyph:"delete",
 					event:"backspace"
 				},
 				"action-closeextendedpanel":{ // TODO better name
-					//label:"[x]",
-					label:"&#9099;",
+					label:FontAwesome.get('undo'),
 					glyph:"cancel",
 					event:"extendedselect"
 				},

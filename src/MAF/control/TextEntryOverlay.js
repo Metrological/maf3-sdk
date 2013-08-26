@@ -156,10 +156,10 @@ define('MAF.control.TextEntryOverlay', function () {
 				var clearButton = new MAF.element.Button({
 					ClassName: 'ControlTextEntryOverlayClearButton',
 					content: new MAF.element.Text({
-						label: '&#8999;',
+						label: FontAwesome.get('remove'),
 						styles: {
-							width: 'inherit',
-							height: 'inherit',
+							width: '100%',
+							height: '100%',
 							anchorStyle: 'center'
 						}
 					}),
