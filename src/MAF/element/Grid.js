@@ -64,7 +64,7 @@ define('MAF.element.Grid', function () {
 				break;
 			case 'down':
 				if (!horiz) {
-					var LastColumn =(dataSize %  (this.config.columns * this.config.rows));
+					var LastColumn = (dataSize %  (this.config.columns * this.config.rows));
 						LastColumn = ( LastColumn !== 0 ) ? LastColumn : this.config.columns; // last column number of the last row
 					if (availableRows < (cellCoords.row + 2)) {
 						cellCoords.row = (this.config.rows - 1);
@@ -85,6 +85,16 @@ define('MAF.element.Grid', function () {
 		if (shift && !state.animating) {
 			this.shift(direction, {focus: cellCoords});
 			event.preventDefault();
+		} else if (direction === 'right') {
+			if (!cellCoords.row) {
+				cellCoords.column = 0;
+				this.shift(direction, {focus: cellCoords});
+				return;
+			}
+			cellCoords.row = cellCoords.row - 1;
+			cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
+			event.preventDefault();
+			this.focusCell(cellCoords, event);
 		}
 	};
 

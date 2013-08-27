@@ -24,7 +24,7 @@ define('MAF.control.SingleTab', function () {
 				this.parent(event, payload);
 			},
 			createContent: function () {
-				this.content = new MAF.element.Text({
+				this.text = new MAF.element.Text({
 					ClassName: (this.config.ClassName || this.ClassName) + 'Text',
 					label: FontAwesome.get('caret-left') + ' ' + this.config.label +  ' ' + FontAwesome.get('caret-right'),
 					styles: Object.merge({
@@ -153,7 +153,13 @@ define('MAF.control.SingleTab', function () {
 				this.setValue(options[0].value);
 			}
 			var dispval = this.getDisplayValue();
-			this.content.setText(FontAwesome.get('caret-left') + ' ' + dispval +  ' ' + FontAwesome.get('caret-right'));
+			this.text.setText(FontAwesome.get('caret-left') + ' ' + dispval +  ' ' + FontAwesome.get('caret-right'));
+		},
+
+		suicide: function () {
+			this.text.suicide();
+			delete this.text;
+			this.parent();
 		}
 	});
 }, {

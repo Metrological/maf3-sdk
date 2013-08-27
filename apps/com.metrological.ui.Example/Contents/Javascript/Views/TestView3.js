@@ -52,7 +52,7 @@ var TestView3 = new MAF.Class({
 
 		this.controls.button4 = new MAF.control.TextButton({
 			guid: 'demoApp',
-			label: 'Launch App',
+			label: 'Launch App #1',
 			styles: {
 				width: this.width / 3,
 				vOffset: button2.outerHeight + 1
@@ -85,7 +85,7 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button6 = new MAF.control.TextButton({
-			label: 'Button6',
+			label: 'Apps Total #' + ApplicationManager.getApplications().length,
 			styles: {
 				width: this.width / 3,
 				hOffset: this.controls.button5.outerWidth + 1,
@@ -233,17 +233,6 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		var testList = new MAF.element.Container({
-			element: List,
-			styles: {
-				width: 200,
-				height: 51,
-				backgroundColor: 'red',
-				hOffset: (this.width - 200) / 2,
-				vOffset: button15.outerHeight + 1
-			}
-		}).appendTo(this);
-
 		var button16 = new MAF.control.TextButton({
 			label: 'AboutBox View',
 			styles: {
@@ -254,6 +243,52 @@ var TestView3 = new MAF.Class({
 				onSelect: function () {
 					MAF.application.loadView('view-TestView4');
 				}
+			}
+		}).appendTo(this);
+
+		new MAF.element.Grid({
+			rows: 2,
+			columns: 2,
+			carousel: true,
+			dataset: ApplicationManager.getApplications(),
+			cellCreator: function () {
+				var cell = new MAF.element.GridCell({
+					styles: this.getCellDimensions(),
+					events: {
+						onSelect: function (event) {
+							var apps = ApplicationManager.getApplications();
+							ApplicationManager.load(apps[this.getCellDataIndex()]);
+							ApplicationManager.open(apps[this.getCellDataIndex()]);
+						},
+						onFocus: function () {
+							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+						},
+						onBlur: function () {
+							this.setStyle('backgroundColor', null);
+						}
+					}
+				});
+				cell.text = new MAF.element.Text({
+					styles: {
+						backgroundColor: 'black',
+						fontSize: 24,
+						color: 'white',
+						width: cell.width - 20,
+						height: cell.height - 20,
+						hOffset: 10,
+						vOffset: 10,
+						anchorStyle: 'center'
+					}
+				}).appendTo(cell);
+				return cell;
+			},
+			cellUpdater: function (cell, data) {
+				cell.text.setText(data.split('.').pop());
+			},
+			styles: {
+				width: this.width,
+				height: 200,
+				vOffset: button15.outerHeight + 1
 			}
 		}).appendTo(this);
 	}

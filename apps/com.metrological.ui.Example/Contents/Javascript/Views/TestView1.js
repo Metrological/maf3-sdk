@@ -26,6 +26,8 @@ var TestView1 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		button1.rotate = 2;
+
 		var button2 = new MAF.control.TextButton({
 			label: 'Set Tabs',
 			styles: {

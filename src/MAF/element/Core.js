@@ -48,6 +48,7 @@ define('MAF.element.Core', function () {
 					'frozen',
 					'hAlign',
 					'vAlign',
+					'rotate',
 					'zOrder',
 					'hOffset',
 					'vOffset',

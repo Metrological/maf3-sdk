@@ -28,16 +28,16 @@ define('MAF.control.FixedTab', function () {
 
 		update: function (state) {
 			this.parent(state);
-			var ts = this.content.element.getTextBounds(),
+			var ts = this.text.element.getTextBounds(),
 				options = this.getOptions(),
 				curpage = options.map(function (o) {
 					return o.value;
 				}).indexOf(this.getValue());
-			this.content.setStyles({
+			this.text.setStyles({
 				width: ts.width,
 				hOffset: 10
 			});
-			var offset = this.content.outerWidth + 10;
+			var offset = this.text.outerWidth + 10;
 			this.right.setStyles({
 				width: this.width - offset - 10,
 				hOffset: offset
