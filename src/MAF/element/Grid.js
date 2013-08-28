@@ -370,6 +370,12 @@ define('MAF.element.Grid', function () {
 			return true;
 		},
 
+		setDisabled: function (value) {
+			if (this.element && typeOf(value) === 'boolean') { 
+				this.element.allowNavigation = !value;
+			}
+		},
+
 		shift: function (type, options) {
 			var target   = false,
 				state    = this.getState(),
