@@ -1,4 +1,4 @@
-define('MAF.views.SeachSuggest', function () {
+define('MAF.views.SearchSuggest', function () {
 	return new MAF.Class({
 		ClassName: 'SearchSuggestView',
 		Extends: MAF.system.SidebarView,

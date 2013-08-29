@@ -606,6 +606,8 @@ widget.handleHostEvent = function (event) {
 				document.body.frozen = false;
 			}
 			break;
+		case 'getSnippetConfs':
+			break;
 		default:
 			break;
 	}

@@ -10,7 +10,7 @@ define('MAF.control.FixedTab', function () {
 					styles: Object.merge({
 						height: this.height,
 						anchorStyle: 'leftCenter',
-						opacity: 0.7
+						color: 'rgba(255,255,255,.7)'
 					}, this.config.textStyles || {})
 				}).appendTo(this);
 				this.parent();

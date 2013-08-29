@@ -20,14 +20,13 @@ define('MAF.control.BackButton', function () {
 		},
 
 		createContent: function () {
-			var className = this.config.ClassName || this.ClassName;
 			this.content = [
 				new MAF.element.Text({
-					ClassName: className + 'Icon',
+					ClassName: 'ControlBackButtonIcon',
 					label: FontAwesome.get('undo')
 				}).appendTo(this),
 				new MAF.element.Text({
-					ClassName: className + 'Text',
+					ClassName: 'ControlBackButtonText',
 					label: this.config.label || widget.getLocalizedString('BACK'),
 					styles: this.config.textStyles
 				}).appendTo(this)
