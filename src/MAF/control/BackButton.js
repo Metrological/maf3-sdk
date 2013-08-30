@@ -9,7 +9,7 @@ define('MAF.control.BackButton', function () {
 				switch(event.type) {
 					case 'select':
 						if (this.fire('onSelect', payload, event)) {
-							MAF.application.previousView();
+							MAF.application.previousView(this.config.backParams || {});
 						}
 						break;
 					default:

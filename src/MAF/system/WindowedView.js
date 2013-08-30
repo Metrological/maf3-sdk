@@ -104,7 +104,9 @@ define('MAF.system.WindowedView', function () {
 
 		resetFocus: function () {
 			if (this.element) {
-				this.element.navigate('down', [0, 0]);
+				if (!this.element.navigate('down', [0, 0])) {
+					this.element.focus();
+				}
 			}
 		}
 	});

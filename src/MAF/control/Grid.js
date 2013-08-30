@@ -5,16 +5,6 @@ define('MAF.control.Grid', function () {
 		Extends: MAF.element.Grid,
 
 		Protected: {
-			generateCells: function (count) {
-				var l = this.parent(count);
-				this.cells.forEach(function (cell) {
-					cell.fire('onAppend', {
-						parent: this.element,
-						owner: this
-					})
-				}, this);
-				return l;
-			},
 			onThemeNeeded: function (event) {
 				if (event.defaultPrevented) {
 					return;

@@ -1,15 +1,4 @@
 define('MAF.element.Grid', function () {
-	var layoutCell = function (cell, cellIndex) {
-		var h = (cellIndex % this.config.columns),
-			v = Math.floor(cellIndex / this.config.columns);
-		if (h > 0) {
-			cell.hOffset = cell.width * h;
-		}
-		if (v > 0) {
-			cell.vOffset = cell.height * v;
-		}
-		return cell;
-	};
 	var handleNavEvent = function (event) {
 		var cellEl     = event && event.Event && event.Event.target,
 			cellCl     = cellEl && cellEl.owner,
@@ -118,11 +107,18 @@ define('MAF.element.Grid', function () {
 			generateCells: function (count, data) {
 				if (count > 0 && this.cells.length === 0) {
 					var fragment = createDocumentFragment(),
-						dims = this.getCellDimensions();
+						dims = {
+							width: ((1 / this.config.columns) * 100) + '%',
+							height: ((1 / this.config.rows) * 100) + '%'
+						};
 					for (var i = 0; i < count; i++) {
 						var cell = this.config.cellCreator.call(this).setStyles(dims);
 						cell.grid = this;
-						fragment.appendChild(layoutCell.call(this, cell, i).element);
+						fragment.appendChild(cell.element);
+						cell.fire('onAppend', {
+							parent: this.element,
+							owner: this
+						});
 						this.cells.push(cell);
 					}
 					this.body.element.appendChild(fragment);
@@ -293,9 +289,10 @@ define('MAF.element.Grid', function () {
 			}
 
 			this.body = new MAF.element.Core({
+				element: List,
 				styles: {
-					width: this.width || 'inherit',
-					height: this.height || 'inherit'
+					width: 'inherit',
+					height: 'inherit'
 				}
 			}).appendTo(this);
 
@@ -487,7 +484,7 @@ define('MAF.element.Grid', function () {
 				this.updateState({
 					hasFocus: true
 				});
-				this.focusCell({row: 0, column:0});
+				this.focusCell(this.getFocusCoordinates() || {row: 0, column: 0});
 			}
 		},
 
@@ -529,8 +526,8 @@ define('MAF.element.Grid', function () {
 
 		getCellDimensions: function () {
 			return {
-				width:  Math.floor(this.body.width / this.config.columns),
-				height: Math.floor(this.body.height / this.config.rows)
+				width:  Math.floor(this.width / this.config.columns),
+				height: Math.floor(this.height / this.config.rows)
 			};
 		},
 
@@ -599,14 +596,17 @@ define('MAF.element.Grid', function () {
 				return packet;
 			}
 			var data = packet && packet[this.config.guid],
-				type = typeof data;
-			if (type == 'null' || type == 'undefined') {
+				type = typeOf(data);
+			if (type === 'null' || type === 'undefined') {
 				return packet;
 			}
 			if (focusOnly) {
 				if (data.focused) {
 					if (this.getVisibleCellCount()) {
-						this.focus();
+						this.updateState({
+							hasFocus: true
+						});
+						this.focusCell(data.state.focusCoordinates || {row: 0, column: 0});
 					} else {
 						var view = this.getView();
 						if (view) {

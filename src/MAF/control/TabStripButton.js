@@ -84,7 +84,6 @@ define('MAF.control.TabStripButton', function () {
 		normal: {
 			styles: {
 				backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor'),
-				'float': 'left',
 				borderTop: '2px solid white',
 				borderLeft: '2px solid white',
 				borderRight: '2px solid white',

@@ -256,7 +256,7 @@ define('MAF.control.InputButton', function () {
 			width: '100%',
 			height: 'inherit',
 			vOffset: 6,
-			fontSize: 30,
+			fontSize: 28,
 			paddingLeft: 10,
 			paddingRight: 10,
 			anchorStyle: 'leftTop',
@@ -270,9 +270,9 @@ define('MAF.control.InputButton', function () {
 			truncation: 'end',
 			paddingLeft: 10,
 			anchorStyle: 'leftBottom',
-			fontSize: 26,
-			paddingBottom: 2,
-			opacity: 0.7
+			fontSize: 23,
+			paddingBottom: 4,
+			color: 'rgba(255,255,255,.7)'
 		}
 	}
 });

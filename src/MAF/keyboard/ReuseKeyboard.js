@@ -1536,6 +1536,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			border: '2px solid white',
 			backgroundColor: 'black',
 			borderRadius: '10px',
+			boxSizing: 'content-box',
 			marginLeft: 2,
 			marginRight: 2,
 			marginBottom: 2,

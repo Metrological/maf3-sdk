@@ -30,7 +30,9 @@ define('MAF.element.Text', function () {
 					'visibleLines',
 					'firstLine',
 					'anchorStyle',
-					'color'
+					'color',
+					'textWidth',
+					'textHeight'
 				].concat(propnames || []));
 			}
 		},

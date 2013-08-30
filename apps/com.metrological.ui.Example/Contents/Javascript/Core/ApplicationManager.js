@@ -32,7 +32,7 @@ var loadTemplate = (function () {
 							navigateoutofbounds: function (event) {
 								var home = getElementById('@' + type + '-home');
 								if (home && home.focusable && event.detail.direction === 'up') {
-									home.focus();
+									return home.focus();
 								}
 							}
 						}
@@ -528,6 +528,7 @@ var loadTemplate = (function () {
 		if (!getElementById(id)) {
 			new View({
 				id: id,
+				focus: true,
 				frozen: true,
 				styles: type === 'sidebar' ? { top: 64 } : null
 			}).appendTo(template);
