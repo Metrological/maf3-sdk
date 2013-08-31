@@ -204,9 +204,35 @@ var TestView1 = new MAF.Class({
 						},
 						onFocus: function () {
 							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+							var coords = this.getCellCoordinates(),
+								origin;
+							if (coords.column === 0) {
+								origin = 'left '
+							} else if (coords.column === (coords.columns - 1)) {
+								origin = 'right '
+							} else {
+								origin = 'center '
+							}
+							if (coords.row === 0) {
+								origin += 'top '
+							} else if (coords.row === (coords.rows - 1)) {
+								origin += 'bottom '
+							} else {
+								origin += 'center '
+							}
+							this.setStyles({
+								transform: Browser.firefox ? 'scale(1.1)' : (new CSSMatrix()).scale(1.1),
+								transformOrigin: origin,
+								zOrder: 999,
+							});
 						},
 						onBlur: function () {
 							this.setStyle('backgroundColor', null);
+							this.setStyles({
+								transform: null,
+								transformOrigin: null,
+								zOrder: null
+							});
 						}
 					}
 				});
