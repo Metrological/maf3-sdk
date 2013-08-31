@@ -221,7 +221,7 @@ var TestView1 = new MAF.Class({
 								origin += 'center '
 							}
 							this.setStyles({
-								transform: Browser.firefox ? 'scale(1.1)' : (new CSSMatrix()).scale(1.1),
+								transform: (new CSSMatrix()).scale(1.1),
 								transformOrigin: origin,
 								zOrder: 999,
 							});
