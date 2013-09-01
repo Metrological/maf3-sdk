@@ -127,6 +127,10 @@ define('MAF.element.Core', function () {
 			return this;
 		},
 
+		animate: function () {
+			return this.element && this.element.animate.apply(this, arguments);
+		},
+
 		getAbsolutePosition: function () {
 			var hPosition = this.hOffset,
 				vPosition = this.vOffset,

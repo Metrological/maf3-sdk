@@ -24,14 +24,19 @@ var TestView1 = new MAF.Class({
 					MAF.application.loadView('view-TestView2');
 				},
 				onFocus: function () {
-					this.element.animate({
+					this.animate({
 						rotate: 182
-					}, 1);
+					}, 0.5).animate({
+						rotate: 182,
+						scale: 0.8
+					}, 0.5);
 				},
 				onBlur: function () {
-					this.element.animate({
+					this.animate({
+						scale: 1
+					}, 0.5).animate({
 						rotate: 2
-					}, 1);
+					}, 0.5);
 				}
 			}
 		}).appendTo(this);
@@ -247,7 +252,7 @@ var TestView1 = new MAF.Class({
 					}
 				});
 
-				cell.element.animate({}, '500ms');
+				cell.animate(0.5);
 
 				cell.setStyles({
 					backgroundRepeat: 'no-repeat',

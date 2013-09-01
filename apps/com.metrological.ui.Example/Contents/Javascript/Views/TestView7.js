@@ -67,5 +67,13 @@ var TestView7 = new MAF.Class({
 				vOffset: button6.outerHeight + 1
 			}
 		}).appendTo(this);
+
+		var button8 = new MAF.control.TextButton({
+			label: 'Resolution: ' + JSON.stringify(tv.nativeResolution) + ' (' + JSON.stringify(tv.resolution) + ')',
+			disabled: true,
+			styles: {
+				vOffset: button7.outerHeight + 1
+			}
+		}).appendTo(this);
 	}
 });
