@@ -13,8 +13,39 @@ var loadTemplate = (function () {
 			template = type && getElementById('@' + type);
 		//log('loadTemplate', type, current, template);
 		if (!template) {
-			var fragment = widget.createDocumentFragment();
+			var fragment;
+			if (type !== 'waitIndicator') {
+				fragment = widget.createDocumentFragment();
+			}
 			switch (type) {
+				case 'waitIndicator':
+					var smallSpinner = getElementById('@'+current[identifier]+'-home'),
+						largeSpinner = getElementById('@'+current[identifier]+'-loading');
+					switch (data.id) {
+						case '0':
+							if (current[identifier] === 'sidebar') {
+								smallSpinner.text = FontAwesome.get('home');
+								smallSpinner.frozen = (smallSpinner && smallSpinner.focusable) ? false : true;
+							}
+							largeSpinner.text = FontAwesome.get('refresh');
+							largeSpinner.frozen = true;
+							break;
+						case '1':
+							if (current[identifier] === 'sidebar') {
+								smallSpinner.text = FontAwesome.get('refresh icon-spin');
+								smallSpinner.frozen = false;
+							}
+							break;
+						case '2':
+							largeSpinner.text = FontAwesome.get('refresh icon-spin');
+							largeSpinner.frozen = false;
+							break;
+						case '3':
+							largeSpinner.text = FontAwesome.get('refresh');
+							largeSpinner.frozen = true;
+							break;
+					}
+					return;
 				case 'sidebar':
 					template = new View({
 						id: '@' + type,
@@ -86,8 +117,8 @@ var loadTemplate = (function () {
 						frozen: true,
 						styles: {
 							backgroundColor: 'black',
-							opacity: '0.7',
-							zIndex: 1,
+							opacity: 0.7,
+							zIndex: Animator.ZORDER + 1,
 							width: 588,
 							height: 930,
 							vOffset: 64,
@@ -105,7 +136,23 @@ var loadTemplate = (function () {
 							width: 1920,
 							height: 1080
 						}
-					}).appendTo(body);
+					}).appendTo(fragment);
+
+					new Text({
+						id: '@' + type + '-loading',
+						label: FontAwesome.get('refresh'),
+						frozen: true,
+						styles: {
+							backgroundColor: 'black',
+							opacity: 0.7,
+							zIndex: Animator.ZORDER + 1,
+							width: 1920,
+							height: 1080,
+							anchorStyle: 'center',
+							fontSize: 40
+						}
+					}).appendTo(template);
+					body.appendChild(fragment);
 					break;
 				case 'dialog':
 					var currentStyle = getElementById('@' + current[identifier]).style,
@@ -146,7 +193,7 @@ var loadTemplate = (function () {
 							height: currentStyle.height,
 							top: currentStyle.top,
 							left: currentStyle.left,
-							zOrder: Animator.ZORDER + 1
+							zOrder: Animator.ZORDER + 2
 						},
 						events: {
 							select: function (event) {
@@ -560,29 +607,10 @@ widget.handleChildEvent = function (event) {
 			loadTemplate.call(this, data);
 			break;
 		case 'setWaitIndicator':
-			var smallSpinner = document.getElementById('@sidebar-home'),
-				largeSpinner = document.getElementById('@sidebar-loading');
-
-			switch (event.data) {
-				case '0':
-					smallSpinner.text = FontAwesome.get('home');
-					largeSpinner.text = FontAwesome.get('refresh');
-					smallSpinner.frozen = (smallSpinner && smallSpinner.focusable) ? false : true;
-					largeSpinner.frozen = true;
-					break;
-				case '1':
-					smallSpinner.text = FontAwesome.get('refresh icon-spin');
-					smallSpinner.frozen = false;
-					break;
-				case '2':
-					largeSpinner.text = FontAwesome.get('refresh icon-spin');
-					largeSpinner.frozen = false;
-					break;
-				case '3':
-					largeSpinner.text = FontAwesome.get('refresh');
-					largeSpinner.frozen = true;
-					break;
-			}
+			loadTemplate.call(this, {
+				id: event.data,
+				type: 'waitIndicator'
+			});
 			break;
 		default:
 			break;
