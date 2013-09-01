@@ -127,8 +127,13 @@ define('MAF.element.Core', function () {
 			return this;
 		},
 
-		animate: function () {
-			return this.element && this.element.animate.apply(this, arguments);
+		animate: function (config) {
+			delete config.callback;
+			if (config.events && config.events.onAnimationEnded) {
+				config.callback = config.events.onAnimationEnded;
+				delete config.events;
+			}
+			return this.element && this.element.animate.call(this, config);
 		},
 
 		getAbsolutePosition: function () {

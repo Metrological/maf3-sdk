@@ -25,18 +25,22 @@ var TestView1 = new MAF.Class({
 				},
 				onFocus: function () {
 					this.animate({
-						rotate: 182
-					}, 0.5).animate({
 						rotate: 182,
-						scale: 0.8
-					}, 0.5);
+						duration: 0.5
+					}).animate({
+						rotate: 182,
+						scale: 0.8,
+						duration: 0.5
+					});
 				},
 				onBlur: function () {
 					this.animate({
-						scale: 1
-					}, 0.5).animate({
-						rotate: 2
-					}, 0.5);
+						scale: 1,
+						duration: 0.5
+					}).animate({
+						rotate: 2,
+						duration: 0.5
+					});
 				}
 			}
 		}).appendTo(this);
@@ -219,40 +223,44 @@ var TestView1 = new MAF.Class({
 						},
 						onFocus: function () {
 							var coords = this.getCellCoordinates(),
-								origin;
+								origin = [];
 							if (coords.column === 0) {
-								origin = 'left ';
+								origin.push('left');
 							} else if (coords.column === (coords.columns - 1)) {
-								origin = 'right ';
+								origin.push('right');
 							} else {
-								origin = 'center ';
+								origin.push('center');
 							}
 							if (coords.row === 0) {
-								origin += 'top ';
+								origin.push('top');
 							} else if (coords.row === (coords.rows - 1)) {
-								origin += 'bottom ';
+								origin.push('bottom');
 							} else {
-								origin += 'center ';
+								origin.push('center');
 							}
-							this.setStyles({
+							this.animate({
 								backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor'),
-								transform: (new CSSMatrix()).scale(1.1),
-								transformOrigin: origin,
-								zOrder: Animator.ZORDER,
+								scale: 1.1,
+								origin: origin,
+								duration: 0.5,
+								zOrder: Animator.ZORDER
 							});
 						},
 						onBlur: function () {
-							this.setStyles({
+							this.animate({
 								backgroundColor: null,
-								transform: null,
-								transformOrigin: null,
-								zOrder: null
+								scale: 1,
+								zOrder: null,
+								duration: 0.5,
+								events: {
+									onAnimationEnded: function (animator) {
+										log(animator, this);
+									}
+								}
 							});
 						}
 					}
 				});
-
-				cell.animate(0.5);
 
 				cell.setStyles({
 					backgroundRepeat: 'no-repeat',
