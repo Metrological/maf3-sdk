@@ -77,11 +77,11 @@ var TestView3 = new MAF.Class({
 			textStyles: {
 				anchorStyle: 'center'
 			},
-            events: {
-                onSelect: function () {
-                    MAF.application.loadView('view-TestView5a');
-                }
-            }
+			events: {
+				onSelect: function () {
+					MAF.application.loadView('view-TestView5a');
+				}
+			}
 		}).appendTo(this);
 
 		var button6 = new MAF.control.TextButton({
@@ -170,15 +170,20 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button10 = new MAF.control.TextButton({
-			label: 'Button10',
+			label: 'Profile API',
 			styles: {
 				width: this.width / 2,
 				vOffset: button8.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					MAF.application.loadView('view-TestView6');
+				}
 			}
 		}).appendTo(this);
 
 		var button11 = new MAF.control.TextButton({
-			label: 'Button11',
+			label: 'TV API',
 			styles: {
 				width: (this.width / 2) - 1,
 				hOffset: button10.outerWidth + 1,
@@ -186,7 +191,7 @@ var TestView3 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					button10.suicide();
+					MAF.application.loadView('view-TestView7');
 				}
 			}
 		}).appendTo(this);

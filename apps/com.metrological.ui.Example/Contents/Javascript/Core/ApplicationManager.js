@@ -145,7 +145,8 @@ var loadTemplate = (function () {
 							width: currentStyle.width,
 							height: currentStyle.height,
 							top: currentStyle.top,
-							left: currentStyle.left
+							left: currentStyle.left,
+							zOrder: Animator.ZORDER + 1
 						},
 						events: {
 							select: function (event) {

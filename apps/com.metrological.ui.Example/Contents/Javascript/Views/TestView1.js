@@ -22,6 +22,16 @@ var TestView1 = new MAF.Class({
 			events: {
 				onSelect: function () {
 					MAF.application.loadView('view-TestView2');
+				},
+				onFocus: function () {
+					this.element.animate({
+						rotate: 182
+					}, 1);
+				},
+				onBlur: function () {
+					this.element.animate({
+						rotate: 2
+					}, 1);
 				}
 			}
 		}).appendTo(this);
@@ -203,32 +213,32 @@ var TestView1 = new MAF.Class({
 							}).show();
 						},
 						onFocus: function () {
-							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
 							var coords = this.getCellCoordinates(),
 								origin;
 							if (coords.column === 0) {
-								origin = 'left '
+								origin = 'left ';
 							} else if (coords.column === (coords.columns - 1)) {
-								origin = 'right '
+								origin = 'right ';
 							} else {
-								origin = 'center '
+								origin = 'center ';
 							}
 							if (coords.row === 0) {
-								origin += 'top '
+								origin += 'top ';
 							} else if (coords.row === (coords.rows - 1)) {
-								origin += 'bottom '
+								origin += 'bottom ';
 							} else {
-								origin += 'center '
+								origin += 'center ';
 							}
 							this.setStyles({
+								backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor'),
 								transform: (new CSSMatrix()).scale(1.1),
 								transformOrigin: origin,
-								zOrder: 999,
+								zOrder: Animator.ZORDER,
 							});
 						},
 						onBlur: function () {
-							this.setStyle('backgroundColor', null);
 							this.setStyles({
+								backgroundColor: null,
 								transform: null,
 								transformOrigin: null,
 								zOrder: null
@@ -236,6 +246,8 @@ var TestView1 = new MAF.Class({
 						}
 					}
 				});
+
+				cell.element.animate({}, '500ms');
 
 				cell.setStyles({
 					backgroundRepeat: 'no-repeat',
