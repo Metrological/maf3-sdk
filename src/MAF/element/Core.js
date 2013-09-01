@@ -128,11 +128,17 @@ define('MAF.element.Core', function () {
 		},
 
 		animate: function (config) {
-			delete config.callback;
+			var callback;
 			if (config.events && config.events.onAnimationEnded) {
-				config.callback = config.events.onAnimationEnded;
+				callback = config.events.onAnimationEnded;
 				delete config.events;
 			}
+			config.callback = function (animator) {
+				if (callback && callback.call) {
+					callback.call(this, animator);
+				}
+				this.fire('onAnimationEnded', animator);
+			};
 			return this.element && this.element.animate.call(this, config);
 		},
 
