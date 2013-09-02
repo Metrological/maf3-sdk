@@ -22,8 +22,10 @@ define('MAF.control.Grid', function () {
 		},
 
 		initialize: function () {
+			if (this.config.theme !== false) {
+				this.onThemeNeeded.subscribeTo(this, ['onAppend', 'onFocus', 'onBlur'], this);
+			}
 			this.parent();
-			this.onThemeNeeded.subscribeTo(this, ['onAppend', 'onFocus', 'onBlur'], this);
 		}
 	});
 }, {

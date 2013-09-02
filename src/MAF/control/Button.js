@@ -29,16 +29,20 @@ define('MAF.control.Button', function () {
 					case 'onAppend':
 						this.renderSkin('normal');
 						this.createContent();
-						updateSecureIndicator.call(this);
 						break;
 				}
 			}
 		},
 
 		initialize: function () {
-			this.onThemeNeeded.subscribeTo(this, ['onFocus', 'onBlur', 'onAppend'] , this);
+			if (this.config.theme !== false) {
+				this.onThemeNeeded.subscribeTo(this, ['onFocus', 'onBlur', 'onAppend'] , this);
+			} else {
+				this.createContent.subscribeTo(this, 'onAppend' , this);
+			}
 			updateSecureIndicator.subscribeTo(this, 'onChangedSecure', this);
 			this.parent();
+			updateSecureIndicator.call(this);
 		},
 
 		createContent: emptyFn,

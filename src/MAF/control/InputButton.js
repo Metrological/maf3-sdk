@@ -41,6 +41,11 @@ define('MAF.control.InputButton', function () {
 		Extends: MAF.control.TextButton,
 
 		Protected: {
+			valueDisplayWidth: function (event) {
+				if (!this.config.valueOnSubline && this.ClassName !== 'ImageToggleButton' && this.valueDisplay && !event.payload.skip) {
+					this.valueDisplay.width = this.width;
+				}
+			},
 			dispatchEvents: function (event, payload) {
 				if (event.type === 'select') {
 					event.stopPropagation();
@@ -48,16 +53,6 @@ define('MAF.control.InputButton', function () {
 					return onValueNeeded.call(this);
 				}
 				this.parent(event, payload);
-			},
-			onThemeNeeded: function (event) {
-				this.parent(event);
-				switch (event.type) {
-					case 'onAppend':
-						if (!this.config.valueOnSubline && this.ClassName !== 'ImageToggleButton' && this.valueDisplay && !event.payload.skip) {
-							this.valueDisplay.width = this.width;
-						}
-						break;
-				}
 			}
 		},
 
@@ -70,6 +65,8 @@ define('MAF.control.InputButton', function () {
 		initialize: function () {
 			this.ClassName += this.config.valueOnSubline ? 'Subline' : '';
 			this.parent();
+
+			this.valueDisplayWidth.subscribeTo(this, 'onAppend' , this);
 
 			if (this.config.options) {
 				this.setOptions(this.config.options);

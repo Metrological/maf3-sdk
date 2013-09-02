@@ -101,13 +101,6 @@ define('MAF.control.TextEntryOverlay', function () {
 		Extends: MAF.element.Container,
 
 		Protected: {
-			onThemeNeeded: function (event) {
-				switch(event.type) {
-					case 'onAppend':
-						this.show();
-						break;
-				}
-			},
 			initValueManager: function () {
 				var maxlength,
 					ValueManager = ValueManagers[this._classID];
@@ -300,7 +293,7 @@ define('MAF.control.TextEntryOverlay', function () {
 
 		initialize: function () {
 			this.parent();
-			this.onThemeNeeded.subscribeTo(this, 'onAppend' , this);
+			this.show.subscribeTo(this, 'onAppend' , this);
 			this.initValueManager();
 			this.createContent();
 			var ValueManager = ValueManagers[this._classID];

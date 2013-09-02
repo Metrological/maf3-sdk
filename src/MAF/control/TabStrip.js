@@ -4,19 +4,15 @@ define('MAF.control.TabStrip', function () {
 		var i = Math.max(0, Math.min(idx, arr.length-1));
 		return arr[i];
 	};
+	var initializeTabs = function () {
+		this.initTabs(this.config.tabs, this.focusIndex);
+	};
 	return new MAF.Class({
 		ClassName: 'ControlTabStrip',
 
 		Extends: MAF.element.Container,
 
 		Protected: {
-			onThemeNeeded: function (event) {
-				switch (event.type) {
-					case 'onAppend':
-						this.initTabs(this.config.tabs, this.focusIndex);
-						break;
-				}
-			},
 			handleFocusEvent: function (event) {
 				var index  = this.focusIndex || 0,
 					active = parseInt(this.activeIndex, 10) > -1 ? this.activeIndex : -1;
@@ -169,7 +165,7 @@ define('MAF.control.TabStrip', function () {
 		},
 
 		initialize: function () {
-			this.onThemeNeeded.subscribeTo(this, 'onAppend', this);
+			initializeTabs.subscribeTo(this, 'onAppend', this);
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
 			this.handleSelectEvent.subscribeTo(this, 'onSelect', this);
 			this.handleNavEvent.subscribeTo(this, 'onNavigate', this);

@@ -11,10 +11,8 @@ define('MAF.control.TextEntryButton', function () {
 		Extends: MAF.control.InputButton,
 
 		Protected: {
-			onThemeNeeded: function (event) {
-				if (event.type === 'onAppend') {
-					event.payload.skip = true;
-				}
+			valueDisplayWidth: function (event) {
+				event.payload.skip = true;
 				this.parent(event);
 			}
 		},
