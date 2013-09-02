@@ -37,7 +37,7 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button3 = new MAF.control.TextButton({
-			label: 'Applications',
+			label: 'Muzzley',
 			styles: {
 				width: (this.width / 2) - 1,
 				hOffset: button2.outerWidth + 1,
@@ -45,7 +45,7 @@ var TestView3 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					log(ApplicationManager.getApplications());
+					MAF.application.loadView('view-TestView8');
 				}
 			}
 		}).appendTo(this);
