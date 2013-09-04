@@ -24,6 +24,12 @@ define('MAF.element.Container', function () {
 			},
 			registerEvents: function (types) {
 				this.parent(['focus', 'blur', 'select', 'navigate'].concat(types || []));
+			},
+			proxyProperties: function (propnames) {
+				this.parent(propnames);
+				getter(this, 'hasFocus', function () {
+					return this.element.hasFocus;
+				});
 			}
 		},
 
@@ -43,13 +49,13 @@ define('MAF.element.Container', function () {
 		},
 
 		focus: function () {
-			if (this.element.hasFocus) {
+			if (this.hasFocus) {
 				return true;
 			}
 			if (this.element.focusable) {
 				this.element.focus();
 			}
-			return (this.element.hasFocus === true);
+			return this.hasFocus;
 		},
 
 		suicide: function () {

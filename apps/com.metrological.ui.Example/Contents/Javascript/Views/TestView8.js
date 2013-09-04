@@ -45,7 +45,11 @@ var TestView8 = new MAF.Class({
 
 	participantJoin: function (event) {
 		log(event.payload);
-		this.elements.canvas.focus();
+		if (this.elements.canvas.hasFocus) {
+			Muzzley.changeDevice('drawpad');
+		} else {
+			this.elements.canvas.focus();
+		}
 	},
 
 	draw: function (event) {

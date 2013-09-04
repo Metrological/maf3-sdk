@@ -154,7 +154,7 @@ define('MAF.control.TabStrip', function () {
 				return Object.merge({
 					activeIndex: this.activeIndex,
 					focusIndex:  this.focusIndex,
-					focused:     this.element.hasFocus
+					focused:     this.hasFocus
 				}, packet);
 			}
 		},
@@ -207,7 +207,7 @@ define('MAF.control.TabStrip', function () {
 					button.fire(b == this.activeIndex ? 'onActive' : 'onInactive');
 				}, this);
 				this.body.width = w || this.width;
-				if (this.element.hasFocus) {
+				if (this.hasFocus) {
 					var fidx = parseInt(this.focusIndex, 10) || 0;
 					this.focusButton(fidx);
 				}
