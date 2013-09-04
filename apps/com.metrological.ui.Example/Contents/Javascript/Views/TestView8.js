@@ -44,13 +44,13 @@ var TestView8 = new MAF.Class({
 	},
 
 	participantJoin: function (event) {
-		Muzzley.changeDevice(new Muzzley.Drawpad(), event.payload);
+		Muzzley.changeDevice('drawpad', null, event.payload);
 	},
 
 	draw: function (event) {
 		var payload = event.payload,
-			canvas = this.elements.canvas;
-		if (payload.device instanceof Muzzley.Drawpad) {
+			canvas = this.elements.canvas.element;
+		if (payload.key === 'drawpad') {
 			if (payload.action === 'touch') {
 				SimpleDrawAPI.draw(canvas, payload);
 			} else if (payload.action === 'clean') {
@@ -63,13 +63,14 @@ var TestView8 = new MAF.Class({
 		var back = new MAF.control.BackButton({
 		}).appendTo(this);
 
-		this.elements.canvas = new Canvas({
+		this.elements.canvas = new MAF.element.Container({
+			element: Canvas,
 			styles: {
 				width: this.width,
 				height: 400,
 				vOffset: back.outerHeight
 			}
-		}).inject(this.element);
+		}).appendTo(this);
 
 		var image = new MAF.element.Image({
 			src: Muzzley.qrCode,
