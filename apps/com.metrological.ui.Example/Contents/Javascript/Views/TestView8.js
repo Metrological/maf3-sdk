@@ -39,12 +39,13 @@ var TestView8 = new MAF.Class({
 	initialize: function () {
 		this.parent();
 		this.setStyle('backgroundColor', 'white');
-		this.participantJoin.subscribeTo(Muzzley, 'onParticipantJoin');
+		this.participantJoin.subscribeTo(Muzzley, 'onParticipantJoin', this);
 		this.draw.subscribeTo(Muzzley, 'onDeviceEvent', this);
 	},
 
 	participantJoin: function (event) {
-		Muzzley.changeDevice('drawpad', null, event.payload);
+		log(event.payload);
+		this.elements.canvas.focus();
 	},
 
 	draw: function (event) {
@@ -55,30 +56,41 @@ var TestView8 = new MAF.Class({
 				SimpleDrawAPI.draw(canvas, payload);
 			} else if (payload.action === 'clean') {
 				SimpleDrawAPI.clear(canvas);
+				this.elements.back.focus();
 			}
 		}
 	},
 
 	createView: function () {
-		var back = new MAF.control.BackButton({
+		this.elements.back = new MAF.control.BackButton({
 		}).appendTo(this);
 
 		this.elements.canvas = new MAF.element.Container({
+			focus: true,
 			element: Canvas,
 			styles: {
-				width: this.width,
+				width: this.width - 10,
 				height: 400,
-				vOffset: back.outerHeight
+				vOffset: this.elements.back.outerHeight
+			},
+			events: {
+				onFocus: function () {
+					this.setStyle('border', '5px solid red');
+					Muzzley.changeDevice('drawpad');
+				},
+				onBlur: function () {
+					Muzzley.resetDevice();
+					this.setStyle('border', null);
+				}
 			}
 		}).appendTo(this);
 
 		var image = new MAF.element.Image({
 			src: Muzzley.qrCode,
 			styles: {
-				vOffset: back.outerHeight + 450,
+				vOffset: this.elements.back.outerHeight + 460,
 				hAlign: 'center'
 			}
 		}).appendTo(this);
-
 	}
 });
