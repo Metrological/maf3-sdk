@@ -47,7 +47,11 @@ define('MAF.control.TextEntryButton', function () {
 					width: this.width - (Theme.getStyles('ControlTextEntryButtonValue', 'margin') * 2)
 				}
 			}).appendTo(this);
-			
+
+			if (this.config.theme !== false) {
+				this.valueDisplay.element.addClass('ControlTextEntryButtonValueTheme');
+			}
+
 			this.valueDisplay._updateContent = (function (event) {
 				var value = event.payload.value,
 					target = this.valueDisplay;
@@ -127,10 +131,14 @@ define('MAF.control.TextEntryButton', function () {
 			minHeight: '40px',
 			height: '1.9em',
 			padding: '5px',
+			truncation: 'end'
+		}
+	},
+	ControlTextEntryButtonValueTheme: {
+		styles: {
 			border: '2px solid white',
 			borderRadius: '10px',
 			backgroundColor: 'rgba(150,150,150,.5)',
-			truncation: 'end',
 			opacity: 0.9
 		}
 	}
