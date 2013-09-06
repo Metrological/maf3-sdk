@@ -105,13 +105,13 @@ define('MAF.element.Grid', function () {
 				}
 			},
 			generateCells: function (count, data) {
-				if (count > 0 && this.cells.length === 0) {
+				if (count > 0 && count > this.cells.length) {
 					var fragment = createDocumentFragment(),
 						dims = {
 							width: ((1 / this.config.columns) * 100) + '%',
 							height: ((1 / this.config.rows) * 100) + '%'
 						};
-					for (var i = 0; i < count; i++) {
+					for (var i = this.cells.length; i < count; i++) {
 						var cell = this.config.cellCreator.call(this).setStyles(dims);
 						cell.grid = this;
 						fragment.appendChild(cell.element);

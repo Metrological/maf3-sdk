@@ -183,7 +183,7 @@ var loadTemplate = (function () {
 					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
 
 					template = new Dialog({
-						id: '@' + type,
+						id: '@' + (data.key ? data.key : type),
 						styles: {
 							overflow: currentStyle.overflow,
 							backgroundColor: 'rgba(0,0,0,.5)',
@@ -603,8 +603,15 @@ widget.handleChildEvent = function (event) {
 		case 'showDialog':
 			var data = event.getData();
 			data.id = data.type;
-			data.type = 'dialog'; 
+			data.type = 'dialog';
+			data.key = data.conf && data.conf.key;
 			loadTemplate.call(this, data);
+			break;
+		case 'hideDialog':
+			var dialog = event.getData();
+			if (dialog && this.widget) {
+				this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog')).destroy();
+			}
 			break;
 		case 'setWaitIndicator':
 			loadTemplate.call(this, {
