@@ -24,14 +24,16 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button2 = new MAF.control.TextButton({
-			label: 'Close Window',
+			label: 'NOS Stream',
 			styles: {
 				width: this.width / 2,
 				vOffset: button1.outerHeight + 1
 			},
 			events: {
 				onSelect: function () {
-					window.close();
+					MAF.mediaplayer.init();
+					MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://download.omroep.nl/nos/content/broadcasts/2013/09/07/12071-mp4-web03.mp4?' + Date.now()));
+					MAF.mediaplayer.playlist.start();
 				}
 			}
 		}).appendTo(this);

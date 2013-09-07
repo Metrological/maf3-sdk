@@ -1,19 +1,18 @@
 define('MAF.media.Playlist', function () {
-	var playlists = {};
 	return new MAF.Class({
 		config: {
-			autoStart: false,
+			autoStart: true,
 			repeatAll: false,
 			forcePlay: true
 		},
 
 		initialize: function() {
-			var playlist = playlists[this._classID] = {};
-			playlist.entries = [];
-			playlist.autoStart = this.config.autoStart === true;
-			playlist.repeatAll = this.config.repeatAll === true;
-			playlist.forcePlay = this.config.forcePlay === true;
-
+			var playlist = {
+				entries: [],
+				autoStart: this.config.autoStart === true,
+				repeatAll: this.config.repeatAll === true,
+				forcePlay: this.config.forcePlay === true
+			};
 			getter(this, 'autoStart', function () {
 				return playlist.autoStart;
 			});
@@ -35,14 +34,17 @@ define('MAF.media.Playlist', function () {
 			getter(this, 'entries', function () {
 				return playlist.entries;
 			});
+			setter(this, 'entries', function (entries) {
+				playlist.entries = entries || [];
+			});
 		},
 
 		removeEntry: function (index) {
-			playlists[this._classID].entries.slice(index);
+			this.entries.slice(index);
 		},
 
 		clearEntries: function() {
-			playlists[this._classID].entries = [];
+			this.entries = [];
 		},
 
 		addEntry: function(entry) {
@@ -50,7 +52,7 @@ define('MAF.media.Playlist', function () {
 		},
 
 		addEntries: function(entries) {
-			playlists[this._classID].entries = [].concat(entries).filter(function (entry) {
+			this.entries = [].concat(entries).filter(function (entry) {
 				return entry instanceof MAF.media.PlaylistEntry;
 			});
 			return this;
@@ -60,12 +62,8 @@ define('MAF.media.Playlist', function () {
 			return this.addEntry(new MAF.media.PlaylistEntry({
 				url: url,
 				bitrate: bitrate,
-				startIndex: startIndex
+				startIndex: startIndex || 0
 			}));
-		},
-
-		suicide: function () {
-			delete playlists[this._classID];
 		}
 	});
 });

@@ -1,24 +1,14 @@
 define('MAF.media.PlaylistEntry', function () {
-	var playlistStreams = {};
 	return new MAF.Class({
 		config: {
 			url: null,
 			bitrate: 0,
-			startIndex: 0,
 			asset: null,
 			streams: null
 		},
 
 		initialize: function () {
-			var startIndex = this.config.startIndex;
-			getter(this, 'startIndex', function () {
-				return startIndex;
-			});
-			setter(this, 'startIndex', function (value) {
-				startIndex = value;
-			});
-
-			var streams = playlistStreams[this._classID] = [];
+			var streams = [];
 			if (this.config.url) {
 				streams.push({
 					url: this.config.url,
@@ -43,18 +33,23 @@ define('MAF.media.PlaylistEntry', function () {
 			});
 		},
 
-		streamsReady: function (callback) {
+		streamsReady: function () {
 			return true;
 		},
 
+		hasURL: function (url) {
+			return this.streams.filter(function (stream) {
+				return stream.url === url;
+			}).length > 0;
+		},
+
 		addURL: function (url, bitrate) {
-			var streams = playlistStreams[this._classID];
 			if (url) {
-				streams.push({
+				this.streams.push({
 					url: url, 
 					bitrate: isNaN(bitrate) ? 0 : bitrate
 				});
-				streams.sort(function (a, b) {
+				this.streams.sort(function (a, b) {
 					if (a.bitrate === b.bitrate) {
 						return 0;
 					}
@@ -62,10 +57,6 @@ define('MAF.media.PlaylistEntry', function () {
 				});
 			}
 			return this;
-		},
-
-		suicide: function () {
-			delete playlistStreams[this._classID];
 		}
 	});
 });
