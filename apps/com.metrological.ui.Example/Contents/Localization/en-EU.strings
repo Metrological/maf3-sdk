@@ -1,6 +1,10 @@
 "OK" = "OK";
 "BACK" = "BACK";
 "CANCEL" = "CANCEL";
+"ERROR" = "ERROR";
+"PLAYBACK_ERROR" = "Error trying to playback this content.";
+"RETRY" = "RETRY";
+"CLOSE" = "CLOSE";
 "FORGOT_PIN" = "FORGOT PIN?";
 "PAGE" = "PAGE %s OF %s";
 "WIDGET_BY" = "App by";

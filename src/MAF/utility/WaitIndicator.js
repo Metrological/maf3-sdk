@@ -2,7 +2,7 @@ define('MAF.utility.WaitIndicator', function () {
 	var tasks = 0,
 		last = null,
 		stale = 60,
-		timer = new Timer(2, function () {
+		timer = new Timer(60, function () {
 			MAF.utility.WaitIndicator.police(true);
 		});
 	return {

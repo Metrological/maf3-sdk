@@ -43,11 +43,11 @@ define('MAF.dialogs.Alert', function () {
 				packet = { selected: config[selectedValue] || {} };
 			if (response.cancelled) {
 				if (this.config.cancelCallback && this.config.cancelCallback.call) {
-					this.config.cancelCallback(packet);
+					this.config.cancelCallback.call(this, packet);
 				}
 			} else {
 				if (callback && callback.call) {
-					callback(packet);
+					callback.call(this, packet);
 				}
 			}
 		}

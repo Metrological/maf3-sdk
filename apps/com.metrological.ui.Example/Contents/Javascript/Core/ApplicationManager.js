@@ -35,6 +35,8 @@ var loadTemplate = (function () {
 								smallSpinner.text = FontAwesome.get('refresh icon-spin');
 								smallSpinner.frozen = false;
 							}
+							largeSpinner.text = FontAwesome.get('refresh');
+							largeSpinner.frozen = true;
 							break;
 						case '2':
 							largeSpinner.text = FontAwesome.get('refresh icon-spin');
