@@ -80,7 +80,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			}
 		}
 		if (event.type === 'valuechanged') {
-			var curLine = this.retrieve('line') || 1;
+			var curLine = this.retrieve('line') || 0;
 			if (curLine && curLine !== el.totalLines) {
 				var lineHeight = this.inputField.lineHeight;
 				if (curLine > el.totalLines) {
@@ -194,6 +194,8 @@ define('MAF.control.TextEntryOverlay', function () {
 					}
 				}).appendTo(this.form);
 
+				this.inputField.element.addClass('ControlTextEntryButtonValueTheme');
+
 				var cancelBtn = new MAF.control.TextButton({
 					label: cancelText,
 					styles: {
@@ -272,7 +274,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					}
 				}).appendTo(this.form);
 
-				this.form.height = (buttonHeight*2) + outputLabel.vOffset - (bpad*3);
+				this.form.height = outputLabel.outerHeight + this.inputField.height + this.inputField.lineHeight;
 			},
 
 			registerHandler: function () {

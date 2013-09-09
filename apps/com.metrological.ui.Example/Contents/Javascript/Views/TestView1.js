@@ -39,7 +39,10 @@ var TestView1 = new MAF.Class({
 						duration: 0.5
 					}).animate({
 						rotate: 2,
-						duration: 0.5
+						duration: 0.5,
+						callback: function (animator) {
+							animator.reset();
+						}
 					});
 				}
 			}
@@ -254,7 +257,8 @@ var TestView1 = new MAF.Class({
 								duration: 0.5,
 								events: {
 									onAnimationEnded: function (animator) {
-										log(animator, this);
+										// remove animation from cell;
+										animator.reset();
 									}
 								}
 							});

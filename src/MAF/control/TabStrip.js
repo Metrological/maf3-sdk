@@ -64,9 +64,10 @@ define('MAF.control.TabStrip', function () {
 			focusButton: function (index) {
 				var button = getSafeIndex(index, this.buttons);
 				if (button) {
-					var owner = this.body.owner;
+					var owner = this.body.owner,
+						offset = button.element.getBounds().left + owner.scrollLeft - (owner.element.getBounds().left * 2);
 					button.fire('onFocus');
-					owner.scrollLeft = button.getStyle('left') + owner.scrollLeft - (1 + owner.element.getBounds().left);
+					owner.scrollLeft = offset;
 				}
 			},
 			blurButton: function (index) {

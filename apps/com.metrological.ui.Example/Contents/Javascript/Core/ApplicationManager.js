@@ -647,6 +647,13 @@ widget.handleHostEvent = function (event) {
 			break;
 		case 'getSnippetConfs':
 			break;
+		case 'onApplicationAvailable':
+			//log(event.data);
+			break;
+		case 'onApplicationsAvailable':
+			//log(event.data);
+			MAF.messages.store('myApps', event.getData());
+			break;
 		default:
 			break;
 	}

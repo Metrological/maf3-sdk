@@ -13,18 +13,21 @@ define('MAF.element.Image', function () {
 						if (this.config.autoShow) {
 							this.show();
 						}
-						//if (this.config.manageWaitIndicator) {
-						//	MAF.utility.WaitIndicator.down();
-						//}
+						if (this.config.manageWaitIndicator) {
+							MAF.utility.WaitIndicator.down();
+						}
 						break;
 					case 'error':
+						if (this.config.missingSrc) {
+							this.element.source = this.config.missingSrc;
+						}
 						this.fire('onError', payload, event);
 						if (this.config.autoShow) {
 							this.show();
 						}
-						//if (this.config.manageWaitIndicator) {
-						//	MAF.utility.WaitIndicator.down();
-						//}
+						if (this.config.manageWaitIndicator) {
+							MAF.utility.WaitIndicator.down();
+						}
 						break;
 					default:
 						break;
@@ -89,20 +92,16 @@ define('MAF.element.Image', function () {
 				src = object.src || object.source;
 
 			if ('missingSrc' in object) {
-				img.missingSrc = cfg.missingSrc = object.missingSrc;
+				cfg.missingSrc = object.missingSrc;
 			}
 			if ('loadingSrc' in object) {
-				img.loadingSrc = cfg.loadingSrc = object.loadingSrc;
+				cfg.loadingSrc = object.loadingSrc;
 			}
-			if (src !== undefined) {
-				//@TODO workaround for setting the same source
-				if (img.source !== '' && src === cfg.src) {
-					return this;
-				}
+			if (src) {
 				img.remoteAsync = (cfg.remoteAsync === false) ? false : true;
-				//if (cfg.manageWaitIndicator) {
-				//	MAF.utility.WaitIndicator.up();
-				//}
+				if (cfg.manageWaitIndicator) {
+					MAF.utility.WaitIndicator.up();
+				}
 				if (cfg.hideWhileLoading) {
 					this.hide();
 				}

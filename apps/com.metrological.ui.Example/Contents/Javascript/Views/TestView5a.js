@@ -66,6 +66,11 @@ var TestView5a = new MAF.Class({
 						height: cell.height - 10,
 						hAlign: 'center',
 						vAlign: 'center'
+					},
+					events: {
+						onLoaded: function (event) {
+							//log(event);
+						}
 					}
 				}).appendTo(cell);
 

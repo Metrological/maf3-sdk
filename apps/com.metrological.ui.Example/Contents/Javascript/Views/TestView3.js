@@ -5,6 +5,13 @@ var TestView3 = new MAF.Class({
 
 	initialize: function () {
 		this.parent();
+		this.registerMessageCenterListenerCallback(this.dataHasChanged);
+	},
+
+	dataHasChanged: function (event) {
+		if (event.payload.key === 'myApps') {
+			this.controls.myApps.changeDataset(event.payload.value, true);
+		}
 	},
 
 	createView: function () {
@@ -253,19 +260,20 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		new MAF.element.Grid({
+		this.controls.myApps = new MAF.element.Grid({
+			guid: 'MyApps',
 			rows: 2,
 			columns: 2,
 			carousel: true,
-			dataset: ApplicationManager.getApplications(),
+			dataset: MAF.messages.fetch('myApps') || [],
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: this.getCellDimensions(),
 					events: {
 						onSelect: function (event) {
-							var apps = ApplicationManager.getApplications();
-							ApplicationManager.load(apps[this.getCellDataIndex()]);
-							ApplicationManager.open(apps[this.getCellDataIndex()]);
+							var id = this.getCellDataItem();
+							ApplicationManager.load(id);
+							ApplicationManager.open(id);
 						},
 						onFocus: function () {
 							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));

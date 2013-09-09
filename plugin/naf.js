@@ -1,6 +1,6 @@
 var NAF = this.NAF = {},
 	WebApp = this.WebApp = {},
-//	version = '1.0.8s4c2r87';
+//	version = '1.0.8s4c2r88';
 	version = '1.0.7s4c2r83';
 
 // Capture globals
