@@ -180,6 +180,9 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'facebook-login':
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
+							break;
 					}
 
 					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
@@ -281,7 +284,7 @@ var loadTemplate = (function () {
 
 					var dialogMessage = new Text({
 						id: '@' + type + '-message',
-						label: widget.getLocalizedString(dialogConfig.message || ''),
+						label: (id === 'facebook-login') ? widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]) : widget.getLocalizedString(dialogConfig.message || ''),
 						styles: {
 							width: '100%',
 							paddingLeft: 10,
@@ -542,7 +545,6 @@ var loadTemplate = (function () {
 						}
 					}
 
-					
 					body.appendChild(fragment);
 					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 1) * dialogMessage.lineHeight);
 					contentFrame.visible = true;
@@ -586,7 +588,6 @@ var loadTemplate = (function () {
 		current[identifier] = type;
 	};
 }());
-
 
 widget.handleChildEvent = function (event) {
 	//log('handleChildEvent', event.subject, event);
@@ -646,6 +647,19 @@ widget.handleHostEvent = function (event) {
 			}
 			break;
 		case 'getSnippetConfs':
+			break;
+		case 'showDialog':
+			var data = event.getData();
+			data.id = data.type;
+			data.type = 'dialog';
+			data.key = data.conf && data.conf.key;
+			loadTemplate.call(this, data);
+			break;
+		case 'hideDialog':
+			var dialog = event.getData();
+			if (dialog && this.widget) {
+				this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog')).destroy();
+			}
 			break;
 		case 'onApplicationAvailable':
 			//log(event.data);

@@ -12,6 +12,8 @@ include('Javascript/Views/TestView8.js');
 
 var photopgr;
 
+Facebook.init('183031261739046');
+
 MAF.application.init({
 	views: [
 		{ id: 'view-TestView1', viewClass: TestView1 },

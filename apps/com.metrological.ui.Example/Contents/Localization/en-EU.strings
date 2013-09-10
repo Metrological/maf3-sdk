@@ -14,3 +14,5 @@
 "SPACE" = "SPACE";
 "DATE_FORMAT" = "d MMM yyyy HH:mm";
 "DATE_PARSE" = "yyyy-MM-dd HH:mm:ss";
+"FB_CONNECT" = "Facebook";
+"FB_CODE" = "Goto facebook.com/device and use code: %s";
