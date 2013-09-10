@@ -464,7 +464,7 @@ define('MAF.element.Grid', function () {
 		},
 
 		getCurrentPage: function () {
-			return this.getState().currentPage;
+			return this.getState().currentPage || 0;
 		},
 
 		getStartIndex: function () {

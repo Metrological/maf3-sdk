@@ -34,10 +34,7 @@ define('MAF.element.Image', function () {
 				}
 			},
 			registerEvents: function (eventTypes) {
-				this.parent([
-					'load',
-					'error'
-				].concat(eventTypes || []));
+				this.parent(['load', 'error'].concat(eventTypes || []));
 			},
 			proxyProperties: function (propnames) {
 				this.parent([
@@ -98,7 +95,6 @@ define('MAF.element.Image', function () {
 				cfg.loadingSrc = object.loadingSrc;
 			}
 			if (src) {
-				img.remoteAsync = (cfg.remoteAsync === false) ? false : true;
 				if (cfg.manageWaitIndicator) {
 					MAF.utility.WaitIndicator.up();
 				}

@@ -5,6 +5,32 @@ var TestView7 = new MAF.Class({
 
 	initialize: function () {
 		this.parent();
+		MAF.mediaplayer.init();
+		this.channelChange.subscribeTo(MAF.mediaplayer, 'onChannelChange', this);
+		this.stateChange.subscribeTo(MAF.mediaplayer, 'onStateChange', this);
+	},
+
+	stateChange: function (event) {
+		var states = MAF.mediaplayer.constants.states;
+		switch (event.payload.newState) {
+			case states.ERROR:
+			case states.EOF:
+			case states.STOP:
+			case states.PLAY:
+				this.elements.isLive.setText('Live TV: ' + String(MAF.mediaplayer.isTVActive));
+				this.elements.assetTitle.setText('Asset Title: ' + (MAF.mediaplayer.currentAsset.title || MAF.mediaplayer.currentAsset.name || ''));
+				this.elements.assetWidget.setText('Asset Widget: ' + (MAF.mediaplayer.currentAsset.widget && MAF.mediaplayer.currentAsset.widget.name || 'None'));
+				break;
+		}
+	},
+
+	channelChange: function () {
+		var currentChannel = MAF.mediaplayer.getCurrentChannel(),
+			currentProgram = MAF.mediaplayer.getCurrentProgram();
+		this.elements.channelNumber.setText('Channel Number: ' + currentChannel.number);
+		this.elements.channelName.setText('Channel Name: ' + currentChannel.name);
+		this.elements.programTitle.setText('Program Title: ' + currentProgram.title);
+		this.elements.programDescription.setText('Program Description: ' + currentProgram.description);
 	},
 
 	createView: function () {
@@ -12,67 +38,74 @@ var TestView7 = new MAF.Class({
 			label: 'TV'
 		}).appendTo(this);
 
-		var button1 = new MAF.control.TextButton({
-			label: 'Channel Id: ' + tv.channel,
-			disabled: true,
+		var currentChannel = MAF.mediaplayer.getCurrentChannel(),
+			currentProgram = MAF.mediaplayer.getCurrentProgram();
+
+		var changeChannel = new MAF.control.TextButton({
+			label: 'Change Channel',
 			styles: {
 				vOffset: back.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					MAF.mediaplayer.setChannelByNumber(Math.floor(Math.random()*11));
+				}
 			}
 		}).appendTo(this);
 
-		var button2 = new MAF.control.TextButton({
-			label: 'Current Channel: ' + JSON.stringify(tv.currentChannel),
+		this.elements.channelNumber = new MAF.control.TextButton({
+			label: 'Channel Number: ' + currentChannel.number,
 			disabled: true,
 			styles: {
-				vOffset: button1.outerHeight + 1
+				vOffset: changeChannel.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button3 = new MAF.control.TextButton({
-			label: 'Channel by Number: ' + tv.getChannelByNumber(5),
+		this.elements.channelName = new MAF.control.TextButton({
+			label: 'Channel Name: ' + currentChannel.name,
 			disabled: true,
 			styles: {
-				vOffset: button2.outerHeight + 1
+				vOffset: this.elements.channelNumber.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button4 = new MAF.control.TextButton({
-			label: 'Current Program: ' + JSON.stringify(tv.currentProgram),
+		this.elements.programTitle = new MAF.control.TextButton({
+			label: 'Program Title: ' + currentProgram.title,
 			disabled: true,
 			styles: {
-				vOffset: button3.outerHeight + 1
+				vOffset: this.elements.channelName.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button5 = new MAF.control.TextButton({
-			label: 'Next Program: ' + JSON.stringify(tv.nextProgram),
+		this.elements.programDescription = new MAF.control.TextButton({
+			label: 'Program Description: ' + currentProgram.description,
 			disabled: true,
 			styles: {
-				vOffset: button4.outerHeight + 1
+				vOffset: this.elements.programTitle.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button6 = new MAF.control.TextButton({
-			label: 'Blocked Channels: ' + JSON.stringify(tv.blockedChannels),
+		this.elements.isLive = new MAF.control.TextButton({
+			label: 'Live TV: ' + String(MAF.mediaplayer.isTVActive),
 			disabled: true,
 			styles: {
-				vOffset: button5.outerHeight + 1
+				vOffset: this.elements.programDescription.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button7 = new MAF.control.TextButton({
-			label: 'Resized Channels: ' + JSON.stringify(tv.resizedChannels),
+		this.elements.assetTitle = new MAF.control.TextButton({
+			label: 'Asset Title: ' + (MAF.mediaplayer.currentAsset.title || MAF.mediaplayer.currentAsset.name || ''),
 			disabled: true,
 			styles: {
-				vOffset: button6.outerHeight + 1
+				vOffset: this.elements.isLive.outerHeight + 1
 			}
 		}).appendTo(this);
 
-		var button8 = new MAF.control.TextButton({
-			label: 'Resolution: ' + JSON.stringify(tv.nativeResolution) + ' (' + JSON.stringify(tv.resolution) + ')',
+		this.elements.assetWidget = new MAF.control.TextButton({
+			label: 'Asset Widget: ' + (MAF.mediaplayer.currentAsset.widget && MAF.mediaplayer.currentAsset.widget.name || 'None'),
 			disabled: true,
 			styles: {
-				vOffset: button7.outerHeight + 1
+				vOffset: this.elements.assetTitle.outerHeight + 1
 			}
 		}).appendTo(this);
 	}
