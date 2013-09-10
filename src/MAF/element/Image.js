@@ -91,9 +91,6 @@ define('MAF.element.Image', function () {
 			if ('missingSrc' in object) {
 				cfg.missingSrc = object.missingSrc;
 			}
-			if ('loadingSrc' in object) {
-				cfg.loadingSrc = object.loadingSrc;
-			}
 			if (src) {
 				if (cfg.manageWaitIndicator) {
 					MAF.utility.WaitIndicator.up();

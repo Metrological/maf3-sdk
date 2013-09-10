@@ -18,7 +18,7 @@ var TestView7 = new MAF.Class({
 			case states.STOP:
 			case states.PLAY:
 				this.elements.isLive.setText('Live TV: ' + String(MAF.mediaplayer.isTVActive));
-				this.elements.assetTitle.setText('Asset Title: ' + (MAF.mediaplayer.currentAsset.title || MAF.mediaplayer.currentAsset.name || ''));
+				this.elements.assetTitle.setText('Asset Title: ' + MAF.mediaplayer.currentAsset.title);
 				this.elements.assetWidget.setText('Asset Widget: ' + (MAF.mediaplayer.currentAsset.widget && MAF.mediaplayer.currentAsset.widget.name || 'None'));
 				break;
 		}
@@ -31,6 +31,8 @@ var TestView7 = new MAF.Class({
 		this.elements.channelName.setText('Channel Name: ' + currentChannel.name);
 		this.elements.programTitle.setText('Program Title: ' + currentProgram.title);
 		this.elements.programDescription.setText('Program Description: ' + currentProgram.description);
+		this.elements.assetTitle.setText('Asset Title: ' + MAF.mediaplayer.currentAsset.title);
+		this.elements.assetWidget.setText('Asset Widget: ' + (MAF.mediaplayer.currentAsset.widget && MAF.mediaplayer.currentAsset.widget.name || 'None'));
 	},
 
 	createView: function () {
@@ -94,7 +96,7 @@ var TestView7 = new MAF.Class({
 		}).appendTo(this);
 
 		this.elements.assetTitle = new MAF.control.TextButton({
-			label: 'Asset Title: ' + (MAF.mediaplayer.currentAsset.title || MAF.mediaplayer.currentAsset.name || ''),
+			label: 'Asset Title: ' + MAF.mediaplayer.currentAsset.title,
 			disabled: true,
 			styles: {
 				vOffset: this.elements.isLive.outerHeight + 1
