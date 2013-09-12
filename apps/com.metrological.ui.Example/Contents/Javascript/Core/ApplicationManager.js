@@ -57,9 +57,9 @@ var loadTemplate = (function () {
 				case 'sidebar':
 					var sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'remove', action: 'close-all' },
-						{ value: '@AppButtonSidebarSettings', label: 'cogs', action: 'app-settings' },
-						{ value: '@AppButtonSidebarMuzzley', label: 'mobile-phone', action: 'app-muzzley' },
-						{ value: '@AppButtonSidebarVideoSize', label: 'resize-small', action: 'viewport-toggle' }
+						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
+						{ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' },
+						{ value: '@AppButtonSidebarVideoSize', label: 'fullscreen', action: 'viewport-toggle' }
 					];
 
 					if (identifier === widget.identifier) {
@@ -173,22 +173,18 @@ var loadTemplate = (function () {
 							focus: true,
 							label: FontAwesome.get(btnConfig.label),
 							styles: {
-								width: 50,
-								height: 32,
-								borderRadius: '10px',
-								border: '2px solid #FFFFFF',
-								hOffset: 294 + (52 * (-(sidebarButtons.length/2)+key)),
+								hAlign: 'center',
 								vAlign: 'bottom',
+								hOffset: 15 + (30 * (-(sidebarButtons.length/2)+key)),
 								vOffset: 3,
-								anchorStyle: 'center',
-								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+								fontSize: 20
 							},
 							events: {
 								focus: function () {
-									this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+									this.setStyle('color', Theme.getStyles('BaseFocus', 'backgroundColor'));
 								},
 								blur: function () {
-									this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
+									this.setStyle('color', null);
 								},
 								navigate: function (event) {
 									if (event.detail.direction === 'down') {
