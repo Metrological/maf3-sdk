@@ -698,7 +698,6 @@ widget.handleChildEvent = function (event) {
 			break;
 		case 'showDialog':
 			var data = event.getData();
-			log(data);
 			data.id = data.type;
 			data.type = 'dialog';
 			data.key = data.conf && data.conf.key;

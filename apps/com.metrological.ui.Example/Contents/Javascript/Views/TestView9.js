@@ -7,6 +7,8 @@ var TestView9 = new MAF.Class({
 		this.parent();
 		this.registerMessageCenterListenerCallback(this.dataHasChanged);
 		this.clockTimerId = this.setClock.periodical(60000, this);
+		MAF.mediaplayer.init();
+		this.channelChange.subscribeTo(MAF.mediaplayer, 'onChannelChange', this);
 	},
 
 	dataHasChanged: function (event) {
@@ -14,11 +16,15 @@ var TestView9 = new MAF.Class({
 			this.controls.myApps.changeDataset(event.payload.value, true);
 		}
 	},
-	
+
+	channelChange: function () {
+		this.controls.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()]);
+	},
+
 	setClock: function() {
 		this.elements.datetime.setText(Date.format(new Date(), 'dd MMM yyyy HH:mm'));
 	},
-	
+
 	animteBar: function(fadeIn, fadeOut, barHeight, barOffset){
 		fadeOut.animate({
 			opacity: 0,
@@ -54,7 +60,7 @@ var TestView9 = new MAF.Class({
 			}
 		});
 	},
-	
+
 	onActivateBackButton: function(event) {
 		if (!this.frozen) {
 			if (this.controls.myApps.visible){
@@ -79,7 +85,7 @@ var TestView9 = new MAF.Class({
 				vOffset: 725
 			}
 		}).appendTo(this);
-		
+
 		new MAF.element.Image({
 			src: 'Images/ml.png',
 			styles: {
@@ -122,7 +128,7 @@ var TestView9 = new MAF.Class({
 				vOffset: this.elements.menuBackground.outerHeight
 			}
 		}).appendTo(this);
-		
+
 		this.elements.meta = new MAF.element.Text({
 			styles: {
 				fontSize: 25,
@@ -134,7 +140,7 @@ var TestView9 = new MAF.Class({
 				truncation: 'end'
 			}
 		}).appendTo(this.elements.menuBottom);
-		
+
 		this.controls.myMenu = new MAF.element.Grid({
 			guid: 'MyMenu',
 			rows: 1,
@@ -153,7 +159,7 @@ var TestView9 = new MAF.Class({
 					events: {
 						onSelect: function (event) {
 							var data = this.getCellDataItem(),
-								view = this.getView();
+								view = this.grid.owner.owner;
 							switch(data.label){
 								case $_('Apps'):
 									var myApps = MAF.messages.fetch('myApps') || [];
@@ -161,11 +167,8 @@ var TestView9 = new MAF.Class({
 										view.animteBar(view.controls.myApps, view.controls.myMenu, 230, 660);
 									break;
 								case $_('Channel'):
-									var currentChannel = MAF.mediaplayer.getCurrentChannel(),
-										currentProgram = MAF.mediaplayer.getCurrentProgram();
 									view.animteBar(view.controls.myEPG, view.controls.myMenu, 230, 660);
-									view.controls.myEPG.changeDataset([ currentProgram ]);
-									//view.elements.nowText.setText(currentChannel.number + ' ' + currentChannel.name + '<br />' + currentProgram.title + '<br />' + currentProgram.description);
+									view.controls.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()]);
 									break;
 								default:
 									MAF.application.loadView('view-TestView1');
@@ -175,11 +178,10 @@ var TestView9 = new MAF.Class({
 						onFocus: function () {
 							this.setStyle('opacity', 1);
 							if (this.getCellDataItem().label === $_('Channel')){
-								var currentChannel = MAF.mediaplayer.getCurrentChannel(),
-									currentProgram = MAF.mediaplayer.getCurrentProgram();
-								this.getView().elements.meta.setText($_('NowWatching') + currentProgram.title);
+								var currentProgram = MAF.mediaplayer.getCurrentProgram();
+								this.grid.owner.owner.elements.meta.setText($_('NowWatching') + currentProgram.title);
 							} else {
-								this.getView().elements.meta.setText(this.getCellDataItem().meta);
+								this.grid.owner.owner.elements.meta.setText(this.getCellDataItem().meta);
 							}
 							this.text.animate({
 								scale: 1.3,
@@ -192,7 +194,6 @@ var TestView9 = new MAF.Class({
 								scale: 1,
 								duration: 0.2
 							});
-//							this.getView().elements.meta.setText('');
 						}
 					}
 				});
@@ -208,7 +209,6 @@ var TestView9 = new MAF.Class({
 						anchorStyle: 'center'
 					}
 				}).appendTo(cell);
-
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
@@ -220,7 +220,7 @@ var TestView9 = new MAF.Class({
 				hOffset: 50
 			}
 		}).appendTo(this.elements.menuBackground);
-		
+
 		this.controls.myApps = new MAF.element.Grid({
 			guid: 'MyApps',
 			rows: 1,
@@ -263,7 +263,6 @@ var TestView9 = new MAF.Class({
 								zOrder: null
 							});
 							this.focusImg.visible = false;
-//							this.getView().elements.meta.setText('');
 						}
 					}
 				});
@@ -306,7 +305,7 @@ var TestView9 = new MAF.Class({
 				opacity: 0
 			}
 		}).appendTo(this.elements.menuBackground);
-		
+
 		this.controls.myEPG = new MAF.element.Grid({
 			guid: 'MyApps',
 			rows: 1,
@@ -351,9 +350,7 @@ var TestView9 = new MAF.Class({
 			cellUpdater: function (cell, data) {
 				cell.program.setText(data.title);
 				cell.desc.setText(data.description);
-//				cell.program.setText('The Bounty Hunter');
-//				cell.desc.setText('<strong>Actiefilm</strong> Premiejager Milo Boyd krijgt een droomklus aangeboden; hij wordt gevraagd zijn ex-vrouw Nicole op te sporen, die op borgtocht is vrijgelaten en zich niet aan de bijbehorende regels heeft gehouden. Journaliste Nicole is echter een moordzaak op het spoor, dus een makkelijke opdracht wordt het zeker niet voor Milo. Ze belanden samen in hachelijke situaties en zullen moeten samenwerken om er levend uit te komen.');
-				this.getView().elements.meta.setText(MAF.mediaplayer.getCurrentChannel().name);
+				cell.grid.owner.owner.elements.meta.setText(MAF.mediaplayer.getCurrentChannel().name);
 			},
 			styles: {
 				visible: false,
@@ -373,12 +370,12 @@ var TestView9 = new MAF.Class({
 			duration: 0.5
 		});
 	},
-	
+
 	destroyView: function() {
 		clearInterval(this.clockTimerId);
 		delete this.clockTimerId;
 	},
-	
+
 	focusView: function() {
 		this.controls.myMenu.focus();
 	}
