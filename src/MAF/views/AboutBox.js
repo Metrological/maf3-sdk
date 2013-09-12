@@ -52,7 +52,6 @@ define('MAF.views.AboutBox', function () {
 			var metadataName = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataName',
 				label: widget.name,
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataName', 'fontSize')
 				}
@@ -218,19 +217,19 @@ define('MAF.views.AboutBox', function () {
 		'PAD_TOP': 20,
 		styles: {
 			hOffset: 5,
-			fontSize: 18
+			fontSize: 23
 		}
 	},
 	AboutBoxViewMetadataAuthor: {
 		styles: {
 			hOffset: 5,
-			fontSize: 18
+			fontSize: 23
 		}
 	},
 	AboutBoxViewMetadataVersion: {
 		styles: {
 			hOffset: 5,
-			fontSize: 18
+			fontSize: 23
 		}
 	},
 	AboutBoxViewMetadataUrlNote: {

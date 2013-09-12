@@ -24,7 +24,7 @@ var loadTemplate = (function () {
 				case 'waitIndicator':
 					var smallSpinner = getElementById('@'+current[identifier]+'-home'),
 						largeSpinner = getElementById('@'+current[identifier]+'-loading');
-					if (!smallSpinner || !largeSpinner) {
+					if (!smallSpinner || !largeSpinner || identifier !== ApplicationManager.active) {
 						return;
 					}
 					switch (data.id) {
@@ -69,7 +69,7 @@ var loadTemplate = (function () {
 						id: '@' + type,
 						styles: {
 							overflow: 'visible',
-							backgroundColor: 'rgba(0,0,0,.5)',
+							backgroundColor: 'rgba(0,0,0,.6)',
 							border: '2px solid white',
 							borderRadius: '15px',
 							width: 588,
