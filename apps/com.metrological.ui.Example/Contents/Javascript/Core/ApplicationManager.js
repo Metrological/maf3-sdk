@@ -7,11 +7,14 @@ var loadTemplate = (function () {
 			return;
 		}
 		var app = this,
-			identifier = app.widget.identifier,
+			identifier = app.widget && app.widget.identifier,
 			body = app.document.body,
-			getElementById = app.widget.getElementById,
-			template = type && getElementById('@' + type);
+			getElementById = app.widget && app.widget.getElementById,
+			template = type && getElementById && getElementById('@' + type);
 		//log('loadTemplate', type, current, template);
+		if (!identifier) {
+			return;
+		}
 		if (!template) {
 			var fragment;
 			if (type !== 'waitIndicator') {
@@ -21,6 +24,9 @@ var loadTemplate = (function () {
 				case 'waitIndicator':
 					var smallSpinner = getElementById('@'+current[identifier]+'-home'),
 						largeSpinner = getElementById('@'+current[identifier]+'-loading');
+					if (!smallSpinner || !largeSpinner) {
+						return;
+					}
 					switch (data.id) {
 						case '0':
 							if (current[identifier] === 'sidebar') {

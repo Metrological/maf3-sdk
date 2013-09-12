@@ -21,7 +21,7 @@ var NDSPlayer = function () {
 		grabbed = false,
 		paused = false,
 		currentSource = null,
-		previousState;
+		previousState = null;
 
 	instance.subscribers = {};
 
@@ -47,13 +47,13 @@ var NDSPlayer = function () {
 			}
 		};
 		VideoPlayer.onPlaybackEnd = function () {
-			if (grabbed && canPlay) {
+			if (grabbed && canPlay && instance.src) {
 				canPlay = false;
 				stateChange(Player.state.EOF);
 			}
 		};
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
-			if (grabbed) {
+			if (grabbed && instance.src) {
 				stateChange(Player.state.STOP);
 				instance.src = '';
 			}
@@ -77,6 +77,9 @@ var NDSPlayer = function () {
 	});
 	getter(instance, 'type', function () {
 		return Player.type.VIDEO;
+	});
+	getter(instance, 'waitIndicator', function () {
+		return false;
 	});
 	getter(instance, 'channel', function () {
 		var channel = TVContext && TVContext.getCurrentChannel() || {};
@@ -198,6 +201,7 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 			canPlay = false;
+			paused = false;
 			try {
 				previousState = null;
 				currentSource = src;
