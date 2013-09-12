@@ -715,6 +715,8 @@ widget.handleChildEvent = function (event) {
 				type: 'waitIndicator'
 			});
 			break;
+		case 'exited':
+			ApplicationManager.unload(event.id);
 		default:
 			break;
 	}
