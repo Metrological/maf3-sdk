@@ -194,8 +194,12 @@ define('MAF.control.Keyboard', function () {
 
 		suicide: function () {
 			var classId = this._classID;
-			keyboards[classId].suicide();
+			if (keyboards[classId]) {
+				keyboards[classId].suicide();
+			}
+			keyboards[classId] = null;
 			delete keyboards[classId];
+			repeaters[classId] = null;
 			delete repeaters[classId];
 			this.parent();
 		}

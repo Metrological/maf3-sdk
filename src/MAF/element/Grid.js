@@ -292,7 +292,8 @@ define('MAF.element.Grid', function () {
 				element: List,
 				styles: {
 					width: 'inherit',
-					height: 'inherit'
+					height: 'inherit',
+					overflow: 'inherit'
 				}
 			}).appendTo(this);
 
@@ -500,9 +501,8 @@ define('MAF.element.Grid', function () {
 			if (focused != newindex) {
 				this.blurCell(focused);
 			}
-			if (newindex > -1) {
-				this.cells[newindex].fire('onFocus');
-				this.cells[newindex].focus();
+			if (newindex > -1 && this.cells && this.cells[newindex]) {
+				this.cells[newindex].element.focus();
 			}
 			focused = this.getCellCoordinates(newindex);
 			this.updateState({
@@ -519,7 +519,7 @@ define('MAF.element.Grid', function () {
 			target = parseInt(target, 10) > -1 ? target : this.getState().focusCoordinates;
 			var index = this.getCellIndex(target);
 			if (index > -1 && this.cells[index]) {
-				this.cells[index].fire('onBlur');
+				this.cells[index].element.blur();
 			}
 			return this;
 		},

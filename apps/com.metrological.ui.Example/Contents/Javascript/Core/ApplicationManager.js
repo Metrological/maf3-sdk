@@ -49,6 +49,16 @@ var loadTemplate = (function () {
 					}
 					return;
 				case 'sidebar':
+					var sidebarButtons = [
+						{ value: '@AppButtonSidebarClose', label: 'remove', action: 'close-all' },
+						{ value: '@AppButtonSidebarSettings', label: 'cogs', action: 'app-settings' },
+						{ value: '@AppButtonSidebarMuzzley', label: 'mobile-phone', action: 'app-muzzley' },
+						{ value: '@AppButtonSidebarVideoSize', label: 'resize-small', action: 'viewport-toggle' }
+					];
+
+					if (identifier === widget.identifier) {
+						sidebarButtons.shift();
+					}
 					template = new View({
 						id: '@' + type,
 						styles: {
@@ -62,15 +72,37 @@ var loadTemplate = (function () {
 							left: 22
 						},
 						events: {
+							select: function (event) {
+								var target = event.target;
+								if (target) {
+									var btnId = Array.pluck(sidebarButtons, 'value').indexOf(target.getAttribute('id'));
+									if (isNumber(btnId) && btnId !== -1) {
+										ApplicationManager.fire(identifier, 'onActivateAppButton', {
+											id: this.retrieve('current'),
+											type: sidebarButtons[btnId].action
+										});
+									}
+								}
+							},
 							navigateoutofbounds: function (event) {
-								var home = getElementById('@' + type + '-home');
-								if (home && home.focusable && event.detail.direction === 'up') {
-									return home.focus();
+								var El = false;
+								switch (event.detail.direction) {
+									case 'up':
+										El = getElementById('@' + type + '-home');
+										break;
+									case 'down':
+										El = getElementById('@AppButtonSidebarSettings');
+										break;
+								}
+
+								if (El && El.focusable) {
+									return El.focus();
 								}
 							}
 						}
 					}).appendTo(fragment);
 					app.widget.getImage('header', 'normal').appendTo(template);
+
 					new Text({
 						id: '@' + type + '-home',
 						label: FontAwesome.get('home'),
@@ -128,6 +160,38 @@ var loadTemplate = (function () {
 							fontSize: 40
 						}
 					}).appendTo(template);
+					
+					sidebarButtons.forEach(function (btnConfig, key) {
+						new Text({
+							id: btnConfig.value,
+							focus: true,
+							label: FontAwesome.get(btnConfig.label),
+							styles: {
+								width: 50,
+								height: 32,
+								borderRadius: '10px',
+								border: '2px solid #FFFFFF',
+								hOffset: 294 + (52 * (-(sidebarButtons.length/2)+key)),
+								vAlign: 'bottom',
+								vOffset: 3,
+								anchorStyle: 'center',
+								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+							},
+							events: {
+								focus: function () {
+									this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+								},
+								blur: function () {
+									this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
+								},
+								navigate: function (event) {
+									if (event.detail.direction === 'down') {
+										event.preventDefault();
+									}
+								}
+							}
+						}).appendTo(template);
+					});
 
 					body.appendChild(fragment);
 					break;
@@ -180,6 +244,7 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'muzzley':
 						case 'facebook-login':
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
@@ -304,7 +369,7 @@ var loadTemplate = (function () {
 								vOffset: (dialogConfig.buttons.length * 56) + 5
 							},
 							events: {
-								focus: function (event) {
+								focus: function () {
 									if (this.firstChild && this.firstChild.owner && this.firstChild.owner.focus && this.firstChild.owner.focus.call) {
 										this.wantsFocus = false;
 										this.firstChild.owner.focus();
@@ -329,7 +394,6 @@ var loadTemplate = (function () {
 								//paddingLeft: 10,
 								//paddingRight: 10,
 								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
-								
 							},
 							events: {
 								focus: function () {
@@ -358,6 +422,35 @@ var loadTemplate = (function () {
 
 					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 50;
 
+					if (id === 'muzzley') {
+						var muzzleyImage = new Image({
+							src: Muzzley.qrCode,
+							styles: {
+								width: 370,
+								height: 370,
+								vAlign: 'bottom',
+								vOffset: (dialogConfig.buttons.length * 56) + 10 + 10,
+								hAlign: 'center'
+							}
+						}).appendTo(contentFrame);
+
+						(function (event) {
+							Muzzley.changeDevice('swipeNavigator', false, event.payload);
+							var dialogKey = template.retrieve('key');
+							template.destroy();
+							if (focusAfterDialog) {
+								focusAfterDialog.focus();
+								focusAfterDialog = null;
+							}
+							ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+							if (KeyboardValueManager) {
+								KeyboardValueManager.suicide();
+								KeyboardValueManager = null;
+							}
+						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
+
+						totalHeight += 370;
+					}
 					var dialogFocus = 'button0';
 					if (isKeyboard) {
 						var keyboard;
@@ -427,7 +520,7 @@ var loadTemplate = (function () {
 							case 'textentry':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
 									maxLength: 24,
-									controlSize: "small",
+									controlSize: 'small',
 									layout: 'alphanumeric'
 								}).appendTo(keyboardContainer);
 								KeyboardValueManager.setMaxLength(24);
@@ -495,7 +588,7 @@ var loadTemplate = (function () {
 							case 'pin':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
 									maxLength: 4,
-									controlSize: "small",
+									controlSize: 'small',
 									layout: 'pinentry'
 								}).appendTo(keyboardContainer);
 								KeyboardValueManager.setMaxLength(4);
@@ -557,7 +650,7 @@ var loadTemplate = (function () {
 						warn('Did not find a element to focus!');
 					}
 					return;
-				default: 
+				default:
 					break;
 			}
 		} else {
@@ -605,6 +698,7 @@ widget.handleChildEvent = function (event) {
 			break;
 		case 'showDialog':
 			var data = event.getData();
+			log(data);
 			data.id = data.type;
 			data.type = 'dialog';
 			data.key = data.conf && data.conf.key;
@@ -631,6 +725,29 @@ widget.handleChildEvent = function (event) {
 widget.handleHostEvent = function (event) {
 	//log('handleHostEvent', event.subject, event);
 	switch(event.subject) {
+		case 'onActivateAppButton':
+			var data = event.getData();
+			switch(data.type) {
+				case 'close-all':
+					if (event.id !== widget.identifier) {
+						ApplicationManager.fire(event.id, 'onAppFin', {
+							id: event.id,
+						});
+					}
+					break;
+				case 'viewport-toggle':
+					var bounds = this.MAF.mediaplayer.getViewportBounds();
+					if (bounds.width === 1920) {
+						this.MAF.mediaplayer.setViewportBounds(648, 168, 1256, 696);
+					} else {
+						this.MAF.mediaplayer.setViewportBounds(0, 0, 1920, 1080);
+					}
+					break;
+				case 'app-muzzley':
+					loadTemplate.call(this, { type: 'dialog', id: 'muzzley', conf: { title: 'Connect with Muzzley', message: 'Use muzzley on your mobile to scan the qr-code below.'}});
+					break;
+			}
+			break;
 		case 'onActivateSnippet':
 			if (event.id !== widget.identifier) {
 				document.body.frozen = true;

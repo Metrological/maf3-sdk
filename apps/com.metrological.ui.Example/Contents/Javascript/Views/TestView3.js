@@ -6,6 +6,7 @@ var TestView3 = new MAF.Class({
 	initialize: function () {
 		this.parent();
 		this.registerMessageCenterListenerCallback(this.dataHasChanged);
+		MAF.mediaplayer.init();
 	},
 
 	dataHasChanged: function (event) {
@@ -38,9 +39,12 @@ var TestView3 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					MAF.mediaplayer.init();
-					MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://download.omroep.nl/nos/content/broadcasts/2013/09/07/12071-mp4-web03.mp4?' + Date.now()));
-					MAF.mediaplayer.playlist.start();
+					if (!MAF.mediaplayer.isPlaylistEntryActive) {
+						MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://download.omroep.nl/nos/content/broadcasts/2013/09/07/12071-mp4-web03.mp4?' + Date.now()));
+						MAF.mediaplayer.playlist.start();
+					} else {
+						MAF.mediaplayer.control.stop();
+					}
 				}
 			}
 		}).appendTo(this);
