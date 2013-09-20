@@ -1,22 +1,19 @@
-var NAF = this.NAF = {},
-	WebApp = this.WebApp = {},
-//	version = '1.0.8s4c2r88';
-	version = '1.0.7s4c2r83';
+var version = '1.0.7s4c2r83';
 
-// Capture globals
-this.callId = this.params = this.isNotification = null;
+NAF = {};
+WebApp = {};
 
-console.log('include naf ' + version);
+KeyMap.defineKeys(KeyMap.NORMAL, {
+	3: 'back'
+}, true);
+
 include('naf-webapp/' + version + '/naf-webapp.min.js');
 
-console.log('create naf webapp model and controller');
 var model = new WebApp.Model(),
 	controller = new WebApp.Controller(model);
 
-console.log('register naf pmrpc');
 controller.registerPMRPC();
 
-console.log('set callback on model initialized');
 controller.on('model.initialized', function () {
 	var doFn = controller['do'],
 		internalIndex = controller.getApplicationIndex;
@@ -27,9 +24,7 @@ controller.on('model.initialized', function () {
 
 	window.addEventListener('focus', function () {
 		var i = getApplicationIndex();
-		console.log('doFocus: ' + i);
 		doFn('model.state.applications.' + i + '?state=running');
-		console.log('active?: ' + active);
 		if (active && apps[active]) {
 			send(active, 'onSelect', {
 				id: apps[active].currentViewId
@@ -39,12 +34,10 @@ controller.on('model.initialized', function () {
 
 	window.addEventListener('blur', function () {
 		var i = getApplicationIndex();
-		console.log('doBlur: ' + i);
 		doFn('model.state.applications.' + i + '.appMsg', {
 			method: 'paused',
 			message: {}
 		});
-		console.log('active?: ' + active);
 		if (active && active !== ui) {
 			send(active, 'exit');
 		}
@@ -54,17 +47,15 @@ controller.on('model.initialized', function () {
 		var ev = model.state.key,
 			keyCode = parseInt(ev.keyCode, 10),
 			keyState = ev.keyState.toLowerCase(),
-			eventObj = document.createEvent('Events'),
+			keyEvent = document.createEvent('Events'),
 			el = document.activeElement || window;
 		if (keyState === 'repeat') {
 			keyState = 'down';
 		}
-		if (eventObj.initEvent) {
-			eventObj.initEvent('key' + keyState, true, true);
-		}
-		console.log('doKeyDown: ' + keyCode);
-		eventObj.keyCode = eventObj.which = keyCode;
-		el.dispatchEvent(eventObj);
+		keyEvent.initEvent('key' + keyState, true, true);
+		keyEvent.keyCode = keyEvent.which = keyCode;
+		keyEvent.key = KeyMap.lookupKey(KeyMap.NORMAL, keyCode);
+		el.dispatchEvent(keyEvent);
 	});
 
 	function onMessageCallback() {
@@ -90,11 +81,8 @@ controller.on('model.initialized', function () {
 	}
 
 	var i = getApplicationIndex();
-	console.log('onMessageCallback: ' + i);
 	controller.on('model.state.applications.' + i + '.appMsg', onMessageCallback);
-	console.log('setLoaded: ' + i);
 	doFn('model.state.applications.' + i + '?state=loaded');
 });
 
-console.log('call controller init');
 controller.init();

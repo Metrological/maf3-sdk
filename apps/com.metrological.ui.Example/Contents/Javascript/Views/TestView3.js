@@ -56,6 +56,9 @@ var TestView3 = new MAF.Class({
 				hOffset: nos.outerWidth + 1,
 				vOffset: button1.outerHeight + 1
 			},
+			textStyles: {
+				anchorStyle: 'center'
+			},
 			events: {
 				onSelect: function () {
 					if (!MAF.mediaplayer.isPlaylistEntryActive) {
@@ -77,6 +80,9 @@ var TestView3 = new MAF.Class({
 				width: (this.width / 3) - 1,
 				hOffset: youtube.outerWidth + 1,
 				vOffset: button1.outerHeight + 1
+			},
+			textStyles: {
+				anchorStyle: 'right'
 			},
 			events: {
 				onSelect: function () {
