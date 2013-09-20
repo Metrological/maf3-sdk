@@ -457,6 +457,17 @@ var loadTemplate = (function () {
 						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
 
 						totalHeight += 370;
+					} else if (id === 'facebook-login' && Muzzley.enabled) {
+						Muzzley.changeDevice('webview');
+						(function (event) {
+							Muzzley.changeDevice('webview');
+						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
+						(function (event) {
+							var payload = event.payload;
+							if (payload.action === 'WebViewReady') {
+								payload.callback(true, null, { url: 'http://m.facebook.com/device' });
+							}
+						}).subscribeOnce(Muzzley, 'onDeviceMessage', this);
 					}
 					var dialogFocus = 'button0';
 					if (isKeyboard) {
@@ -784,6 +795,9 @@ widget.handleHostEvent = function (event) {
 			var dialog = event.getData();
 			if (dialog && this.widget) {
 				this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog')).destroy();
+			}
+			if (Muzzley.enabled) {
+				Muzzley.resetDevice();
 			}
 			break;
 		case 'onApplicationAvailable':
