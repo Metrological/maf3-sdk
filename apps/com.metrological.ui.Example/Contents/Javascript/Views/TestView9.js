@@ -9,6 +9,7 @@ var TestView9 = new MAF.Class({
 		this.clockTimerId = this.setClock.periodical(60000, this);
 		MAF.mediaplayer.init();
 		this.channelChange.subscribeTo(MAF.mediaplayer, 'onChannelChange', this);
+		this.onActivateBackButton.subscribeTo(MAF.application, 'onActivateBackButton', this);
 	},
 
 	dataHasChanged: function (event) {
@@ -79,7 +80,6 @@ var TestView9 = new MAF.Class({
 				backgroundImage: 'Images/menuBar.png',
 				backgroundSize:'100% 100%',
 				boxShadow: '8px 8px 10px rgba(0,0,0,.6)',
-				opacity: 0,
 				width: this.width,
 				height: 100,
 				vOffset: 725
@@ -363,20 +363,8 @@ var TestView9 = new MAF.Class({
 		}).appendTo(this.elements.menuBackground);
 	},
 
-	updateView: function() {
-		this.subcribedFunction = this.onActivateBackButton.subscribeTo(MAF.application, 'onActivateBackButton', this);
-		this.elements.menuBackground.animate({
-			opacity: 1,
-			duration: 0.5
-		});
-	},
-
 	destroyView: function() {
 		clearInterval(this.clockTimerId);
 		delete this.clockTimerId;
-	},
-
-	focusView: function() {
-		this.controls.myMenu.focus();
 	}
 });

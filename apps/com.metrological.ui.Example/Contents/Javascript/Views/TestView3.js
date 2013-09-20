@@ -31,10 +31,10 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		var button2 = new MAF.control.TextButton({
+		var nos = new MAF.control.TextButton({
 			label: 'NOS Stream',
 			styles: {
-				width: this.width / 2,
+				width: this.width / 3,
 				vOffset: button1.outerHeight + 1
 			},
 			events: {
@@ -49,11 +49,33 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
-		var button3 = new MAF.control.TextButton({
+		var youtube = new MAF.control.TextButton({
+			label: 'YouTube',
+			styles: {
+				width: (this.width / 3) - 2,
+				hOffset: nos.outerWidth + 1,
+				vOffset: button1.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					if (!MAF.mediaplayer.isPlaylistEntryActive) {
+						YouTube.get('http://www.youtube.com/watch?v=rYEDA3JcQqw', function (config) {
+							log(this, config);
+							MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntry(new MAF.media.PlaylistEntry(config)));
+							MAF.mediaplayer.playlist.start();
+						}, this);
+					} else {
+						MAF.mediaplayer.control.stop();
+					}
+				}
+			}
+		}).appendTo(this);
+
+		var muzzley = new MAF.control.TextButton({
 			label: 'Muzzley',
 			styles: {
-				width: (this.width / 2) - 1,
-				hOffset: button2.outerWidth + 1,
+				width: (this.width / 3) - 1,
+				hOffset: youtube.outerWidth + 1,
 				vOffset: button1.outerHeight + 1
 			},
 			events: {
@@ -68,7 +90,7 @@ var TestView3 = new MAF.Class({
 			label: 'Launch App #1',
 			styles: {
 				width: this.width / 3,
-				vOffset: button2.outerHeight + 1
+				vOffset: nos.outerHeight + 1
 			},
 			events: {
 				onSelect: function () {
@@ -85,7 +107,7 @@ var TestView3 = new MAF.Class({
 			styles: {
 				width: (this.width / 3) - 2,
 				hOffset: this.controls.button4.outerWidth + 1,
-				vOffset: button2.outerHeight + 1
+				vOffset: nos.outerHeight + 1
 			},
 			textStyles: {
 				anchorStyle: 'center'
@@ -102,7 +124,7 @@ var TestView3 = new MAF.Class({
 			styles: {
 				width: this.width / 3,
 				hOffset: this.controls.button5.outerWidth + 1,
-				vOffset: button2.outerHeight + 1
+				vOffset: nos.outerHeight + 1
 			},
 			textStyles: {
 				anchorStyle: 'right'

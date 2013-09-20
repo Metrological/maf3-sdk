@@ -1,4 +1,12 @@
 define('MAF.media.PlaylistEntry', function () {
+	var sortOnBitrate = function (streams) {
+		streams.sort(function (a, b) {
+			if (a.bitrate === b.bitrate) {
+				return 0;
+			}
+			return a.bitrate < b.bitrate ? 1 : -1;
+		});
+	};
 	return new MAF.Class({
 		config: {
 			url: null,
@@ -25,8 +33,13 @@ define('MAF.media.PlaylistEntry', function () {
 						});
 					}
 				}, this);
+				sortOnBitrate(streams);
 				delete this.config.streams;
 			}
+
+			getter(this, 'asset', function () {
+				return this.config.asset;
+			});
 
 			getter(this, 'streams', function () {
 				return streams;
@@ -49,12 +62,7 @@ define('MAF.media.PlaylistEntry', function () {
 					url: url, 
 					bitrate: isNaN(bitrate) ? 0 : bitrate
 				});
-				this.streams.sort(function (a, b) {
-					if (a.bitrate === b.bitrate) {
-						return 0;
-					}
-					return a.bitrate < b.bitrate ? 1 : -1;
-				});
+				sortOnBitrate(this.streams);
 			}
 			return this;
 		}

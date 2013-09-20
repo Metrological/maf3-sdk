@@ -58,9 +58,14 @@ var loadTemplate = (function () {
 					var sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'remove', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
-						{ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' },
 						{ value: '@AppButtonSidebarVideoSize', label: 'fullscreen', action: 'viewport-toggle' }
 					];
+
+					if (Muzzley.enabled) {
+						var last = sidebarButtons.pop();
+						sidebarButtons.push({ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' });
+						sidebarButtons.push(last);
+					}
 
 					if (identifier === widget.identifier) {
 						sidebarButtons.shift();
