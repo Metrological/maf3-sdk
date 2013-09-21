@@ -72,11 +72,25 @@ var NDSPlayer = function () {
 		};
 	}
 
+	var mimetypes = videoPlayer && videoPlayer.getSupportedMimeTypes() || [];
+	function supports(mimetype) {
+		var container = mimetype && mimetype.split(';')[0];
+		for (var i = 0; i < mimetypes.length; i++) {
+			if (mimetypes[i].indexOf(mimetype) > -1 || mimetypes[i].indexOf(container) > -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	getter(instance, 'id', function () {
 		return Player.TV;
 	});
 	getter(instance, 'type', function () {
 		return Player.type.VIDEO;
+	});
+	getter(instance, 'supports', function () {
+		return supports;
 	});
 	getter(instance, 'waitIndicator', function () {
 		return false;
