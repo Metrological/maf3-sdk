@@ -9,10 +9,14 @@ define('MAF.element.GridCell', function () {
 				if (this.grid) {
 					switch (event.type) {
 						case 'focus':
-							this.grid.fire('onFocus', this.getCellCoordinates());
+							if (this.grid && !this.grid.getState().hasFocus) {
+								this.grid.fire('onFocus', this.getCellCoordinates());
+							}
 							break;
 						case 'blur':
-							this.grid.fire('onBlur', this.getCellCoordinates());
+							if (this.grid && (!this.element.navigateTo || (this.grid.cells && this.grid.cells.indexOf(this.element.navigateTo.owner) === -1))) {
+								this.grid.fire('onBlur', this.getCellCoordinates());
+							}
 							break;
 						case 'select':
 							this.fire('onSelect', {
