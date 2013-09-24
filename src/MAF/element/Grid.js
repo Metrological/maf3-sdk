@@ -74,7 +74,7 @@ define('MAF.element.Grid', function () {
 		if (shift && !state.animating) {
 			this.shift(direction, {focus: cellCoords});
 			event.preventDefault();
-		} else if (direction === 'right') {
+		} else if (horiz && direction === 'right') {
 			if (!cellCoords.row) {
 				cellCoords.column = 0;
 				this.shift(direction, {focus: cellCoords});
@@ -84,6 +84,15 @@ define('MAF.element.Grid', function () {
 			cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
 			event.preventDefault();
 			this.focusCell(cellCoords, event);
+		} else if (!horiz && direction === 'down') {
+			// handle page switch
+		} else {
+			this.body.element.allowNavigation = false;
+			if (this.element.navigate(direction)) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
+			this.body.element.allowNavigation = true;
 		}
 	};
 
@@ -296,6 +305,8 @@ define('MAF.element.Grid', function () {
 					overflow: 'inherit'
 				}
 			}).appendTo(this);
+
+			this.body.element.innerNavigation = true;
 
 			this.generateCells(Math.min(this.pager.getDataSize(), this.pager.getPageSize()));
 
