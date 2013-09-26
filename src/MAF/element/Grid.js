@@ -484,7 +484,16 @@ define('MAF.element.Grid', function () {
 		},
 
 		getFocusIndex: function () {
-			return this.getState().focusIndex;
+			var active = document.activeElement,
+				state = this.getState(),
+				idx = -1;
+			if (active && this.cells) {
+				idx = this.cells.indexOf(active.owner);
+			}
+			if (idx === -1 && state.focusIndex !== undefined) {
+				idx = state.focusIndex;
+			}
+			return idx;
 		},
 
 		getFocusCoordinates: function () {

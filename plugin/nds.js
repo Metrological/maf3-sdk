@@ -72,15 +72,8 @@ var NDSPlayer = function () {
 		};
 	}
 
-	var mimetypes = videoPlayer && videoPlayer.getSupportedMimeTypes() || [];
 	function supports(mimetype) {
-		var container = mimetype && mimetype.split(';')[0];
-		for (var i = 0; i < mimetypes.length; i++) {
-			if (mimetypes[i].indexOf(mimetype) > -1 || mimetypes[i].indexOf(container) > -1) {
-				return true;
-			}
-		}
-		return false;
+		return true;
 	}
 
 	getter(instance, 'id', function () {
@@ -290,12 +283,12 @@ var NDSPlayer = function () {
 	});
 };
 
-var ndsplayer = new NDSPlayer();
-plugins.players.push(ndsplayer);
+plugins.players.push(new NDSPlayer());
 
-function resetNDSPlayer() {
-	if (ndsplayer.src) {
-		ndsplayer.src = '';
+var resetNDSPlayer = function () {
+	var player = plugins.players[0];
+	if (player) {
+		player.src = '';
 	}
 }
 
@@ -311,5 +304,7 @@ window.addEventListener('unload', function () {
 
 window.addEventListener('blur', function () {
 	resetNDSPlayer();
-	Application.pause();
+	if (Application) {
+		Application.pause();
+	}
 });

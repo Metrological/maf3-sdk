@@ -98,9 +98,9 @@ define('MAF.element.Image', function () {
 				if (cfg.hideWhileLoading) {
 					this.hide();
 				}
-				img.source = cfg.src = src;
-				delete cfg.source;
 			}
+			img.source = cfg.src = src;
+			delete cfg.source;
 			return this;
 		},
 
