@@ -232,7 +232,7 @@ var loadTemplate = (function () {
 						focusAfterDialog = app.document.activeElement,
 						totalHeight = 0,
 						buttons = [],
-						isKeyboard = (id === 'textentry' || id === 'pincreation' || id === 'pin'),
+						isKeyboard = (id === 'textentry' || id === 'pincreation' || id === 'pin' || id === 'twitter-login'),
 						KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
 
 					// Default buttons
@@ -242,6 +242,7 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$back', label: 'BACK' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'twitter-login':
 						case 'textentry':
 						case 'pincreation':
 							buttons.push({ value: '$ok', label: 'OK' });
@@ -468,6 +469,17 @@ var loadTemplate = (function () {
 								payload.callback(true, null, { url: 'http://m.facebook.com/device' });
 							}
 						}).subscribeOnce(Muzzley, 'onDeviceMessage', this);
+					} else if (id === 'twitter-login' && Muzzley.enabled) {
+						Muzzley.changeDevice('webview');
+						(function (event) {
+							Muzzley.changeDevice('webview');
+						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
+						(function (event) {
+							var payload = event.payload;
+							if (payload.action === 'WebViewReady') {
+								payload.callback(true, null, { url: dialogConfig.key });
+							}
+						}).subscribeOnce(Muzzley, 'onDeviceMessage', this);
 					}
 					var dialogFocus = 'button0';
 					if (isKeyboard) {
@@ -525,6 +537,7 @@ var loadTemplate = (function () {
 											}
 										}
 										break;
+									case 'twitter-login':
 									case 'textentry':
 										if (input) {
 											input.data = payload.value;
@@ -535,6 +548,7 @@ var loadTemplate = (function () {
 						}).subscribeTo(KeyboardValueManager, ['valuechanged']);
 
 						switch (id) {
+							case 'twitter-login':
 							case 'textentry':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
 									maxLength: 24,

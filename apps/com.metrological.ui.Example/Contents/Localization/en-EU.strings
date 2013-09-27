@@ -14,6 +14,8 @@
 "SPACE" = "SPACE";
 "DATE_FORMAT" = "d MMM yyyy HH:mm";
 "DATE_PARSE" = "yyyy-MM-dd HH:mm:ss";
+"TWITTER_CONNECT" = "Twitter";
+"TWITTER_CODE" = "Login to Twitter and enter below the 7 digit code you receive.";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
 "Channel" = "Channel";

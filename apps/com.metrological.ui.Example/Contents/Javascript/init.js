@@ -14,6 +14,7 @@ include('Javascript/Views/TestView9.js');
 var photopgr;
 
 Facebook.init('183031261739046');
+Twitter.init('183031261739046');
 
 MAF.application.init({
 	views: [
