@@ -15,6 +15,11 @@ var TestView9 = new MAF.Class({
 	dataHasChanged: function (event) {
 		if (event.payload.value && event.payload.key === 'myApps') {
 			this.controls.myApps.changeDataset(event.payload.value, true);
+			this.controls.myMenu.changeDataset([
+				{ label: $_('Apps'), meta: $_('AppMeta') },
+				{ label: $_('Channel'), meta: $_('ChannelMeta') },
+				{ label: $_('Settings'), meta: $_('SettingsMeta') },
+			]);
 		}
 	},
 
@@ -147,7 +152,7 @@ var TestView9 = new MAF.Class({
 			columns: 3,
 			carousel: true,
 			dataset: [
-				{ label: $_('Apps'), meta: $_('AppMeta') },
+				{ label: $_('Apps') + ' ' + FontAwesome.get('refresh icon-spin'), meta: $_('AppMeta') },
 				{ label: $_('Channel'), meta: $_('ChannelMeta') },
 				{ label: $_('Settings'), meta: $_('SettingsMeta') },
 			],
@@ -159,8 +164,9 @@ var TestView9 = new MAF.Class({
 					events: {
 						onSelect: function (event) {
 							var data = this.getCellDataItem(),
-								view = this.grid.owner.owner;
-							switch(data.label){
+								view = this.grid.owner.owner,
+								label = data.label.split(' ')[0];
+							switch (label) {
 								case $_('Apps'):
 									var myApps = MAF.messages.fetch('myApps') || [];
 									if (myApps.length > 0)
@@ -170,8 +176,10 @@ var TestView9 = new MAF.Class({
 									view.animteBar(view.controls.myEPG, view.controls.myMenu, 230, 660);
 									view.controls.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()]);
 									break;
-								default:
+								case $_('Settings'):
 									MAF.application.loadView('view-TestView1');
+									break;
+								default:
 									break;
 							}
 						},
@@ -212,7 +220,7 @@ var TestView9 = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				cell.text.setText(data.label.toUpperCase());
+				cell.text.setText(data.label);
 			},
 			styles: {
 				width: this.width - 100,

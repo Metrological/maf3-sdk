@@ -18,9 +18,9 @@
 "TWITTER_CODE" = "Login to Twitter and enter below the 7 digit code you receive.";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
-"Channel" = "Channel";
-"Apps" = "Apps";
-"Settings" = "Settings";
+"Channel" = "CHANNEL";
+"Apps" = "APPS";
+"Settings" = "SETTINGS";
 "ChannelMeta" = "See the information about the current channel you are watching.";
 "AppMeta" = "Want to know the latest news? See the weather or traffic information? Click OK to explore the apps!";
 "SettingsMeta" = "Change your settings, PIN-code, Facebook or Twitter login information etc.";
