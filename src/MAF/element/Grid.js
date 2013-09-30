@@ -80,10 +80,13 @@ define('MAF.element.Grid', function () {
 				this.shift(direction, {focus: cellCoords});
 				return;
 			}
-			cellCoords.row = cellCoords.row - 1;
-			cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
-			event.preventDefault();
-			this.focusCell(cellCoords, event);
+			var col = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
+			if (col !== cellCoords.column) {
+				cellCoords.row = cellCoords.row - 1;
+				cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
+				event.preventDefault();
+				this.focusCell(cellCoords, event);
+			}
 		} else if (!horiz && direction === 'down') {
 			// handle page switch
 		} else {
