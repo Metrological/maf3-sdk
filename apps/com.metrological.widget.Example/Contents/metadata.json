@@ -7,6 +7,15 @@
 	"copyright": "Metrological Widgets BV",
 	"description": "Example Widget",
 	"scripts": "Javascript/init.js",
+	"channels": [
+		"rtl"
+	],
+	"programs": [
+		"voice"
+	],
+	"categories": [
+		"example"
+	],
 	"images": {
 		"header": {
 			"normal": "Images/header.png",

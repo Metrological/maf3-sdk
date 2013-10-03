@@ -369,7 +369,7 @@ define('MAF.element.Grid', function () {
 			var state = this.getState(),
 				focus = state.hasFocus && state.focusCoordinates,
 				start = reset ? 0 : state.currentPage || 0,
-				options = {transition:'none', refresh:reset||false, focus:focus};
+				options = {transition: 'none', refresh: reset || false, focus: focus};
 			this.changePage(start, options);
 			this.fire("onDatasetChanged");
 			return this;

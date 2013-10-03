@@ -107,3 +107,44 @@ var getPicasaPhotos = function (fetchParams, albumType, albumID, userID) {
 		}
 	}).get();
 };
+
+var getSuggestions = function(a_callback, userText) {
+	new Request({
+		url: 'http://where.yahooapis.com/v1/places.q(' + escape(userText) + ');start=0;count=5?appid=otQtXR_V34HCXKPNswUpb6hIIzOEXZ5_mZLEQrOONgPVhGAPfNciVOienGnBo1mE.E3no9dNQT4-&lang=' + (profile.languageCode || 'en'),
+		proxy: {
+			json: true
+		},
+		onSuccess: function (json) {
+			var suggestions = [];
+			if (json.places.place && !json.places.place.length) {
+				suggestions.push({
+					city: json.places.place.name,
+					country: json.places.place.country['$t'],
+					latitude: json.places.place.boundingBox.northEast.latitude,
+					longitude: json.places.place.boundingBox.northEast.longitude
+				});
+				a_callback(suggestions || []);
+			} else if (json.places.place && json.places.place.length > 0) {
+				for (var x = 0; x < json.places.place.length; x++) {
+					if (json.places.place[x].city === 'Nederland') {
+						/* use position of de Bilt instead of Steenwijkerland in Overijssel*/
+						suggestions.push({
+							city: json.places.place[x].name,
+							country: json.places.place[x].country['$t'],
+							latitude: 52.144566,
+							longitude: 5.162485
+						});
+					} else {
+						suggestions.push({
+							city: json.places.place[x].name,
+							country: json.places.place[x].country['$t'],
+							latitude: json.places.place[x].boundingBox.northEast.latitude,
+							longitude: json.places.place[x].boundingBox.northEast.longitude
+						});
+					}
+				}
+				a_callback(suggestions);
+			}
+		}
+	}).send();
+};

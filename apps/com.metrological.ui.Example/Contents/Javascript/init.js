@@ -10,6 +10,7 @@ include('Javascript/Views/TestView6.js');
 include('Javascript/Views/TestView7.js');
 include('Javascript/Views/TestView8.js');
 include('Javascript/Views/TestView9.js');
+include('Javascript/Views/SearchSuggest.js');
 
 var photopgr;
 
@@ -27,8 +28,9 @@ MAF.application.init({
 		{ id: 'view-TestView6', viewClass: TestView6 },
 		{ id: 'view-TestView7', viewClass: TestView7 },
 		{ id: 'view-TestView8', viewClass: TestView8 },
-		{ id: 'view-TestView9', viewClass: TestView9 }
+		{ id: 'view-TestView9', viewClass: TestView9 },
+		{ id: 'view-TestView10', viewClass: SearchSuggestView }
 	],
 	defaultViewId: 'view-TestView9',
-	settingsViewId: 'view-TestView3'
+	settingsViewId: 'view-TestView10'
 });

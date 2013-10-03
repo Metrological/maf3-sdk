@@ -20,6 +20,7 @@ var TestView9 = new MAF.Class({
 				{ label: $_('Channel'), meta: $_('ChannelMeta') },
 				{ label: $_('Settings'), meta: $_('SettingsMeta') },
 			]);
+			this.controls.myMenu.cells[0].text.setText($_('Apps'));
 		}
 	},
 

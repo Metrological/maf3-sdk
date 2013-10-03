@@ -24,12 +24,13 @@ var TestView2 = new MAF.Class({
 		}).appendTo(this);
 
 		var button3 = new MAF.control.TextButton({
-			label: 'Screenshot',
+			label: 'SearchSuggest',
 			styles: {
 				vOffset: button2.outerHeight + 1
 			},
 			events: {
 				onSelect: function () {
+					MAF.application.loadView('view-TestView10');/*
 					var view = this.owner,
 						current = widget.getElementById('screenshot'),
 						screenshot = view.element.createImage();
@@ -44,7 +45,7 @@ var TestView2 = new MAF.Class({
 						vAlign: 'center',
 						border: '3px solid ' + Theme.getStyles('BaseFocus', 'backgroundColor'),
 						zOrder: 99
-					}).appendTo(document.body);
+					}).appendTo(document.body);*/
 				}
 			}
 		}).appendTo(this);
