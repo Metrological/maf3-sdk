@@ -112,7 +112,7 @@ define('MAF.control.InputButton', function () {
 		},
 
 		setValue: function (value) {
-			var firstBlush = this.retrieve('value') === null,
+			var firstBlush = isEmpty(this.retrieve('value')),
 				stringValue = value === null ? '' : String(value);
 
 			if ((this.retrieve('value') || '') === stringValue) {

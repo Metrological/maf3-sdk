@@ -551,11 +551,11 @@ var loadTemplate = (function () {
 							case 'twitter-login':
 							case 'textentry':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
-									maxLength: 24,
+									maxLength: (data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99,
 									controlSize: 'small',
 									layout: 'alphanumeric'
 								}).appendTo(keyboardContainer);
-								KeyboardValueManager.setMaxLength(24);
+								KeyboardValueManager.setMaxLength((data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99);
 								keyboardContainer.wantsFocus = true;
 								keyboardContainer.setStyle('height', keyboard.height || 0);
 								keyboard.hAlign = 'center';

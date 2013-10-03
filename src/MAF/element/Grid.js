@@ -194,6 +194,11 @@ define('MAF.element.Grid', function () {
 					this.updateState({ focusIndex: -1 });
 				}
 				this.body.freeze();
+				if (this.cells && this.cells.length > 0 && request && request.options && request.options.refresh) {
+					while(this.cells.length) {
+						this.cells.pop().suicide();
+					}
+				}
 				if (this.generateCells(dataLength) > 0) {
 					this.cells.forEach(function (cell, i) {
 						if (i < dataLength) {
@@ -364,7 +369,7 @@ define('MAF.element.Grid', function () {
 			var state = this.getState(),
 				focus = state.hasFocus && state.focusCoordinates,
 				start = reset ? 0 : state.currentPage || 0,
-				options = {transition:'none', refresh:true, focus:focus};
+				options = {transition:'none', refresh:reset||false, focus:focus};
 			this.changePage(start, options);
 			this.fire("onDatasetChanged");
 			return this;

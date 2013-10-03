@@ -8,7 +8,8 @@ define('MAF.dialogs.TextEntry', function () {
 			title: '',
 			message: '',
 			callback: null,
-			cancelCallback: null
+			cancelCallback: null,
+			maxLength: 99
 		},
 		
 		initialize: function () {
@@ -16,7 +17,7 @@ define('MAF.dialogs.TextEntry', function () {
 		},
 		
 		getDialogConfig: function() {
-			return { type: 'textentry', conf: { 'ignoreBackKey': this.config.isModal, key: this.retrieve('key'), title: this.config.title, message: this.config.message } };
+			return { type: 'textentry', conf: { maxLength: this.config.maxLength, 'ignoreBackKey': this.config.isModal, key: this.retrieve('key'), title: this.config.title, message: this.config.message } };
 		},
 
 		handleCallback: function (response) {
