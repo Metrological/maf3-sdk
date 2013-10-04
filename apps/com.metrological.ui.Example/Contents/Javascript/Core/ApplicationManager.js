@@ -747,8 +747,6 @@ widget.handleChildEvent = function (event) {
 				type: 'waitIndicator'
 			});
 			break;
-		case 'exited':
-			ApplicationManager.unload(event.id);
 		default:
 			break;
 	}
@@ -795,6 +793,9 @@ widget.handleHostEvent = function (event) {
 			if (event.id !== widget.identifier) {
 				document.body.frozen = false;
 			}
+			break;
+		case 'onAppUnload':
+			ApplicationManager.unload(event.id);
 			break;
 		case 'getSnippetConfs':
 			break;
