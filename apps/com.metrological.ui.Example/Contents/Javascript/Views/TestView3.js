@@ -126,7 +126,7 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button6 = new MAF.control.TextButton({
-			label: 'Apps Total #' + ApplicationManager.getApplications().length,
+			label: 'Apps #' + ApplicationManager.getApplications().length,
 			styles: {
 				width: this.width / 3,
 				hOffset: this.controls.button5.outerWidth + 1,

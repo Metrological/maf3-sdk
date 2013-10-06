@@ -794,7 +794,7 @@ widget.handleHostEvent = function (event) {
 				document.body.frozen = false;
 			}
 			break;
-		case 'onAppUnload':
+		case 'onAppFinComplete':
 			ApplicationManager.unload(event.id);
 			break;
 		case 'getSnippetConfs':
