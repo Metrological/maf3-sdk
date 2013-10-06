@@ -27,6 +27,7 @@ define('MAF.element.Text', function () {
 					'font',
 					'lineHeight',
 					'totalLines',
+					'maxVisibleLindex',
 					'visibleLines',
 					'firstLine',
 					'anchorStyle',

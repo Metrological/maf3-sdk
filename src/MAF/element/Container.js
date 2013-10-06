@@ -9,10 +9,8 @@ define('MAF.element.Container', function () {
 		Protected: {
 			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
-
 				var type = event.type,
 					el = this.element;
-
 				switch(type) {
 					case 'navigate':
 						this.fire('onNavigate', event.detail, event);

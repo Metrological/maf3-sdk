@@ -767,11 +767,12 @@ widget.handleHostEvent = function (event) {
 					}
 					break;
 				case 'viewport-toggle':
-					var bounds = this.MAF.mediaplayer.getViewportBounds();
-					if (bounds.width === 1920) {
-						this.MAF.mediaplayer.setViewportBounds(648, 168, 1256, 696);
-					} else {
-						this.MAF.mediaplayer.setViewportBounds(0, 0, 1920, 1080);
+					var mediaplayer = this.MAF.mediaplayer,
+						bounds = mediaplayer && mediaplayer.getViewportBounds();
+					if (bounds && bounds.width === 1920) {
+						mediaplayer.setViewportBounds(624, 176, 1280, 720);
+					} else if (bounds) {
+						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}
 					break;
 				case 'app-muzzley':
