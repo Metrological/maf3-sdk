@@ -26,15 +26,14 @@ define('MAF.control.FixedTab', function () {
 			this.textPadding = this.config.optionsPadding.replace(/(?:(?:^ | $)|( ) )/gm, '&nbsp;');
 		},
 
-		update: function (state) {
-			this.parent(state);
-			var ts = this.text.element.getTextBounds(),
-				options = this.getOptions(),
+		update: function (reset) {
+			this.parent(reset);
+			var options = this.getOptions(),
 				curpage = options.map(function (o) {
 					return o.value;
 				}).indexOf(this.getValue());
 			this.text.setStyles({
-				width: ts.width,
+				width: null,
 				hOffset: 10
 			});
 			var offset = this.text.outerWidth + 10;

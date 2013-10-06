@@ -1,4 +1,13 @@
 define('MAF.control.SingleTab', function () {
+	var setText = function (value) {
+		this.text.setText(FontAwesome.get('caret-left') + ' ' + value + ' ' + FontAwesome.get('caret-right'));
+		var maxWidth = this.width - 160;
+		if (this.text.textWidth > maxWidth) {
+			var diff = maxWidth / this.text.textWidth,
+				end = Math.ceil(value.length * diff);
+			this.text.setText(FontAwesome.get('caret-left') + ' ' + value.truncate(end) + ' ' + FontAwesome.get('caret-right'));
+		}
+	};
 	return new MAF.Class({
 		ClassName: 'ControlSingleTab',
 
@@ -26,11 +35,10 @@ define('MAF.control.SingleTab', function () {
 			createContent: function () {
 				this.text = new MAF.element.Text({
 					ClassName: (this.config.ClassName || this.ClassName) + 'Text',
-					label: FontAwesome.get('caret-left') + ' ' + this.config.label +  ' ' + FontAwesome.get('caret-right'),
 					styles: Object.merge({
-						width: this.width - 80,
+						width: this.width - 40,
 						height: this.height,
-						hOffset: 40,
+						hOffset: 20,
 						anchorStyle: 'center',
 						truncation: (this.ClassName === 'SingleTab') ? 'end' : null
 					},this.config.textStyles || {})
@@ -100,6 +108,7 @@ define('MAF.control.SingleTab', function () {
 					label: l > v ? labels[v] : o && 'label' in value ? value.label : value
 				} : value;
 			});
+			this.eliminate('value');
 			this.store('options', options);
 			this.fire('onOptionsChanged', { options: this.getOptions() });
 		},
@@ -148,12 +157,11 @@ define('MAF.control.SingleTab', function () {
 		},
 
 		update: function (reset) {
-			var options = this.getOptions();
 			if (reset === true) {
+				var options = this.getOptions();
 				this.setValue(options[0].value);
 			}
-			var dispval = this.getDisplayValue();
-			this.text.setText(FontAwesome.get('caret-left') + ' ' + dispval +  ' ' + FontAwesome.get('caret-right'));
+			setText.call(this, this.getDisplayValue());
 		},
 
 		suicide: function () {
