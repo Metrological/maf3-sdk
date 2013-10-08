@@ -671,7 +671,7 @@ var loadTemplate = (function () {
 					}
 
 					body.appendChild(fragment);
-					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 1) * dialogMessage.lineHeight);
+					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 0.5) * dialogMessage.lineHeight);
 					contentFrame.visible = true;
 
 					var focusEl = getElementById('@' + type + '-' + dialogFocus);

@@ -23,14 +23,24 @@ var TestView1 = new MAF.Class({
 				onSelect: function () {
 					MAF.application.loadView('view-TestView2');
 				},
+				onAnimationEnded: function () {
+					log('animate ended');
+				},
 				onFocus: function () {
 					this.animate({
 						rotate: 182,
-						duration: 0.5
+						duration: 0.5,
+						callback: function () {
+							log('callback1');
+						}
 					}).animate({
+						//relative: true,
 						rotate: 182,
 						scale: 0.8,
-						duration: 0.5
+						duration: 0.5,
+						callback: function () {
+							log('callback2');
+						}
 					});
 				},
 				onBlur: function () {

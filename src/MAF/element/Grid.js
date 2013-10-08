@@ -90,12 +90,12 @@ define('MAF.element.Grid', function () {
 		} else if (!horiz && direction === 'down') {
 			// handle page switch
 		} else {
-			this.body.element.allowNavigation = false;
+			this.setDisabled(true);
 			if (this.element.navigate(direction)) {
 				event.stopPropagation();
 				event.preventDefault();
 			}
-			this.body.element.allowNavigation = true;
+			this.setDisabled(false);
 		}
 	};
 
@@ -183,13 +183,6 @@ define('MAF.element.Grid', function () {
 				var data = payload.data.items && payload.data.items.length && [].concat(payload.data.items) || [],
 					dataLength = data.length;
 
-				if (this.config.focus) {
-					if (dataLength === 0) {
-						this.element.wantsFocus = false;
-					} else {
-						this.element.wantsFocus = true;
-					}
-				}
 				if (state.focusIndex === undefined) {
 					this.updateState({ focusIndex: -1 });
 				}
@@ -314,7 +307,7 @@ define('MAF.element.Grid', function () {
 				}
 			}).appendTo(this);
 
-			this.body.element.innerNavigation = true;
+			this.element.innerNavigation = true;
 
 			this.generateCells(Math.min(this.pager.getDataSize(), this.pager.getPageSize()));
 
@@ -336,10 +329,6 @@ define('MAF.element.Grid', function () {
 			delete this.config.state;
 			delete this.config.dataset;
 			delete this.config.dataSet;
-
-			if (this.getVisibleCellCount() === 0) {
-				this.element.wantsFocus = false;
-			}
 		},
 
 		setFilter: function (fn) {
@@ -348,6 +337,7 @@ define('MAF.element.Grid', function () {
 				this.changePage(0);
 			}
 		},
+
 		appendTo: function (parent) {
 			var appended = this.parent(parent);
 			if (appended && this.getSubscriberCount('onBroadcast')) {
@@ -385,12 +375,6 @@ define('MAF.element.Grid', function () {
 
 		releaseFocus: function (direction, event) {
 			return true;
-		},
-
-		setDisabled: function (value) {
-			if (this.element && typeOf(value) === 'boolean') { 
-				this.element.allowNavigation = !value;
-			}
 		},
 
 		shift: function (type, options) {
@@ -651,6 +635,11 @@ define('MAF.element.Grid', function () {
 				}
 			}
 			return data;
+		},
+
+		setDisabled: function (disabled) {
+			this.element.allowNavigation = !disabled;
+			return this;
 		},
 
 		generateStatePacket: function (packet) {

@@ -132,6 +132,8 @@ define('MAF.element.Core', function () {
 			if (config.events && config.events.onAnimationEnded) {
 				callback = config.events.onAnimationEnded;
 				delete config.events;
+			} else if (config.callback) {
+				callback = config.callback;
 			}
 			config.callback = function (animator) {
 				if (callback && callback.call) {
