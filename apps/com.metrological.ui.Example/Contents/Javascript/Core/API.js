@@ -144,6 +144,8 @@ var getSuggestions = function(a_callback, userText) {
 					}
 				}
 				a_callback(suggestions);
+			} else {
+				a_callback([]);
 			}
 		}
 	}).send();

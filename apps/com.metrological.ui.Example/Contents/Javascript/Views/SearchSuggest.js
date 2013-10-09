@@ -13,8 +13,6 @@ var SearchSuggestView = new MAF.Class({
 
 	performRowSelected: function(item) {
 		if (item) {
-			console.log('performRowSelected', item);
-
 			MAF.application.previousView({
 				city: item.name,
 				lat: item.latitude,
@@ -24,13 +22,8 @@ var SearchSuggestView = new MAF.Class({
 	},
 
 	performSearch: function(userInput) {
-		log('performSearch', userInput);
 		getSuggestions(function(results) {
-			var items = [];
-			for (var i = 0; i < results.length; i++) {
-				items.push({ label: results[i].name + ' (' + results[i].cname + ')', value: results[i]});
-			}
-			this.dataReady(results);
+			this.dataReady(results, true);
 		}.bindTo(this), userInput, this.persist.type);
 	},
 

@@ -688,7 +688,7 @@ var loadTemplate = (function () {
 		} else {
 			if (type === 'sidebar') {
 				var home = getElementById('@' + type + '-home');
-				if (home.retrieve('id') === id) {
+				if (app.MAF.application.isDefaultView()) {
 					home.wantsFocus = false;
 					home.frozen = true;
 				} else {

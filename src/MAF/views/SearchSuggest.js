@@ -45,9 +45,6 @@ define('MAF.views.SearchSuggest', function () {
 			},
 			showNoResults: function () {
 				this.hideResultsGrid();
-				if (!this.elements.noResultsOverlay.visible) {
-					this.elements.noResultsOverlay.show();
-				}
 				if (!this.elements.noResultsIcon.visible) {
 					this.elements.noResultsIcon.show();
 				}
@@ -64,9 +61,6 @@ define('MAF.views.SearchSuggest', function () {
 				}
 			},
 			hideNoResults: function () {
-				if (this.elements.noResultsOverlay.visible) {
-					this.elements.noResultsOverlay.hide();
-				}
 				if (this.elements.noResultsIcon.visible) {
 					this.elements.noResultsIcon.hide();
 				}
@@ -77,9 +71,9 @@ define('MAF.views.SearchSuggest', function () {
 		},
 
 		config: {
-			BackButtonTitle: /*$_('Back') || */'Back',
-			SearchButtonTitle: /*$_('Search') || */'Search',
-			NoResultsMessage: /*$_('NO_RESULTS_FOUND') || */'No results found',
+			BackButtonTitle: 'Back',
+			SearchButtonTitle: 'Search',
+			NoResultsMessage: 'No results found',
 			Cursor: '_',
 			DisplayDefaultValue: '',
 			AutocompleteThreshold: 3,
@@ -298,8 +292,8 @@ define('MAF.views.SearchSuggest', function () {
 				embedded: false,
 				maxLength: this.config.keyboard.maxLength || 255,
 				layout: 'alphanumeric',
+				controlSize: 'standard',
 				styles: {
-					controlSize: 'standard',
 					width: this.width,
 					vAlign: 'bottom'
 				},
@@ -315,13 +309,8 @@ define('MAF.views.SearchSuggest', function () {
 				}
 			}).appendTo(this.controls.keyboardContainer);
 
-			this.elements.noResultsOverlay = new MAF.element.Image({
-				src: Theme.storage.get('SearchSuggestNoResultsOverlay', 'src'),
-				styles: Theme.getStyles('SearchSuggestNoResultsOverlay')
-			}).appendTo(this);
-
-			this.elements.noResultsIcon = new MAF.element.Image({
-				src: Theme.storage.get('SearchSuggestNoResultsIcon', 'src'),
+			this.elements.noResultsIcon = new MAF.element.Text({
+				label: FontAwesome.get(Theme.storage.get('SearchSuggestNoResultsIcon', 'icon')),
 				styles: Theme.getStyles('SearchSuggestNoResultsIcon')
 			}).appendTo(this);
 
@@ -381,18 +370,15 @@ define('MAF.views.SearchSuggest', function () {
 	});
 }, {
 	SearchSuggestView: 'SidebarView',
-	SearchSuggestNoResultsOverlay: {
-		src: 'SearchSuggest/search-suggest-no_results-overlay.png',
-		styles: {
-			visible: false,
-			vOffset: 51
-		}
-	},
 	SearchSuggestNoResultsIcon: {
+		icon: 'search',
 		styles: {
 			visible: false,
+			width: 550,
+			color: '#FFFFFF',
+			fontSize: 120,
 			vOffset: 151,
-			hAlign: 'center'
+			textAlign: 'center'
 		}
 	},
 	SearchSuggestNoResultsText: {

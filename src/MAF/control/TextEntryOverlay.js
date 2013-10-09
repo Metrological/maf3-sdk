@@ -52,6 +52,9 @@ define('MAF.control.TextEntryOverlay', function () {
 		}
 		return masked;
 	};
+	var filterHTML = function (str) {
+		return (str || '').replace(/\</g, '&lt;').replace(/\>/, '&gt;');
+	};
 	var onValueManagerEvent = function (event) {
 		var el = this.inputField.element || false,
 			ValueManager = ValueManagers[this._classID],
@@ -73,23 +76,14 @@ define('MAF.control.TextEntryOverlay', function () {
 		if (!nativeCursor) {
 			cursor = this.config.creator.config.cursorCharacter;
 			displayValue = displayValue.substr(0, cursorPosition) + cursor + displayValue.substr(cursorPosition, displayValue.length);
-			this.inputField.setText(displayValue);
+			this.inputField.setText(filterHTML(displayValue));
 		} else {
 			if (event.type === 'valuechanged') {
-				this.inputField.setText(displayValue);
+				this.inputField.setText(filterHTML(displayValue));
 			}
 		}
 		if (event.type === 'valuechanged') {
-			var curLine = this.retrieve('line') || 0;
-			if (curLine && curLine !== el.totalLines) {
-				var lineHeight = this.inputField.lineHeight;
-				if (curLine > el.totalLines) {
-					this.form.height = this.form.height - ((curLine-Math.max(1, el.totalLines))*lineHeight);
-				} else {
-					this.form.height = this.form.height + ((el.totalLines-Math.max(1, curLine))*lineHeight);
-				}
-			}
-			this.store('line', el.totalLines);
+			this.form.height = this.retrieve('formHeight') + el.getTextBounds().height;
 		}
 		if (nativeCursor && isNumber(el.cursor) && event.type === 'cursormoved') {
 			el.cursor = cursorPosition || 0;
@@ -170,7 +164,8 @@ define('MAF.control.TextEntryOverlay', function () {
 					styles: {
 						width: view.width - 80,
 						height: 'auto',
-						wrap: true
+						wrap: true,
+						truncation: null
 					},
 					events: {
 						onCursor: function (event) {
@@ -274,7 +269,9 @@ define('MAF.control.TextEntryOverlay', function () {
 					}
 				}).appendTo(this.form);
 
-				this.form.height = outputLabel.outerHeight + this.inputField.height + this.inputField.lineHeight;
+				var inputMargin = Theme.getStyles('ControlTextEntryButtonValue', 'margin') * 2;
+				this.form.height = outputLabel.outerHeight + this.inputField.height + inputMargin;
+				this.store('formHeight', this.form.height);
 			},
 
 			registerHandler: function () {

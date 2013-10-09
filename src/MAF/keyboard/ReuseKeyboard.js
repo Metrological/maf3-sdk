@@ -1532,15 +1532,27 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		}
 	},
 	'ReuseKeyboard .item': {
-		styles: {
-			border: '2px solid white',
-			backgroundColor: 'black',
-			borderRadius: '10px',
-			boxSizing: 'content-box',
-			marginLeft: 2,
-			marginRight: 2,
-			marginBottom: 2,
-			'float': 'left'
+		normal: {
+			styles: {
+				border: '2px solid white',
+				backgroundColor: 'black',
+				borderRadius: '10px',
+				boxSizing: 'content-box',
+				marginLeft: 2,
+				marginRight: 2,
+				marginBottom: 2,
+				'float': 'left'
+			}
+		},
+		focused: {
+			styles: {
+				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
+			}
+		},
+		disabled: {
+			styles: {
+				opacity: 0.3
+			}
 		}
 	},
 	ReuseKeyboardkey: {
@@ -1554,16 +1566,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			styles: {
 				width: 52,
 				height: 63
-			}
-		},
-		focused: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
-			}
-		},
-		disabled: {
-			styles: {
-				opacity: 0.3
 			}
 		}
 	},
@@ -1579,16 +1581,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				width: 82,
 				height: 63
 			}
-		},
-		focused: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
-			}
-		},
-		disabled: {
-			styles: {
-				opacity: 0.3
-			}
 		}
 	},
 	ReuseKeyboardspace: {
@@ -1603,16 +1595,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				width: 171,
 				height: 63
 			}
-		},
-		focused: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
-			}
-		},
-		disabled: {
-			styles: {
-				opacity: 0.3
-			}
 		}
 	},
 	ReuseKeyboardnumkey: {
@@ -1626,16 +1608,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			styles: {
 				width: 116,
 				height: 63
-			}
-		},
-		focused: {
-			styles: {
-				backgroundColor: Theme.getStyles('BaseFocus', 'backgroundColor')
-			}
-		},
-		disabled: {
-			styles: {
-				opacity: 0.3
 			}
 		}
 	},
