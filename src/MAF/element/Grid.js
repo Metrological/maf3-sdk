@@ -143,12 +143,6 @@ define('MAF.element.Grid', function () {
 					MAF.utility.WaitIndicator[method]();
 				}
 			},
-			updateState: function (state) {
-				var newState = Object.merge(this.getState(), state || {});
-				this.store('state', newState);
-				this.fire('onStateUpdated', newState);
-				return newState;
-			},
 			handleFocusEvent: function (event) {
 				var payload = event.payload;
 				switch (event.type) {
@@ -371,6 +365,13 @@ define('MAF.element.Grid', function () {
 
 		getState: function () {
 			return this.retrieve('state');
+		},
+
+		updateState: function (state) {
+			var newState = Object.merge(this.getState(), state || {});
+			this.store('state', newState);
+			this.fire('onStateUpdated', newState);
+			return newState;
 		},
 
 		releaseFocus: function (direction, event) {

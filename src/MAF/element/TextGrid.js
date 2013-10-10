@@ -28,7 +28,7 @@ define('MAF.element.TextGrid', function () {
 		},
 
 		getCurrentPage: function () {
-			return Math.round(this.getPageCount() * this.firstLine / this.totalLines);
+			return Math.floor(this.getPageCount() * this.firstLine / this.totalLines);
 		},
 
 		getPageCount: function () {
@@ -69,10 +69,9 @@ define('MAF.element.TextGrid', function () {
 		},
 
 		setText: function (text) {
-			this.freeze();
 			this.firstLine = 0;
 			this.parent(text);
-			this.thaw();
+			this.element.lastChild.height = this.lineHeight * this.visibleLines * this.getPageCount();
 		}
 	});
 });

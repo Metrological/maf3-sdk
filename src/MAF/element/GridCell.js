@@ -7,15 +7,24 @@ define('MAF.element.GridCell', function () {
 		Protected: {
 			dispatchEvents: function (event) {
 				if (this.grid) {
+					var coords = this.getCellCoordinates();
 					switch (event.type) {
 						case 'focus':
 							if (this.grid && !this.grid.getState().hasFocus) {
-								this.grid.fire('onFocus', this.getCellCoordinates());
+								this.grid.fire('onFocus', coords);
+							} else {
+								this.grid.updateState({
+									focusIndex: this.getCellIndex(),
+									focusCoordinates: {
+										row:    coords.row,
+										column: coords.column
+									}
+								});
 							}
 							break;
 						case 'blur':
 							if (this.grid && (!this.element.navigateTo || (this.grid.cells && this.grid.cells.indexOf(this.element.navigateTo.owner) === -1))) {
-								this.grid.fire('onBlur', this.getCellCoordinates());
+								this.grid.fire('onBlur', coords);
 							}
 							break;
 						case 'select':
