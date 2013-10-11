@@ -180,7 +180,7 @@ define('MAF.views.SearchSuggest', function () {
 				}
 			}).appendTo(this);
 
-			var clearStyles = Theme.storage.get('ControlTextEntryOverlayClearButton', 'styling') || {};
+			var clearStyles = Theme.get('ControlTextEntryOverlayClearButton', 'styling') || {};
 			this.controls.clearButton = new MAF.element.Button({
 				ClassName: 'ControlTextEntryOverlayClearButton',
 				content: new MAF.element.Text({
@@ -272,7 +272,7 @@ define('MAF.views.SearchSuggest', function () {
 
 			this.controls.keyOutput.element.addClass('ControlTextEntryButtonValueTheme');
 
-			var cursorStyles = Theme.storage.get('ControlTextEntryButtonValue', 'cursor');
+			var cursorStyles = Theme.get('ControlTextEntryButtonValue', 'cursor');
 /*			if (this._isCursorSupported()) {
 				this.controls.keyOutput.element.allowCursor = true;
 				this.controls.keyOutput.element.cursor.color = cursorStyles.color;
@@ -310,7 +310,7 @@ define('MAF.views.SearchSuggest', function () {
 			}).appendTo(this.controls.keyboardContainer);
 
 			this.elements.noResultsIcon = new MAF.element.Text({
-				label: FontAwesome.get(Theme.storage.get('SearchSuggestNoResultsIcon', 'icon')),
+				label: FontAwesome.get(Theme.get('SearchSuggestNoResultsIcon', 'icon')),
 				styles: Theme.getStyles('SearchSuggestNoResultsIcon')
 			}).appendTo(this);
 
@@ -321,7 +321,7 @@ define('MAF.views.SearchSuggest', function () {
 
 			this.controls.keyboardContainer.renderSkin('ControlTextEntryOverlay');
 
-		//	this.elements.keyCaps.setStyle('vOffset', (this.controls.keyboardContainer.height - Theme.storage.get('ControlTextEntryButton').submitButtonPadding));
+		//	this.elements.keyCaps.setStyle('vOffset', (this.controls.keyboardContainer.height - Theme.get('ControlTextEntryButton').submitButtonPadding));
 		},
 
 		updateView: function () {

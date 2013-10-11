@@ -132,7 +132,7 @@ var loadTemplate = (function () {
 								if (focused) {
 									this.parentNode.firstChild.source = focused;
 								}
-								this.setStyle('color', Theme.getStyles('BaseFocus', 'backgroundColor'));
+								this.setStyle('color', app.Theme.getStyles('BaseFocus', 'backgroundColor'));
 							},
 							blur: function () {
 								var normal = app.widget.getImageSource('header', 'normal');
@@ -171,7 +171,7 @@ var loadTemplate = (function () {
 							fontSize: 40
 						}
 					}).appendTo(template);
-					
+
 					sidebarButtons.forEach(function (btnConfig, key) {
 						new Text({
 							id: btnConfig.value,
@@ -186,7 +186,7 @@ var loadTemplate = (function () {
 							},
 							events: {
 								focus: function () {
-									this.setStyle('color', Theme.getStyles('BaseFocus', 'backgroundColor'));
+									this.setStyle('color', app.Theme.getStyles('BaseFocus', 'backgroundColor'));
 								},
 								blur: function () {
 									this.setStyle('color', null);
@@ -401,14 +401,14 @@ var loadTemplate = (function () {
 								vOffset: (((dialogConfig.buttons.length-1) - key) * 56) + 5,
 								//paddingLeft: 10,
 								//paddingRight: 10,
-								backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+								backgroundColor: app.Theme.getStyles('BaseGlow', 'backgroundColor')
 							},
 							events: {
 								focus: function () {
-									this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+									this.setStyle('backgroundColor', app.Theme.getStyles('BaseFocus', 'backgroundColor'));
 								},
 								blur: function () {
-									this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
+									this.setStyle('backgroundColor', app.Theme.getStyles('BaseGlow', 'backgroundColor'));
 								}
 							}
 						}).appendTo(contentFrame);
@@ -596,10 +596,10 @@ var loadTemplate = (function () {
 											KeyboardValueManager.value = '';
 										},
 										focus: function () {
-											this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+											this.setStyle('backgroundColor', app.Theme.getStyles('BaseFocus', 'backgroundColor'));
 										},
 										blur: function () {
-											this.setStyle('backgroundColor', Theme.getStyles('BaseGlow', 'backgroundColor'));
+											this.setStyle('backgroundColor', app.Theme.getStyles('BaseGlow', 'backgroundColor'));
 										}
 									}
 								}).appendTo(contentFrame);

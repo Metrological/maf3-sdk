@@ -126,7 +126,7 @@ define('MAF.control.TextEntryOverlay', function () {
 
 				var textButtonStyles = Theme.getStyles('ControlButton'),
 					labelStyles = Theme.getStyles('ControlTextEntryButtonLabel'),
-					bpad = Theme.storage.get('ControlTextEntryButton').submitButtonPadding || 0,
+					bpad = Theme.get('ControlTextEntryButton').submitButtonPadding || 0,
 					buttonStyles = Theme.getStyles('ControlTextEntryTextButtonText'),
 					submitText = this.config.creator.config.submitButtonLabel || 'OK',
 					cancelText = this.config.creator.config.cancelButtonLabel || 'Cancel';
@@ -139,7 +139,7 @@ define('MAF.control.TextEntryOverlay', function () {
 					}
 				}).appendTo(this);
 
-				var clearStyles = Theme.storage.get('ControlTextEntryOverlayClearButton') || {};
+				var clearStyles = Theme.get('ControlTextEntryOverlayClearButton') || {};
 				var clearButton = new MAF.element.Button({
 					ClassName: 'ControlTextEntryOverlayClearButton',
 					content: new MAF.element.Text({

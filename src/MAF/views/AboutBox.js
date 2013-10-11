@@ -67,7 +67,7 @@ define('MAF.views.AboutBox', function () {
 				}
 			}).appendTo(contentContainer);
 
-			var PAD = Theme.storage.get('AboutBoxViewMetadataAuthorNote', 'PAD_TOP');
+			var PAD = Theme.get('AboutBoxViewMetadataAuthorNote', 'PAD_TOP');
 
 			var metadataAuthorNote = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataAuthorNote',
@@ -100,7 +100,7 @@ define('MAF.views.AboutBox', function () {
 			}).appendTo(contentContainer);
 
 			if (widget.authorURL || widget.url) {
-				PAD = Theme.storage.get('AboutBoxViewMetadataUrlNote', 'PAD_TOP');
+				PAD = Theme.get('AboutBoxViewMetadataUrlNote', 'PAD_TOP');
 
 				var metadataUrlNote = new MAF.element.Text({
 					ClassName: 'AboutBoxViewMetadataUrlNote',
@@ -123,7 +123,7 @@ define('MAF.views.AboutBox', function () {
 				}).appendTo(contentContainer);
 			}
 
-			PAD = Theme.storage.get('AboutBoxViewMetadataCopyright', 'PAD_BOTTOM');
+			PAD = Theme.get('AboutBoxViewMetadataCopyright', 'PAD_BOTTOM');
 
 			var metadataCopyright = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataCopyright',
@@ -135,7 +135,7 @@ define('MAF.views.AboutBox', function () {
 				}
 			}).appendTo(contentContainer);
 
-			PAD = Theme.storage.get('AboutBoxViewMetadataReserved', 'PAD_BOTTOM');
+			PAD = Theme.get('AboutBoxViewMetadataReserved', 'PAD_BOTTOM');
 
 			var metadataReserved = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataReserved',
