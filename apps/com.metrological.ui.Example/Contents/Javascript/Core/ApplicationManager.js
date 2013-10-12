@@ -755,14 +755,15 @@ widget.handleChildEvent = function (event) {
 
 widget.handleHostEvent = function (event) {
 	//log('handleHostEvent', event.subject, event);
+	var data;
 	switch(event.subject) {
 		case 'onActivateAppButton':
-			var data = event.getData();
+			data = event.getData();
 			switch(data.type) {
 				case 'close-all':
 					if (event.id !== widget.identifier) {
 						ApplicationManager.fire(event.id, 'onAppFin', {
-							id: event.id,
+							id: event.id
 						});
 					}
 					break;
@@ -801,7 +802,7 @@ widget.handleHostEvent = function (event) {
 		case 'getSnippetConfs':
 			break;
 		case 'showDialog':
-			var data = event.getData();
+			data = event.getData();
 			data.id = data.type;
 			data.type = 'dialog';
 			data.key = data.conf && data.conf.key;

@@ -18,7 +18,7 @@ var TestView9 = new MAF.Class({
 			this.controls.myMenu.changeDataset([
 				{ label: $_('Apps'), meta: $_('AppMeta') },
 				{ label: $_('Channel'), meta: $_('ChannelMeta') },
-				{ label: $_('Settings'), meta: $_('SettingsMeta') },
+				{ label: $_('Settings'), meta: $_('SettingsMeta') }
 			]);
 			this.controls.myMenu.cells[0].text.setText($_('Apps'));
 		}
@@ -155,7 +155,7 @@ var TestView9 = new MAF.Class({
 			dataset: [
 				{ label: $_('Apps') + ' ' + FontAwesome.get('refresh icon-spin'), meta: $_('AppMeta') },
 				{ label: $_('Channel'), meta: $_('ChannelMeta') },
-				{ label: $_('Settings'), meta: $_('SettingsMeta') },
+				{ label: $_('Settings'), meta: $_('SettingsMeta') }
 			],
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({

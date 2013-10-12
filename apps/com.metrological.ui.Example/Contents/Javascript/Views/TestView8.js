@@ -15,7 +15,7 @@ var SimpleDrawAPI = {
 				context.lineTo(x, y);
 				context.stroke();
 			}
-		} else if (payload.type == 'touchEnd') {
+		} else if (payload.type === 'touchEnd') {
 			if (this.drawing) {
 				context.lineTo(x, y);
 				context.stroke();

@@ -24,7 +24,7 @@ var TestView5b = new MAF.Class({
 				height: this.height - 200,
 				hAlign: 'center',
 				vAlign: 'center',
-				vOffset: -50,
+				vOffset: -50
 			}
 		}).appendTo(this);
 

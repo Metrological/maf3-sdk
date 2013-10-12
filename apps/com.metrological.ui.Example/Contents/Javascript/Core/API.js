@@ -39,7 +39,7 @@ var getPagingData = function (fetchParams, nonpaging) {
 		fetchParams = {
 			page: 0,
 			per_page: totalItems
-		}
+		};
 	}
 	var startIndex = (fetchParams && fetchParams.page && fetchParams.per_page) ? ((fetchParams.page * fetchParams.per_page) + 1) : 1,
 		items = [],
@@ -73,10 +73,9 @@ var getPicasaPhotos = function (fetchParams, albumType, albumID, userID) {
 		alt: 'json',
 		access: 'public',
 		hl: widget.locale.replace('-', '_'),
-		'kind': 'photo',
-		'imgmax': 'd',
-		'thumbsize': '170u,150u,72c',
-		'feat': 'tags',
+		imgmax: 'd',
+		thumbsize: '170u,150u,72c',
+		feat: 'tags',
 		'start-index': startPage,
 		'max-results': fetchParams.per_page || 15
 	};
