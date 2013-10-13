@@ -19,6 +19,10 @@ define('MAF.control.BackButton', function () {
 			}
 		},
 
+		config: {
+			backParams: false
+		},
+
 		createContent: function () {
 			this.content = [
 				new MAF.element.Text({
