@@ -1,5 +1,16 @@
 define('MAF.element.Grid', function () {
-	var handleNavEvent = function (event) {
+	var onAppend = function () {
+		if (this.config.render) {
+			var st = this.config.state || {},
+				op = {transition:'none'};
+			if (st.focusCoordinates) {
+				op.focus = st.focusCoordinates;
+			}
+			this.changePage(st.currentPage || 0, op);
+		}
+		delete this.config.state;
+	};
+	var onNavigateOutOfBounds = function (event) {
 		var cellEl     = event && event.Event && event.Event.target,
 			cellCl     = cellEl && cellEl.owner,
 			direction  = event && event.payload && event.payload.direction,
@@ -308,19 +319,11 @@ define('MAF.element.Grid', function () {
 			this.onDataPage.subscribeTo(this.pager, this.pager.eventType, this);
 			this.updateWaitIndicator.subscribeTo(this, ['onChangePage', 'onPageChanged'], this);
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
-			handleNavEvent.subscribeTo(this, 'onNavigateOutOfBounds', this);
+			onNavigateOutOfBounds.subscribeTo(this, 'onNavigateOutOfBounds', this);
+			onAppend.subscribeOnce(this, 'onAppend', this);
 
 			this.store('state', {});
 
-			if (this.config.render) {
-				var st = this.config.state || {},
-					op = {transition:'none'};
-				if (st.focusCoordinates) {
-					op.focus = st.focusCoordinates;
-				}
-				this.changePage(st.currentPage || 0, op);
-			}
-			delete this.config.state;
 			delete this.config.dataset;
 			delete this.config.dataSet;
 		},

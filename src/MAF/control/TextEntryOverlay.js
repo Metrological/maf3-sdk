@@ -83,7 +83,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			}
 		}
 		if (event.type === 'valuechanged') {
-			this.form.height = this.retrieve('formHeight') + el.getTextBounds().height;
+			this.form.height = this.retrieve('formHeight') + el.getTextBounds().height - el.lineHeight;
 		}
 		if (nativeCursor && isNumber(el.cursor) && event.type === 'cursormoved') {
 			el.cursor = cursorPosition || 0;

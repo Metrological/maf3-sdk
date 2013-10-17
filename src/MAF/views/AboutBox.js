@@ -13,7 +13,14 @@ define('MAF.views.AboutBox', function () {
 			var buttonHeight = parseInt(Theme.getStyles('ControlTextButton', 'normal').height, 10) || 51;
 			
 			var backButton = new MAF.control.BackButton({
-				label: this.config.BackButtonTitle
+				label: this.config.BackButtonTitle,
+				events: {
+					onSelect: function (event) {
+						if (!this.getView().fire('onBackButtonSelect', event)){
+							event.preventDefault();
+						}
+					}
+				}
 			}).appendTo(this);
 
 			var list = [];

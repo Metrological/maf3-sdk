@@ -15,7 +15,7 @@ define('MAF.utility.Pager', function () {
 				}
 				internal.storage.forEach(function (value, key) {
 					var item = (filterFn && typeOf(filterFn) === 'function') ? filterFn(value, key) : value;
-					if (item) {
+					if (item !== false && item !== undefined && item !== null) {
 						if (filterFn && typeOf(filterFn) === 'function') {
 							filterArray.push(key);
 						} else {

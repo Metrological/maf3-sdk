@@ -128,9 +128,9 @@ define('MAF.control.TextEntryButton', function () {
 		styles: {
 			display: 'block',
 			margin: 10,
-			minHeight: '40px',
+			minHeight: '42px',
 			height: '1.9em',
-			padding: '5px',
+			padding: '3px',
 			truncation: 'end'
 		}
 	},
