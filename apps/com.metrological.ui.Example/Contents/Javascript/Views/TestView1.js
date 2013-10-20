@@ -221,7 +221,12 @@ var TestView1 = new MAF.Class({
 			carousel: true,
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
-					styles: this.getCellDimensions(),
+					styles: Object.merge({}, this.getCellDimensions(), {
+						transform: 'translateZ(0)',
+						backgroundRepeat: 'no-repeat',
+						backgroundImage: 'Images/tv.png',
+						backgroundPosition: 'center'
+					}),
 					events: {
 						onSelect: function (event) {
 							new MAF.dialogs.Alert({
@@ -274,12 +279,6 @@ var TestView1 = new MAF.Class({
 							});
 						}
 					}
-				});
-
-				cell.setStyles({
-					backgroundRepeat: 'no-repeat',
-					backgroundImage: 'Images/tv.png',
-					backgroundPosition: 'center'
 				});
 
 				cell.text = new MAF.element.Text({

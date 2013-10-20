@@ -60,6 +60,7 @@ include('MAF/system/WindowedView.js');
 include('MAF/system/SidebarView.js');
 include('MAF/system/FullscreenView.js');
 include('MAF/system/SnippetView.js');
+include('MAF/system/IconView.js');
 include('MAF/system/AnchorSnippetView.js');
 include('MAF/system/ProfileSnippetView.js');
 include('MAF/system/AboutDocView.js');

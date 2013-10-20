@@ -26,13 +26,24 @@ define('MAF.control.InputButton', function () {
 			(function () {
 				this.valueDisplay.data = this.getDisplayValue();
 			}).subscribeTo(this, ['onValueInitialized', 'onValueChanged'], this);
-		} else {
+		} else if (this.ClassName !== 'ImageToggleButton') {
 			this.valueDisplay = new MAF.control.ValueDisplay({
 				source: this,
 				styles: {
 					height: 'inherit'
 				}
 			}).appendTo(this);
+		} else {
+			this.valueDisplay = new MAF.element.Image({
+				src: dispayValue.src,
+				styles: Object.merge({
+					hAlign: 'right',
+					vAlign: 'center'
+				}, this.config.toggleStyles || {})
+			}).appendTo(this);
+			(function () {
+				this.valueDisplay.setSource(this.getDisplayValue().src);
+			}).subscribeTo(this, ['onValueInitialized', 'onValueChanged'], this);
 		}
 	};
 	return new MAF.Class({

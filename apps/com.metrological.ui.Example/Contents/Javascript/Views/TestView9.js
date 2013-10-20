@@ -83,9 +83,8 @@ var TestView9 = new MAF.Class({
 	createView: function () {
 		this.elements.menuBackground = new MAF.element.Container({
 			styles: {
-				backgroundImage: 'Images/menuBar.png',
-				backgroundSize:'100% 100%',
-				boxShadow: '8px 8px 10px rgba(0,0,0,.6)',
+				transform: 'translateZ(0)',
+				backgroundColor: 'rgba(22,22,27,.9)',
 				width: this.width,
 				height: 100,
 				vOffset: 725
@@ -104,10 +103,9 @@ var TestView9 = new MAF.Class({
 
 		this.elements.menuTop = new MAF.element.Container({
 			styles: {
-				backgroundImage: 'Images/menuTop.png',
-				width: 503,
+				backgroundColor: 'rgba(22,22,27,.5)',
+				width: this.width,
 				height: 54,
-				hOffset: this.width - 503,
 				vOffset: this.elements.menuBackground.vOffset - 54
 			}
 		}).appendTo(this);
@@ -116,21 +114,18 @@ var TestView9 = new MAF.Class({
 			label: Date.format(new Date(), 'dd MMM yyyy HH:mm'),
 			styles: {
 				fontSize: 25,
-				color: 'white',
 				opacity: 0.7,
-				width: this.elements.menuTop.width - 40,
+				width: this.width - 40,
 				height: this.elements.menuTop.height,
-				hOffset: 40,
-				anchorStyle: 'center'
+				anchorStyle: 'rightCenter'
 			}
 		}).appendTo(this.elements.menuTop);
 
 		this.elements.menuBottom = new MAF.element.Container({
 			styles: {
-				backgroundImage: 'Images/menuBottom.png',
-				width: 1300,
+				backgroundColor: 'rgba(255,0,0,.5)',
+				width: this.width,
 				height: 57,
-				hOffset: this.width - 1300,
 				vOffset: this.elements.menuBackground.outerHeight
 			}
 		}).appendTo(this);
@@ -138,11 +133,9 @@ var TestView9 = new MAF.Class({
 		this.elements.meta = new MAF.element.Text({
 			styles: {
 				fontSize: 25,
-				color: 'black',
-				width: this.elements.menuBottom.width - 70,
+				width: this.width - 40,
 				height: this.elements.menuBottom.height,
-				hOffset: 60,
-				anchorStyle: 'leftCenter',
+				anchorStyle: 'center',
 				truncation: 'end'
 			}
 		}).appendTo(this.elements.menuBottom);
@@ -160,6 +153,7 @@ var TestView9 = new MAF.Class({
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
+						transform: 'translateZ(0)',
 						opacity: 0.5
 					}),
 					events: {
@@ -209,12 +203,8 @@ var TestView9 = new MAF.Class({
 				cell.text = new MAF.element.Text({
 					styles: {
 						fontSize: 50,
-						color: 'white',
-						fontWeight: 'bold',
-						width: cell.width - 20,
-						height: cell.height - 20,
-						hOffset: 10,
-						vOffset: 10,
+						width: cell.width,
+						height: cell.height,
 						anchorStyle: 'center'
 					}
 				}).appendTo(cell);
@@ -224,9 +214,8 @@ var TestView9 = new MAF.Class({
 				cell.text.setText(data.label);
 			},
 			styles: {
-				width: this.width - 100,
-				height: 100,
-				hOffset: 50
+				width: this.width,
+				height: 100
 			}
 		}).appendTo(this.elements.menuBackground);
 
@@ -239,6 +228,7 @@ var TestView9 = new MAF.Class({
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
+						transform: 'translateZ(0)',
 						overflow: 'visible'
 					}),
 					events: {
@@ -255,8 +245,7 @@ var TestView9 = new MAF.Class({
 							});
 							this.animate({
 								scale: 1.1,
-								duration: 0.2,
-								zOrder: Animator.ZORDER
+								duration: 0.2
 							});
 							var data = ApplicationManager.getMetadata(this.getCellDataItem());
 							this.getView().elements.meta.setText(data.name + ' - ' + data.description);
@@ -268,8 +257,7 @@ var TestView9 = new MAF.Class({
 							});
 							this.animate({
 								scale: 1,
-								duration: 0.2,
-								zOrder: null
+								duration: 0.2
 							});
 							this.focusImg.visible = false;
 						}

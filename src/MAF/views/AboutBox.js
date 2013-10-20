@@ -14,6 +14,7 @@ define('MAF.views.AboutBox', function () {
 			
 			var backButton = new MAF.control.BackButton({
 				label: this.config.BackButtonTitle,
+				backParams: this.viewBackParams || {},
 				events: {
 					onSelect: function (event) {
 						if (!this.getView().fire('onBackButtonSelect', event)){

@@ -73,10 +73,9 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-							overflow: 'visible',
-							backgroundColor: 'rgba(22,22,27,.98)',
-							border: '2px solid #262a35',
+							backgroundColor: 'rgba(22,22,27,.9)',
 							borderRadius: '10px',
+							boxShadow: '0 0 3px 3px #262a35',
 							width: 588,
 							height: 1032,
 							top: 22,
@@ -112,7 +111,7 @@ var loadTemplate = (function () {
 							}
 						}
 					}).appendTo(fragment);
-					app.widget.getImage('header', 'normal').appendTo(template);
+					app.widget.getImage('header', 'normal').setStyle('borderRadius', '10px 10px 0 0').appendTo(template);
 
 					new Text({
 						id: '@' + type + '-home',
@@ -263,7 +262,6 @@ var loadTemplate = (function () {
 					template = new Dialog({
 						id: '@' + (data.key ? data.key : type),
 						styles: {
-							overflow: currentStyle.overflow,
 							backgroundColor: 'rgba(0,0,0,.5)',
 							border: currentStyle.border,
 							borderRadius: currentStyle.width !== 1920 ? '15px' : null,
