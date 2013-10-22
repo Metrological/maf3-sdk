@@ -150,7 +150,9 @@ define('MAF.control.TextEntryOverlay', function () {
 							anchorStyle: 'center'
 						}
 					}),
-					styles: clearStyles.styling || {},
+					styles: Object.merge({}, clearStyles.styling || {}, {
+						marginRight: (view.width - 588) / 2
+					}),
 					events: {
 						onSelect: function () {
 							ValueManager.value = '';
@@ -163,7 +165,10 @@ define('MAF.control.TextEntryOverlay', function () {
 					label: '',
 					styles: {
 						width: view.width - 80,
+						maxWidth: '508px',
 						height: 'auto',
+						vOffset: 0,
+						hOffset: (view.width - 588) / 2,
 						wrap: true,
 						truncation: null
 					},
@@ -183,7 +188,7 @@ define('MAF.control.TextEntryOverlay', function () {
 								event.preventDefault();
 								event.stopPropagation();
 								ValueManager.handleExternalKeyInput(event);
-								this.keyboard.toggleKey(event.payload.key);
+								//this.keyboard.toggleKey(event.payload.key);
 							}
 						}.bindTo(this)
 					}
@@ -263,7 +268,8 @@ define('MAF.control.TextEntryOverlay', function () {
 					label: this.config.creator.config.label,
 					styles: {
 						fontSize: 20,
-						hOffset: 10,
+						width: 578,
+						hOffset: ((view.width - 588) / 2) + 10,
 						vAlign: 'bottom',
 						vOffset: (buttonHeight*2) + (bpad*3) + this.keyboard.height
 					}
@@ -279,8 +285,10 @@ define('MAF.control.TextEntryOverlay', function () {
 			},
 
 			unregisterHandler: function () {
-				this.boundHandler.unsubscribeFrom(MAF.application, ['onActivateBackButton','onActivateSettingsButton', 'onHideView']);
-				delete this.boundHandler;
+				if (this.boundHandler) {
+					this.boundHandler.unsubscribeFrom(MAF.application, ['onActivateBackButton','onActivateSettingsButton', 'onHideView']);
+					delete this.boundHandler;
+				}
 			}
 		},
 
@@ -318,17 +326,29 @@ define('MAF.control.TextEntryOverlay', function () {
 
 		suicide: function () {
 			this.unregisterHandler();
-			var view = this.config.creator.getView();
-			delete this.config.creator;
-			view.element.allowNavigation = true;
-			ValueManagers[this._classID].suicide();
-			delete ValueManagers[this._classID];
-			this.inputField.suicide();
-			this.keyboard.suicide();
-			this.form.suicide();
-			delete this.inputField;
-			delete this.keyboard;
-			delete this.form;
+			if (this.config.creator) {
+				var view = this.config.creator.getView();
+				delete this.config.creator;
+				if (view.element) {
+					view.element.allowNavigation = true;
+				}
+			}
+			if (ValueManagers[this._classID]) {
+				ValueManagers[this._classID].suicide();
+				delete ValueManagers[this._classID];
+			}
+			if (this.inputField) {
+				this.inputField.suicide();
+				delete this.inputField;
+			}
+			if (this.keyboard) {
+				this.keyboard.suicide();
+				delete this.keyboard;
+			}
+			if (this.form) {
+				this.form.suicide();
+				delete this.form;
+			}
 			this.parent();
 		}
 	});

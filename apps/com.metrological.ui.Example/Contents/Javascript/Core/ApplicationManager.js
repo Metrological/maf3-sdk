@@ -73,6 +73,8 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
+							transform: 'translateZ(0)',
+							overflow: 'visible',
 							backgroundColor: 'rgba(22,22,27,.9)',
 							borderRadius: '10px',
 							boxShadow: '0 0 3px 3px #262a35',
@@ -205,6 +207,7 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
+							transform: 'translateZ(0)',
 							width: 1920,
 							height: 1080
 						}
@@ -262,6 +265,7 @@ var loadTemplate = (function () {
 					template = new Dialog({
 						id: '@' + (data.key ? data.key : type),
 						styles: {
+							overflow: currentStyle.overflow,
 							backgroundColor: 'rgba(0,0,0,.5)',
 							border: currentStyle.border,
 							borderRadius: currentStyle.width !== 1920 ? '15px' : null,

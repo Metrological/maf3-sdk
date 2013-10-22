@@ -188,9 +188,9 @@ define('MAF.control.Keyboard', function () {
 			return keyboards[this._classID].toggleExtended();
 		},
 
-		toggleKey: function (key) {
-			keyboards[this._classID].toggleKey(key);
-		},
+		//toggleKey: function (key) {
+		//	keyboards[this._classID].toggleKey(key);
+		//},
 
 		suicide: function () {
 			var classId = this._classID;

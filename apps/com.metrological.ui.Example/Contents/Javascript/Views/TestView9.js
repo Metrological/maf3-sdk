@@ -38,7 +38,7 @@ var TestView9 = new MAF.Class({
 			duration: 0.2,
 			events: {
 				onAnimationEnded: function() {
-					fadeOut.setStyle('visible', false);
+					fadeOut.visible = false;
 				}
 			}
 		});
@@ -153,8 +153,7 @@ var TestView9 = new MAF.Class({
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
-						transform: 'translateZ(0)',
-						opacity: 0.5
+						transform: 'translateZ(0)'
 					}),
 					events: {
 						onSelect: function (event) {
@@ -179,21 +178,23 @@ var TestView9 = new MAF.Class({
 							}
 						},
 						onFocus: function () {
-							this.setStyle('opacity', 1);
-							if (this.getCellDataItem().label === $_('Channel')){
+							var view = this.grid.owner.owner,
+								item = this.getCellDataItem();
+							if (item.label === $_('Channel')) {
 								var currentProgram = MAF.mediaplayer.getCurrentProgram();
-								this.grid.owner.owner.elements.meta.setText($_('NowWatching') + currentProgram.title);
+								view.elements.meta.setText($_('NowWatching') + currentProgram.title);
 							} else {
-								this.grid.owner.owner.elements.meta.setText(this.getCellDataItem().meta);
+								view.elements.meta.setText(item.meta);
 							}
 							this.text.animate({
+								color: 'rgba(255,255,255,1)',
 								scale: 1.3,
 								duration: 0.2
 							});
 						},
 						onBlur: function () {
-							this.setStyle('opacity', 0.5);
 							this.text.animate({
+								color: 'rgba(255,255,255,.5)',
 								scale: 1,
 								duration: 0.2
 							});
@@ -202,6 +203,7 @@ var TestView9 = new MAF.Class({
 				});
 				cell.text = new MAF.element.Text({
 					styles: {
+						color: 'rgba(255,255,255,.5)',
 						fontSize: 50,
 						width: cell.width,
 						height: cell.height,

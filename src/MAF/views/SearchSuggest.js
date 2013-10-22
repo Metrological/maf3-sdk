@@ -203,9 +203,9 @@ define('MAF.views.SearchSuggest', function () {
 								event.preventDefault();
 								break;
 							case 'left':
-								if (!this.getView()._isCursorSupported()) {
-									event.preventDefault();
-								}
+								//if (!this.getView()._isCursorSupported()) {
+								//event.preventDefault();
+								//}
 								break;
 						}
 					}
