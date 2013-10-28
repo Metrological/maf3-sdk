@@ -24,15 +24,19 @@ define('MAF.control.PageIndicator', function () {
 				}).appendTo(this);
 			},
 			buildDots: function (curpage, pagecount, state) {
-				var dots = '';
-				for (var i = 0; i < pagecount; i++) {
-					dots += FontAwesome.get(curpage === i ? 'circle-blank' : 'circle') + ' ';
+				if (this.config.updateDots && this.config.updateDots.call) {
+					return this.config.updateDots.call(this, curpage, pagecount, state);
+				} else {
+					var dots = '';
+					for (var i = 0; i < pagecount; i++) {
+						dots += FontAwesome.get(curpage === i ? 'circle-o' : 'circle') + ' ';
+					}
+					return dots.trim();
 				}
-				return dots.trim();
 			},
 			buildText: function (curpage, pagecount, state) {
 				if (this.config.updateText && this.config.updateText.call) {
-					return this.config.updateText(curpage, pagecount, state);
+					return this.config.updateText.call(this, curpage, pagecount, state);
 				} else {
 					return FontAwesome.get('caret-left') + ' ' + widget.getLocalizedString('PAGE', [parseInt(curpage, 10) + 1, pagecount]) + ' ' + FontAwesome.get('caret-right');
 				}
@@ -92,7 +96,7 @@ define('MAF.control.PageIndicator', function () {
 
 			if (useDots) {
 				this.element.wantsFocus = false;
-				this.content.setStyle('fontSize', 14);
+				this.content.setStyle('fontSize', '66%');
 			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
 				this.content.setStyle('fontSize', null);

@@ -92,9 +92,18 @@ define('MAF.control.TextEntryButton', function () {
 			return output;
 		},
 		destroyOverlay: function () {
-			this._TextEntryOverlay.suicide();
-			delete this._TextEntryOverlay;
+			if (this._TextEntryOverlay) {
+				this._TextEntryOverlay.suicide();
+				delete this._TextEntryOverlay;
+			}
 			this.focus();
+		},
+		suicide: function () {
+			if (this._TextEntryOverlay) {
+				this._TextEntryOverlay.suicide();
+				delete this._TextEntryOverlay;
+			}
+			this.parent();
 		},
 		changeValue: function (change_callback, current_value) {
 			buildOverlay.call(this, current_value);

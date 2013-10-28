@@ -28,13 +28,4 @@ define('MAF.control.Grid', function () {
 			this.parent();
 		}
 	});
-}, {
-	ControlGrid: {
-		renderSkin: function (state, w, h, args, theme) {
-			return;
-		}
-	},
-	ControlGridCellHighlight: {
-		
-	}
-});
+}, {});

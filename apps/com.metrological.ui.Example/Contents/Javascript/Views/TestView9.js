@@ -25,19 +25,23 @@ var TestView9 = new MAF.Class({
 	},
 
 	channelChange: function () {
-		this.controls.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()]);
+		var currentProgram = MAF.mediaplayer.getCurrentProgram();
+		this.elements.myEPG.changeDataset([currentProgram], true);
+		if (document.activeElement && this.elements.myEPG.cells.indexOf(document.activeElement.owner) > -1) {
+			this.elements.meta.setText($_('NowWatching') + currentProgram.title);
+		}
 	},
 
-	setClock: function() {
+	setClock: function () {
 		this.elements.datetime.setText(Date.format(new Date(), 'dd MMM yyyy HH:mm'));
 	},
 
-	animteBar: function(fadeIn, fadeOut, barHeight, barOffset){
+	animteBar: function (fadeIn, fadeOut, barHeight, barOffset){
 		fadeOut.animate({
 			opacity: 0,
 			duration: 0.2,
 			events: {
-				onAnimationEnded: function() {
+				onAnimationEnded: function () {
 					fadeOut.visible = false;
 				}
 			}
@@ -61,20 +65,20 @@ var TestView9 = new MAF.Class({
 			delay: 0.2,
 			duration: 0.3,
 			events: {
-				onAnimationEnded: function() {
+				onAnimationEnded: function () {
 					fadeIn.focus();
 				}
 			}
 		});
 	},
 
-	onActivateBackButton: function(event) {
+	onActivateBackButton: function (event) {
 		if (!this.frozen) {
 			if (this.controls.myApps.visible){
 				this.animteBar(this.controls.myMenu, this.controls.myApps, 100, 725);
 				event.preventDefault();
-			} else if (this.controls.myEPG.visible){
-				this.animteBar(this.controls.myMenu, this.controls.myEPG, 100, 725);
+			} else if (this.elements.myEPG.visible){
+				this.animteBar(this.controls.myMenu, this.elements.myEPG, 100, 725);
 				event.preventDefault();
 			}
 		}
@@ -146,7 +150,7 @@ var TestView9 = new MAF.Class({
 			columns: 3,
 			carousel: true,
 			dataset: [
-				{ label: $_('Apps') + ' ' + FontAwesome.get('refresh icon-spin'), meta: $_('AppMeta') },
+				{ label: $_('Apps') + ' ' + FontAwesome.get(['refresh', 'spin']), meta: $_('AppMeta') },
 				{ label: $_('Channel'), meta: $_('ChannelMeta') },
 				{ label: $_('Settings'), meta: $_('SettingsMeta') }
 			],
@@ -167,8 +171,8 @@ var TestView9 = new MAF.Class({
 										view.animteBar(view.controls.myApps, view.controls.myMenu, 230, 660);
 									break;
 								case $_('Channel'):
-									view.animteBar(view.controls.myEPG, view.controls.myMenu, 230, 660);
-									view.controls.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()]);
+									view.animteBar(view.elements.myEPG, view.controls.myMenu, 230, 660);
+									view.elements.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()], true);
 									break;
 								case $_('Settings'):
 									MAF.application.loadView('view-TestView1');
@@ -305,8 +309,7 @@ var TestView9 = new MAF.Class({
 			}
 		}).appendTo(this.elements.menuBackground);
 
-		this.controls.myEPG = new MAF.element.Grid({
-			guid: 'MyApps',
+		this.elements.myEPG = new MAF.element.Grid({
 			rows: 1,
 			columns: 1,
 			carousel: true,
@@ -362,7 +365,7 @@ var TestView9 = new MAF.Class({
 		}).appendTo(this.elements.menuBackground);
 	},
 
-	destroyView: function() {
+	destroyView: function () {
 		clearInterval(this.clockTimerId);
 		delete this.clockTimerId;
 	}

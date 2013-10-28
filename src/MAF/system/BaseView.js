@@ -1,5 +1,36 @@
 define('MAF.system.BaseView', function () {
 	var messagecenterlisteners = {};
+	var generateTransition = function (view, type) {
+		var eventType = 'on' + type.capitalize();
+		if (type === 'updateView') {
+			view.thaw();
+		}
+		if (view.transition && view.transition[type]) {
+			var animation = Object.merge({}, view.transition[type], {
+				events: {
+					onAnimationEnded: function () {
+						if ((type === 'hideView' || type === 'unselectView') && document.activeElement && view.element === document.activeElement.window) {
+							return;
+						}
+						if (view.fire(eventType)) {
+							view[type].call(view);
+						}
+						if (type === 'hideView') {
+							view.freeze();
+						}
+					}
+				}
+			});
+			view.animate(animation);
+		} else {
+			if (view.fire(eventType)) {
+				view[type].call(view);
+			}
+			if (type === 'hideView') {
+				view.freeze();
+			}
+		}
+	};
 
 	return new MAF.Class({
 		ClassName: 'BaseView',
@@ -30,24 +61,16 @@ define('MAF.system.BaseView', function () {
 				messagecenterlisteners[this._classID] = [];
 			},
 			onShowView: function () {
-				if (this.fire('onUpdateView')) {
-					this.updateView();
-				}
+				generateTransition(this, 'updateView');
 			},
 			onHideView: function () {
-				if (this.fire('onHideView')) {
-					this.hideView();
-				}
+				generateTransition(this, 'hideView');
 			},
 			onSelectView: function () {
-				if (this.fire('onSelectView')) {
-					this.selectView();
-				}
+				generateTransition(this, 'selectView');
 			},
 			onUnselectView: function () {
-				if (this.fire('onUnselectView')) {
-					this.unselectView();
-				}
+				generateTransition(this, 'unselectView');
 			},
 			setInitialFocus: emptyFn,
 			unregisterMessageCenterListeners: function () {
@@ -143,6 +166,7 @@ define('MAF.system.BaseView', function () {
 			delete this.persist;
 			delete this.cache;
 			delete this.viewBackParams;
+			delete this.transition;
 			Object.forEach(this.elements, function (key, obj) {
 				if (obj && obj.suicide) {
 					delete this.elements[key];

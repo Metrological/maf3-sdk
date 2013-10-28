@@ -143,7 +143,7 @@ define('MAF.control.TextEntryOverlay', function () {
 				var clearButton = new MAF.element.Button({
 					ClassName: 'ControlTextEntryOverlayClearButton',
 					content: new MAF.element.Text({
-						label: FontAwesome.get('remove'),
+						label: FontAwesome.get('times'),
 						styles: {
 							width: '100%',
 							height: '100%',
@@ -329,7 +329,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			if (this.config.creator) {
 				var view = this.config.creator.getView();
 				delete this.config.creator;
-				if (view.element) {
+				if (view && view.element) {
 					view.element.allowNavigation = true;
 				}
 			}

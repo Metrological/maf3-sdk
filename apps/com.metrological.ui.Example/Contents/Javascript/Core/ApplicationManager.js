@@ -38,14 +38,14 @@ var loadTemplate = (function () {
 							break;
 						case '1':
 							if (current[identifier] === 'sidebar') {
-								smallSpinner.text = FontAwesome.get('refresh icon-spin');
+								smallSpinner.text = FontAwesome.get(['refresh', 'spin']);
 								smallSpinner.frozen = false;
 							}
 							largeSpinner.text = FontAwesome.get('refresh');
 							largeSpinner.frozen = true;
 							break;
 						case '2':
-							largeSpinner.text = FontAwesome.get('refresh icon-spin');
+							largeSpinner.text = FontAwesome.get(['refresh', 'spin']);
 							largeSpinner.frozen = false;
 							break;
 						case '3':
@@ -56,7 +56,7 @@ var loadTemplate = (function () {
 					return;
 				case 'sidebar':
 					var sidebarButtons = [
-						{ value: '@AppButtonSidebarClose', label: 'remove', action: 'close-all' },
+						{ value: '@AppButtonSidebarClose', label: 'times', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
 						{ value: '@AppButtonSidebarVideoSize', label: 'fullscreen', action: 'viewport-toggle' }
 					];
@@ -607,7 +607,7 @@ var loadTemplate = (function () {
 								}).appendTo(contentFrame);
 
 								new Text({
-									data: FontAwesome.get('remove'),
+									data: FontAwesome.get('times'),
 									styles: {
 										width: '100%',
 										height: '100%',

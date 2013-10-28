@@ -184,7 +184,7 @@ define('MAF.views.SearchSuggest', function () {
 			this.controls.clearButton = new MAF.element.Button({
 				ClassName: 'ControlTextEntryOverlayClearButton',
 				content: new MAF.element.Text({
-					label: FontAwesome.get('remove'),
+					label: FontAwesome.get('times'),
 					styles: {
 						width: '100%',
 						height: '100%',

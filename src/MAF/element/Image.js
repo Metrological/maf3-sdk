@@ -99,8 +99,10 @@ define('MAF.element.Image', function () {
 					this.hide();
 				}
 			}
-			img.source = cfg.src = src;
-			delete cfg.source;
+			if (img && cfg) {
+				img.source = cfg.src = src;
+				delete cfg.source;
+			}
 			return this;
 		},
 
