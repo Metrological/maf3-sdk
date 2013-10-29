@@ -55,7 +55,6 @@ var NDSPlayer = function () {
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
 			if (grabbed && instance.src) {
 				stateChange(Player.state.STOP);
-				instance.src = '';
 			}
 		};
 		VideoPlayer.onPlaybackError = function () {
@@ -189,7 +188,7 @@ var NDSPlayer = function () {
 		}
 	});
 	getter(instance, 'src', function () {
-		return currentSource;
+		return grabbed && currentSource;
 	});
 	setter(instance, 'src', function (src) {
 		if (src && VideoPlayer) {
@@ -201,8 +200,7 @@ var NDSPlayer = function () {
 				} catch(err) {
 					return;
 				}
-			}
-			if (canPlay && currentSource && VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
+			} else if (currentSource && VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
 				try {
 					VideoPlayer.stop();
 				} catch(err) {}
@@ -215,26 +213,25 @@ var NDSPlayer = function () {
 				VideoPlayer.setURI(src);
 				VideoPlayer.start.delay(800, VideoPlayer);
 			} catch(err) {}
-		} else if (VideoPlayer) {
+		} else if (currentSource && VideoPlayer) {
 			paused = false;
-			if (canPlay && currentSource && VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
+			if (VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
 				try {
 					VideoPlayer.stop();
 				} catch(err) {}
-				canPlay = false;
-				currentSource = null;
-				stateChange(Player.state.STOP);
-			} else {
-				canPlay = false;
-				currentSource = null;
 			}
+			canPlay = false;
+			currentSource = null;
 			previousState = null;
-			if (grabbed) {
-				try {
-					VideoPlayer.ungrab();
-				} catch(err) {}
-				grabbed = false;
-			}
+			stateChange(Player.state.STOP);
+			(function () {
+				if (grabbed && !currentSource) {
+					try {
+						VideoPlayer.ungrab();
+					} catch(err) {}
+					grabbed = false;
+				}
+			}).delay(800);
 		}
 	});
 	getter(instance, 'paused', function () {
