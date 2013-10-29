@@ -9,8 +9,7 @@ var Horizon = (function (body) {
 			height: 'inherit',
 			backgroundImage: widget.getPath('Images/Horizon/Header.png'),
 			backgroundRepeat: 'no-repeat',
-			backgroundPosition: '50% 0%',
-			zIndex: 1
+			backgroundPosition: '50% 0%'
 		}
 	}).inject(body);
 
@@ -20,7 +19,8 @@ var Horizon = (function (body) {
 			hOffset: 134,
 			vOffset: 47,
 			color: 'rgba(255,255,255,.6)',
-			fontSize: fontSize
+			fontSize: fontSize,
+			zOrder: 1
 		}
 	}).inject(container);
 
@@ -29,7 +29,8 @@ var Horizon = (function (body) {
 		styles: {
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,
-			fontSize: fontSize
+			fontSize: fontSize,
+			zOrder: 1
 		}
 	}).inject(container);
 
@@ -41,7 +42,8 @@ var Horizon = (function (body) {
 			vOffset: title.vOffset,
 			color: 'rgba(255,255,255,.6)',
 			fontSize: fontSize,
-			textAlign: 'right'
+			textAlign: 'right',
+			zOrder: 1
 		}
 	}).inject(container);
 
@@ -58,7 +60,8 @@ var Horizon = (function (body) {
 			fontSize: fontSize,
 			color: 'rgba(255,255,255,.6)',
 			anchorStyle: 'center',
-			truncation: 'end'
+			truncation: 'end',
+			zOrder: 1
 		}
 	}).inject(container);
 
