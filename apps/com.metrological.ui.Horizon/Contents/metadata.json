@@ -1,0 +1,10 @@
+{
+	"identifier": "com.metrological.ui.Horizon",
+	"name": "Horizon UI",
+	"version": "2.0.0",
+	"author": "Metrological Development",
+	"company": "Metrological Widgets BV",
+	"copyright": "Metrological Widgets BV",
+	"description": "Horizon UI",
+	"scripts": "Javascript/init.js"
+}
