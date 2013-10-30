@@ -21,7 +21,8 @@ var NDSPlayer = function () {
 		grabbed = false,
 		paused = false,
 		currentSource = null,
-		previousState = null;
+		previousState = null,
+		startTimer;
 
 	instance.subscribers = {};
 
@@ -39,26 +40,41 @@ var NDSPlayer = function () {
 	function channelChange() {
 		fire.call(instance, 'onChannelChange');
 	}
+	function start() {
+		if (currentSource && !canPlay) {
+			screen.log('START');
+			VideoPlayer.setURI(currentSource);
+			VideoPlayer.start();
+			startTimer = setTimeout(start, 800);
+		} else {
+			screen.log('STARTED');
+			clearTimeout(startTimer);
+		}
+	}
+
 	if (VideoPlayer) {
 		VideoPlayer.onPlaybackStarted = function () {
-			if (grabbed && instance.src && !canPlay) {
+			if (grabbed && currentSource && VideoPlayer) {
 				canPlay = true;
-				stateChange(Player.state.PLAY);
+				screen.log('INFOLOADED');
+				stateChange(Player.state.INFOLOADED);
 			}
 		};
 		VideoPlayer.onPlaybackEnd = function () {
-			if (grabbed && canPlay && instance.src) {
-				canPlay = false;
+			if (grabbed && currentSource) {
+				screen.log('EOF');
 				stateChange(Player.state.EOF);
 			}
 		};
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
-			if (grabbed && instance.src) {
+			if (grabbed && currentSource && canPlay) {
+				screen.log('STOPPED');
 				stateChange(Player.state.STOP);
 			}
 		};
 		VideoPlayer.onPlaybackError = function () {
-			if (grabbed && instance.src) {
+			if (grabbed && currentSource) {
+				screen.log('ERROR');
 				stateChange(Player.state.ERROR);
 			}
 		};
@@ -66,6 +82,7 @@ var NDSPlayer = function () {
 	if (TVContext) {
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
+				screen.log('CHANNEL CHANGE');
 				channelChange();
 			}
 		};
@@ -191,7 +208,11 @@ var NDSPlayer = function () {
 		return grabbed && currentSource;
 	});
 	setter(instance, 'src', function (src) {
-		if (src && VideoPlayer) {
+		if (src && VideoPlayer && !currentSource) {
+			canPlay = false;
+			previousState = null;
+			paused = false;
+			screen.log('BUFFERING');
 			stateChange(Player.state.BUFFERING);
 			if (!grabbed) {
 				try {
@@ -205,31 +226,33 @@ var NDSPlayer = function () {
 					VideoPlayer.stop();
 				} catch(err) {}
 			}
-			canPlay = false;
-			paused = false;
 			try {
-				previousState = null;
-				currentSource = src;
+				screen.log('LOAD');
 				VideoPlayer.setURI(src);
-				VideoPlayer.start.delay(800, VideoPlayer);
-			} catch(err) {}
+				currentSource = src;
+				start();
+				//startTimer = setTimeout(start, 600);
+			} catch(err) {
+				screen.log('LOAD ERROR');
+			}
 		} else if (currentSource && VideoPlayer) {
+			canPlay = false;
+			currentSource = null;
+			previousState = null;
 			paused = false;
 			if (VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
 				try {
 					VideoPlayer.stop();
 				} catch(err) {}
 			}
-			canPlay = false;
-			currentSource = null;
-			previousState = null;
+			screen.log('STOP');
 			stateChange(Player.state.STOP);
 			(function () {
 				if (grabbed && !currentSource) {
+					grabbed = false;
 					try {
 						VideoPlayer.ungrab();
 					} catch(err) {}
-					grabbed = false;
 				}
 			}).delay(800);
 		}
@@ -238,29 +261,25 @@ var NDSPlayer = function () {
 		return paused;
 	});
 	setter(instance, 'paused', function (p) {
-		if (canPlay && this.src) {
-			if (!p) {
-				if (this.paused) {
-					try {
+		if (grabbed && VideoPlayer) {
+			if (p === false && paused === true) {
+				try {
+					if (VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
 						VideoPlayer.resume();
-						paused = false;
-						stateChange(Player.state.PLAY);
-					} catch(err) {
-						canPlay = false;
-						return;
+					} else {
+						VideoPlayer.start();
 					}
-				}
-			} else {
+					paused = false;
+				} catch(err) {}
+			} else if (p === true && paused === false) {
 				try {
 					VideoPlayer.pause();
 					paused = true;
-					stateChange(Player.state.PAUSE);
-				} catch(err) {
-					canPlay = false;
-					return;
-				}
+				} catch(err) {}
 			}
 		}
+		screen.log(paused ? 'PAUSED' : 'RESUME');
+		stateChange(paused ? Player.state.PAUSE : Player.state.PLAY);
 	});
 	getter(instance, 'bounds', function () {
 		if (VideoPlayer) {
@@ -287,7 +306,7 @@ var resetNDSPlayer = function () {
 	if (player) {
 		player.src = '';
 	}
-}
+};
 
 if (Application) {
 	Application.onHide = function () {
