@@ -1,5 +1,5 @@
 var Horizon = (function (body) {
-	var fontSize = 22;
+	var fontSize = '1em';
 
 	MAF.mediaplayer.init();
 

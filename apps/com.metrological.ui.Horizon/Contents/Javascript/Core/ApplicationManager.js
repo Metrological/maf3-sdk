@@ -582,6 +582,7 @@ var loadTemplate = (function () {
 								}).appendTo(contentFrame);
 
 								var cleanButton = new Frame({
+									id: '@' + type + '-clear',
 									focus: true,
 									styles: {
 										border: '2px solid white',

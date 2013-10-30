@@ -2,7 +2,7 @@ include('Javascript/Core/ApplicationManager.js');
 include('Javascript/Views/Apps.js');
 
 Facebook.init('183031261739046');
-Twitter.init();
+Twitter.init('requiredATM');
 
 MAF.application.init({
 	views: [

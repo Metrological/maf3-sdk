@@ -346,10 +346,10 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
-		changeDataset: function (data, reset, data_length) {
+		changeDataset: function (data, reset, dataLength) {
 			data = data && data.length ? data : [];
-			data_length = data_length && (data_length > data.length) ? data_length : data.length;
-			this.pager.initItems(data, data_length);
+			dataLength = dataLength && (dataLength > data.length) ? dataLength : data.length;
+			this.pager.initItems(data, dataLength);
 			if (reset) {
 				this.updateState({row:null, column:null});
 			}
@@ -357,6 +357,11 @@ define('MAF.element.Grid', function () {
 				focus = state.hasFocus && state.focusCoordinates,
 				start = reset ? 0 : state.currentPage || 0,
 				options = {transition: 'none', refresh: reset || false, focus: focus};
+			if (dataLength === 0 && reset && this.cells) {
+				while(this.cells.length) {
+					this.cells.pop().suicide();
+				}
+			}
 			this.changePage(start, options);
 			this.fire("onDatasetChanged");
 			return this;
