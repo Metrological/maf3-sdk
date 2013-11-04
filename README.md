@@ -23,26 +23,32 @@ Create the initial structure
 Example Contents/metadata.json
 
 	{
-  		"identifier": "com.CompanyName.app.AppName",
-  		"name": "My App",
-  		"version": "1.0.0",
-  		"author": "My Name",
-  		"company": "My Company",
-  		"copyright": "Copyright Company",
-  		"description": "A description of the App",
-  		"scripts": "Javascript/init.js",
-  		"images": {
-  			"header": {
-	  			"normal": "Images/header.png",
-  				"focused": "Images/header-focused.png"
-	  		},
-  			"about": "Images/about.png",
-	  		"icon": {
-  				"192x192": "Images/icon.png",
-  				"280x166": "Images/snippet.png"
-  			}
-  		}
-  	}
+		"identifier": "com.CompanyName.app.AppName",
+		"name": "My App",
+		"version": "1.0.0",
+		"author": "My Name",
+		"company": "My Company",
+		"copyright": "Copyright Company",
+		"description": "A description of the App",
+		"keywords": "video funny kids music",
+		"categories": [
+			"video",
+			"music",
+			"kids"
+		],
+		"scripts": "Javascript/init.js",
+		"images": {
+			"header": {
+				"normal": "Images/header.png",
+				"focused": "Images/header-focused.png"
+			},
+			"about": "Images/about.png",
+			"icon": {
+				"192x192": "Images/icon.png",
+				"280x166": "Images/snippet.png"
+			}
+		}
+	}
 
 
 Example Contents/Javascript/init.js which is the first script loaded from the metadata.json (scripts)
