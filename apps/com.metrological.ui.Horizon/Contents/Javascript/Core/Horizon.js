@@ -1,24 +1,35 @@
 var Horizon = (function (body) {
-	var fontSize = '1em';
+	var fontSize = '1em',
+		fontColor = 'rgba(255,255,255,.4)',
+		floorHeight = 451,
+		visible = true;
 
 	MAF.mediaplayer.init();
+	ApplicationManager.getViewport().setStyle('transformStyle', 'preserve-3d');
 
 	var container = new Frame({
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
+			backgroundColor: 'rgba(0,0,0,.4)',
 			backgroundImage: widget.getPath('Images/Horizon/Header.png'),
 			backgroundRepeat: 'no-repeat',
 			backgroundPosition: '50% 0%'
 		}
 	}).inject(body);
 
+	container.animate({
+		timingFunction: 'linear',
+		delay: 1,
+		duration: 1
+	});
+
 	var title = new Text({
 		label: $_('APP STORE'),
 		styles: {
 			hOffset: 134,
 			vOffset: 47,
-			color: 'rgba(255,255,255,.6)',
+			color: fontColor,
 			fontSize: fontSize,
 			zOrder: 1
 		}
@@ -40,7 +51,7 @@ var Horizon = (function (body) {
 			hAlign: 'right',
 			hOffset: 134,
 			vOffset: title.vOffset,
-			color: 'rgba(255,255,255,.6)',
+			color: fontColor,
 			fontSize: fontSize,
 			textAlign: 'right',
 			zOrder: 1
@@ -58,14 +69,31 @@ var Horizon = (function (body) {
 			hOffset: 560,
 			vOffset: 47,
 			fontSize: fontSize,
-			color: 'rgba(255,255,255,.6)',
+			color: fontColor,
 			anchorStyle: 'center',
 			truncation: 'end',
 			zOrder: 1
 		}
 	}).inject(container);
 
-	(function updatePlaying() {
+	var floor = new Frame({
+		styles: {
+			width: 'inherit',
+			height: floorHeight,
+			top: 'auto',
+			bottom: 0,
+			transformOrigin: '50% 0%',
+			backgroundImage: widget.getPath('Images/Horizon/FullFloor.png'),
+			backgroundRepeat: 'no-repeat'
+		}
+	}).inject(container);
+
+	floor.animate({
+		origin: ['center', 'top'],
+		duration: 0.6
+	});
+
+	function updateNowPlaying() {
 		var now = $_('NOW PLAYING') + ' ';
 		if (MAF.mediaplayer.isTVActive) {
 			now += $_('LIVE TV');
@@ -74,57 +102,99 @@ var Horizon = (function (body) {
 		}
 		now += ' - ' + MAF.mediaplayer.currentAsset.title;
 		playing.data = now;
-	}).periodical(1000);
-
-	function clearAnimator(animator) {
-		animator.reset();
 	}
 
-	function hide(callback) {
-		body.animate({
-			scale: 1.6,
-			timingFunction: 'linear',
-			delay: 5,
-			duration: 0.6,
-			callback: callback || clearAnimator
-		});
+	function hideNowPlaying(callback) {
+		if (!visible) {
+			body.animate({
+				scale: 1.6,
+				delay: 5,
+				duration: 0.6,
+				callback: callback
+			});
+		} else if (callback) {
+			callback();
+		}
 	}
 
-	function show(callback) {
-		body.animate({
-			scale: 1,
-			timingFunction: 'linear',
-			delay: 0.1,
-			duration: 0.15,
-			callback: callback || clearAnimator
-		});
+	function showNowPlaying(callback) {
+		if (!visible) {
+			body.animate({
+				scale: 1,
+				duration: 0.6,
+				callback: callback
+			});
+		} else if (callback) {
+			callback();
+		}
+	}
+
+	var animatingNowPlaying = false;
+	function allowNowPlayingAnimation(animator) {
+		animatingNowPlaying = false;
+		if (animator) {
+			animator.reset();
+		}
+	}
+	function resetAndHideNowPlaying(animator) {
+		if (animator) {
+			animator.reset();
+		}
+		hideNowPlaying(allowNowPlayingAnimation);
 	}
 
 	(function playerEvents(event) {
 		var states = this.constants.states;
-		if (ApplicationManager.active === widget.identifier) {
-			return;
-		}
 		switch(event.payload.newState) {
+			case states.INFOLOADED:
+				updateNowPlaying();
+				break;
 			case states.STOP:
+			case states.PAUSE:
 			case states.PLAY:
-				show(function (animator) {
-					animator.reset();
-					hide();
-				});
+				updateNowPlaying.delay(300);
+				if (!animatingNowPlaying) {
+					animatingNowPlaying = true;
+					showNowPlaying(resetAndHideNowPlaying);
+				}
 				break;
 		}
 	}).subscribeTo(MAF.mediaplayer, 'onStateChange');
 
 	(function channelEvents() {
-		if (ApplicationManager.active === widget.identifier) {
+		updateNowPlaying();
+		if (ApplicationManager.active === widget.identifier || visible) {
 			return;
 		}
-		show(function (animator) {
-			animator.reset();
-			hide();
-		});
+		if (!animatingNowPlaying) {
+			animatingNowPlaying = true;
+			showNowPlaying(resetAndHideNowPlaying);
+		}
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
+
+	function hide() {
+		visible = false;
+		container.setStyle('backgroundColor', 'rgba(0,0,0,0)');
+		floor.setStyles({
+			transform: 'scale(2)',
+			bottom: -floorHeight
+		});
+		if (!animatingNowPlaying) {
+			hideNowPlaying();
+		}
+	}
+
+	function show() {
+		showNowPlaying();
+		visible = true;
+		floor.setStyles({
+			transform: null,
+			bottom: 0
+		});
+		container.setStyle('backgroundColor', 'rgba(0,0,0,.4)');
+	}
+
+	updateNowPlaying();
 
 	return {
 		hide: hide,

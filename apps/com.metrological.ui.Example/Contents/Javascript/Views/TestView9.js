@@ -296,7 +296,7 @@ var TestView9 = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				cell.icon.setSource('../../' + data + '/Contents/' + ApplicationManager.getMetadata(data).images.icon['200x200']);
+				cell.icon.setSource(ApplicationManager.getRootPath(data) + ApplicationManager.getMetadata(data).images.icon['192x192']);
 			},
 			styles: {
 				overflow: 'visible',

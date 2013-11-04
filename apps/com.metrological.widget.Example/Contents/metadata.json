@@ -23,9 +23,8 @@
 		},
 		"about": "Images/about.png",
 		"icon": {
-			"200x200": "Images/icon.png",
-			"280x166": "Images/snippet.png",
-			"500x500": "Images/promo.png"
+			"192x192": "Images/icon.png",
+			"280x166": "Images/snippet.png"
 		}
 	}
 }

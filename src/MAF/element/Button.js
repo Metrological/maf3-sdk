@@ -108,21 +108,9 @@ define('MAF.element.Button', function () {
 			return this;
 		},
 
-		setDisabled: function (value) {
-			if (value === true && this.disabled !== true) {
-				this.disabled = true;
-				this.setStyle('opacity', 0.5);
-				this.fire('onDisable');
-				this.fire('onChangeDisabled', {disabled: true});
-			} else if (value === false && this.disabled !== false) {
-				this.disabled = false;
-				this.setStyle('opacity', null);
-				this.fire('onEnable');
-				this.fire('onChangeDisabled', {disabled: false});
-			}
-			if (this.disabled === this.element.wantsFocus && this.config.focus) {
-				this.element.wantsFocus = !this.disabled;
-			}
+		setDisabled: function (disabled) {
+			this.disabled = disabled === true;
+			this.setStyle('opacity', this.disabled ? 0.5 : null);
 			return this;
 		},
 

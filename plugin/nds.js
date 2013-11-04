@@ -22,6 +22,7 @@ var NDSPlayer = function () {
 		paused = false,
 		currentSource = null,
 		previousState = null,
+		startCounter = 0,
 		startTimer;
 
 	instance.subscribers = {};
@@ -43,12 +44,24 @@ var NDSPlayer = function () {
 	function start() {
 		if (currentSource && !canPlay) {
 			screen.log('START');
-			VideoPlayer.setURI(currentSource);
 			VideoPlayer.start();
-			startTimer = setTimeout(start, 800);
-		} else {
+			if (startCounter < 5) {
+				//VideoPlayer.setURI(currentSource);
+				startTimer = setTimeout(start, (5 - startCounter) * 1000);
+				startCounter++;
+			} else {
+				startCounter = 0;
+				if (startTimer) {
+					clearTimeout(startTimer);
+					startTimer = null;
+				}
+				stateChange(Player.state.ERROR);
+			}
+		} else if (startTimer) {
 			screen.log('STARTED');
+			startCounter = 0;
 			clearTimeout(startTimer);
+			startTimer = null;
 		}
 	}
 
@@ -212,6 +225,10 @@ var NDSPlayer = function () {
 			canPlay = false;
 			previousState = null;
 			paused = false;
+			if (startTimer) {
+				clearTimeout(startTimer);
+				startTimer = null;
+			}
 			screen.log('BUFFERING');
 			stateChange(Player.state.BUFFERING);
 			if (!grabbed) {
@@ -230,7 +247,7 @@ var NDSPlayer = function () {
 				screen.log('LOAD');
 				VideoPlayer.setURI(src);
 				currentSource = src;
-				start();
+				start.delay(800);
 				//startTimer = setTimeout(start, 600);
 			} catch(err) {
 				screen.log('LOAD ERROR');
@@ -240,6 +257,10 @@ var NDSPlayer = function () {
 			currentSource = null;
 			previousState = null;
 			paused = false;
+			if (startTimer) {
+				clearTimeout(startTimer);
+				startTimer = null;
+			}
 			if (VideoPlayer.status !== VideoPlayer.PLAYER_STATUS_STOPPED) {
 				try {
 					VideoPlayer.stop();

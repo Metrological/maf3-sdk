@@ -190,24 +190,20 @@ define('MAF.control.TabStrip', function () {
 				}
 				this.config.tabs = tabs && tabs.length ? tabs : [];
 				var active = this.activeIndex,
-					w = 0,
+					bodyStyles = Theme.getStyles(this.ClassName + 'Container'),
+					w = bodyStyles && bodyStyles.paddingRight || 0,
 					noimages = !this.config.tabs.filter(function (t) {
 						return t.src || t.source;
 					}).length;
 				this.generateButtons(this.config.tabs.length, noimages);
 				this.buttons.forEach(function (button, b) {
+					var buttonStyles = Theme.getStyles(button.ClassName);
 					button.setTabContent(this.config.tabs[b], noimages);
 					button.show();
-					var externalStyles = Theme.getStyles(button.ClassName),
-						externalWidth = 0;
-					['border', 'borderLeft', 'borderRight', 'marginLeft', 'marginRight'].forEach(function (type) {
-						var value = (type === 'border') ? parseInt(externalStyles[type], 10) * 2 : parseInt(externalStyles[type], 10);
-						externalWidth += value || 0;
-					}, this);
-					w += button.width + externalWidth;
 					button.fire(b == this.activeIndex ? 'onActive' : 'onInactive');
+					w += button.element.clientWidth + (buttonStyles.marginLeft * 2) + parseInt(buttonStyles.borderLeft, 10) + parseInt(buttonStyles.borderRight, 10);
 				}, this);
-				this.body.width = w || this.width;
+				this.body.width = w < this.width ? 'auto' : w;
 				if (this.element.hasFocus) {
 					var fidx = parseInt(this.focusIndex, 10) || 0;
 					this.focusButton(fidx);
@@ -233,10 +229,12 @@ define('MAF.control.TabStrip', function () {
 		},
 
 		suicide: function () {
-			while(this.buttons.length) {
-				this.buttons.pop().suicide();
+			if (this.buttons){
+				while(this.buttons.length) {
+					this.buttons.pop().suicide();
+				}
+				delete this.buttons;
 			}
-			delete this.buttons;
 			this.body.suicide();
 			delete this.body;
 			this.parent();

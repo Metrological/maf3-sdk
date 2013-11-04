@@ -47,6 +47,9 @@ define('MAF.system.BaseView', function () {
 			},
 			onLoadView: function () {
 				if (this.fire('onCreateView')) {
+					if (MAF.Browser.webkit) {
+						this.thaw();
+					}
 					this.createView();
 				}
 			},

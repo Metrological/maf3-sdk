@@ -22,6 +22,22 @@ define('MAF.element.Container', function () {
 			},
 			registerEvents: function (types) {
 				this.parent(['focus', 'blur', 'select', 'navigate'].concat(types || []));
+			},
+			proxyProperties: function (propnames) {
+				this.parent(propnames);
+				getter(this, 'disabled', function () {
+					return this.element && this.element.disabled;
+				});
+				setter(this, 'disabled', function (disabled) {
+					disabled = disabled || false;
+					if (this.disabled !== disabled && this.element) {
+						this.fire(disabled ? 'onDisable' : 'onEnable');
+						this.element.disabled = disabled;
+						this.fire('onChangeDisabled', {
+							disabled: disabled
+						});
+					}
+				});
 			}
 		},
 

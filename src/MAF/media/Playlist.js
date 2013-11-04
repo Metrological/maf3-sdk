@@ -52,7 +52,7 @@ define('MAF.media.Playlist', function () {
 		},
 
 		addEntries: function(entries) {
-			this.entries = [].concat(entries).filter(function (entry) {
+			this.entries = this.entries.concat(entries).filter(function (entry) {
 				return entry instanceof MAF.media.PlaylistEntry;
 			});
 			return this;

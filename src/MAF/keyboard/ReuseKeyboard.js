@@ -1403,13 +1403,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (!this.config.allowSpace) {
 				value.replace(/\s/g,"");
 			}
-			
 			if (newval.length > maxlen) {
 				this.fire('maxlengthexceeded');
-				newval.length = maxlen;
 			}
 			
 			internals[this._classID].value = newval.split('');
+			internals[this._classID].value.length = Math.min(maxlen, newval.length);
 
 			if (oldval != newval) {
 				this.fireEvent('valuechanged', {oldValue:oldval,newValue:newval});

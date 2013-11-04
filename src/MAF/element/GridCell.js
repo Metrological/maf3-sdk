@@ -75,6 +75,19 @@ define('MAF.element.GridCell', function () {
 				setter(this, 'id', function (id) {
 					return el.setAttribute('id', id);
 				});
+				getter(this, 'disabled', function () {
+					return this.element && this.element.disabled;
+				});
+				setter(this, 'disabled', function (disabled) {
+					disabled = disabled || false;
+					if (this.disabled !== disabled && this.element) {
+						this.fire(disabled ? 'onDisable' : 'onEnable');
+						this.element.disabled = disabled;
+						this.fire('onChangeDisabled', {
+							disabled: disabled
+						});
+					}
+				});
 			}
 		},
 
