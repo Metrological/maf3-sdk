@@ -38,7 +38,7 @@ Example Contents/metadata.json
 	  		},
   			"about": "Images/about.png",
 	  		"icon": {
-  				"200x200": "Images/icon.png",
+  				"192x192": "Images/icon.png",
   				"280x166": "Images/snippet.png"
   			}
   		}
@@ -49,12 +49,14 @@ Example Contents/Javascript/init.js which is the first script loaded from the me
 
 	include("Javascript/Views/MainView.js");
 	include("Javascript/Views/AboutView.js");
+	include("Javascript/Views/IconView.js");
 	include("Javascript/Views/SnippetView.js");
 
 	MAF.application.init({
 		views: [
 			{ id: 'view-MainView', viewClass: MainView },
 			{ id: 'view-AboutView', viewClass: AboutView },
+			{ id: 'view-IconView', viewClass: IconView },
 			{ id: 'view-SnippetView', viewClass: SnippetView }
 		],
 		defaultViewId: 'view-MainView',
