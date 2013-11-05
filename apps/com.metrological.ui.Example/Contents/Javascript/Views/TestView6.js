@@ -85,7 +85,7 @@ var TestView6 = new MAF.Class({
 		}).appendTo(this);
 
 		var button10 = new MAF.control.TextButton({
-			label: 'Has Pin (Locked): ' + String(profile.hasPIN) + ' (' + String(profile.locked) + ')',
+			label: 'Has Pin (Locked): ' + String(profile.hasPIN()) + ' (' + String(profile.locked) + ')',
 			disabled: true,
 			styles: {
 				vOffset: button9.outerHeight + 1

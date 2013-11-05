@@ -198,6 +198,9 @@ var Horizon = (function (body) {
 
 	return {
 		hide: hide,
-		show: show
+		show: show,
+		setText: function (s) {
+			subtitle.data = s;
+		}
 	};
 }.call(window, document.body));

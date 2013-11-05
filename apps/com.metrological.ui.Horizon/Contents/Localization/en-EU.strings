@@ -30,3 +30,16 @@
 "AppMeta" = "Want to know the latest news? See the weather or traffic information? Click OK to explore the apps!";
 "SettingsMeta" = "Change your settings, PIN-code, Facebook or Twitter login information etc.";
 "NowWatching" = "You are watching: ";
+"CATEGORY_FAVORITES" = "MY FAVORITES";
+"CATEGORY_VIDEO" = "TV & VIDEO";
+"CATEGORY_NEWS" = "NEWS & INFO";
+"CATEGORY_SOCIAL" = "SOCIAL TV";
+"CATEGORY_GAMES" = "GAMES";
+"CATEGORY_SPORT" = "SPORT";
+"CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"ADDFAVO" = "Add/remove favourite Apps";
+"ADDFAVO_DESC" = "Press OK to start managing your Favourite Apps.";
+"ADDFAVO_SELECTED" = "Navigate to your favourite App and press OK to add the App to FAVOURITES. Press BACK at any time to cancel and return to APPS.";
+"REORDERFAVO" = "Re-order FAVOURITES";
+"REORDERFAVO_DESC" = "Press OK to re-order the positions of the Apps in FAVOURITES. Press BACK at any time to cancel and return to APPS.";
+"REORDERFAVO_SELECTED" = "Navigate to the App you want to move to a new position. Arrows indicate the direction to which you are able to move the App.";

@@ -2,73 +2,192 @@ var AppsView = new MAF.Class({
 	ClassName: 'AppsView',
 
 	Extends: MAF.system.FullscreenView,
-/*
-	transition: {
-		updateView: {
-			scale: 1,
-			timingFunction: 'linear',
-			duration: 0.3
-		},
-		hideView: {
-			scale: 0,
-			timingFunction: 'linear',
-			duration: 0.3
-		}
-	},
-*/
+
+	state: null,
+
 	initialize: function () {
 		this.parent();
 		this.registerMessageCenterListenerCallback(this.dataHasChanged);
+		this.onWidgetKeyPress = this.handleFavoriteBack.subscribeTo(MAF.application, 'onWidgetKeyPress', this);
 	},
 
 	dataHasChanged: function (event) {
 		if (event.payload.value && event.payload.key === 'myApps') {
-			this.appsReady(event.payload.value);
+			this.appsReady();
 		}
 	},
 
-	appsReady: function (data) {
-		this.controls.apps.changeDataset(data || [], true);
-		this.controls.apps.focus();
+	handleFavoriteBack: function (event) {
+		if (event.payload.key === 'back' && this.state !== null) {
+			var categories = ApplicationManager.getCategories(),
+				data;
+			this.state = null;
+			if (this.category === 'favorites') {
+				delete this.reodered;
+				delete this.reorder;
+				delete this.cell;
+				delete this.icon;
+				data = this.getFavoritesCategory();
+			} else {
+				data = ApplicationManager.getApplicationsByCategory(this.category);
+			}
+			this.controls.apps.changeDataset(data, true);
+			event.stopPropagation();
+			event.preventDefault();
+		}
+	},
+
+	getFavorites: function () {
+		return currentAppData.get('favorites') || [];
+	},
+
+	setFavorites: function (favorites) {
+		currentAppData.set('favorites', favorites || []);
+		return favorites;
+	},
+
+	addFavorite: function (id) {
+		var favorites = this.getFavorites();
+		if (favorites.indexOf(id) === -1) {
+			favorites.push(id);
+			this.setFavorites(favorites);
+		}
+		return favorites;
+	},
+
+	removeFavorite: function (id) {
+		var favorites = this.getFavorites(),
+			i = this.getFavoriteIndex(id);
+		if (i !== -1) {
+			favorites.splice(i, 1);
+			this.setFavorites(favorites);
+		}
+		return favorites;
+	},
+
+	reorderFavorite: function (id, idx) {
+		var favorites = this.getFavorites(),
+			i = this.getFavoriteIndex(id);
+		if (i !== -1 && idx < favorites.length) {
+			favorites.splice(i, 1);
+			favorites.splice(idx, 0, id);
+			this.setFavorites(favorites);
+		}
+		return favorites;
+	},
+
+	getFavoritesCategory: function () {
+		switch (this.state) {
+			case 'addfavo':
+			case 'reorderfavo':
+				return this.getFavorites().concat([this.state]);
+			default:
+				return this.getFavorites().concat(['addfavo', 'reorderfavo']);
+		}
+	},
+
+	getFavoriteIndex: function (id) {
+		return this.getFavorites().indexOf(id);
+	},
+
+	appsReady: function () {
+		if (this.ready !== true) {
+			this.ready = true;
+			this.controls.categories.setDisabled(false);
+			this.controls.categories.focus();
+			if (this.getFavorites().length === 0) {
+				this.controls.categories.focusCell(1);
+			}
+			this.controls.apps.focus();
+		}
 	},
 
 	createView: function () {
-		this.elements.categories = new MAF.element.Carousel({
+		this.controls.categories = new MAF.element.Grid({
+			guid: 'categories',
 			rows: 10,
 			columns: 1,
 			carousel: true,
 			orientation: 'vertical',
-			dataset: [
-				'My Favorites',
-				'TV & Video',
-				'News & Info',
-				'Social TV',
-				'Games',
-				'Sport',
-				'Lifestyle'
-			],
+			dataset: ApplicationManager.getCategories(),
 			cellCreator: function () {
 				var baseFontColor = 'rgba(255,255,255,.6)',
-					cell = new MAF.element.CarouselCell({
+					cell = new MAF.element.GridCell({
 						styles: Object.merge(this.getCellDimensions(), {
 							transform: 'translateZ(0)'
 						}),
 						events: {
-							onSelect: function (event) {
-							},
 							onFocus: function () {
+								var category = this.getCellDataItem(),
+									view = this.grid.owner,
+									data;
+								if (category === 'favorites') {
+									data = view.getFavoritesCategory();
+								} else {
+									data = ApplicationManager.getApplicationsByCategory(category);
+								}
+								this.animate({
+									scale: 1.2,
+									origin: ['0%', '50%'],
+									duration: 0.2
+								});
 								this.category.animate({
 									color: 'white',
 									fontWeight: 'bold',
 									duration: 0.2
 								});
+								if (view.category !== category) {
+									var first = view.category === undefined,
+										len = data.length;
+									if (category === 'favorites') {
+										len -= 2;
+									}
+									Horizon.setText($_('CATEGORY_' + category.toUpperCase()) + ' (' + len + ')');
+									view.category = category;
+									view.controls.apps.animate({
+										opacity: 0,
+										duration: 0.3,
+										events: {
+											onAnimationEnded: function () {
+												if (view.category === category) {
+													this.animate({
+														opacity: 1,
+														duration: 0.3,
+														events: {
+															onAnimationEnded: function () {
+																if (view.category === category && first) {
+																	this.focus();
+																}
+															}
+														}
+													});
+												}
+												if (view.category === category) {
+													this.changeDataset(data || [], true);
+												}
+											}
+										}
+									});
+								}
 							},
 							onBlur: function () {
-								this.category.animate({
-									color: baseFontColor,
-									fontWeight: 'normal',
+								var cell = this,
+									category = cell.getCellDataItem(),
+									view = cell.grid.owner;
+								cell.animate({
+									scale: 1,
+									origin: ['0%', '50%'],
 									duration: 0.2
 								});
+								(function () {
+									if (cell && view.category !== category) {
+										cell.category.animate({
+											color: baseFontColor,
+											fontWeight: 'normal',
+											duration: 0.2
+										});
+									}
+								}).delay(100);
 							}
 						}
 					});
@@ -86,7 +205,7 @@ var AppsView = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				cell.category.setText(data.toUpperCase());
+				cell.category.setText($_('CATEGORY_' + data.toUpperCase()));
 			},
 			styles: {
 				transform: 'translateZ(0)',
@@ -95,6 +214,17 @@ var AppsView = new MAF.Class({
 				hOffset: 134,
 				vAlign: 'bottom',
 				vOffset: 300
+			},
+			events: {
+				onNavigateOutOfBounds: function (event) {
+					var direction = event.payload.direction;
+					if (direction === 'right' || direction === 'left') {
+						var apps = this.owner.controls.apps;
+						apps.focus();
+						apps.focusCell(direction === 'left' ? Math.min(apps.cells.length, apps.config.columns - 1) : 0);
+						event.preventDefault();
+					}
+				}
 			}
 		}).appendTo(this);
 
@@ -102,45 +232,88 @@ var AppsView = new MAF.Class({
 			cellRows = 2,
 			cellColumns = 6;
 
-		this.controls.apps = new MAF.element.Carousel({
+		this.controls.apps = new MAF.element.Grid({
 			guid: 'apps',
 			rows: cellRows,
 			columns: cellColumns,
-			carousel: true,
+			//carousel: true,
 			orientation: 'vertical',
 			cellCreator: function () {
-				var cell = new MAF.element.CarouselCell({
+				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
 						transform: 'translateZ(0)'
 					}),
 					events: {
 						onSelect: function (event) {
-							var id = this.getCellDataItem();
-							ApplicationManager.load(id);
-							ApplicationManager.open(id);
+							var id = this.getCellDataItem(),
+								grid = this.grid,
+								view = grid.owner;
+							if (id === 'addfavo') {
+								if (view.state === id) {
+									view.state = null;
+								} else if (view.state === null) {
+									view.state = id;
+								}
+								grid.changeDataset(view.getFavoritesCategory(), true);
+							} else if (id === 'reorderfavo') {
+								if (view.state === id) {
+									view.state = null;
+								} else {
+									view.state = id;
+								}
+								grid.changeDataset(view.getFavoritesCategory(), true);
+								grid.focusCell(grid.cells.length - 1);
+							} else if (view.state !== null) {
+								var i = view.getFavoriteIndex(id);
+								switch (view.state) {
+									case 'addfavo':
+										if (i === -1) {
+											view.addFavorite(id);
+											cell.overlay.setSource('Images/RemoveFavoIcon.png');
+										} else {
+											view.removeFavorite(id);
+											cell.overlay.setSource('Images/AddFavoIcon.png');
+										}
+										break;
+									case 'reorderfavo':
+										if (!view.reorder) {
+											view.reorder = id;
+											view.cell = this;
+											view.icon = this.icon.source;
+										} else if (view.reodered !== undefined) {
+											view.reorderFavorite(view.reorder, view.reodered);
+											delete view.reodered;
+											delete view.reorder;
+											delete view.cell;
+											delete view.icon;
+											grid.changeDataset(view.getFavoritesCategory(), true);
+										}
+										break;
+								}
+							} else {
+								ApplicationManager.load(id);
+								ApplicationManager.open(id);
+							}
 						},
 						onFocus: function () {
-							var idx = this.getCellIndex(),
-								carousel = this.carousel,
-								view = carousel.owner,
-								id = this.getCellDataItem(),
+							var id = this.getCellDataItem(),
+								coords = this.getCellCoordinates(),
+								view = this.grid.owner,
 								origin = [];
-							if (idx%cellColumns === 0) {
+							if (coords.column === 0) {
 								origin.push('left');
-							} else if ((idx+1)%cellColumns === 0) {
+							} else if (coords.column === (coords.columns - 1)) {
 								origin.push('right');
 							} else {
 								origin.push('center');
 							}
-							//log(((idx/6)%cellColumns)%2, (carousel.body.scrollTop / cellSize));
-							if (idx < cellColumns) {
+							if (coords.row === 0) {
 								origin.push('top');
-							} else if (idx >= cellColumns) {
+							} else if (coords.row === (coords.rows - 1)) {
 								origin.push('bottom');
 							} else {
 								origin.push('center');
 							}
-							this.focusImg.visible = true;
 							this.focusImg.animate({
 								opacity: 1,
 								duration: 0.2
@@ -151,23 +324,53 @@ var AppsView = new MAF.Class({
 								zOrder: Animator.ZORDER,
 								duration: 0.2
 							});
-							view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name'));
-							view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
+							if (id === 'addfavo') {
+								view.elements.appTitle.setText($_('ADDFAVO'));
+								if (view.state === id) {
+									view.elements.appDescription.setText($_('ADDFAVO_SELECTED'));
+								} else {
+									view.elements.appDescription.setText($_('ADDFAVO_DESC'));
+								}
+							} else if (id === 'reorderfavo') {
+								view.elements.appTitle.setText($_('REORDERFAVO'));
+								if (view.state === id) {
+									view.elements.appDescription.setText($_('REORDERFAVO_SELECTED'));
+								} else {
+									view.elements.appDescription.setText($_('REORDERFAVO_DESC'));
+								}
+							} else {
+								view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name'));
+								view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
+							}
+							if (view.reorder && view.cell && this.retrieve('favbutton') !== true) {
+								var currentIcon = this.icon.source;
+								view.reodered = this.getCellDataIndex();
+								if (view.cell === this) {
+									this.icon.setSource(view.icon);
+								} else if (view.cell) {
+									this.original = currentIcon;
+									this.icon.setSource(view.icon);
+									if (view.cell.icon) {
+										view.cell.icon.setSource(currentIcon);
+									}
+								}
+							}
 						},
 						onBlur: function () {
-							var idx = this.getCellIndex(),
-								view = this.carousel.owner,
+							var id = this.getCellDataItem(),
+								coords = this.getCellCoordinates(),
+								view = this.grid.owner,
 								origin = [];
-							if (idx%cellColumns === 0) {
+							if (coords.column === 0) {
 								origin.push('left');
-							} else if ((idx+1)%cellColumns === 0) {
+							} else if (coords.column === (coords.columns - 1)) {
 								origin.push('right');
 							} else {
 								origin.push('center');
 							}
-							if (idx < cellColumns) {
+							if (coords.row === 0) {
 								origin.push('top');
-							} else if (idx >= cellColumns) {
+							} else if (coords.row === (coords.rows - 1)) {
 								origin.push('bottom');
 							} else {
 								origin.push('center');
@@ -184,13 +387,17 @@ var AppsView = new MAF.Class({
 							});
 							view.elements.appTitle.setText('');
 							view.elements.appDescription.setText('');
+							if (view.reorder && view.cell && this.original && this.retrieve('favbutton') !== true) {
+								view.cell = this;
+								this.icon.setSource(this.original);
+								delete this.original;
+							}
 						}
 					}
 				});
 
 				cell.focusImg = new MAF.element.Image({
 					src: 'Images/IconFocus.png',
-					autoShow: false,
 					styles: {
 						opacity: 0,
 						width: 192,
@@ -210,25 +417,100 @@ var AppsView = new MAF.Class({
 					}
 				}).appendTo(cell);
 
+				cell.overlay = new MAF.element.Image({
+					hideWhileLoading: true,
+					styles: {
+						width: 192,
+						height: 192,
+						hOffset: (cell.width - 192) / 2,
+						vOffset: (cell.height - 192) / 2
+					}
+				}).appendTo(cell);
+
 				return cell;
 			},
-			cellUpdater: function (cell, data) {
-				cell.icon.setSource(ApplicationManager.getRootPath(data) + ApplicationManager.getMetadata(data).images.icon['192x192']);
+			cellUpdater: function (cell, id) {
+				var view = cell.grid.owner;
+				if (id === 'addfavo') {
+					cell.store('favbutton', true);
+					if (view.state === id) {
+						cell.icon.setSource('Images/AddFavoActive.png');
+					} else {
+						cell.icon.setSource('Images/AddFavo.png');
+					}
+				} else if (id === 'reorderfavo') {
+					cell.store('favbutton', true);
+					if (view.state === id) {
+						cell.icon.setSource('Images/ReOrderFavoActive.png');
+					} else {
+						cell.icon.setSource('Images/ReOrderFavo.png');
+					}
+				} else {
+					cell.eliminate('favbutton');
+					cell.icon.setSource(ApplicationManager.getRootPath(id) + ApplicationManager.getMetadata(id).images.icon['192x192']);
+					if (view.state === 'addfavo') {
+						var i = view.getFavoriteIndex(id);
+						if (view.category === 'favorites' || i !== -1) {
+							cell.overlay.setSource('Images/RemoveFavoIcon.png');
+						} else {
+							cell.overlay.setSource('Images/AddFavoIcon.png');
+						}
+					} else if (view.state === 'reorderfavo') {
+						cell.overlay.setSource('Images/ReOrderFavoIcon.png');
+					} else {
+						cell.overlay.setSource('');
+					}
+				}
 			},
 			styles: {
 				transform: 'translateZ(0)',
 				width: cellSize * cellColumns,
 				height: cellSize * cellRows,
-				hOffset: this.elements.categories.outerWidth,
+				hOffset: this.controls.categories.outerWidth,
 				vAlign: 'bottom',
-				vOffset: this.elements.categories.vOffset - 20
+				vOffset: this.controls.categories.vOffset - 20,
+				opacity: 0
 			},
 			events: {
-				onNavigate: function (event) {
-					if (event.payload.direction === 'down') {
-						this.body.scrollTop += cellSize;
-					} else if (event.payload.direction === 'up') {
-						this.body.scrollTop -= cellSize;
+				onNavigateOutOfBounds: function (event) {
+					var view = this.owner;
+					if (view.state !== 'reorderfavo' && (event.payload.direction === 'right' || event.payload.direction === 'left')) {
+						view.controls.categories.focus();
+						event.preventDefault();
+					} else {
+						var categories = ApplicationManager.getCategories(),
+							max = categories.length - 1,
+							page = this.getCurrentPage() || 0,
+							lastpage = Math.max(0, this.getPageCount() - 1),
+							idx = categories.indexOf(view.category);
+						if (event.payload.direction === 'down') {
+							if (page !== lastpage) {
+								return;
+							}
+							if (idx === max) {
+								idx = 0;
+							} else {
+								idx++;
+							}
+						} else if (event.payload.direction === 'up'){
+							if (page !== 0) {
+								return;
+							}
+							if (idx === 0) {
+								idx = max;
+							} else {
+								idx--;
+							}
+						}
+						if (view.state === 'reorderfavo') {
+							event.preventDefault();
+							return;
+						}
+						view.controls.categories.focus();
+						view.controls.categories.focusCell(idx);
+						this.focus();
+						this.focusCell(0);
+						event.preventDefault();
 					}
 				}
 			}
@@ -237,7 +519,7 @@ var AppsView = new MAF.Class({
 		this.elements.appTitle = new MAF.element.Text({
 			styles: {
 				hOffset: this.controls.apps.hOffset + 20,
-				vOffset: (this.height + 25) - this.elements.categories.vOffset,
+				vOffset: (this.height + 25) - this.controls.categories.vOffset,
 				fontSize: '2em',
 				fontWeight: 'bold'
 			}
@@ -253,10 +535,21 @@ var AppsView = new MAF.Class({
 				truncation: 'end'
 			}
 		}).appendTo(this);
+	},
 
-		var apps = MAF.messages.fetch('myApps');
-		if (apps) {
-			this.appsReady(apps);
+	focusView: function () {
+		if (MAF.messages.exists('myApps')) {
+			this.appsReady();
 		}
+	},
+
+	destroyView: function () {
+		this.onWidgetKeyPress.unsubscribeFrom(MAF.application, 'onWidgetKeyPress');
+		delete this.onWidgetKeyPress;
+		delete this.reodered;
+		delete this.reorder;
+		delete this.cell;
+		delete this.icon;
+		delete this.category;
 	}
 });

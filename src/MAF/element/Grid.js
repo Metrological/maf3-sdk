@@ -11,6 +11,9 @@ define('MAF.element.Grid', function () {
 		delete this.config.state;
 	};
 	var onNavigateOutOfBounds = function (event) {
+		if (event.defaultPrevented) {
+			return;
+		}
 		var cellEl     = event && event.Event && event.Event.target,
 			cellCl     = cellEl && cellEl.owner,
 			direction  = event && event.payload && event.payload.direction,

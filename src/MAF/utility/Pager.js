@@ -181,6 +181,12 @@ define('MAF.utility.Pager', function () {
 				internal.paramsMap[key] = entry;
 				if (internal.fetch && internal.fetch.func) {
 					internal.fetch.func.call(internal.fetch.obj, params);
+				} else {
+					this.fire(this.eventType, {
+						data: new MAF.utility.PagerStorageClass({ data: [] }),
+						index: index,
+						wrap: wrap
+					});
 				}
 				return null;
 			}

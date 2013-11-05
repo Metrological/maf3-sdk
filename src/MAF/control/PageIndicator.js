@@ -95,15 +95,15 @@ define('MAF.control.PageIndicator', function () {
 			this.content.setText(build.call(this, currentPage, pageCount, state));
 
 			if (useDots) {
-				this.element.wantsFocus = false;
 				this.content.setStyle('fontSize', '66%');
+			} else {
+				this.content.setStyle('fontSize', null);
+			} 
+
+			if (this.config.focus === false || pageCount === 0) {
+				this.element.wantsFocus = false;
 			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
-				this.content.setStyle('fontSize', null);
-			}
-
-			if (this.config.focus === false) {
-				this.element.wantsFocus = false;
 			}
 
 			if (this.config.autoDisableWhenEmpty) {

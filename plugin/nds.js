@@ -4,6 +4,7 @@ var NDS = createPluginObject('my_user_api', 'my_user_api', 'application/x-jsuser
 	AudioPlayer = NDS.AudioOutput_getInstance && NDS.AudioOutput_getInstance(),
 	TVContext   = NDS.ApplicationTvContext_getInstance && NDS.ApplicationTvContext_getInstance() || NDS.ApplicationTVContext_getInstance && NDS.ApplicationTVContext_getInstance(),
 	User        = NDS.UserAuthentication_getInstance && NDS.UserAuthentication_getInstance(),
+	UserData    = TVContext && TVContext.getUserData(),
 	Planner     = NDS.Planner_getInstance && NDS.Planner_getInstance();
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
@@ -319,9 +320,188 @@ var NDSPlayer = function () {
 		}
 	});
 };
+NDSPlayer.prototype = new Player();
+NDSPlayer.prototype.constructor = NDSPlayer;
 
 plugins.players.push(new NDSPlayer());
 
+var NDSCOUNTRIES = {
+	'eng': 'en',
+	'enm': 'en',
+	'ned': 'nl',
+	'nld': 'nl',
+	'dut': 'nl',
+	'che': 'ch',
+	'fre': 'fr',
+	'fra': 'fr',
+	'ger': 'de',
+	'deu': 'de',
+	'irl': 'ie'
+}, NDSLANGUAGES = {
+	'ang': 'en',
+	'eng': 'en',
+	'enm': 'en',
+	'ned': 'nl',
+	'nld': 'nl',
+	'dut': 'nl',
+	'fre': 'fr',
+	'fra': 'fr',
+	'frm': 'fr',
+	'fro': 'fr',
+	'ger': 'de',
+	'deu': 'de',
+	'gmh': 'de',
+	'goh': 'de',
+	'ita': 'it',
+	'irl': 'en',
+	'gla': 'en',
+	'gle': 'en'
+};
+/*
+var NDSProfile = function () {
+	var instance = ++Profile.__instances__,
+		LOCKED = false,
+		ATTEMPTS = 0;
+	var getUserData = function (key) {
+		try {
+			return UserData && UserData.get(key);
+		} catch(err) {}
+		return null;
+	}
+	getter(this, 'id', function () {
+		return md5(this.household + instance);
+	});
+	getter(this, 'name', function () {
+		return getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
+	});
+	getter(this, 'ageRating', function () {
+		return getUserData(UserData.KEY_PROFILE_PARENTAL_AGE) || 0;
+	});
+	getter(this, 'household', function () {
+		return md5(this.operator + (getUserData(UserData.KEY_PROFILE_USER_ID) || 0));
+	});
+	getter(this, 'operator', function () {
+		return 'horizon';
+	});
+	getter(this, 'packages', function () {
+		return [];
+	});
+	getter(this, 'country', function () {
+		return GEO && GEO.geo && GEO.geo.countryName;
+	});
+	getter(this, 'countryCode', function () {
+		var c = (getUserData(UserData.KEY_PROFILE_COUNTRY) || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
+		return NDSCOUNTRIES[country] || c;
+	});
+	getter(this, 'language', function () {
+		return LANGUAGES[this.languageCode];
+	});
+	getter(this, 'languageCode', function () {
+		var l = (getUserData(userData.KEY_PROFILE_UI_LANG) || (MAE.language || html.lang || 'en')).toLowerCase();
+		return NDSLANGUAGES[l] || l;
+	});
+	getter(this, 'city', function () {
+		return GEO && GEO.geo && GEO.geo.city;
+	});
+	getter(this, 'latlon', function () {
+		return GEO && GEO.geo && GEO.geo.ll || [];
+	});
+	getter(this, 'ip', function () {
+		return GEO && GEO.ip || '127.0.0.1';
+	});
+	getter(this, 'mac', function () {
+		return '00:00:00:00:00:00';
+	});
+	getter(this, 'locale', function () {
+		return this.languageCode + '-' + this.countryCode.toUpperCase();
+	});
+	getter(this, 'locked', function () {
+		return LOCKED;
+	});
+
+	function hasPIN(type) {
+		switch (type) {
+			case 'adult':
+				type = User.ADULT_PIN;
+				break;
+			case 'youth':
+				type = User.ADULT_PIN;
+				break;
+			default:
+				type = User.MASTER_PIN;
+				break;
+		}
+		try {
+			return UserData && UserData.isPINSet(type) || false;
+		} catch(err) {
+			return false;
+		}
+	}
+	getter(this, 'hasPIN', function () {
+		return hasPIN;
+	});
+
+	var resetLockedPIN = function () {
+		LOCKED = false;
+		ATTEMPTS = 0;
+	};
+	var challengePINCode = function (type, value) {
+		try {
+			return User && User.challengePINCode(type, value);
+		} catch(err) {}
+		return null;
+	};
+	var validatePIN = function (value, type) {
+		if (!hasPIN(type)) {
+			return true;
+		}
+		if (LOCKED) {
+			return false;
+		}
+		var result;
+		switch (type) {
+			case 'adult':
+				result = challengePINCode(User.ADULT_PIN, value);
+				break;
+			case 'youth':
+				result = challengePINCode(User.YOUTH_PIN, value);
+				break;
+			default:
+				result = challengePINCode(User.MASTER_PIN, value);
+				break;
+		}
+		switch (result) {
+			case User.PIN_SUCCESS:
+				LOCKED = false;
+				return true;
+			case User.PIN_RETRY:
+				ATTEMPTS++;
+				if (ATTEMPTS === 3) {
+					LOCKED = true;
+					resetLockedPIN.delay(15 * 60 * 1000);
+				}
+				return false;
+			case User.PIN_NOT_SET:
+			case User.PIN_LOCKED:
+				return false;
+			default:
+				return false;
+		}
+	};
+	getter(this, 'validatePIN', function () {
+		return validatePIN;
+	});
+
+	var passport = new GenericStorage('pp', true);
+	getter(this, 'passport', function () {
+		return passport;
+	});
+};
+NDSProfile.prototype = new Profile();
+NDSProfile.prototype.constructor = NDSProfile;
+
+plugins.profiles.push(new NDSProfile());
+*/
 var resetNDSPlayer = function () {
 	var player = plugins.players[0];
 	if (player) {
