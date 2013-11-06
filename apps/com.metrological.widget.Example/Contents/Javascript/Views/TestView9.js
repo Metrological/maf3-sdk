@@ -1,7 +1,7 @@
-var SearchSuggestView = new MAF.Class({
+var TestView9 = new MAF.Class({
 	Extends: MAF.views.SearchSuggest,
 
-	ClassName: 'SearchSuggestView',
+	ClassName: 'TestView9',
 
 	config: {
 		NoResultsMessage: $_('NO_RESULTS_FOUND')

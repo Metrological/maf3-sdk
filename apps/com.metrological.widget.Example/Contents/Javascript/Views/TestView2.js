@@ -24,7 +24,7 @@ var TestView2 = new MAF.Class({
 		}).appendTo(this);
 
 		var button3 = new MAF.control.TextButton({
-			label: 'SearchSuggest',
+			label: 'Load TestView10',
 			styles: {
 				vOffset: button2.outerHeight + 1
 			},
@@ -73,8 +73,10 @@ var TestView2 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		var ipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis turpis vestibulum, rutrum ipsum in, ultricies eros. Sed egestas faucibus interdum. Donec dictum quam ac dignissim ultricies. Pellentesque sed est ac metus ornare ornare et id mauris. Aenean hendrerit elit iaculis lacus aliquam, venenatis cursus risus imperdiet. Nulla sagittis facilisis mi sed sagittis. Nunc et justo tincidunt, congue odio id, rutrum lectus. Vivamus dignissim consectetur tellus. Vivamus lobortis tincidunt augue sed vestibulum. Nulla fringilla gravida purus vel tempus.';
+
 		var text1 = new MAF.element.TextField({
-			label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis turpis vestibulum, rutrum ipsum in, ultricies eros. Sed egestas faucibus interdum. Donec dictum quam ac dignissim ultricies. Pellentesque sed est ac metus ornare ornare et id mauris. Aenean hendrerit elit iaculis lacus aliquam, venenatis cursus risus imperdiet. Nulla sagittis facilisis mi sed sagittis. Nunc et justo tincidunt, congue odio id, rutrum lectus. Vivamus dignissim consectetur tellus. Vivamus lobortis tincidunt augue sed vestibulum. Nulla fringilla gravida purus vel tempus.',
+			label: ipsum,
 			styles: {
 				color: '#ddd',
 				vOffset: header2.outerHeight + 1,
@@ -165,28 +167,17 @@ var TestView2 = new MAF.Class({
 		}).appendTo(this);
 
 		var button7 = new MAF.control.TextButton({
-			label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis turpis vestibulum, rutrum ipsum in, ultricies eros.',
+			label: ipsum,
 			styles: {
 				height: 100,
 				vOffset: keyboard.outerHeight + 10
-			}
-		}).appendTo(this);
-
-		var button8 = new MAF.control.Button({
-			styles: {
-				vOffset: button7.outerHeight + 1
 			},
 			events: {
-				onSelect: function () {
-					log('Button onSelect');
+				onFocus: function () {
+					this.content.scrolling = true;
 				},
-				onFocus: function (event) {
-					log('Button onFocus');
-					event.preventDefault();
-				},
-				onBlur: function (event) {
-					log('Button onBlur');
-					event.preventDefault();
+				onBlur: function () {
+					this.content.scrolling = false;
 				}
 			}
 		}).appendTo(this);

@@ -26,7 +26,7 @@ var TestView3 = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
-					ApplicationManager.reload();
+					//ApplicationManager.reload();
 				}
 			}
 		}).appendTo(this);
@@ -99,10 +99,10 @@ var TestView3 = new MAF.Class({
 				vOffset: nos.outerHeight + 1
 			},
 			events: {
-				onSelect: function () {
+				onSelect: function () {/*
 					var apps = ApplicationManager.getApplications();
 					ApplicationManager.load(apps[0]);
-					ApplicationManager.open(apps[0]);
+					ApplicationManager.open(apps[0]);*/
 				}
 			}
 		}).appendTo(this);
@@ -126,7 +126,7 @@ var TestView3 = new MAF.Class({
 		}).appendTo(this);
 
 		var button6 = new MAF.control.TextButton({
-			label: 'Apps #' + ApplicationManager.getApplications().length,
+			/*label: 'Apps #' + ApplicationManager.getApplications().length,*/
 			styles: {
 				width: this.width / 3,
 				hOffset: this.controls.button5.outerWidth + 1,
@@ -297,15 +297,15 @@ var TestView3 = new MAF.Class({
 			rows: 2,
 			columns: 2,
 			carousel: true,
-			dataset: MAF.messages.fetch('myApps') || [],
+			dataset: /*MAF.messages.fetch('myApps') || */[],
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: this.getCellDimensions(),
 					events: {
 						onSelect: function (event) {
-							var id = this.getCellDataItem();
+							/*var id = this.getCellDataItem();
 							ApplicationManager.load(id);
-							ApplicationManager.open(id);
+							ApplicationManager.open(id);*/
 						},
 						onFocus: function () {
 							this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));

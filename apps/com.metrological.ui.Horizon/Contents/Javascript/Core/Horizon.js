@@ -7,6 +7,8 @@ var Horizon = (function (body) {
 	MAF.mediaplayer.init();
 	ApplicationManager.getViewport().setStyle('transformStyle', 'preserve-3d');
 
+	body.setStyle('transformOrigin', '50% 50%');
+
 	var container = new Frame({
 		styles: {
 			width: 'inherit',
@@ -88,10 +90,12 @@ var Horizon = (function (body) {
 		}
 	}).inject(container);
 
-	floor.animate({
-		origin: ['center', 'top'],
-		duration: 0.6
-	});
+	if (!MAF.Browser.nds && !MAF.Browser.firefox) {
+		floor.animate({
+			origin: ['center', 'top'],
+			duration: 0.6
+		});
+	}
 
 	function updateNowPlaying() {
 		var now = $_('NOW PLAYING') + ' ';
@@ -132,14 +136,14 @@ var Horizon = (function (body) {
 	var animatingNowPlaying = false;
 	function allowNowPlayingAnimation(animator) {
 		animatingNowPlaying = false;
-		if (animator) {
+		/*if (animator) {
 			animator.reset();
-		}
+		}*/
 	}
 	function resetAndHideNowPlaying(animator) {
-		if (animator) {
+		/*if (animator) {
 			animator.reset();
-		}
+		}*/
 		hideNowPlaying(allowNowPlayingAnimation);
 	}
 
@@ -176,7 +180,7 @@ var Horizon = (function (body) {
 		visible = false;
 		container.setStyle('backgroundColor', 'rgba(0,0,0,0)');
 		floor.setStyles({
-			transform: 'scale(2)',
+			transform: !MAF.Browser.nds && !MAF.Browser.firefox ? 'scale(2)' : null,
 			bottom: -floorHeight
 		});
 		if (!animatingNowPlaying) {

@@ -128,7 +128,7 @@ var NDSPlayer = function () {
 		}
 	});
 	getter(instance, 'program', function () {
-		var channel = TVContext && TVContext.getCurrentChannel() || {},
+		var channel = TVContext && TVContext.getCurrentChannel(),
 			program = channel && channel.getCurrentProgram() || {};
 		return new TVProgram(program.title, program.description, program.startTime, program.duration);
 	});
@@ -357,7 +357,9 @@ var NDSCOUNTRIES = {
 	'gla': 'en',
 	'gle': 'en'
 };
-/*
+
+plugins.storage = new CookieStorage();
+
 var NDSProfile = function () {
 	var instance = ++Profile.__instances__,
 		LOCKED = false,
@@ -378,7 +380,7 @@ var NDSProfile = function () {
 		return getUserData(UserData.KEY_PROFILE_PARENTAL_AGE) || 0;
 	});
 	getter(this, 'household', function () {
-		return md5(this.operator + (getUserData(UserData.KEY_PROFILE_USER_ID) || 0));
+		return md5(this.operator + (UserData && getUserData(UserData.KEY_PROFILE_USER_ID) || 0));
 	});
 	getter(this, 'operator', function () {
 		return 'horizon';
@@ -390,14 +392,14 @@ var NDSProfile = function () {
 		return GEO && GEO.geo && GEO.geo.countryName;
 	});
 	getter(this, 'countryCode', function () {
-		var c = (getUserData(UserData.KEY_PROFILE_COUNTRY) || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
-		return NDSCOUNTRIES[country] || c;
+		var c = (UserData && getUserData(UserData.KEY_PROFILE_COUNTRY) || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
+		return NDSCOUNTRIES[c] || c;
 	});
 	getter(this, 'language', function () {
 		return LANGUAGES[this.languageCode];
 	});
 	getter(this, 'languageCode', function () {
-		var l = (getUserData(userData.KEY_PROFILE_UI_LANG) || (MAE.language || html.lang || 'en')).toLowerCase();
+		var l = (UserData && getUserData(UserData.KEY_PROFILE_UI_LANG) || (MAE.language || html.lang || 'en')).toLowerCase();
 		return NDSLANGUAGES[l] || l;
 	});
 	getter(this, 'city', function () {
@@ -501,7 +503,7 @@ NDSProfile.prototype = new Profile();
 NDSProfile.prototype.constructor = NDSProfile;
 
 plugins.profiles.push(new NDSProfile());
-*/
+
 var resetNDSPlayer = function () {
 	var player = plugins.players[0];
 	if (player) {

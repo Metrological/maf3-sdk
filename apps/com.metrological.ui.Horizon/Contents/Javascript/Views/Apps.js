@@ -137,12 +137,8 @@ var AppsView = new MAF.Class({
 									duration: 0.2
 								});
 								if (view.category !== category) {
-									var first = view.category === undefined,
-										len = data.length;
-									if (category === 'favorites') {
-										len -= 2;
-									}
-									Horizon.setText($_('CATEGORY_' + category.toUpperCase()) + ' (' + len + ')');
+									var first = view.category === undefined;
+									Horizon.setText($_('CATEGORY_' + category.toUpperCase()));
 									view.category = category;
 									view.controls.apps.animate({
 										opacity: 0,
@@ -293,6 +289,7 @@ var AppsView = new MAF.Class({
 							} else {
 								ApplicationManager.load(id);
 								ApplicationManager.open(id);
+								Horizon.setText('');
 							}
 						},
 						onFocus: function () {
@@ -468,7 +465,7 @@ var AppsView = new MAF.Class({
 				height: cellSize * cellRows,
 				hOffset: this.controls.categories.outerWidth,
 				vAlign: 'bottom',
-				vOffset: this.controls.categories.vOffset - 20,
+				vOffset: this.controls.categories.vOffset - 15,
 				opacity: 0
 			},
 			events: {
@@ -540,6 +537,9 @@ var AppsView = new MAF.Class({
 	focusView: function () {
 		if (MAF.messages.exists('myApps')) {
 			this.appsReady();
+		}
+		if (this.category) {
+			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()));
 		}
 	},
 

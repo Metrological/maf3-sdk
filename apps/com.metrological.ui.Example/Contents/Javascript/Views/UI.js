@@ -1,5 +1,5 @@
-var TestView9 = new MAF.Class({
-	ClassName: 'TestView9',
+var UI = new MAF.Class({
+	ClassName: 'UI',
 
 	Extends: MAF.system.FullscreenView,
 
@@ -175,7 +175,6 @@ var TestView9 = new MAF.Class({
 									view.elements.myEPG.changeDataset([MAF.mediaplayer.getCurrentProgram()], true);
 									break;
 								case $_('Settings'):
-									MAF.application.loadView('view-TestView1');
 									break;
 								default:
 									break;
@@ -363,6 +362,12 @@ var TestView9 = new MAF.Class({
 				opacity: 0
 			}
 		}).appendTo(this.elements.menuBackground);
+	},
+
+	focusView: function () {
+		if (MAF.messages.exists('myApps')) {
+			this.controls.myMenu.cells[0].text.setText($_('Apps'));
+		}
 	},
 
 	destroyView: function () {
