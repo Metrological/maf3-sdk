@@ -84,6 +84,7 @@ var NDSPlayer = function () {
 			if (grabbed && currentSource && canPlay) {
 				screen.log('STOPPED');
 				stateChange(Player.state.STOP);
+				screen.log('BOUNDS:' + JSON.stringify(instance.bounds));
 			}
 		};
 		VideoPlayer.onPlaybackError = function () {
@@ -98,6 +99,7 @@ var NDSPlayer = function () {
 			if (!grabbed) {
 				screen.log('CHANNEL CHANGE');
 				channelChange();
+				screen.log('BOUNDS:' + JSON.stringify(instance.bounds));
 			}
 		};
 	}
