@@ -4,6 +4,7 @@ var AppsView = new MAF.Class({
 	Extends: MAF.system.FullscreenView,
 
 	state: null,
+	firstCategory: 1,
 
 	initialize: function () {
 		this.parent();
@@ -12,7 +13,7 @@ var AppsView = new MAF.Class({
 	},
 
 	dataHasChanged: function (event) {
-		if (event.payload.value && event.payload.key === 'myApps') {
+		if (event.payload.value && event.payload.key === 'myApps' && !this.ready) {
 			this.appsReady();
 		}
 	},
@@ -38,7 +39,9 @@ var AppsView = new MAF.Class({
 	},
 
 	getFavorites: function () {
-		return currentAppData.get('favorites') || [];
+		return (currentAppData.get('favorites') || []).filter(function (id) {
+			return ApplicationManager.exists(id);
+		});
 	},
 
 	setFavorites: function (favorites) {
@@ -82,7 +85,11 @@ var AppsView = new MAF.Class({
 			case 'reorderfavo':
 				return this.getFavorites().concat([this.state]);
 			default:
-				return this.getFavorites().concat(['addfavo', 'reorderfavo']);
+				var favo = this.getFavorites().concat(['addfavo']);
+				if (favo.length > 2) {
+					return favo.concat(['reorderfavo']);
+				}
+				return favo;
 		}
 	},
 
@@ -96,7 +103,7 @@ var AppsView = new MAF.Class({
 			this.controls.categories.setDisabled(false);
 			this.controls.categories.focus();
 			if (this.getFavorites().length === 0) {
-				this.controls.categories.focusCell(1);
+				this.controls.categories.focusCell(this.firstCategory);
 			}
 			this.controls.apps.focus();
 		}
@@ -105,7 +112,7 @@ var AppsView = new MAF.Class({
 	createView: function () {
 		this.controls.categories = new MAF.element.Grid({
 			guid: 'categories',
-			rows: 10,
+			rows: 8,
 			columns: 1,
 			carousel: true,
 			orientation: 'vertical',
@@ -114,7 +121,8 @@ var AppsView = new MAF.Class({
 				var baseFontColor = 'rgba(255,255,255,.6)',
 					cell = new MAF.element.GridCell({
 						styles: Object.merge(this.getCellDimensions(), {
-							transform: 'translateZ(0)'
+							transform: 'translateZ(0)',
+							transformOrigin: '0% 50%'
 						}),
 						events: {
 							onFocus: function () {
@@ -138,32 +146,11 @@ var AppsView = new MAF.Class({
 								});
 								if (view.category !== category) {
 									var first = view.category === undefined;
-									Horizon.setText($_('CATEGORY_' + category.toUpperCase()));
 									view.category = category;
-									view.controls.apps.animate({
-										opacity: 0,
-										duration: 0.3,
-										events: {
-											onAnimationEnded: function () {
-												if (view.category === category) {
-													this.animate({
-														opacity: 1,
-														duration: 0.3,
-														events: {
-															onAnimationEnded: function () {
-																if (view.category === category && first) {
-																	this.focus();
-																}
-															}
-														}
-													});
-												}
-												if (view.category === category) {
-													this.changeDataset(data || [], true);
-												}
-											}
-										}
-									});
+									view.controls.apps.changeDataset(data || [], true);
+									if (first) {
+										view.controls.apps.focus();
+									}
 								}
 							},
 							onBlur: function () {
@@ -175,15 +162,15 @@ var AppsView = new MAF.Class({
 									origin: ['0%', '50%'],
 									duration: 0.2
 								});
-								(function () {
-									if (cell && view.category !== category) {
-										cell.category.animate({
+								(function (c) {
+									if (this && view.category !== c) {
+										this.category.animate({
 											color: baseFontColor,
 											fontWeight: 'normal',
 											duration: 0.2
 										});
 									}
-								}).delay(100);
+								}).delay(100, cell, [category]);
 							}
 						}
 					});
@@ -193,7 +180,7 @@ var AppsView = new MAF.Class({
 						color: baseFontColor,
 						width: 'inherit',
 						height: 'inherit',
-						fontSize: '1.3em',
+						fontSize: '1.5em',
 						anchorStyle: 'leftCenter'
 					}
 				}).appendTo(cell);
@@ -224,6 +211,8 @@ var AppsView = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		this.controls.categories.setDisabled(true);
+
 		var cellSize = 215,
 			cellRows = 2,
 			cellColumns = 6;
@@ -247,10 +236,17 @@ var AppsView = new MAF.Class({
 							if (id === 'addfavo') {
 								if (view.state === id) {
 									view.state = null;
+									grid.changeDataset(view.getFavoritesCategory(), true);
 								} else if (view.state === null) {
 									view.state = id;
+									if (view.getFavorites().length === 0) {
+										view.controls.categories.focus();
+										view.controls.categories.focusCell(view.firstCategory);
+										grid.focus();
+									} else {
+										grid.changeDataset(view.getFavoritesCategory(), true);
+									}
 								}
-								grid.changeDataset(view.getFavoritesCategory(), true);
 							} else if (id === 'reorderfavo') {
 								if (view.state === id) {
 									view.state = null;
@@ -443,8 +439,14 @@ var AppsView = new MAF.Class({
 						cell.icon.setSource('Images/ReOrderFavo.png');
 					}
 				} else {
+					var meta = ApplicationManager.getMetadata(id);
 					cell.eliminate('favbutton');
-					cell.icon.setSource(ApplicationManager.getRootPath(id) + ApplicationManager.getMetadata(id).images.icon['192x192']);
+					if (meta && meta.images && meta.images.icon) {
+						cell.icon.setSource(ApplicationManager.getRootPath(id) + meta.images.icon['192x192']);
+					} else {
+						cell.icon.setSource('');
+						warn('no static icon for:' + id);
+					}
 					if (view.state === 'addfavo') {
 						var i = view.getFavoriteIndex(id);
 						if (view.category === 'favorites' || i !== -1) {
@@ -465,10 +467,12 @@ var AppsView = new MAF.Class({
 				height: cellSize * cellRows,
 				hOffset: this.controls.categories.outerWidth,
 				vAlign: 'bottom',
-				vOffset: this.controls.categories.vOffset - 15,
-				opacity: 0
+				vOffset: this.controls.categories.vOffset - 10
 			},
 			events: {
+				onPageChanged: function () {
+					this.owner.updateCategory();
+				},
 				onNavigateOutOfBounds: function (event) {
 					var view = this.owner;
 					if (view.state !== 'reorderfavo' && (event.payload.direction === 'right' || event.payload.direction === 'left')) {
@@ -534,12 +538,18 @@ var AppsView = new MAF.Class({
 		}).appendTo(this);
 	},
 
+	updateCategory: function () {
+		if (this.category) {
+			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()) + ' ' + (this.controls.apps.getCurrentPage() + 1) + '/' + this.controls.apps.getPageCount());
+		}
+	},
+
 	focusView: function () {
-		if (MAF.messages.exists('myApps')) {
+		if (MAF.messages.exists('myApps') && !this.ready) {
 			this.appsReady();
 		}
-		if (this.category) {
-			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()));
+		if (this.ready) {
+			this.updateCategory();
 		}
 	},
 

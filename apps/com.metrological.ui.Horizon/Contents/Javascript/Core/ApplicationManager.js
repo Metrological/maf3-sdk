@@ -691,7 +691,7 @@ var loadTemplate = (function () {
 		} else {
 			if (type === 'sidebar') {
 				var home = getElementById('@' + type + '-home');
-				if (app.MAF.application.isDefaultView()) {
+				if (app.MAF.application.isDefaultView() || (app.widget.hacks && app.widget.hacks.home === false)) {
 					home.wantsFocus = false;
 					home.frozen = true;
 				} else {
@@ -703,7 +703,6 @@ var loadTemplate = (function () {
 			template.frozen = false;
 		}
 		if (current[identifier] && current[identifier] !== type) {
-			log('frozen');
 			getElementById('@' + current[identifier]).frozen = true;
 		}
 		if (!getElementById(id)) {

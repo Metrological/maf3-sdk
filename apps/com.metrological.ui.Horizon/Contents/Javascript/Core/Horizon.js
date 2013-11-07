@@ -1,6 +1,7 @@
 var Horizon = (function (body) {
 	var fontSize = '1em',
 		fontColor = 'rgba(255,255,255,.4)',
+		backgroundColor = 'rgba(0,0,0,.7)',
 		floorHeight = 451,
 		visible = true;
 
@@ -13,7 +14,7 @@ var Horizon = (function (body) {
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
-			backgroundColor: 'rgba(0,0,0,.4)',
+			backgroundColor: backgroundColor,
 			backgroundImage: widget.getPath('Images/Horizon/Header.png'),
 			backgroundRepeat: 'no-repeat',
 			backgroundPosition: '50% 0%'
@@ -195,7 +196,7 @@ var Horizon = (function (body) {
 			transform: null,
 			bottom: 0
 		});
-		container.setStyle('backgroundColor', 'rgba(0,0,0,.4)');
+		container.setStyle('backgroundColor', backgroundColor);
 	}
 
 	updateNowPlaying();
