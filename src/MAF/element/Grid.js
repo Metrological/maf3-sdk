@@ -190,7 +190,6 @@ define('MAF.element.Grid', function () {
 				}
 				var data = payload.data.items && payload.data.items.length && [].concat(payload.data.items) || [],
 					dataLength = data.length;
-
 				if (state.focusIndex === undefined) {
 					this.updateState({ focusIndex: -1 });
 				}
@@ -218,7 +217,6 @@ define('MAF.element.Grid', function () {
 				});
 				var focus = request.options.focus,
 					fidx = this.getCellIndex(focus);
-
 				if (focus && state.hasFocus) {
 					var loop = this.cells.length;
 					while (fidx >= dataLength && loop) {
@@ -360,11 +358,6 @@ define('MAF.element.Grid', function () {
 				focus = state.hasFocus && state.focusCoordinates,
 				start = reset ? 0 : state.currentPage || 0,
 				options = {transition: 'none', refresh: reset || false, focus: focus};
-			if (dataLength === 0 && reset && this.cells) {
-				while(this.cells.length) {
-					this.cells.pop().suicide();
-				}
-			}
 			this.changePage(start, options);
 			this.fire("onDatasetChanged");
 			return this;
@@ -434,18 +427,17 @@ define('MAF.element.Grid', function () {
 			var count = this.getCellCount(),
 				state = this.getState(),
 				index = this.normalizeIndex((pagenum || 0) * count);
-			if (pagenum === state.currentPage && (options && !options.refresh)) {
-				return;
-			}
-			state = this.updateState({
-				pageRequested: {
-					index: index,
-					options: options || {}
-				},
-				pageChanging: true
-			});
-			if (this.getPageCount()) {
-				this.fire('onChangePage', state);
+			if (pagenum !== state.currentPage || (options && options.refresh)) {
+				state = this.updateState({
+					pageRequested: {
+						index: index,
+						options: options || {}
+					},
+					pageChanging: true
+				});
+				if (this.getPageCount()) {
+					this.fire('onChangePage', state);
+				}
 			}
 			this.pager.getPage(index);
 		},

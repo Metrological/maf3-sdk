@@ -976,11 +976,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 	var onBodyKeyDown = function (event) {
 		var target = event.target;
-		//log('onBodyKeyDown', event, event.keyCode, event.key, event.isChar);
+		//log('onBodyKeyDown', event, event.keyCode, event.key, event.isChar, event.isNumeric);
 		//target.owner.fireEvent('keydown', event);
-		if (event.isChar || event.isNumeric) {
-			if (!checkForFocus.call(target.owner, event.key))
+		if (event.isChar || event.isNumeric || event.isExtendedChar || event.isExtendedNumeric) {
+			if (!checkForFocus.call(target.owner, event.key)) {
 				return target.owner.appendToValue(event.key);
+			}
 		} else if (this.visible){
 			switch (event.key) {
 				case 'shift':
