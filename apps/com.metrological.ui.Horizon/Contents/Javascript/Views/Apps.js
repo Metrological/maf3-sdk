@@ -22,7 +22,11 @@ var AppsView = new MAF.Class({
 		if (event.payload.key === 'back' && this.state !== null) {
 			var categories = ApplicationManager.getCategories(),
 				data;
-			this.state = null;
+/*			log(this.state);
+			if (this.state === 'addfavo' || this.category !== 'favorites') {
+				// back to favourites
+			}
+*/			this.state = null;
 			if (this.category === 'favorites') {
 				delete this.reodered;
 				delete this.reorder;
@@ -272,18 +276,25 @@ var AppsView = new MAF.Class({
 											view.removeFavorite(id);
 											cell.overlay.setSource('Images/AddFavoIcon.png');
 										}
+										var isFavorite = view.getFavorites().indexOf(id) !== -1;
+										view.elements.appTitle.setText($_(isFavorite ? 'REMOVEFAVO_APP' : 'ADDFAVO_APP', [ApplicationManager.getMetadataByKey(id, 'name')]));
+										view.elements.appDescription.setText($_(isFavorite ? 'CONFIRM_REMOVEFAVO' : 'CONFIRM_ADDFAVO'));
 										break;
 									case 'reorderfavo':
 										if (!view.reorder) {
 											view.reorder = id;
 											view.cell = this;
 											view.icon = this.icon.source;
+											view.controls.categories.setDisabled(true);
+											view.elements.appDescription.setText($_('STOP_REORDERFAVO'));
 										} else if (view.reodered !== undefined) {
 											view.reorderFavorite(view.reorder, view.reodered);
 											delete view.reodered;
 											delete view.reorder;
 											delete view.cell;
 											delete view.icon;
+											view.controls.categories.setDisabled(false);
+											view.elements.appDescription.setText($_('START_REORDERFAVO'));
 											grid.changeDataset(view.getFavoritesCategory(), true);
 										}
 										break;
@@ -298,7 +309,8 @@ var AppsView = new MAF.Class({
 							var id = this.getCellDataItem(),
 								coords = this.getCellCoordinates(),
 								view = this.grid.owner,
-								origin = [];
+								origin = [],
+								isFavorite = view.getFavorites().indexOf(id) !== -1;
 							if (coords.column === 0) {
 								origin.push('left');
 							} else if (coords.column === (coords.columns - 1)) {
@@ -338,9 +350,21 @@ var AppsView = new MAF.Class({
 									view.elements.appDescription.setText($_('REORDERFAVO_DESC'));
 								}
 							} else {
-								var isFavorite = view.getFavorites().indexOf(id) !== -1;
-								view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
-								view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
+								if (view.state === 'addfavo') {
+									view.elements.appTitle.setText($_(isFavorite ? 'REMOVEFAVO_APP' : 'ADDFAVO_APP', [ApplicationManager.getMetadataByKey(id, 'name')]));
+									view.elements.appDescription.setText($_(isFavorite ? 'CONFIRM_REMOVEFAVO' : 'CONFIRM_ADDFAVO'));
+								} else if (view.state === 'reorderfavo') {
+									if (!view.reorder) {
+										view.elements.appTitle.setText($_('REORDERFAVO_APP', [ApplicationManager.getMetadataByKey(id, 'name')]));
+										view.elements.appDescription.setText($_('START_REORDERFAVO'));
+									} else {
+										view.elements.appTitle.setText($_('REORDERFAVO_APP', [ApplicationManager.getMetadataByKey(view.reorder, 'name')]));
+										view.elements.appDescription.setText($_('STOP_REORDERFAVO'));
+									}
+								} else {
+									view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
+									view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
+								}
 							}
 							if (view.reorder && view.cell && this.retrieve('favbutton') !== true) {
 								var currentIcon = this.icon.source;

@@ -1,4 +1,4 @@
-var version = '1.0.7s4c2r83';
+var version = '1.0.8s4c2r99';
 
 NAF = {};
 WebApp = {};
