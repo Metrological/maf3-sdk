@@ -111,6 +111,7 @@ var Horizon = (function (body) {
 
 	function hideNowPlaying(callback) {
 		if (!visible) {
+			body.setStyle('transform', null);
 			body.animate({
 				scale: 1.6,
 				delay: 5,
@@ -137,14 +138,14 @@ var Horizon = (function (body) {
 	var animatingNowPlaying = false;
 	function allowNowPlayingAnimation(animator) {
 		animatingNowPlaying = false;
-		/*if (animator) {
+		if (animator) {
 			animator.reset();
-		}*/
+		}
 	}
 	function resetAndHideNowPlaying(animator) {
-		/*if (animator) {
+		if (animator) {
 			animator.reset();
-		}*/
+		}
 		hideNowPlaying(allowNowPlayingAnimation);
 	}
 

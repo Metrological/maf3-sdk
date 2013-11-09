@@ -42,6 +42,7 @@ include('MAF/control/TabStripButton.js');
 include('MAF/control/TabPipeButton.js');
 include('MAF/control/TabPipe.js');
 include('MAF/control/PageIndicator.js');
+include('MAF/control/ScrollIndicator.js');
 include('MAF/control/SingleTab.js');
 include('MAF/control/FixedTab.js');
 include('MAF/control/MetadataDisplay.js');

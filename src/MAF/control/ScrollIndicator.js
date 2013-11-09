@@ -1,6 +1,6 @@
-define('MAF.control.PageIndicator', function () {
+define('MAF.control.ScrollIndicator', function () {
 	return new MAF.Class({
-		ClassName: 'ControlPageIndicator',
+		ClassName: 'ControlScrollIndicator',
 
 		Extends: MAF.control.Button,
 
@@ -9,9 +9,9 @@ define('MAF.control.PageIndicator', function () {
 				switch(event.type) {
 					case 'navigate':
 						if (event.detail && event.detail.direction) {
-							if (event.detail.direction === 'left' || event.detail.direction === 'right') {
+							if (event.detail.direction === 'up' || event.detail.direction === 'down') {
 								event.preventDefault();
-								return this.shiftSource(event.detail.direction);
+								return this.shiftSource(event.detail.direction === 'up' ? 'left' : 'right');
 							}
 						}
 						break;
@@ -19,27 +19,17 @@ define('MAF.control.PageIndicator', function () {
 				this.parent(event, payload);
 			},
 			createContent: function () {
-				this.content = new MAF.element.Text({
-					ClassName: this.ClassName + 'TextLink'
-				}).appendTo(this);
-			},
-			buildDots: function (curpage, pagecount, state) {
-				if (this.config.updateDots && this.config.updateDots.call) {
-					return this.config.updateDots.call(this, curpage, pagecount, state);
-				} else {
-					var dots = '';
-					for (var i = 0; i < pagecount; i++) {
-						dots += FontAwesome.get(curpage === i ? 'circle-o' : 'circle') + ' ';
+				this.content = new MAF.element.Container({
+					ClassName: this.ClassName + 'Scroll',
+					styles: {
+						visible: false
 					}
-					return dots.trim();
-				}
-			},
-			buildText: function (curpage, pagecount, state) {
-				if (this.config.updateText && this.config.updateText.call) {
-					return this.config.updateText.call(this, curpage, pagecount, state);
-				} else {
-					return FontAwesome.get('caret-left') + ' ' + widget.getLocalizedString('PAGE', [parseInt(curpage, 10) + 1, pagecount]) + ' ' + FontAwesome.get('caret-right');
-				}
+				}).appendTo(this);
+
+				this.content.animate({
+					properties: ['top'],
+					duration: 0.6
+				});
 			},
 			onSourceUpdated: function (event) {
 				return this.update(event.payload);
@@ -47,9 +37,7 @@ define('MAF.control.PageIndicator', function () {
 		},
 
 		config: {
-			threshold: 0,
-			arrowPadding: 6,
-			imageSources: null,
+			autoHideWhenEmpty: true,
 			autoDisableWhenEmpty: true
 		},
 
@@ -89,27 +77,26 @@ define('MAF.control.PageIndicator', function () {
 		update: function (state) {
 			var currentPage = state && state.currentPage ? state.currentPage : this.getSourceCurrentPage() || 0,
 				pageCount = state && state.pageCount ? state.pageCount : this.getSourcePageCount() || 1,
-				useDots = pageCount < (parseInt(this.config.threshold, 10) || 0),
-				build = useDots ? this.buildDots : this.buildText;
+				height = this.height * (1 / pageCount);
 
-			this.content.setText(build.call(this, currentPage, pageCount, state));
+			if (this.config.autoDisableWhenEmpty) {
+				this.setDisabled(pageCount < 2);
+			}
 
-			if (useDots) {
-				this.content.setStyle('fontSize', '66%');
-			} else {
-				this.content.setStyle('fontSize', null);
-			} 
+			if (this.config.autoHideWhenEmpty) {
+				this.content.visible = !(pageCount < 2);
+			}
+
+			this.content.setStyles({
+				height: height,
+				top: height * currentPage
+			});
 
 			if (this.config.focus === false || pageCount === 0) {
 				this.element.wantsFocus = false;
 			} else if (pageCount > 0) {
 				this.element.wantsFocus = true;
 			}
-
-			if (this.config.autoDisableWhenEmpty) {
-				this.setDisabled((pageCount < 2));
-			}
-
 			return this;
 		},
 
@@ -123,7 +110,7 @@ define('MAF.control.PageIndicator', function () {
 		}
 	});
 }, {
-	ControlPageIndicator: {
+	ControlScrollIndicator: {
 		renderSkin: function (state, w, h, args, theme) {
 			var ff = new Frame();
 			theme.applyLayer('BaseGlow', ff);
@@ -134,15 +121,16 @@ define('MAF.control.PageIndicator', function () {
 			return ff;
 		},
 		styles: {
-			width: 'inherit',
-			height: '38px'
+			width: '7px',
+			height: 'inherit',
+			borderRadius: '3px'
 		}
 	},
-	ControlPageIndicatorTextLink: {
+	ControlScrollIndicatorScroll: {
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
-			anchorStyle: 'center'
+			backgroundColor: 'rgba(255,255,255,.9)'
 		}
 	}
 });

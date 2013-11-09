@@ -227,6 +227,17 @@ var AppsView = new MAF.Class({
 			cellRows = 2,
 			cellColumns = 6;
 
+		var scroll = new MAF.control.ScrollIndicator({
+			focus: false,
+			styles: {
+				height: (cellSize * cellRows) - 40,
+				hAlign: 'right',
+				vAlign: 'bottom',
+				hOffset: 134,
+				vOffset: this.controls.categories.vOffset + 10
+			}
+		}).appendTo(this);
+
 		this.controls.apps = new MAF.element.Grid({
 			guid: 'apps',
 			rows: cellRows,
@@ -494,7 +505,7 @@ var AppsView = new MAF.Class({
 			},
 			styles: {
 				transform: 'translateZ(0)',
-				width: cellSize * cellColumns,
+				width: (cellSize - 7) * cellColumns,
 				height: cellSize * cellRows,
 				hOffset: this.controls.categories.outerWidth,
 				vAlign: 'bottom',
@@ -549,6 +560,8 @@ var AppsView = new MAF.Class({
 		}).appendTo(this);
 
 		this.controls.apps.setDisabled(true);
+
+		scroll.attachToSource(this.controls.apps);
 
 		this.elements.appTitle = new MAF.element.Text({
 			styles: {
