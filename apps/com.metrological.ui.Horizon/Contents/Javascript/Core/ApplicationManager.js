@@ -827,6 +827,11 @@ widget.handleHostEvent = function (event) {
 			//log(event.data);
 			MAF.messages.store('myApps', event.getData());
 			break;
+		case 'onApplicationStartupRequest':
+			data = event.data;
+			ApplicationManager.load(data);
+			ApplicationManager.open(data);
+			break;
 		default:
 			break;
 	}

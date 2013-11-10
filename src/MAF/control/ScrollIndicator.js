@@ -130,7 +130,8 @@ define('MAF.control.ScrollIndicator', function () {
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
-			backgroundColor: 'rgba(255,255,255,.9)'
+			backgroundColor: 'rgba(255,255,255,.9)',
+			borderRadius: 'inherit'
 		}
 	}
 });
