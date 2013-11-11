@@ -58,17 +58,21 @@ controller.on('model.initialized', function () {
 		el.dispatchEvent(keyEvent);
 	});
 
-	function getApplicationsByChannelName(channel) {
-		var ids = ApplicationsManager.getApplicationsByChannelName(channel),
-			result = [];
-		ids.forEach(function (id) {
-			result.push({
-				id: id,
-				name: ApplicationManager.getMetadataByKey(id, 'name'),
-				image: getRootPath(id) + meta[id].images.icon['192x192'],
-				url: ApplicationManager.getBaseURL() + '#app:' + id
+	function getApplicationsByChannelById(id) {
+		var result = [],
+			channel = model.channels.filter(function (c) {
+				return c.id === id;
 			});
-		});
+		if (channel.length > 0) {
+			ApplicationsManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
+				result.push({
+					id: id,
+					name: ApplicationManager.getMetadataByKey(id, 'name'),
+					image: getRootPath(id) + meta[id].images.icon['192x192'],
+					url: ApplicationManager.getBaseURL() + '#app:' + id
+				});
+			});
+		}
 		return [{
 			id: ui,
 			name: 'Apps',
@@ -87,7 +91,7 @@ controller.on('model.initialized', function () {
 		}
 		switch (msg.method) {
 			case 'getApplications':
-				message = getApplicationsByChannelName(msg.message);
+				message = getApplicationsByChannelById(msg.message);
 				break;
 		}
 		if (message) {
