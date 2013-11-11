@@ -477,14 +477,8 @@ var AppsView = new MAF.Class({
 						cell.icon.setSource('Images/ReOrderFavo.png');
 					}
 				} else {
-					var meta = ApplicationManager.getMetadata(id);
 					cell.eliminate('favbutton');
-					if (meta && meta.images && meta.images.icon) {
-						cell.icon.setSource(ApplicationManager.getRootPath(id) + meta.images.icon['192x192']);
-					} else {
-						cell.icon.setSource('');
-						warn('no static icon for:' + id);
-					}
+					cell.icon.setSource(ApplicationManager.getIcon(id) || '');
 					if (view.state === 'addfavo') {
 						var i = view.getFavoriteIndex(id);
 						if (view.category === 'favorites' || i !== -1) {

@@ -58,26 +58,26 @@ controller.on('model.initialized', function () {
 		el.dispatchEvent(keyEvent);
 	});
 
-	function getApplicationsByChannelById(id) {
+	function getApplicationsByChannelId(channelId) {
 		var result = [],
 			channel = model.channels.filter(function (c) {
-				return c.id === id;
+				return c.id === channelId;
 			});
 		if (channel.length > 0) {
 			ApplicationsManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
 				result.push({
 					id: id,
 					name: ApplicationManager.getMetadataByKey(id, 'name'),
-					image: getRootPath(id) + meta[id].images.icon['192x192'],
-					url: ApplicationManager.getBaseURL() + '#app:' + id
+					image: ApplicationManager.getIcon(id),
+					url: ApplicationManager.getLaunchURL(id)
 				});
 			});
 		}
 		return [{
 			id: ui,
 			name: 'Apps',
-			image: getRootPath(ui) + meta[ui].images.icon['192x192'],
-			url: ApplicationManager.getBaseURL() + '#/' + ui
+			image: ApplicationManager.getIcon(ui),
+			url: ApplicationManager.getMainURL()
 		}].concat(result);
 	}
 
@@ -91,7 +91,7 @@ controller.on('model.initialized', function () {
 		}
 		switch (msg.method) {
 			case 'getApplications':
-				message = getApplicationsByChannelById(msg.message);
+				message = getApplicationsByChannelId(msg.message);
 				break;
 		}
 		if (message) {
@@ -105,6 +105,7 @@ controller.on('model.initialized', function () {
 	var i = getApplicationIndex();
 	controller.on('model.state.applications.' + i + '.appMsg', onMessageCallback);
 	doFn('model.state.applications.' + i + '?state=loaded');
+	doFn('model.state.applications.' + i + '?inFocus=false');
 });
 
 controller.init();

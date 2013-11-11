@@ -295,7 +295,7 @@ var UI = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, data) {
-				cell.icon.setSource(ApplicationManager.getRootPath(data) + ApplicationManager.getMetadata(data).images.icon['192x192']);
+				cell.icon.setSource(ApplicationManager.getIcon(data) || '');
 			},
 			styles: {
 				overflow: 'visible',
