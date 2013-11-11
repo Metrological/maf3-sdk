@@ -58,6 +58,25 @@ controller.on('model.initialized', function () {
 		el.dispatchEvent(keyEvent);
 	});
 
+	function getApplicationsByChannelName(channel) {
+		var ids = ApplicationsManager.getApplicationsByChannelName(channel),
+			result = [];
+		ids.forEach(function (id) {
+			result.push({
+				id: id,
+				name: ApplicationManager.getMetadataByKey(id, 'name'),
+				image: getRootPath(id) + meta[id].images.icon['192x192'],
+				url: ApplicationManager.getBaseURL() + '#app:' + id
+			});
+		});
+		return [{
+			id: ui,
+			name: 'Apps',
+			image: getRootPath(ui) + meta[ui].images.icon['192x192'],
+			url: ApplicationManager.getBaseURL() + '#/' + ui
+		}].concat(result);
+	}
+
 	function onMessageCallback() {
 		var i = getApplicationIndex(),
 			msg = model.state.applications[i].appMsg,
@@ -68,8 +87,7 @@ controller.on('model.initialized', function () {
 		}
 		switch (msg.method) {
 			case 'getApplications':
-				var channelId = msg.message;
-				message = [];
+				message = getApplicationsByChannelName(msg.message);
 				break;
 		}
 		if (message) {

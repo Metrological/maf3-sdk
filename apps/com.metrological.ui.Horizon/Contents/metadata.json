@@ -6,5 +6,10 @@
 	"company": "Metrological Widgets BV",
 	"copyright": "Metrological Widgets BV",
 	"description": "Horizon UI",
-	"scripts": "Javascript/init.js"
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
 }

@@ -9,7 +9,7 @@ var AppsView = new MAF.Class({
 	initialize: function () {
 		this.parent();
 		this.registerMessageCenterListenerCallback(this.dataHasChanged);
-		this.onWidgetKeyPress = this.handleFavoriteBack.subscribeTo(MAF.application, 'onWidgetKeyPress', this);
+		this.onActivateBackButton = this.handleFavoriteBack.subscribeTo(MAF.application, 'onActivateBackButton', this);
 	},
 
 	dataHasChanged: function (event) {
@@ -19,14 +19,10 @@ var AppsView = new MAF.Class({
 	},
 
 	handleFavoriteBack: function (event) {
-		if (event.payload.key === 'back' && this.state !== null) {
+		if (this.state !== null) {
 			var categories = ApplicationManager.getCategories(),
 				data;
-/*			log(this.state);
-			if (this.state === 'addfavo' || this.category !== 'favorites') {
-				// back to favourites
-			}
-*/			this.state = null;
+			this.state = null;
 			if (this.category === 'favorites') {
 				delete this.reodered;
 				delete this.reorder;
@@ -597,11 +593,10 @@ var AppsView = new MAF.Class({
 		if (this.ready) {
 			this.updateCategory();
 		}
-		return this.ready !== undefined;
 	},
 
 	destroyView: function () {
-		this.onWidgetKeyPress.unsubscribeFrom(MAF.application, 'onWidgetKeyPress');
+		this.onActivateBackButton.unsubscribeFrom(MAF.application, 'onActivateBackButton');
 		delete this.onWidgetKeyPress;
 		delete this.reodered;
 		delete this.reorder;
