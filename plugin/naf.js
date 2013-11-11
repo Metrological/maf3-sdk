@@ -58,6 +58,26 @@ controller.on('model.initialized', function () {
 		el.dispatchEvent(keyEvent);
 	});
 
+	(function (i) {
+		var ids = ApplicationManager.getApplications().filter(function (id) {
+			return meta[id].menu === true;
+		});
+		ids.forEach(function (id) {
+			var name = ApplicationManager.getMetadataByKey(id, 'name'),
+				image = ApplicationManager.getIcon(id),
+				url = ApplicationManager.getLaunchURL(id);
+			doFn('model.state.applications.' + (++i) +
+				'?name=' + name +
+				'&type=webapp' + 
+				'&id=' + id + 
+				'&windowId=' + window.name + 
+				'&url=' + url + 
+				'&state=loaded' +
+				'&viewState=hidden' +
+				'&pictures=[' + image + ']');
+		});
+	}(getApplicationIndex()));
+
 	function getApplicationsByChannelId(channelId) {
 		var result = [],
 			channel = model.channels.filter(function (c) {

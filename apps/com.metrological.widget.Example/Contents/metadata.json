@@ -18,6 +18,7 @@
 		"video",
 		"example"
 	],
+	"menu": true,
 	"images": {
 		"header": {
 			"normal": "Images/header.png",
