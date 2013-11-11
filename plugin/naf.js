@@ -64,7 +64,7 @@ controller.on('model.initialized', function () {
 				return c.id === channelId;
 			});
 		if (channel.length > 0) {
-			ApplicationsManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
+			ApplicationManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
 				result.push({
 					id: id,
 					name: ApplicationManager.getMetadataByKey(id, 'name'),
