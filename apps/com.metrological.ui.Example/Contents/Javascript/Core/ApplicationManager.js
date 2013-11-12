@@ -314,7 +314,7 @@ var loadTemplate = (function () {
 							back: function (event) {
 								var dialogKey = this.retrieve('key');
 								event.preventDefault();
-								event.stopPropegation();
+								event.stopPropagation();
 								this.destroy();
 								if (focusAfterDialog) {
 									focusAfterDialog.focus();
