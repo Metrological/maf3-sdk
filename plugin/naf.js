@@ -58,10 +58,12 @@ controller.on('model.initialized', function () {
 		el.dispatchEvent(keyEvent);
 	});
 
-	(function (i) {
-		var ids = ApplicationManager.getApplications().filter(function (id) {
-			return meta[id].menu === true;
-		});
+	function getMainMenuApplications(apps) {
+		apps = apps || ApplicationManager.getApplications();
+		var i = getApplicationIndex();
+			ids = apps.filter(function (id) {
+				return meta[id].menu === true;
+			});
 		ids.forEach(function (id) {
 			var name = ApplicationManager.getMetadataByKey(id, 'name'),
 				image = ApplicationManager.getIcon(id),
@@ -76,7 +78,8 @@ controller.on('model.initialized', function () {
 				'&viewState=hidden' +
 				'&pictures=[' + image + ']');
 		});
-	}(getApplicationIndex()));
+		doFn('model.state.applications.' + getApplicationIndex() + '?state=loaded');
+	}
 
 	function getApplicationsByChannelId(channelId) {
 		var result = [],
@@ -122,10 +125,13 @@ controller.on('model.initialized', function () {
 		}
 	}
 
-	var i = getApplicationIndex();
-	controller.on('model.state.applications.' + i + '.appMsg', onMessageCallback);
-	doFn('model.state.applications.' + i + '?state=loaded');
-	doFn('model.state.applications.' + i + '?inFocus=false');
+	controller.on('model.state.applications.' + getApplicationIndex() + '.appMsg', onMessageCallback);
+
+	if (ApplicationManager.complete) {
+		getMainMenuApplications();
+	} else {
+		ApplicationManager.onComplete = getMainMenuApplications;
+	}
 });
 
 controller.init();
