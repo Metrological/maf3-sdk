@@ -58,7 +58,7 @@ var loadTemplate = (function () {
 					var sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'times', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
-						{ value: '@AppButtonSidebarVideoSize', label: 'fullscreen', action: 'viewport-toggle' }
+						{ value: '@AppButtonSidebarVideoSize', label: 'arrows-alt', action: 'viewport-toggle' }
 					];
 
 					if (Muzzley.enabled) {

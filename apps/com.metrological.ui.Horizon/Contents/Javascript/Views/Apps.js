@@ -226,7 +226,7 @@ var AppsView = new MAF.Class({
 		var scroll = new MAF.control.ScrollIndicator({
 			focus: false,
 			styles: {
-				height: (cellSize * cellRows) - 40,
+				height: (cellSize * cellRows) - 42,
 				hAlign: 'right',
 				vAlign: 'bottom',
 				hOffset: 134,
@@ -267,6 +267,10 @@ var AppsView = new MAF.Class({
 							} else if (id === 'reorderfavo') {
 								if (view.state === id) {
 									view.state = null;
+									delete view.reodered;
+									delete view.reorder;
+									delete view.cell;
+									delete view.icon;
 								} else {
 									view.state = id;
 								}
@@ -294,6 +298,7 @@ var AppsView = new MAF.Class({
 											view.icon = this.icon.source;
 											view.controls.categories.setDisabled(true);
 											view.elements.appDescription.setText($_('STOP_REORDERFAVO'));
+											this.setStyle('backgroundImage', 'Images/IconMove.png');
 										} else if (view.reodered !== undefined) {
 											view.reorderFavorite(view.reorder, view.reodered);
 											delete view.reodered;
@@ -376,12 +381,14 @@ var AppsView = new MAF.Class({
 							if (view.reorder && view.cell && this.retrieve('favbutton') !== true) {
 								var currentIcon = this.icon.source;
 								view.reodered = this.getCellDataIndex();
+								this.setStyle('backgroundImage', 'Images/IconMove.png');
 								if (view.cell === this) {
 									this.icon.setSource(view.icon);
 								} else if (view.cell) {
 									this.original = currentIcon;
 									this.icon.setSource(view.icon);
 									if (view.cell.icon) {
+										view.cell.setStyle('backgroundImage', null);
 										view.cell.icon.setSource(currentIcon);
 									}
 								}
@@ -418,6 +425,9 @@ var AppsView = new MAF.Class({
 							});
 							view.elements.appTitle.setText('');
 							view.elements.appDescription.setText('');
+							if (view.reorder) {
+								this.setStyle('backgroundImage', null);
+							}
 							if (view.reorder && view.cell && this.original && this.retrieve('favbutton') !== true) {
 								view.cell = this;
 								this.icon.setSource(this.original);
