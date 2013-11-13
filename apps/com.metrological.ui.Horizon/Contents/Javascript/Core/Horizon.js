@@ -5,6 +5,14 @@ var Horizon = (function (body) {
 		floorHeight = 451,
 		visible = true;
 
+	Theme.Fonts.add('InterstatePro-Bold', 'Fonts/InterstatePro-Bold');
+	Theme.Fonts.add('InterstatePro-ExtraLight', 'Fonts/InterstatePro-ExtraLight');
+	Theme.Fonts.add('InterstatePro-Light', 'Fonts/InterstatePro-Light');
+	Theme.Fonts.add('InterstatePro-Regular', 'Fonts/InterstatePro-Regular');
+	Theme.Fonts.add('InterstatePro-Thin', 'Fonts/InterstatePro-Thin');
+	Theme.Fonts.add('UPCDigital-Bold', 'Fonts/UPCDigital-Bold');
+	Theme.Fonts.add('UPCDigital-Regular', 'Fonts/UPCDigital-Regular');
+
 	MAF.mediaplayer.init();
 	ApplicationManager.getViewport().setStyle('transformStyle', 'preserve-3d');
 
@@ -33,6 +41,7 @@ var Horizon = (function (body) {
 			hOffset: 134,
 			vOffset: 47,
 			color: fontColor,
+			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
 			zOrder: 1
 		}
@@ -43,6 +52,7 @@ var Horizon = (function (body) {
 		styles: {
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,
+			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
 			zOrder: 1
 		}
@@ -55,6 +65,7 @@ var Horizon = (function (body) {
 			hOffset: 134,
 			vOffset: title.vOffset,
 			color: fontColor,
+			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
 			textAlign: 'right',
 			zOrder: 1
@@ -71,6 +82,7 @@ var Horizon = (function (body) {
 			height: 40,
 			hOffset: 560,
 			vOffset: 47,
+			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
 			color: fontColor,
 			anchorStyle: 'center',
