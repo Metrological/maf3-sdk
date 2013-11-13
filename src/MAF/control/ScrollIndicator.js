@@ -8,11 +8,15 @@ define('MAF.control.ScrollIndicator', function () {
 			dispatchEvents: function (event, payload) {
 				switch(event.type) {
 					case 'navigate':
-						if (event.detail && event.detail.direction) {
-							if (event.detail.direction === 'up' || event.detail.direction === 'down') {
-								event.preventDefault();
-								return this.shiftSource(event.detail.direction === 'up' ? 'left' : 'right');
+						var direction = event.detail && event.detail.direction;
+						if (direction === 'up' || direction === 'down') {
+							var current = this.getSourceCurrentPage(),
+								total = this.getSourcePageCount() - 1;
+							if ((direction === 'up' && current === 0) || (direction === 'down' && current === total)) {
+								return;
 							}
+							event.preventDefault();
+							return this.shiftSource(event.detail.direction === 'up' ? 'left' : 'right');
 						}
 						break;
 				}
@@ -25,11 +29,6 @@ define('MAF.control.ScrollIndicator', function () {
 						visible: false
 					}
 				}).appendTo(this);
-
-				this.content.animate({
-					properties: ['top'],
-					duration: 0.6
-				});
 			},
 			onSourceUpdated: function (event) {
 				return this.update(event.payload);
@@ -77,21 +76,26 @@ define('MAF.control.ScrollIndicator', function () {
 		update: function (state) {
 			var currentPage = state && state.currentPage ? state.currentPage : this.getSourceCurrentPage() || 0,
 				pageCount = state && state.pageCount ? state.pageCount : this.getSourcePageCount() || 1,
-				height = this.height * (1 / pageCount);
-
+				height = this.height * (1 / pageCount),
+				offset = height * currentPage;
+			if (this.content.height === height && this.content.retrieve('offset') === offset) {
+				return;
+			}
 			if (this.config.autoDisableWhenEmpty) {
 				this.setDisabled(pageCount < 2);
 			}
-
 			if (this.config.autoHideWhenEmpty) {
 				this.content.visible = !(pageCount < 2);
 			}
-
-			this.content.setStyles({
-				height: height,
-				top: height * currentPage
-			});
-
+			this.content.height = height;
+			if (this.content.retrieve('offset') !== offset) {
+				this.content.store('offset', offset);
+				this.content.animate({
+					properties: ['top'],
+					duration: 0.3,
+					top: offset
+				});
+			}
 			if (this.config.focus === false || pageCount === 0) {
 				this.element.wantsFocus = false;
 			} else if (pageCount > 0) {

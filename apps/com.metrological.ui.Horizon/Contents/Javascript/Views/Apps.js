@@ -111,7 +111,7 @@ var AppsView = new MAF.Class({
 	createView: function () {
 		this.controls.categories = new MAF.element.Grid({
 			guid: 'categories',
-			rows: 8,
+			rows: 9,
 			columns: 1,
 			carousel: true,
 			orientation: 'vertical',
@@ -141,7 +141,7 @@ var AppsView = new MAF.Class({
 								});
 								this.category.animate({
 									color: 'white',
-									fontWeight: 'bold',
+									fontFamily: 'InterstatePro-Bold',
 									duration: 0.2
 								});
 								if (view.category !== category) {
@@ -172,7 +172,7 @@ var AppsView = new MAF.Class({
 									if (this.getCellDataItem() !== view.category) {
 										this.category.animate({
 											color: baseFontColor,
-											fontWeight: 'normal',
+											fontFamily: 'InterstatePro-ExtraLight',
 											duration: 0.2
 										});
 									}
@@ -186,6 +186,7 @@ var AppsView = new MAF.Class({
 						color: baseFontColor,
 						width: 'inherit',
 						height: 'inherit',
+						fontFamily: 'InterstatePro-ExtraLight',
 						fontSize: '1.5em',
 						anchorStyle: 'leftCenter'
 					}
@@ -567,8 +568,8 @@ var AppsView = new MAF.Class({
 			styles: {
 				hOffset: this.controls.apps.hOffset + 20,
 				vOffset: (this.height + 25) - this.controls.categories.vOffset,
-				fontSize: '2em',
-				fontWeight: 'bold'
+				fontFamily: 'UPCDigital-Bold',
+				fontSize: '2em'
 			}
 		}).appendTo(this);
 
@@ -578,6 +579,7 @@ var AppsView = new MAF.Class({
 				width: this.width - this.elements.appTitle.hOffset - 140,
 				hOffset: this.elements.appTitle.hOffset,
 				vOffset: this.elements.appTitle.outerHeight + 25,
+				fontFamily: 'UPCDigital-Regular',
 				wrap: true,
 				truncation: 'end'
 			}

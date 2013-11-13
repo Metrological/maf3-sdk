@@ -88,6 +88,7 @@ define('MAF.element.Grid', function () {
 		if (shift && !state.animating) {
 			this.shift(direction, {focus: cellCoords});
 			event.preventDefault();
+			event.stopPropagation();
 		} else if (horiz && direction === 'right') {
 			if (!cellCoords.row) {
 				cellCoords.column = 0;
@@ -99,6 +100,7 @@ define('MAF.element.Grid', function () {
 				cellCoords.row = cellCoords.row - 1;
 				cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
 				event.preventDefault();
+				event.stopPropagation();
 				this.focusCell(cellCoords, event);
 			}
 		} else if (!horiz && direction === 'down') {
@@ -106,8 +108,8 @@ define('MAF.element.Grid', function () {
 		} else {
 			this.setDisabled(true);
 			if (this.element.navigate(direction)) {
-				event.stopPropagation();
 				event.preventDefault();
+				event.stopPropagation();
 			}
 			this.setDisabled(false);
 		}
