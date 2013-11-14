@@ -90,12 +90,12 @@ define('MAF.element.Grid', function () {
 			event.preventDefault();
 			event.stopPropagation();
 		} else if (horiz && direction === 'right') {
-			if (!cellCoords.row) {
+/*			if (!cellCoords.row) {
 				cellCoords.column = 0;
 				this.shift(direction, {focus: cellCoords});
 				return;
 			}
-			var col = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
+*/			var col = Math.min(cellCoords.column + 1, cellCoords.columns - 1);
 			if (col !== cellCoords.column) {
 				cellCoords.row = cellCoords.row - 1;
 				cellCoords.column = Math.min(cellCoords.column + 1, cellCoords.columns - 1);

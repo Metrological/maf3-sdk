@@ -18,6 +18,7 @@ KeyMap.defineKeys(KeyMap.NORMAL, {
 var NDSPlayer = function () {
 	var instance = this,
 		defaultBounds = Player.prototype.bounds,
+		currentBounds = defaultBounds,
 		canPlay = false,
 		grabbed = false,
 		paused = false,
@@ -84,7 +85,10 @@ var NDSPlayer = function () {
 			if (grabbed && currentSource && canPlay) {
 				screen.log('STOPPED');
 				stateChange(Player.state.STOP);
-				screen.log('BOUNDS:' + JSON.stringify(instance.bounds));
+				screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				if (currentBounds[3] !== instance.bounds[3]) {
+					instance.bounds = currentBounds;
+				}
 			}
 		};
 		VideoPlayer.onPlaybackError = function () {
@@ -99,7 +103,10 @@ var NDSPlayer = function () {
 			if (!grabbed) {
 				screen.log('CHANNEL CHANGE');
 				channelChange();
-				screen.log('BOUNDS:' + JSON.stringify(instance.bounds));
+				screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				if (currentBounds[3] !== instance.bounds[3]) {
+					instance.bounds = currentBounds;
+				}
 			}
 		};
 	}
@@ -320,6 +327,7 @@ var NDSPlayer = function () {
 			}
 			VideoPlayer.move(b[0], b[1]);
 		}
+		currentBounds = b;
 	});
 };
 NDSPlayer.prototype = new Player();
