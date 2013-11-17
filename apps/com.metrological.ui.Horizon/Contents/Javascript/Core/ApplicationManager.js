@@ -268,7 +268,9 @@ var loadTemplate = (function () {
 							if (!ProfileManager.isFamily) {
 								buttons.push({ value: '$logout', label: 'LOGOUT' });
 							}
-							buttons.push({ value: '$profile-create', label: 'ADD_PROFILE' });
+							if (ProfileManager.getProfiles().length < 5) {
+								buttons.push({ value: '$profile-create', label: 'ADD_PROFILE' });
+							}
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'profile-create':
