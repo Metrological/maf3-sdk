@@ -192,6 +192,10 @@ define('MAF.control.Keyboard', function () {
 		//	keyboards[this._classID].toggleKey(key);
 		//},
 
+		getKeyboard: function () {
+			return keyboards[this._classID];
+		},
+
 		suicide: function () {
 			var classId = this._classID;
 			if (keyboards[classId]) {

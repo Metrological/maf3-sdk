@@ -3,22 +3,22 @@ define('MAF.dialogs.VerifyPin', function () {
 		ClassName: 'VerifyPinDialog',
 
 		Extends: MAF.dialogs.BaseDialogImplementation,
-		
+
 		config: {
 			title: '',
 			message: '',
 			errorMessage: '',
-			isAdminPIN: false,
+			type: 'adult', // adult, master, youth, purchase, passport
 			profileId: null,
 			forgotPinCallback: null,
 			callback: null,
 			cancelCallback: null
 		},
-		
+
 		initialize: function () {
 			this.parent();
 		},
-		
+
 		getDialogConfig: function() {
 			return {
 				type: 'pin',
@@ -27,7 +27,7 @@ define('MAF.dialogs.VerifyPin', function () {
 					title: this.config.title,
 					message: this.config.message,
 					errorMessage: this.config.errorMessage,
-					isAdminPIN: this.config.isAdminPIN,
+					type: this.config.type,
 					profileId: this.config.profileId,
 					ignoreBackKey: this.config.isModal
 				}

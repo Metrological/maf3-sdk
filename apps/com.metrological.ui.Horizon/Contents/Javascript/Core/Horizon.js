@@ -14,7 +14,7 @@ var Horizon = (function (body) {
 	Theme.Fonts.add('UPCDigital-Regular', 'Fonts/UPCDigital-Regular');
 
 	MAF.mediaplayer.init();
-	ApplicationManager.getViewport().setStyle('transformStyle', 'preserve-3d');
+//	ApplicationManager.getViewport().setStyle('transformStyle', 'preserve-3d');
 
 	body.setStyle('transformOrigin', '50% 50%');
 
@@ -123,7 +123,6 @@ var Horizon = (function (body) {
 
 	function hideNowPlaying(callback) {
 		if (!visible) {
-			body.setStyle('transform', null);
 			body.animate({
 				scale: 1.6,
 				delay: 5,
@@ -203,7 +202,16 @@ var Horizon = (function (body) {
 	}
 
 	function show() {
-		showNowPlaying();
+		body.setStyle('overflow', 'auto');
+		showNowPlaying(function (animator) {
+			if (animator) {
+				animator.reset();
+			}
+			body.setStyles({
+				overflow: null,
+				transform: null
+			});
+		});
 		visible = true;
 		floor.setStyles({
 			transform: null,

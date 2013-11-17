@@ -370,9 +370,8 @@ var NDSCOUNTRIES = {
 
 plugins.storage = new CookieStorage();
 
-var NDSProfile = function () {
-	var instance = ++Profile.__instances__,
-		LOCKED = false,
+var NDSProfile = function (name) {
+	var LOCKED = false,
 		ATTEMPTS = 0;
 	var getUserData = function (key) {
 		try {
@@ -381,10 +380,10 @@ var NDSProfile = function () {
 		return null;
 	}
 	getter(this, 'id', function () {
-		return md5(this.household + instance);
+		return md5(this.household + '|' + (name || ''));
 	});
 	getter(this, 'name', function () {
-		return getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
+		return name || getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
 	});
 	getter(this, 'ageRating', function () {
 		return getUserData(UserData.KEY_PROFILE_PARENTAL_AGE) || 0;
@@ -512,7 +511,7 @@ var NDSProfile = function () {
 NDSProfile.prototype = new Profile();
 NDSProfile.prototype.constructor = NDSProfile;
 
-plugins.profiles.push(new NDSProfile());
+plugins.profile = NDSProfile;
 
 var resetNDSPlayer = function () {
 	var player = plugins.players[0];

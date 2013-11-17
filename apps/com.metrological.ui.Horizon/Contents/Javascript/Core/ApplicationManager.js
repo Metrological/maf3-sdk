@@ -1,5 +1,14 @@
 var loadTemplate = (function () {
 	var current = {};
+	var keyboardDialogs = [
+		'textentry',
+		'pincreation',
+		'pin',
+		'twitter-login',
+		'profile-create',
+		'profile-pincreation',
+		'profile-pin'
+	];
 	return function ApplicationManager_loadTemplate(data) {
 		var type = data.type,
 			id = data.id;
@@ -58,6 +67,7 @@ var loadTemplate = (function () {
 					var sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'times', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
+						{ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' },
 						{ value: '@AppButtonSidebarVideoSize', label: 'arrows-alt', action: 'viewport-toggle' }
 					];
 
@@ -113,6 +123,7 @@ var loadTemplate = (function () {
 							}
 						}
 					}).appendTo(fragment);
+
 					app.widget.getImage('header', 'normal').setStyle('borderRadius', '10px 10px 0 0').appendTo(template);
 
 					new Text({
@@ -234,7 +245,7 @@ var loadTemplate = (function () {
 						focusAfterDialog = app.document.activeElement,
 						totalHeight = 0,
 						buttons = [],
-						isKeyboard = (id === 'textentry' || id === 'pincreation' || id === 'pin' || id === 'twitter-login'),
+						isKeyboard = keyboardDialogs.indexOf(id) !== -1,
 						KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
 
 					// Default buttons
@@ -250,12 +261,37 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$ok', label: 'OK' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'profile':
+							ProfileManager.getProfiles().forEach(function (name) {
+								buttons.push({ value: '$profile-options', label: name });
+							});
+							if (!ProfileManager.isFamily) {
+								buttons.push({ value: '$logout', label: 'LOGOUT' });
+							}
+							buttons.push({ value: '$profile-create', label: 'ADD_PROFILE' });
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
+							break;
+						case 'profile-create':
+							buttons.push({ value: '$profile-pincreation', label: 'NEXT' });
+							buttons.push({ value: '$profile', label: 'BACK' });
+							break;
+						case 'profile-pincreation':
+							buttons.push({ value: '$profile-pincreated', label: 'STORE_PROFILE' });
+							buttons.push({ value: '$profile', label: 'BACK' });
+							break;
+						case 'profile-options':
+							buttons.push({ value: '$profile-pin', label: 'SELECT' });
+							buttons.push({ value: '$profile-remove', label: 'REMOVE' });
+							buttons.push({ value: '$profile', label: 'BACK' });
+							break;
+						case 'profile-pin':
 						case 'pin':
-							buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
+							//buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'muzzley':
 						case 'facebook-login':
+							buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 					}
@@ -279,10 +315,12 @@ var loadTemplate = (function () {
 							select: function (event) {
 								var target = event.target,
 									selectedValue = target && target.retrieve('value'),
+									selectedLabel = target && target.retrieve('label'),
 									dialogKey = this.retrieve('key');
 								if (target && target.id && target.id.indexOf('button') > 0) {
 									event.preventDefault();
-									var keyboard = getElementById('@' + type + '-keyboard');
+									var keyboard = getElementById('@' + type + '-keyboard'),
+										keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
 									if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
 										keyboard.firstChild.owner.suicide();
 									}
@@ -291,23 +329,55 @@ var loadTemplate = (function () {
 										focusAfterDialog.focus();
 										focusAfterDialog = null;
 									}
+									if (KeyboardValueManager) {
+										KeyboardValueManager.suicide();
+										KeyboardValueManager = null;
+									}
 									switch (selectedValue) {
 										case '$forgot':
 											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: false, forgot: true });
 											break;
 										case '$ok':
-											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, response: KeyboardValueManager.value });
+											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, response: keyboardValue });
 											break;
 										case '$cancel':
-											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey, previousDialog: data.previousDialog });
+											break;
+										case '$logout':
+											ProfileManager.logout();
+											ApplicationManager.fire(identifier, 'onDialogProfile', { key: dialogKey, previousDialog: data.previousDialog });
+											break;
+										case '$profile':
+											ApplicationManager.fire(identifier, 'onDialogProfile', { key: dialogKey, previousDialog: data.previousDialog });
+											break;
+										case '$profile-switch':
+											ApplicationManager.fire(identifier, 'onDialogProfileSwitch', { key: dialogKey, previousDialog: data });
+											break;
+										case '$profile-create':
+											ApplicationManager.fire(identifier, 'onDialogProfileCreate', { key: dialogKey, previousDialog: data.previousDialog });
+											break;
+										case '$profile-options':
+											ApplicationManager.fire(identifier, 'onDialogProfileOptions', { key: dialogKey, profile: selectedLabel, previousDialog: data.previousDialog });
+											break;
+										case '$profile-remove':
+											ApplicationManager.fire(identifier, 'onDialogProfileRemove', { key: dialogKey, profile: data.conf.profile, previousDialog: data.previousDialog });
+											break;
+										case '$profile-pincreation':
+											ApplicationManager.fire(identifier, 'onDialogProfileCreatePIN', { key: dialogKey, profile: keyboardValue, previousDialog: data.previousDialog });
+											break;
+										case '$profile-pincreated':
+											ApplicationManager.fire(identifier, 'onDialogProfileCreated', { key: dialogKey, profile: data.conf.profile, pin: keyboardValue, previousDialog: data.previousDialog });
+											break;
+										case '$profile-pin':
+											ApplicationManager.fire(identifier, 'onDialogProfilePIN', { key: dialogKey, profile: data.conf.profile, previousDialog: data.previousDialog });
 											break;
 										default:
-											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
+											if (data.previousDialog) {
+												ApplicationManager.fire(identifier, 'onDialogPrevious', { key: dialogKey, previousDialog: data.previousDialog });
+											} else {
+												ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
+											}
 											break;
-									}
-									if (KeyboardValueManager) {
-										KeyboardValueManager.suicide();
-										KeyboardValueManager = null;
 									}
 								}
 							},
@@ -358,9 +428,47 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(contentFrame);
 
+					if (!ProfileManager.isFamily && (id === 'facebook-login' || id === 'profile')) {
+						new Text({
+							id: '@' + type + '-profile',
+							label: FontAwesome.get('user') + ' ' + profile.name,
+							styles: {
+								width: '100%',
+								height: 64,
+								paddingLeft: 10,
+								paddingRight: 10,
+								anchorStyle: 'rightCenter'
+							}
+						}).appendTo(contentFrame);
+					}
+
+					var messageLabel;
+					switch (id) {
+						case 'facebook-login':
+							if (!ProfileManager.isFamily) {
+								messageLabel = widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]);
+							} else {
+								messageLabel = widget.getLocalizedString('PROFILE_REQUIRED');
+							}
+							break;
+						case 'profile-options':
+							messageLabel = widget.getLocalizedString((dialogConfig.message || ''), [data.conf.profile]);
+							break;
+						case 'profile':
+							if (!ProfileManager.isFamily) {
+								messageLabel = widget.getLocalizedString((dialogConfig.message || '') + '_ACTIVE', [profile.name]);
+							} else {
+								messageLabel = widget.getLocalizedString(dialogConfig.message || '');
+							}
+							break;
+						default:
+							messageLabel = widget.getLocalizedString(dialogConfig.message || '');
+							break;
+					}
+
 					var dialogMessage = new Text({
 						id: '@' + type + '-message',
-						label: (id === 'facebook-login') ? widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]) : widget.getLocalizedString(dialogConfig.message || ''),
+						label: messageLabel,
 						styles: {
 							width: '100%',
 							paddingLeft: 10,
@@ -416,10 +524,41 @@ var loadTemplate = (function () {
 							}
 						}).appendTo(contentFrame);
 
+						dialogbutton.store('label', btnConfig.label);
 						dialogbutton.store('value', btnConfig.value);
 
+						var buttonLabel;
+						switch (btnConfig.value) {
+							case '$profile-options':
+								buttonLabel = FontAwesome.get('user') + ' ' + btnConfig.label;
+								break;
+							case '$profile-pincreated':
+							case '$profile-pin':
+								buttonLabel = FontAwesome.get('lock') + ' ' + widget.getLocalizedString(btnConfig.label);
+								break;
+							case '$profile-pincreation':
+								buttonLabel = FontAwesome.get('unlock') + ' ' + widget.getLocalizedString(btnConfig.label);
+								break;
+							case '$profile-remove':
+								buttonLabel = FontAwesome.get('trash-o') + ' ' + widget.getLocalizedString(btnConfig.label);
+								break;
+							case '$profile-remove':
+								buttonLabel = FontAwesome.get('trash-o') + ' ' + widget.getLocalizedString(btnConfig.label);
+								break;
+							case '$profile':
+								if (id && id.indexOf('profile-') === 0) {
+									buttonLabel = FontAwesome.get('rotate-left') + ' ' + widget.getLocalizedString(btnConfig.label);
+								} else {
+									buttonLabel = widget.getLocalizedString(btnConfig.label);
+								}
+								break;
+							default:
+								buttonLabel = widget.getLocalizedString(btnConfig.label);
+								break;
+						}
+
 						new Text({
-							label: widget.getLocalizedString(btnConfig.label),
+							label: buttonLabel,
 							styles: {
 								width: '100%',
 								height: 'inherit',
@@ -502,25 +641,30 @@ var loadTemplate = (function () {
 									KeyboardValueManager.suicide();
 									KeyboardValueManager = null;
 								}
-								ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: authorized });
+								ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: authorized, previousDialog: data.previousDialog });
 							} else {
-								getElementById('@' + type + '-title').setStyle('backgroundColor', '#610B0B');
-								getElementById('@' + type + '-message').data = data.errorMessage || data.message;
-								var pindotEl = pinDots.firstChild;
-								do {
-									if (pindotEl.nodeType === 1) {
-										pindotEl.data = '';
-									}
-									pindotEl = pindotEl.nextSibling;
-								} while (pindotEl);
+								getElementById('@' + type + '-title').setStyle('backgroundColor', 'red');
+								getElementById('@' + type + '-message').data = widget.getLocalizedString(data.conf.errorMessage || data.conf.message);
+								KeyboardValueManager.value = '';
 							}
 						};
+
 						(function (event) {
-							var payload = event.payload || {};
+							var payload = event.payload || {},
+								i;
 							if (event.type === 'valuechanged') {
 								switch (id) {
-									case 'pin':
-										for (var i=0; i<4; i++) {
+									case 'profile-pincreation':
+										for (i=0; i<4; i++) {
+											if (payload.value.length > i) {
+												pinDots.childNodes[i].data = payload.value[i];
+											} else {
+												pinDots.childNodes[i].data = '';
+											}
+										}
+										break;
+									case 'profile-pin':
+										for (i=0; i<4; i++) {
 											if (payload.value.length > i) {
 												pinDots.childNodes[i].data = FontAwesome.get('circle');
 											} else {
@@ -528,18 +672,32 @@ var loadTemplate = (function () {
 											}
 										}
 										if (payload.value.length === 4) {
-											// TODO: Profile/Admin Pin checking
-											if (data.isAdminPIN) {
-												onPinDone.defer(1000, null, true);
+											if (ProfileManager.select(data.conf.profile, payload.value)) {
+												onPinDone.defer(500, null, true);
 											} else {
-												if (data.profileId) {
-													onPinDone.defer(1000, null, true);
-												} else {
-													onPinDone.defer(1000, null, true);
-												}
+												onPinDone.defer(500, null, false);
 											}
 										}
 										break;
+									case 'pin':
+										for (i=0; i<4; i++) {
+											if (payload.value.length > i) {
+												pinDots.childNodes[i].data = FontAwesome.get('circle');
+											} else {
+												pinDots.childNodes[i].data = '';
+											}
+										}
+										if (payload.value.length === 4) {
+											if (ProfileManager.profile.validatePIN(payload.value, data.conf.type)) {
+												onPinDone.defer(500, null, true);
+											} else {
+												onPinDone.defer(500, null, false);
+											}
+										} else if (!ProfileManager.profile.hasPIN(data.conf.type)) {
+											onPinDone.defer(500, null, true);
+										}
+										break;
+									case 'profile-create':
 									case 'twitter-login':
 									case 'textentry':
 										if (input) {
@@ -551,6 +709,7 @@ var loadTemplate = (function () {
 						}).subscribeTo(KeyboardValueManager, ['valuechanged']);
 
 						switch (id) {
+							case 'profile-create':
 							case 'twitter-login':
 							case 'textentry':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
@@ -620,6 +779,8 @@ var loadTemplate = (function () {
 								totalHeight += input.height + 20;
 
 								break;
+							case 'profile-pincreation':
+							case 'profile-pin':
 							case 'pincreation':
 							case 'pin':
 								keyboard = new MAF.keyboard.ReuseKeyboard({
@@ -758,7 +919,7 @@ widget.handleChildEvent = function (event) {
 };
 
 widget.handleHostEvent = function (event) {
-	//log('handleHostEvent', event.subject, event);
+	//log('handleHostEvent', event.subject, event.data);
 	var data;
 	switch(event.subject) {
 		case 'onActivateAppButton':
@@ -780,9 +941,75 @@ widget.handleHostEvent = function (event) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}
 					break;
-				case 'app-muzzley':
-					loadTemplate.call(this, { type: 'dialog', id: 'muzzley', conf: { title: 'Connect with Muzzley', message: 'Use muzzley on your mobile to scan the qr-code below.'}});
+				case 'switch-profile':
+					loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }});
 					break;
+				case 'app-muzzley':
+					loadTemplate.call(this, { type: 'dialog', id: 'muzzley', conf: { title: 'MUZZLEY_TITLE', message: 'MUZZLEY_MESSAGE' }});
+					break;
+			}
+			break;
+		case 'onDialogPrevious':
+			data = event.getData();
+			if (data.previousDialog) {
+				loadTemplate.call(this, data.previousDialog);
+			}
+			break;
+		case 'onDialogProfileSwitch':
+		case 'onDialogProfile':
+			data = event.getData();
+			loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }, previousDialog: data.previousDialog });
+			break;
+		case 'onDialogProfileOptions':
+			data = event.getData();
+			if (data.profile) {
+				loadTemplate.call(this, { type: 'dialog', id: 'profile-options', conf: { title: 'PROFILE_OPTIONS', message: 'PROFILE_OPTIONS_MESSAGE', profile: data.profile }, previousDialog: data.previousDialog });
+			}
+			break;
+		case 'onDialogProfileRemove':
+			data = event.getData();
+			if (data.profile) {
+				ProfileManager.remove(data.profile);
+				loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }, previousDialog: data.previousDialog});
+			}
+			break;
+		case 'onDialogProfilePIN':
+			data = event.getData();
+			if (data.profile) {
+				loadTemplate.call(this, { type: 'dialog', id: 'profile-pin', conf: { title: 'PROFILE_PIN', message: 'PROFILE_PIN_MESSAGE', errorMessage: 'PROFILE_PIN_ERROR', profile: data.profile, type: 'passport' }, previousDialog: data.previousDialog });
+			}
+			break;
+		case 'onDialogProfileCreate':
+			data = event.getData();
+			loadTemplate.call(this, { type: 'dialog', id: 'profile-create', conf: { title: 'PROFILE_CREATE', message: 'PROFILE_CREATE_MESSAGE'}, previousDialog: data.previousDialog });
+			break;
+		case 'onDialogProfileCreatePIN':
+			data = event.getData();
+			if (data.profile) {
+				loadTemplate.call(this, { type: 'dialog', id: 'profile-pincreation', conf: { title: 'PROFILE_CREATE_PIN', message: 'PROFILE_CREATE_PIN_MESSAGE', profile: data.profile }, previousDialog: data.previousDialog });
+			}
+			break;
+		case 'onDialogProfileCreated':
+			data = event.getData();
+			if (data.profile && data.pin) {
+				ProfileManager.add(data.profile, data.pin);
+				if (data.previousDialog) {
+					loadTemplate.call(this, data.previousDialog);
+				}
+			}
+			break;
+		case 'onDialogCancelled':
+		case 'onDialogDone':
+			data = event.getData();
+			if (data.previousDialog) {
+				switch (data.previousDialog.id) {
+					case 'facebook-login':
+						if (Facebook.userId) {
+							return;
+						}
+						break;
+				}
+				loadTemplate.call(this, data.previousDialog);
 			}
 			break;
 		case 'onActivateSnippet':
@@ -815,7 +1042,10 @@ widget.handleHostEvent = function (event) {
 		case 'hideDialog':
 			var dialog = event.getData();
 			if (dialog && this.widget) {
-				this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog')).destroy();
+				var dlg = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
+				if (dlg) {
+					dlg.destroy();
+				}
 			}
 			if (Muzzley.enabled) {
 				Muzzley.resetDevice();
