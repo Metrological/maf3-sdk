@@ -1,5 +1,6 @@
 var loadTemplate = (function () {
 	var current = {};
+	var maxProfiles = 5;
 	var keyboardDialogs = [
 		'textentry',
 		'pincreation',
@@ -262,13 +263,16 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'profile':
-							ProfileManager.getProfiles().forEach(function (name) {
+							var profiles = ProfileManager.getProfiles();
+							profiles.forEach(function (name) {
 								buttons.push({ value: '$profile-options', label: name });
 							});
+							var max = maxProfiles;
 							if (!ProfileManager.isFamily) {
 								buttons.push({ value: '$logout', label: 'LOGOUT' });
+								max = (max - 1);
 							}
-							if (ProfileManager.getProfiles().length < 5) {
+							if (profiles.length < max) {
 								buttons.push({ value: '$profile-create', label: 'ADD_PROFILE' });
 							}
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
