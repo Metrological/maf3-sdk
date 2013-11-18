@@ -39,13 +39,13 @@ var AppsView = new MAF.Class({
 	},
 
 	getFavorites: function () {
-		return (currentAppData.get('favorites') || []).filter(function (id) {
+		return (currentAppConfig.get('favorites') || []).filter(function (id) {
 			return ApplicationManager.exists(id);
 		});
 	},
 
 	setFavorites: function (favorites) {
-		currentAppData.set('favorites', favorites || []);
+		currentAppConfig.set('favorites', favorites || []);
 		return favorites;
 	},
 
