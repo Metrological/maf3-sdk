@@ -975,14 +975,17 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	};
 
 	var onBodyKeyDown = function (event) {
-		var target = event.target;
-		//log('onBodyKeyDown', event, event.keyCode, event.key, event.isChar, event.isNumeric);
+		var target = event.target,
+			key = event.key;
+		//log('onBodyKeyDown', event, event.keyCode, key, event.isChar, event.isNumeric, event.isExtendedChar || event.isExtendedNumeric);
 		//target.owner.fireEvent('keydown', event);
 		if (event.isChar || event.isNumeric || event.isExtendedChar || event.isExtendedNumeric) {
-			if (!checkForFocus.call(target.owner, event.key)) {
-				return target.owner.appendToValue(event.key);
+			if (!checkForFocus.call(target.owner, key)) {
+				target.owner.appendToValue(key);
+				generateKeyDown.call(target.owner, 'char', key, event.shiftKey || false);
+				return;
 			}
-		} else if (this.visible){
+		} else if (this.visible) {
 			switch (event.key) {
 				case 'shift':
 					if (!internals[target.owner._classID].state.currentLayout.noShift && !internals[target.owner._classID].state.showShift) {
@@ -1100,9 +1103,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var onBodySelectEvent = function (event) {
 		var internal = internals[this.owner._classID || event.target.owner._classID],
 			current  = event.target || internal.state.current_focused_key,
-			keydef   = current.retrieve('definition')||current._characterDefinition,
-			verb     = String(current.retrieve('keyid')||current._charDefId).split('-')[0],
-			subject  = String(current.retrieve('keyid')||current._charDefId).split('-')[1],
+			keydef   = current.retrieve('definition') || current._characterDefinition,
+			verb     = String(current.retrieve('keyid') || current._charDefId).split('-')[0],
+			subject  = String(current.retrieve('keyid') || current._charDefId).split('-')[1],
 			shift    = internal.state.showShift,
 			chardef  = null,
 			refocus  = null,
@@ -1165,7 +1168,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 	var sendSignal = function (event) {
 		//log('sendSignal', this, event.type, event.target);
-		var el = internals[this._classID].body.firstChild.firstChild;
+		var internal = internals[this._classID];
+			el = internal.body.firstChild.firstChild;
+		internal.indexing = {};
 		do {
 			if (el.nodeType === 1) {
 				updateKeyframe.call(this, el, el.retrieve('keyid'), event.type === 'shiftselect' ? 'shift' : 'extended');
@@ -1407,12 +1412,15 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (newval.length > maxlen) {
 				this.fire('maxlengthexceeded');
 			}
-			
+
 			internals[this._classID].value = newval.split('');
 			internals[this._classID].value.length = Math.min(maxlen, newval.length);
 
-			if (oldval != newval) {
-				this.fireEvent('valuechanged', {oldValue:oldval,newValue:newval});
+			if (oldval !== newval) {
+				this.fireEvent('valuechanged', {
+					oldValue: oldval,
+					newValue: newval
+				});
 			}
 			return newval;
 		},
@@ -1420,7 +1428,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (USE_INPUT_METHOD) {
 				return;
 			}
-			return this.setValue(this.getValue() + String(characters||''));
+			return this.setValue(this.getValue() + String(characters || ''));
 		},
 		deleteFromValue: function (count) {
 			if (USE_INPUT_METHOD) return;

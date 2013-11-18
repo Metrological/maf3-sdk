@@ -256,7 +256,7 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$back', label: 'BACK' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
-						case 'twitter-login':
+						//case 'twitter-login':
 						case 'textentry':
 						case 'pincreation':
 							buttons.push({ value: '$ok', label: 'OK' });
@@ -300,10 +300,21 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'twitter-login':
+							if (data.conf && data.conf.type === 'email') {
+								buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
+								if (!ProfileManager.isFamily) {
+									buttons.push({ value: '$ok', label: 'OK' });
+								}
+								buttons.push({ value: '$cancel', label: 'CANCEL' });
+							} else {
+								buttons.push({ value: '$ok', label: 'OK' });
+								buttons.push({ value: '$cancel', label: 'CANCEL' });
+							}
+							break;
 					}
 
 					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
-
 					template = new Dialog({
 						id: '@' + (data.key ? data.key : type),
 						styles: {
@@ -434,7 +445,7 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(contentFrame);
 
-					if (!ProfileManager.isFamily && (id === 'facebook-login' || id === 'profile')) {
+					if (!ProfileManager.isFamily && (id === 'facebook-login' || id === 'twitter-login' || id === 'profile')) {
 						new Text({
 							id: '@' + type + '-profile',
 							label: FontAwesome.get('user') + ' ' + profile.name,
@@ -451,6 +462,13 @@ var loadTemplate = (function () {
 					var messageLabel;
 					switch (id) {
 						case 'facebook-login':
+							if (!ProfileManager.isFamily) {
+								messageLabel = widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]);
+							} else {
+								messageLabel = widget.getLocalizedString('PROFILE_REQUIRED');
+							}
+							break;
+						case 'twitter-login':
 							if (!ProfileManager.isFamily) {
 								messageLabel = widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]);
 							} else {
@@ -715,13 +733,16 @@ var loadTemplate = (function () {
 						}).subscribeTo(KeyboardValueManager, ['valuechanged']);
 
 						switch (id) {
-							case 'profile-create':
 							case 'twitter-login':
+							case 'profile-create':
 							case 'textentry':
+								if (id === 'twitter-login' && ProfileManager.isFamily) {
+									break;
+								}
 								keyboard = new MAF.keyboard.ReuseKeyboard({
 									maxLength: (data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99,
 									controlSize: 'small',
-									layout: 'alphanumeric'
+									layout: (data && data.conf && data.conf.layout) ? data.conf.layout : 'alphanumeric'
 								}).appendTo(keyboardContainer);
 								KeyboardValueManager.setMaxLength((data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99);
 								keyboardContainer.wantsFocus = true;
@@ -840,7 +861,6 @@ var loadTemplate = (function () {
 							};
 						}
 					}
-
 					body.appendChild(fragment);
 					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 0.5) * dialogMessage.lineHeight);
 					contentFrame.visible = true;
@@ -1011,6 +1031,11 @@ widget.handleHostEvent = function (event) {
 				switch (data.previousDialog.id) {
 					case 'facebook-login':
 						if (Facebook.userId) {
+							return;
+						}
+						break;
+					case 'twitter-login':
+						if (Twitter.userId) {
 							return;
 						}
 						break;
