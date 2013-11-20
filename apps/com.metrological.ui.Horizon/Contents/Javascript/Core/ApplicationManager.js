@@ -704,9 +704,9 @@ var loadTemplate = (function () {
 										}
 										if (payload.value.length === 4) {
 											if (ProfileManager.select(data.conf.profile, payload.value)) {
-												onPinDone.defer(500, null, true);
+												onPinDone.delay(0, null, true);
 											} else {
-												onPinDone.defer(500, null, false);
+												onPinDone.delay(0, null, false);
 											}
 										}
 										break;
@@ -720,12 +720,12 @@ var loadTemplate = (function () {
 										}
 										if (payload.value.length === 4) {
 											if (ProfileManager.profile.validatePIN(payload.value, data.conf.type)) {
-												onPinDone.defer(500, null, true);
+												onPinDone.delay(0, null, true);
 											} else {
-												onPinDone.defer(500, null, false);
+												onPinDone.delay(0, null, false);
 											}
 										} else if (!ProfileManager.profile.hasPIN(data.conf.type)) {
-											onPinDone.defer(500, null, true);
+											onPinDone.delay(0, null, true);
 										}
 										break;
 									case 'profile-create':

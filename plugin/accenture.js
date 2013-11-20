@@ -1,5 +1,5 @@
 var UTC = window.UTC,
-	OTT = UTC && OTT;
+	OTT = UTC && UTC.OTT || false;
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
 }, true);
@@ -104,11 +104,11 @@ var AccenturePlayer = function () {
 	setter(instance, 'src', function (src) {
 		if (OTT && src) {
 			if (OTT.viewMode) {
-				UTC.OTT.viewMode('full');
+				OTT.viewMode('full');
 			}
 			currentSource = src;
 			paused = false;
-			OTT.load(src);
+			OTT.load(src, false);
 		} else if (OTT && currentSource) {
 			currentSource = null;
 			paused = false;
@@ -143,10 +143,17 @@ var AccenturePlayer = function () {
 		}
 	});
 };
+AccenturePlayer.prototype = new Player();
+AccenturePlayer.prototype.constructor = AccenturePlayer;
 
 plugins.players.push(new AccenturePlayer());
 
 var onShow = function () {
+		if (active && apps[active]) {
+			send(active, 'onSelect', {
+				id: apps[active].currentViewId
+			});
+		}
 	},
 	onHide = function () {
 		var player = plugins.players[0];

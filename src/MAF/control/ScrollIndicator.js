@@ -13,7 +13,7 @@ define('MAF.control.ScrollIndicator', function () {
 							var current = this.getSourceCurrentPage(),
 								total = this.getSourcePageCount() - 1;
 							if ((direction === 'up' && current === 0) || (direction === 'down' && current === total)) {
-								return;
+								break;
 							}
 							event.preventDefault();
 							return this.shiftSource(event.detail.direction === 'up' ? 'left' : 'right');
