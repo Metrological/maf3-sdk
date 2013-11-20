@@ -960,7 +960,7 @@ widget.handleChildEvent = function (event) {
 };
 
 widget.handleHostEvent = function (event) {
-	//log('handleHostEvent', event.subject, event.data);
+	//log('handleHostEvent', event.subject/*, event.data*/);
 	var data;
 	switch(event.subject) {
 		case 'onActivateAppButton':
@@ -1056,6 +1056,7 @@ widget.handleHostEvent = function (event) {
 						break;
 				}
 				loadTemplate.call(this, data.previousDialog);
+				return false;
 			}
 			break;
 		case 'onActivateSnippet':
