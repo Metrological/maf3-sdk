@@ -3,7 +3,7 @@ var UTC = window.UTC,
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
 }, true);
-/*
+
 var AccenturePlayer = function () {
 	var instance = this,
 		scale = 720 / 1080,
@@ -145,7 +145,7 @@ var AccenturePlayer = function () {
 };
 
 plugins.players.push(new AccenturePlayer());
-*/
+
 var onShow = function () {
 	},
 	onHide = function () {

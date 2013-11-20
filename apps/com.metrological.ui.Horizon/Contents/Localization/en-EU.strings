@@ -40,6 +40,7 @@
 "MUZZLEY_MESSAGE" = "Use muzzley on your mobile to scan the qr-code below.";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Login to Twitter and enter below the 7 digit code you receive.";
+"TWITTER_INVALIDCODE" = "Incorrect code. Please re-enter your email address to receive a new code.";
 "TWITTER_METHOD" = "Connection method for twitter:";
 "TWITTER_EMAIL" = "Please enter your e-mail address below. An e-mail will be sent to this address containing a link to the code required to complete the setup.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";

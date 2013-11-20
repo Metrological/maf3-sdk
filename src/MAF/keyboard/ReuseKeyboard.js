@@ -1245,7 +1245,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					targetBounds = target.getBounds() || {};
 				switch (direction) {
 					case 'left':
-						target.navigate(direction, [bodyBounds.width || 0, targetBounds.top || 0]);
+						target.navigate(direction, [(bodyBounds.left || 0) + (bodyBounds.width || 0), targetBounds.top || 0]);
 						break;
 					case 'right':
 						target.navigate(direction, [bodyBounds.left || 0, targetBounds.top || 0]);
