@@ -59,7 +59,7 @@ define('MAF.views.AboutBox', function () {
 			
 			var metadataName = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataName',
-				label: widget.name,
+				label: widget.getLocalizedString(widget.name),
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataName', 'fontSize')
 				}
@@ -67,7 +67,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataDescription = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataDescription',
-				label: widget.description,
+				label: widget.getLocalizedString(widget.description),
 				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataDescription', 'fontSize'),

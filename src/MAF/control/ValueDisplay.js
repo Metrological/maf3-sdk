@@ -9,7 +9,8 @@ define('MAF.control.ValueDisplay', function () {
 				var value = this.getSourceDisplayValue();
 				this.updateContent(value);
 			},
-/*@TODO still required?
+//@TODO still required?
+/*
 			adjustContent: function () {
 				this.content.setStyle('width', this.width);
 				this.buffer.setStyle('width', this.width);
