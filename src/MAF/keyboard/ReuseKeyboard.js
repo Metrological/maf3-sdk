@@ -848,7 +848,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		} else {
 			var chardef_id = keydef[internal.state.showShift ? 'shift' : 'normal'];
 			var chardef = getCharacterDefinitionById(chardef_id);
-
+			if (!chardef) {
+				return;
+			}
 			label = chardef.label;
 			code = chardef.code || label;
 			sublabel = chardef.sublabel;
@@ -1169,10 +1171,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var sendSignal = function (event) {
 		//log('sendSignal', this, event.type, event.target);
 		var internal = internals[this._classID];
-			el = internal.body.firstChild.firstChild;
+			el = internal.body && internal.body.firstChild && internal.body.firstChild.firstChild;
 		internal.indexing = {};
 		do {
-			if (el.nodeType === 1) {
+			if (el && el.nodeType === 1) {
 				updateKeyframe.call(this, el, el.retrieve('keyid'), event.type === 'shiftselect' ? 'shift' : 'extended');
 			}
 			el = el.nextSibling;
