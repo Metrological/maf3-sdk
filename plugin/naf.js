@@ -26,7 +26,7 @@ controller.on('model.initialized', function () {
 		var i = getApplicationIndex();
 		doFn('model.state.applications.' + i + '?state=running');
 		if (active && apps[active]) {
-			send(active, 'onSelect', {
+			ApplicationManager.fire(active, 'onSelect', {
 				id: apps[active].currentViewId
 			});
 		}
@@ -39,7 +39,7 @@ controller.on('model.initialized', function () {
 			message: {}
 		});
 		if (active && active !== ui) {
-			send(active, 'exit');
+			ApplicationManager.close(active);
 		}
 	});
 

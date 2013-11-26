@@ -32,7 +32,7 @@ define('MAF.element.TextField', function () {
 		},
 
 		config: {
-			editable: true
+			editable: false
 		},
 
 		initialize: function () {

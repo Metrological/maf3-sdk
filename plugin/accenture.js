@@ -150,7 +150,7 @@ plugins.players.push(new AccenturePlayer());
 
 var onShow = function () {
 		if (active && apps[active]) {
-			send(active, 'onSelect', {
+			ApplicationManager.send(active, 'onSelect', {
 				id: apps[active].currentViewId
 			});
 		}

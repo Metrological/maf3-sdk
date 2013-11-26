@@ -32,7 +32,7 @@ define('MAF.element.Grid', function () {
 			case 'left':
 				if (horiz) {
 					if (cellCoords.column === 0) {
-						if (page || carousel) {
+						if (page || (lastpage > 0 && carousel)) {
 							shift = true;
 							cellCoords.column = cellCoords.columns - 1;
 						}
@@ -42,7 +42,7 @@ define('MAF.element.Grid', function () {
 			case 'right':
 				if (horiz) {
 					if (cellCoords.column == cellCoords.columns - 1) {
-						if (page < lastpage || carousel) {
+						if (page < lastpage || (lastpage > 0 && carousel)) {
 							shift = true;
 							cellCoords.column = 0;
 						}
@@ -52,7 +52,7 @@ define('MAF.element.Grid', function () {
 			case 'up':
 				if (!horiz) {
 					if (cellCoords.row === 0) {
-						if (page || carousel) {
+						if (page || (lastpage > 0 && carousel)) {
 							shift = true;
 							if (page === 0 && carousel) {
 								var LastRowItems = Math.ceil(dataSize / this.config.columns) % this.config.rows;
@@ -73,7 +73,7 @@ define('MAF.element.Grid', function () {
 						cellCoords.row = (this.config.rows - 1);
 					}
 					if (cellCoords.row === this.config.rows - 1) {
-						if (page < lastpage || carousel) {
+						if (page < lastpage || (lastpage > 0 && carousel)) {
 							shift = true;
 							cellCoords.row = 0;
 							if (page  ===  lastpage -1 && cellCoords.column+1 > LastColumn) {

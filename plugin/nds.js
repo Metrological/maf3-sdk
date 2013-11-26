@@ -520,9 +520,33 @@ var resetNDSPlayer = function () {
 	}
 };
 
+var getUIWindow = function () {
+	return apps[ui] && apps[ui].document.body;
+};
+
 if (Application) {
+	Application.onShow = function () {
+		(function () {
+			var UI = getUIWindow();
+			if (UI) {
+				screen.log('ONSHOW');
+				UI.visible = true;
+				ApplicationManager.fire(active, 'onSelect', {
+					id: apps[active].currentViewId
+				});
+			}
+		}).delay(800);
+	};
 	Application.onHide = function () {
+		var UI = getUIWindow();
+		if (UI) {
+			screen.log('ONHIDE');
+			UI.visible = false;
+		}
 		resetNDSPlayer();
+		if (active && active !== ui) {
+			ApplicationManager.close(active);
+		}
 	};
 }
 
@@ -531,8 +555,12 @@ window.addEventListener('unload', function () {
 });
 
 window.addEventListener('blur', function () {
-	resetNDSPlayer();
 	if (Application) {
 		Application.pause();
+	}
+	var UI = getUIWindow();
+	if (UI) {
+		screen.log('HIDE');
+		UI.visible = false;
 	}
 });
