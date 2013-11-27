@@ -32,8 +32,10 @@ define('MAF.element.Grid', function () {
 			case 'left':
 				if (horiz) {
 					if (cellCoords.column === 0) {
-						if (page || (lastpage > 0 && carousel)) {
-							shift = true;
+						if (page || carousel) {
+							if (lastpage > 0 && carousel || page) {
+								shift = true;
+							}
 							cellCoords.column = cellCoords.columns - 1;
 						}
 					}
@@ -42,8 +44,10 @@ define('MAF.element.Grid', function () {
 			case 'right':
 				if (horiz) {
 					if (cellCoords.column == cellCoords.columns - 1) {
-						if (page < lastpage || (lastpage > 0 && carousel)) {
-							shift = true;
+						if (page < lastpage || carousel) {
+							if (lastpage > 0 && carousel || page < lastpage) {
+								shift = true;
+							}
 							cellCoords.column = 0;
 						}
 					}
@@ -52,8 +56,10 @@ define('MAF.element.Grid', function () {
 			case 'up':
 				if (!horiz) {
 					if (cellCoords.row === 0) {
-						if (page || (lastpage > 0 && carousel)) {
-							shift = true;
+						if (page || carousel) {
+							if (lastpage > 0 && carousel || page) {
+								shift = true;
+							}
 							if (page === 0 && carousel) {
 								var LastRowItems = Math.ceil(dataSize / this.config.columns) % this.config.rows;
 									LastRowItems = (LastRowItems === 0 )? this.config.rows-1 : LastRowItems-1;
@@ -73,8 +79,10 @@ define('MAF.element.Grid', function () {
 						cellCoords.row = (this.config.rows - 1);
 					}
 					if (cellCoords.row === this.config.rows - 1) {
-						if (page < lastpage || (lastpage > 0 && carousel)) {
-							shift = true;
+						if (page < lastpage || carousel) {
+							if (lastpage > 0 && carousel || page < lastpage) {
+								shift = true;
+							}
 							cellCoords.row = 0;
 							if (page  ===  lastpage -1 && cellCoords.column+1 > LastColumn) {
 								cellCoords.column = LastColumn-1;
@@ -103,8 +111,9 @@ define('MAF.element.Grid', function () {
 				event.stopPropagation();
 				this.focusCell(cellCoords, event);
 			}
-		} else if (!horiz && direction === 'down') {
-			// handle page switch
+		} else if (!horiz && (direction === 'up' || direction === 'down')) {
+			event.stop();
+			this.focusCell(cellCoords, event);
 		} else {
 			this.setDisabled(true);
 			if (this.element.navigate(direction)) {

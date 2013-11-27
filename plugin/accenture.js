@@ -2,6 +2,7 @@ var UTC = window.UTC,
 	OTT = UTC && UTC.OTT || false;
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
+	123: 'blue', 122: 'yellow', 121: 'green', 120: 'red'
 }, true);
 
 var AccenturePlayer = function () {
@@ -149,6 +150,7 @@ AccenturePlayer.prototype.constructor = AccenturePlayer;
 plugins.players.push(new AccenturePlayer());
 
 var onShow = function () {
+		screen.log('ONSHOW');
 		if (active && apps[active]) {
 			ApplicationManager.send(active, 'onSelect', {
 				id: apps[active].currentViewId
@@ -156,6 +158,7 @@ var onShow = function () {
 		}
 	},
 	onHide = function () {
+		screen.log('ONHIDE');
 		var player = plugins.players[0];
 		if (player) {
 			player.src = '';
@@ -183,3 +186,7 @@ window.addEventListener('blur', function () {
 if (OTT && OTT.viewMode) {
 	OTT.viewMode('overlay');
 }
+
+window.addEventListener('keydown', function (event) {
+	screen.log('KEYDOWN: ' + event.keyCode);
+});
