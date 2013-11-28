@@ -9,6 +9,10 @@
 "PLAYBACK_ERROR" = "Error trying to playback this content.";
 "RETRY" = "RETRY";
 "CLOSE" = "CLOSE";
+"APP_STORE" = "APP STORE";
+"ALL_APPS" = "ALL APPS";
+"NOW_PLAYING" = "NOW PLAYING";
+"LIVE_TV" = "LIVE TV";
 "FORGOT_PIN" = "FORGOT PIN?";
 "ADD_PROFILE" = "ADD PROFILE";
 "PAGE" = "PAGE %s OF %s";
@@ -30,6 +34,7 @@
 "PROFILE_PIN_ERROR" = "Error: the PIN was incorrect.";
 "PROFILE_CREATE" = "Profile";
 "PROFILE_CREATE_MESSAGE" = "Please enter your name.";
+"PROFILE_CREATE_EXISTS" = "This name already exists.";
 "PROFILE_CREATE_PIN" = "Profile";
 "PROFILE_CREATE_PIN_MESSAGE" = "Please enter a personal PIN.";
 "ADD_PROFILE" = "ADD PROFILE";

@@ -100,9 +100,19 @@ define('MAF.element.Image', function () {
 				}
 			}
 			if (img && cfg) {
+				var sameSrc = cfg.src === src;
 				img.source = cfg.src = src;
-				delete cfg.source;
+				if (sameSrc && src && src !== Image.BLANK) {
+					this.fire('onLoaded');
+					if (cfg.autoShow) {
+						this.show();
+					}
+					if (cfg.manageWaitIndicator) {
+						MAF.utility.WaitIndicator.down();
+					}
+				}
 			}
+			delete cfg.source;
 			return this;
 		},
 

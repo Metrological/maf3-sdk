@@ -568,6 +568,8 @@ var loadTemplate = (function () {
 								buttonLabel = FontAwesome.get('lock') + ' ' + widget.getLocalizedString(btnConfig.label);
 								break;
 							case '$profile-pincreation':
+								dialogbutton.disabled = true;
+								dialogbutton.setStyle('opacity', '0.6');
 								buttonLabel = FontAwesome.get('unlock') + ' ' + widget.getLocalizedString(btnConfig.label);
 								break;
 							case '$profile-remove':
@@ -729,6 +731,27 @@ var loadTemplate = (function () {
 										}
 										break;
 									case 'profile-create':
+										if (input) {
+											input.data = payload.value;
+											var nextBtn = getElementById('@' + type + '-button0');
+											if (input.data && input.data.length > 0) {
+												if (ProfileManager.exists(input.data)) {
+													getElementById('@' + type + '-title').setStyle('backgroundColor', 'red');
+													getElementById('@' + type + '-message').data = widget.getLocalizedString('PROFILE_CREATE_EXISTS' || data.conf.message);
+													nextBtn.setStyle('opacity', '0.6');
+													nextBtn.disabled = true;
+												} else {
+													getElementById('@' + type + '-title').setStyle('backgroundColor', null);
+													getElementById('@' + type + '-message').data = widget.getLocalizedString(data.conf.errorMessage || data.conf.message);
+													nextBtn.setStyle('opacity', '1');
+													nextBtn.disabled = false;
+												}
+											} else {
+												nextBtn.setStyle('opacity', '0.6');
+												nextBtn.disabled = true;
+											}
+										}
+										break;
 									case 'twitter-login':
 									case 'textentry':
 										if (input) {
@@ -1026,8 +1049,10 @@ widget.handleHostEvent = function (event) {
 			break;
 		case 'onDialogProfileCreatePIN':
 			data = event.getData();
-			if (data.profile) {
+			if (data.profile && data.profile.length > 0) {
 				loadTemplate.call(this, { type: 'dialog', id: 'profile-pincreation', conf: { title: 'PROFILE_CREATE_PIN', message: 'PROFILE_CREATE_PIN_MESSAGE', profile: data.profile }, previousDialog: data.previousDialog });
+			} else { // Failsafe
+				loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }});
 			}
 			break;
 		case 'onDialogProfileCreated':

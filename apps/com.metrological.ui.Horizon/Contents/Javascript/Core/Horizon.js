@@ -36,7 +36,7 @@ var Horizon = (function (body) {
 	});
 
 	var title = new Text({
-		label: $_('APP STORE'),
+		label: $_('APP_STORE'),
 		styles: {
 			hOffset: 134,
 			vOffset: 47,
@@ -111,9 +111,9 @@ var Horizon = (function (body) {
 	}
 
 	function updateNowPlaying() {
-		var now = $_('NOW PLAYING') + ' ';
+		var now = $_('NOW_PLAYING') + ' ';
 		if (MAF.mediaplayer.isTVActive) {
-			now += $_('LIVE TV');
+			now += $_('LIVE_TV');
 		} else {
 			now += $_('APPS');
 		}
