@@ -5,7 +5,7 @@ define('MAF.views.AboutBox', function () {
 		Extends: MAF.system.SidebarView,
 
 		config: {
-			BackButtonTitle: 'About'
+			BackButtonTitle: 'ABOUT'
 		},
 
 		createView: function () {
@@ -13,7 +13,7 @@ define('MAF.views.AboutBox', function () {
 			var buttonHeight = parseInt(Theme.getStyles('ControlTextButton', 'normal').height, 10) || 51;
 			
 			var backButton = new MAF.control.BackButton({
-				label: this.config.BackButtonTitle,
+				label: widget.getLocalizedString(this.config.BackButtonTitle),
 				backParams: this.viewBackParams || {},
 				events: {
 					onSelect: function (event) {
@@ -25,6 +25,22 @@ define('MAF.views.AboutBox', function () {
 			}).appendTo(this);
 
 			var list = [];
+
+			if (profile.countryCode === 'de') { 
+				if (!this.config.pages) {
+					this.config.pages = [];
+				}
+				var impressum = this.config.pages.filter(function (page) {
+					return page.id === 'impressum';
+				});
+				if (impressum.length === 0) {
+					this.config.pages.push({
+						id: 'impressum',
+						name: widget.getLocalizedString('IMPRESSUM'),
+						srcString: filesystem.readFile('About/' + profile.locale + '/impressum.txt', true)
+					});
+				}
+			}
 
 			if (typeOf(this.config.pages) === 'array') {
 				this.config.pages.forEach(function (page) {
@@ -135,7 +151,7 @@ define('MAF.views.AboutBox', function () {
 
 			var metadataCopyright = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataCopyright',
-				label: widget.getLocalizedString('COPYRIGHT', (new Date).getFullYear()) + ' ' + widget.copyright,
+				label: widget.getLocalizedString('COPYRIGHT', (new Date()).getFullYear()) + ' ' + widget.copyright,
 				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataCopyright', 'fontSize'),

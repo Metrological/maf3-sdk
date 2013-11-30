@@ -4,6 +4,7 @@ define('MAF.element.Carousel', function () {
 			carousel = this.config.carousel,
 			len = this.cells.length,
 			direction = event && event.payload && event.payload.direction;
+
 		if (direction) {
 			if (carousel && len > 0 && ((orientation === 'horizontal' && direction === 'right') || (orientation === 'vertical' && direction === 'down'))) {
 				this.cells[0].focus();
@@ -36,12 +37,16 @@ define('MAF.element.Carousel', function () {
 				}
 			},
 			generateCells: function (count, data) {
+				while(this.cells.length) {
+					this.cells.pop().suicide();
+				}
+
 				var cellUpdater = this.config.cellUpdater;
 				if (count > 0 && count > this.cells.length) {
 					var fragment = createDocumentFragment(),
 						dims = {
-							width: ((1 / this.config.columns) * 100) + '%',
-							height: ((1 / this.config.rows) * 100) + '%'
+							width: ((1 / this.config.columns) * 100)/((this.config.orientation === 'horizontal') ? this.getPageCount() : 1) + '%',
+							height: ((1 / this.config.rows) * 100)/((this.config.orientation === 'horizontal') ? 1 : this.getPageCount()) + '%'
 						};
 					for (var i = this.cells.length; i < count; i++) {
 						var cell = this.config.cellCreator.call(this).setStyles(dims);
@@ -53,10 +58,33 @@ define('MAF.element.Carousel', function () {
 						});
 						this.cells.push(cell);
 						cellUpdater.call(this, cell, data[i]);
+						
 					}
 					this.body.element.appendChild(fragment);
+					
 				}
 				return this.cells.length;
+			},
+			handleFocusEvent: function (event) {
+				var payload = event.payload;
+				switch (event.type) {
+					case 'onFocus':
+						var newindex = this.getCellIndex(payload || {row:0, column:0});
+						this.updateState({
+							hasFocus: true,
+							focusIndex: newindex,
+							focusCoordinates: {
+								row:    payload.row,
+								column: payload.column
+							}
+						});
+						break;
+					case 'onBlur':
+						this.updateState({
+							hasFocus: false
+						});
+						break;
+				}
 			}
 		},
 
@@ -64,7 +92,7 @@ define('MAF.element.Carousel', function () {
 			rows: 1,
 			columns: 1,
 			orientation: 'horizontal',
-			carousel: false
+			carousel: true
 		},
 
 		initialize: function () {
@@ -90,7 +118,10 @@ define('MAF.element.Carousel', function () {
 
 			this.element.innerNavigation = true;
 
+			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
 			handleNavEvent.subscribeTo(this, 'onNavigateOutOfBounds', this);
+
+			this.store('state', {});
 
 			var data = this.config.dataset || this.config.dataSet;
 			if (data && data.length > 0) {
@@ -158,6 +189,17 @@ define('MAF.element.Carousel', function () {
 				len = data.length,
 				i = this.getCellDataIndex(cell);
 			return i > -1 && i < len ? data[i] : null;
+		},
+
+		getState: function () {
+			return this.retrieve('state');
+		},
+
+		updateState: function (state) {
+			var newState = Object.merge(this.getState(), state || {});
+			this.store('state', newState);
+			this.fire('onStateUpdated', newState);
+			return newState;
 		},
 
 		changeDataset: function (data) {

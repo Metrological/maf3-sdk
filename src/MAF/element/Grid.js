@@ -19,6 +19,7 @@ define('MAF.element.Grid', function () {
 			direction  = event && event.payload && event.payload.direction,
 			carousel   = this.config.carousel,
 			shift      = false,
+			stop       = false,
 			state      = this.getState(),
 			page       = state.currentPage || 0,
 			lastpage   = Math.max(0, this.getPageCount() - 1),
@@ -67,6 +68,8 @@ define('MAF.element.Grid', function () {
 							} else {
 								cellCoords.row = this.config.rows - 1;
 							}
+						} else {
+							stop = true;
 						}
 					}
 				}
@@ -87,6 +90,8 @@ define('MAF.element.Grid', function () {
 							if (page  ===  lastpage -1 && cellCoords.column+1 > LastColumn) {
 								cellCoords.column = LastColumn-1;
 							}
+						} else {
+							stop = true;
 						}
 					}
 				}
@@ -111,7 +116,7 @@ define('MAF.element.Grid', function () {
 				event.stopPropagation();
 				this.focusCell(cellCoords, event);
 			}
-		} else if (!horiz && (direction === 'up' || direction === 'down')) {
+		} else if (!horiz && (direction === 'up' || direction === 'down') && !stop) {
 			event.stop();
 			this.focusCell(cellCoords, event);
 		} else {

@@ -86,7 +86,7 @@ var loadTemplate = (function () {
 						styles: {
 							transform: 'translateZ(0)',
 							overflow: 'visible',
-							backgroundColor: 'rgba(22,22,27,.9)',
+							backgroundColor: 'rgba(34,34,34,.93)',
 							borderRadius: '10px',
 							boxShadow: '0 0 3px 3px #262a35',
 							width: 588,
@@ -186,23 +186,38 @@ var loadTemplate = (function () {
 					}).appendTo(template);
 
 					sidebarButtons.forEach(function (btnConfig, key) {
+						var max = sidebarButtons.length - 1;
 						new Text({
 							id: btnConfig.value,
 							focus: true,
 							label: FontAwesome.get(btnConfig.label),
 							styles: {
+								width: 58,
+								height: 23,
 								hAlign: 'center',
 								vAlign: 'bottom',
-								hOffset: 15 + (30 * (-(sidebarButtons.length/2)+key)),
+								hOffset: 30 + (60 * (-(sidebarButtons.length/2)+key)),
 								vOffset: 3,
-								fontSize: 20
+								anchorStyle: 'center',
+								borderTopLeftRadius: key === 0 ? '6px' : null,
+								borderBottomLeftRadius: key === 0 ? '6px' : null,
+								borderTopRightRadius: key === max ? '6px' : null,
+								borderBottomRightRadius: key === max ? '6px' : null,
+								backgroundImage: widget.getPath('Images/SidebarButton.png'),
+								fontSize: 16
 							},
 							events: {
 								focus: function () {
-									this.setStyle('color', app.Theme.getStyles('BaseFocus', 'backgroundColor'));
+									this.setStyles({
+										backgroundImage: widget.getPath('Images/SidebarButtonFocus.png'),
+										color: app.Theme.getStyles('BaseFocus', 'backgroundColor')
+									});
 								},
 								blur: function () {
-									this.setStyle('color', null);
+									this.setStyles({
+										backgroundImage: widget.getPath('Images/SidebarButton.png'),
+										color: null
+									});
 								},
 								navigate: function (event) {
 									if (event.detail.direction === 'down') {

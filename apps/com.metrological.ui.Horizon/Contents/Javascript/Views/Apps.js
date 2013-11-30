@@ -134,6 +134,7 @@ var AppsView = new MAF.Class({
 								} else {
 									data = ApplicationManager.getApplicationsByCategory(category);
 								}
+								this.setStyle('transformOrigin', '0% 50%');
 								this.animate({
 									scale: 1.2,
 									origin: ['0%', '50%'],
@@ -342,6 +343,7 @@ var AppsView = new MAF.Class({
 								opacity: 1,
 								duration: 0.2
 							});
+							this.setStyle('transformOrigin', origin.join(' '));
 							this.animate({
 								scale: 1.25,
 								origin: origin,

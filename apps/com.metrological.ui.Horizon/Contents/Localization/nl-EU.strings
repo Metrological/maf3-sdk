@@ -6,9 +6,11 @@
 "SELECT" = "Kiezen";
 "LOGOUT" = "Uitloggen";
 "ERROR" = "Fout";
+"ABOUT" = "OVER";
 "PLAYBACK_ERROR" = "Fout bij het afspelen";
 "RETRY" = "Nog een keer";
 "CLOSE" = "Sluiten";
+"IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
 "ALL_APPS" = "ALLE APPS";
 "NOW_PLAYING" = "NU TE ZIEN";

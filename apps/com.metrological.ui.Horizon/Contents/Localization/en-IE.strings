@@ -6,9 +6,11 @@
 "SELECT" = "SELECT";
 "LOGOUT" = "LOGOUT";
 "ERROR" = "ERROR";
+"ABOUT" = "ABOUT";
 "PLAYBACK_ERROR" = "Error trying to playback this content.";
 "RETRY" = "RETRY";
 "CLOSE" = "CLOSE";
+"IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
 "ALL_APPS" = "ALL APPS";
 "NOW_PLAYING" = "NOW PLAYING";

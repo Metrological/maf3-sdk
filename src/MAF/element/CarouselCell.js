@@ -11,13 +11,17 @@ define('MAF.element.CarouselCell', function () {
 					var coords = this.getCellCoordinates();
 					switch (event.type) {
 						case 'focus':
-							if (this.carousel && !this.carousel.hasFocus) {
-								this.carousel.fire('onFocus', coords);
+							if (!this.carousel.getState().hasFocus) {
+								this.carousel.fire('onFocus', this);
+							} else {
+								this.carousel.updateState({
+									focusIndex: this.getCellIndex()
+								});
 							}
 							break;
 						case 'blur':
 							if (this.carousel && (!this.element.navigateTo || (this.carousel.cells && this.carousel.cells.indexOf(this.element.navigateTo.owner) === -1))) {
-								this.carousel.fire('onBlur', coords);
+								this.carousel.fire('onBlur', this);
 							}
 							break;
 						case 'select':
@@ -28,7 +32,9 @@ define('MAF.element.CarouselCell', function () {
 							});
 							break;
 					}
-					this.parent(event);
+					if (event.type !== 'select') {
+						this.parent(event);
+					}
 				}
 			},
 			proxyProperties: proxyProperties
