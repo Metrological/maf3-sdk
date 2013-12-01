@@ -126,12 +126,10 @@ var AppsView = new MAF.Class({
 							ApplicationManager.exit();
 						}
 					}]
-				});
-				view.tos.show();
+				}).show();
 			}
 		} else {
-			view.tos.hide();
-			view.tos.show();
+			view.tos.hide().show();
 		}
 	},
 
