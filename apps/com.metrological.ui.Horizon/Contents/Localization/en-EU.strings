@@ -6,7 +6,9 @@
 "SELECT" = "SELECT";
 "LOGOUT" = "LOGOUT";
 "ERROR" = "ERROR";
-"ABOUT" = "ABOUT";
+"TERMS" = "Terms &amp; Conditions";
+"AGREE" = "AGREE";
+"ABOUT" = "About this App";
 "PLAYBACK_ERROR" = "Error trying to playback this content.";
 "RETRY" = "RETRY";
 "CLOSE" = "CLOSE";

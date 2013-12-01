@@ -6,7 +6,9 @@
 "SELECT" = "Kiezen";
 "LOGOUT" = "Uitloggen";
 "ERROR" = "Fout";
-"ABOUT" = "OVER";
+"TERMS" = "Voorwaarden";
+"AGREE" = "AKKOORD";
+"ABOUT" = "Over deze App";
 "PLAYBACK_ERROR" = "Fout bij het afspelen";
 "RETRY" = "Nog een keer";
 "CLOSE" = "Sluiten";

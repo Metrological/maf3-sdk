@@ -414,18 +414,23 @@ var loadTemplate = (function () {
 								}
 							},
 							back: function (event) {
-								var dialogKey = this.retrieve('key');
-								event.preventDefault();
-								event.stopPropagation();
-								this.destroy();
-								if (focusAfterDialog) {
-									focusAfterDialog.focus();
-									focusAfterDialog = null;
-								}
-								ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
-								if (KeyboardValueManager) {
-									KeyboardValueManager.suicide();
-									KeyboardValueManager = null;
+								if (!dialogConfig.ignoreBackKey) {
+									var dialogKey = this.retrieve('key');
+									event.preventDefault();
+									event.stopPropagation();
+									this.destroy();
+									if (focusAfterDialog) {
+										focusAfterDialog.focus();
+										focusAfterDialog = null;
+									}
+									ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+									if (KeyboardValueManager) {
+										KeyboardValueManager.suicide();
+										KeyboardValueManager = null;
+									}
+								} else {
+									event.preventDefault();
+									event.stopPropagation();
 								}
 							}
 						}

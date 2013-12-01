@@ -103,7 +103,7 @@ define('MAF.system.WindowedView', function () {
 		focusView: emptyFn,
 
 		resetFocus: function () {
-			if (this.element) {
+			if (!this.disableResetFocus && this.element) {
 				if (!this.element.navigate('down', [0, 0])) {
 					this.element.focus();
 				}

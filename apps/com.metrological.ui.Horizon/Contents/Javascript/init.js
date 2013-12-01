@@ -1,3 +1,13 @@
+Theme.set({
+	BaseFocus: {
+		styles: {
+			backgroundColor: 'rgba(255,255,255,.5)'
+		}
+	}
+});
+
+var TOS = 1;
+
 include('Javascript/Core/ApplicationManager.js');
 include('Javascript/Views/Apps.js');
 

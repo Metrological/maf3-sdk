@@ -35,11 +35,13 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			// we need this since this is the only place where we activate dialogs
 			// ??? it would be nice if this was responding to an onShowDialog event or something
 			MAF.HostEventManager.send('showDialog', this.getDialogConfig());
+			return this;
 		},
 
 		hide: function() {
 			this.removeHandler();
 			MAF.HostEventManager.send('hideDialog', this.getDialogConfig());
+			return this;
 		},
 
 		dispatchEvents: function(event) {

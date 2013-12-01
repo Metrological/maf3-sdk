@@ -25,7 +25,7 @@ var NDSPlayer = function () {
 		currentSource = null,
 		previousState = null,
 		startCounter = 0,
-		startTimer;
+		startTimer, timeTimer;
 
 	instance.subscribers = {};
 
@@ -45,7 +45,7 @@ var NDSPlayer = function () {
 	}
 	function start() {
 		if (currentSource && !canPlay) {
-			screen.log('START');
+			//screen.log('START');
 			VideoPlayer.start();
 			if (startCounter < 5) {
 				//VideoPlayer.setURI(currentSource);
@@ -60,7 +60,7 @@ var NDSPlayer = function () {
 				stateChange(Player.state.ERROR);
 			}
 		} else if (startTimer) {
-			screen.log('STARTED');
+			//screen.log('STARTED');
 			startCounter = 0;
 			clearTimeout(startTimer);
 			startTimer = null;
@@ -71,21 +71,21 @@ var NDSPlayer = function () {
 		VideoPlayer.onPlaybackStarted = function () {
 			if (grabbed && currentSource && VideoPlayer) {
 				canPlay = true;
-				screen.log('INFOLOADED');
+				//screen.log('INFOLOADED');
 				stateChange(Player.state.INFOLOADED);
 			}
 		};
 		VideoPlayer.onPlaybackEnd = function () {
 			if (grabbed && currentSource) {
-				screen.log('EOF');
+				//screen.log('EOF');
 				stateChange(Player.state.EOF);
 			}
 		};
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
 			if (grabbed && currentSource && canPlay) {
-				screen.log('STOPPED');
+				//screen.log('STOPPED');
 				stateChange(Player.state.STOP);
-				screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
 					instance.bounds = currentBounds;
 				}
@@ -93,7 +93,7 @@ var NDSPlayer = function () {
 		};
 		VideoPlayer.onPlaybackError = function () {
 			if (grabbed && currentSource) {
-				screen.log('ERROR');
+				//screen.log('ERROR');
 				stateChange(Player.state.ERROR);
 			}
 		};
@@ -101,9 +101,9 @@ var NDSPlayer = function () {
 	if (TVContext) {
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
-				screen.log('CHANNEL CHANGE');
+				//screen.log('CHANNEL CHANGE');
 				channelChange();
-				screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
 					instance.bounds = currentBounds;
 				}
@@ -239,7 +239,7 @@ var NDSPlayer = function () {
 				clearTimeout(startTimer);
 				startTimer = null;
 			}
-			screen.log('BUFFERING');
+			//screen.log('BUFFERING');
 			stateChange(Player.state.BUFFERING);
 			if (!grabbed) {
 				try {
@@ -254,19 +254,23 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 			try {
-				screen.log('LOAD');
+				//screen.log('LOAD');
 				VideoPlayer.setURI(src);
 				currentSource = src;
 				start.delay(800);
 				//startTimer = setTimeout(start, 600);
 			} catch(err) {
-				screen.log('LOAD ERROR');
+				//screen.log('LOAD ERROR');
 			}
 		} else if (currentSource && VideoPlayer) {
 			canPlay = false;
 			currentSource = null;
 			previousState = null;
 			paused = false;
+			if (timeTimer) {
+				clearInterval(timeTimer);
+				timeTimer = null;
+			}
 			if (startTimer) {
 				clearTimeout(startTimer);
 				startTimer = null;
@@ -276,7 +280,7 @@ var NDSPlayer = function () {
 					VideoPlayer.stop();
 				} catch(err) {}
 			}
-			screen.log('STOP');
+			//screen.log('STOP');
 			stateChange(Player.state.STOP);
 			(function () {
 				if (grabbed && !currentSource) {
@@ -309,7 +313,15 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 		}
-		screen.log(paused ? 'PAUSED' : 'RESUME');
+		if (paused) {
+			if (timeTimer) {
+				clearInterval(timeTimer);
+				timeTimer = null;
+			}
+		} else {
+			timeTimer = setInterval(timeChange, 1000);
+		}
+		//screen.log(paused ? 'PAUSED' : 'RESUME');
 		stateChange(paused ? Player.state.PAUSE : Player.state.PLAY);
 	});
 	getter(instance, 'bounds', function () {
@@ -529,7 +541,7 @@ if (Application) {
 		(function () {
 			var UI = getUIWindow();
 			if (UI) {
-				screen.log('ONSHOW');
+				//screen.log('ONSHOW');
 				UI.visible = true;
 				ApplicationManager.fire(active, 'onSelect', {
 					id: apps[active].currentViewId
@@ -540,13 +552,15 @@ if (Application) {
 	Application.onHide = function () {
 		var UI = getUIWindow();
 		if (UI) {
-			screen.log('ONHIDE');
+			//screen.log('ONHIDE');
 			UI.visible = false;
 		}
 		resetNDSPlayer();
-		if (active && active !== ui) {
-			ApplicationManager.close(active);
-		}
+		(function () {
+			if (active && active !== ui) {
+				ApplicationManager.close(active);
+			}
+		}).delay(1000);
 	};
 }
 
@@ -560,7 +574,7 @@ window.addEventListener('blur', function () {
 	}
 	var UI = getUIWindow();
 	if (UI) {
-		screen.log('HIDE');
+		//screen.log('HIDE');
 		UI.visible = false;
 	}
 });

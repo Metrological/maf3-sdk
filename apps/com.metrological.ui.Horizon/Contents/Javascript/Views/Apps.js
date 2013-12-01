@@ -97,14 +97,57 @@ var AppsView = new MAF.Class({
 		return this.getFavorites().indexOf(id);
 	},
 
+	showTOSDialog: function () {
+		var view = this;
+		if (!document.body.visible || !view.ready || view.frozen) {
+			return;
+		}
+		if (!view.tos) {
+			var categories = view.controls.categories,
+				tos = filesystem.readFile('About/' + profile.locale + '/tos.txt', true);
+			if (!tos) {
+				categories.focus();
+			} else {
+				view.tos = new MAF.dialogs.Alert({
+					title: $_('TERMS'),
+					isModal: true,
+					message: tos,
+					buttons: [{
+						label: $_('AGREE'),
+						callback: function () {
+							delete view.tos;
+							currentAppConfig.set('tos', TOS);
+							categories.focus();
+						}
+					}, {
+						label: $_('CANCEL'),
+						callback: function () {
+							delete view.tos;
+							ApplicationManager.exit();
+						}
+					}]
+				});
+				view.tos.show();
+			}
+		} else {
+			view.tos.hide();
+			view.tos.show();
+		}
+	},
+
 	appsReady: function () {
-		if (this.ready !== true) {
-			this.ready = true;
-			var categories = this.controls.categories,
-				apps = this.controls.apps;
+		var view = this;
+		if (view.ready !== true) {
+			view.ready = true;
+			var categories = view.controls.categories,
+				apps = view.controls.apps;
 			categories.setDisabled(false);
 			apps.setDisabled(false);
-			categories.focus();
+			if (currentAppConfig.get('tos') === TOS) {
+				categories.focus();
+			} else {
+				view.showTOSDialog();
+			}
 		}
 	},
 
@@ -594,9 +637,12 @@ var AppsView = new MAF.Class({
 		}
 	},
 
-	focusView: function () {
+	selectView: function () {
+		this.disableResetFocus = false;
 		if (MAF.messages.exists('myApps') && !this.ready) {
 			this.appsReady();
+		} else if (currentAppConfig.get('tos') !== TOS) {
+			this.showTOSDialog();
 		}
 		if (this.ready) {
 			this.updateCategory();
