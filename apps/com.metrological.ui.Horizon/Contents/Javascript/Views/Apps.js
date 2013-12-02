@@ -631,7 +631,7 @@ var AppsView = new MAF.Class({
 
 	updateCategory: function () {
 		if (this.category) {
-			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()) + ' ' + (this.controls.apps.getCurrentPage() + 1) + '/' + this.controls.apps.getPageCount());
+			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()) + ' ' + (this.controls.apps.getCurrentPage() + 1) + '/' + (this.controls.apps.getPageCount() || 1));
 		}
 	},
 

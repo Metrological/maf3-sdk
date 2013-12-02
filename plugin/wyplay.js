@@ -14,7 +14,3 @@ var releasePlayer = function () {
 window.addEventListener('unload', function () {
 	releasePlayer();
 });
-
-window.addEventListener('blur', function () {
-	releasePlayer();
-});

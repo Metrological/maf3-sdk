@@ -200,7 +200,13 @@ define('MAF.control.TabStrip', function () {
 					var buttonStyles = Theme.getStyles(button.ClassName);
 					button.setTabContent(this.config.tabs[b], noimages);
 					button.show();
-					button.fire(b == this.activeIndex ? 'onActive' : 'onInactive');
+				//	button.fire(b == this.activeIndex ? 'onActive' : 'onInactive');
+					if (b == this.activeIndex) {
+						this.fire('onTabInitialized', this.config.tabs[b]);
+						button.fire('onActive');
+					} else {
+						button.fire('onInactive');
+					}
 					w += button.element.clientWidth + (buttonStyles.marginLeft * 2) + parseInt(buttonStyles.borderLeft, 10) + parseInt(buttonStyles.borderRight, 10);
 				}, this);
 				this.body.width = w < this.width ? 'auto' : w;
