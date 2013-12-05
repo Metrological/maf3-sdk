@@ -635,6 +635,12 @@ var AppsView = new MAF.Class({
 		}
 	},
 
+	hideView: function () {
+		if (this.tos) {
+			this.tos.hide();
+		}
+	},
+
 	selectView: function () {
 		this.disableResetFocus = false;
 		if (MAF.messages.exists('myApps') && !this.ready) {

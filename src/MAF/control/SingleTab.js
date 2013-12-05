@@ -166,7 +166,7 @@ define('MAF.control.SingleTab', function () {
 			if (this.config.updateText && this.config.updateText.call) {
 				text = this.config.updateText.call(this, value);
 			} else {
-				text = FontAwesome.get('caret-left') + ' ' + value + ' ' + FontAwesome.get('caret-right');
+				text = FontAwesome.get('caret-left') + ' ' + value.stripTags() + ' ' + FontAwesome.get('caret-right');
 			}
 			this.text.setText(text);
 		},

@@ -213,12 +213,16 @@ define('MAF.element.Carousel', function () {
 		},
 
 		suicide: function () {
-			while(this.cells.length) {
-				this.cells.pop().suicide();
+			if (this.cells) {
+				while(this.cells.length) {
+					this.cells.pop().suicide();
+				}
+				delete this.cells;
 			}
-			delete this.cells;
-			this.body.suicide();
-			delete this.body;
+			if (this.body) {
+				this.body.suicide();
+				delete this.body;
+			}
 			this.parent();
 		}
 	});

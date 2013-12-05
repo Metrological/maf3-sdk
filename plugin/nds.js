@@ -443,12 +443,13 @@ var NDSProfile = function (name) {
 	});
 
 	function hasPIN(type) {
+		return true;
 		switch (type) {
 			case 'adult':
 				type = User.ADULT_PIN;
 				break;
 			case 'youth':
-				type = User.ADULT_PIN;
+				type = User.YOUTH_PIN;
 				break;
 			default:
 				type = User.MASTER_PIN;

@@ -44,13 +44,11 @@ define('MAF.element.Grid', function () {
 				break;
 			case 'right':
 				if (horiz) {
-					if (cellCoords.column == cellCoords.columns - 1) {
-						if (page < lastpage || carousel) {
-							if (lastpage > 0 && carousel || page < lastpage) {
-								shift = true;
-							}
-							cellCoords.column = 0;
+					if (page < lastpage || carousel) {
+						if (lastpage > 0 && carousel || page < lastpage) {
+							shift = true;
 						}
+						cellCoords.column = 0;
 					}
 				}
 				break;
@@ -671,12 +669,16 @@ define('MAF.element.Grid', function () {
 		},
 
 		suicide: function () {
-			while(this.cells.length) {
-				this.cells.pop().suicide();
+			if (this.cells) {
+				while(this.cells.length) {
+					this.cells.pop().suicide();
+				}
+				delete this.cells;
 			}
-			delete this.cells;
-			this.body.suicide();
-			delete this.body;
+			if (this.body) {
+				this.body.suicide();
+				delete this.body;
+			}
 			delete this.pager;
 			this.parent();
 		}

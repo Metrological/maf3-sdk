@@ -71,9 +71,9 @@ define('MAF.views.SearchSuggest', function () {
 		},
 
 		config: {
-			BackButtonTitle: 'Back',
-			SearchButtonTitle: 'Search',
-			NoResultsMessage: 'No results found',
+			BackButtonTitle: 'BACK',
+			SearchButtonTitle: 'SEARCH',
+			NoResultsMessage: 'NO_RESULTS',
 			Cursor: '_',
 			DisplayDefaultValue: '',
 			AutocompleteThreshold: 3,
@@ -128,7 +128,7 @@ define('MAF.views.SearchSuggest', function () {
 			this.elements.valueManager.cursorPosition = this.elements.valueManager.value.length;
 
 			this.controls.backButton = new MAF.control.BackButton({
-				label: this.config.BackButtonTitle
+				label: widget.getLocalizedString(this.config.BackButtonTitle)
 			}).appendTo(this);
 
 			this.controls.grid = new MAF.control.Grid({
@@ -159,7 +159,7 @@ define('MAF.views.SearchSuggest', function () {
 			}).appendTo(this).attachToSource(this.controls.grid);
 
 			this.controls.submitButton = new MAF.control.TextButton({
-				label: this.config.SearchButtonTitle,
+				label: widget.getLocalizedString(this.config.SearchButtonTitle),
 				styles: {
 					vAlign: 'bottom'
 				},
@@ -282,7 +282,7 @@ define('MAF.views.SearchSuggest', function () {
 
 			this.controls.outputLabel = new MAF.element.Text({
 				ClassName: 'ControlTextEntryButtonLabel',
-				label: this.config.label
+				label: widget.getLocalizedString(this.config.label)
 			}).appendTo(this.controls.keyboardContainer);
 			//this.controls.outputLabel.setStyles(this.controls.outputLabel.config.ClassName);
 			this.controls.outputLabel.setStyles({ width: 0, height: 0 });
@@ -315,7 +315,7 @@ define('MAF.views.SearchSuggest', function () {
 			}).appendTo(this);
 
 			this.elements.noResultsText = new MAF.element.Text({
-				label: this.config.NoResultsMessage,
+				label: widget.getLocalizedString(this.config.NoResultsMessage),
 				styles: Object.merge(Theme.getStyles('SearchSuggestNoResultsText'),{wrap: true})
 			}).appendTo(this);
 

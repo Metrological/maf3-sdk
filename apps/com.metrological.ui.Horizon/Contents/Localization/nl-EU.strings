@@ -4,6 +4,8 @@
 "REMOVE" = "Verwijderen";
 "CANCEL" = "Annuleren";
 "SELECT" = "Kiezen";
+"SEARCH" = "Zoeken";
+"NO_RESULTS" = "Geen resultaten gevonden";
 "LOGOUT" = "Uitloggen";
 "ERROR" = "Fout";
 "TERMS" = "Voorwaarden";

@@ -4,6 +4,8 @@
 "REMOVE" = "REMOVE";
 "CANCEL" = "CANCEL";
 "SELECT" = "SELECT";
+"SEARCH" = "SEARCH";
+"NO_RESULTS" = "No results found";
 "LOGOUT" = "LOGOUT";
 "ERROR" = "ERROR";
 "TERMS" = "Terms &amp; Conditions";

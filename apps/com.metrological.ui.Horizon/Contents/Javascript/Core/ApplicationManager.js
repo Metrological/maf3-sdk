@@ -68,12 +68,17 @@ var loadTemplate = (function () {
 					var sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'times', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
-						{ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' },
 						{ value: '@AppButtonSidebarVideoSize', label: 'arrows-alt', action: 'viewport-toggle' }
-					];
+					], last;
+
+					if (app.widget.profile !== false) {
+						last = sidebarButtons.pop();
+						sidebarButtons.push({ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' });
+						sidebarButtons.push(last);
+					}
 
 					if (Muzzley.enabled) {
-						var last = sidebarButtons.pop();
+						last = sidebarButtons.pop();
 						sidebarButtons.push({ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' });
 						sidebarButtons.push(last);
 					}
@@ -987,7 +992,10 @@ widget.handleChildEvent = function (event) {
 		case 'hideDialog':
 			var dialog = event.getData();
 			if (dialog && this.widget) {
-				this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog')).destroy();
+				var dialogWindow = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
+				if (dialogWindow) {
+					dialogWindow.destroy();
+				}
 			}
 			break;
 		case 'setWaitIndicator':
