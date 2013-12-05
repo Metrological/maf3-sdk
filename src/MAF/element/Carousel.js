@@ -104,7 +104,7 @@ define('MAF.element.Carousel', function () {
 
 			getter(this, 'hasFocus', function () {
 				var activeElement = document.activeElement;
-				return activeElement && this.cells.indexOf(activeElement) > -1 || false;
+				return activeElement && this.cells && this.cells.indexOf(activeElement) > -1 || false;
 			});
 
 			this.body = new MAF.element.Core({
