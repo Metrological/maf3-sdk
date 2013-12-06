@@ -5,7 +5,8 @@ var NDS = createPluginObject('my_user_api', 'my_user_api', 'application/x-jsuser
 	TVContext   = NDS.ApplicationTvContext_getInstance && NDS.ApplicationTvContext_getInstance() || NDS.ApplicationTVContext_getInstance && NDS.ApplicationTVContext_getInstance(),
 	User        = NDS.UserAuthentication_getInstance && NDS.UserAuthentication_getInstance(),
 	UserData    = TVContext && TVContext.getUserData(),
-	Planner     = NDS.Planner_getInstance && NDS.Planner_getInstance();
+	Planner     = NDS.Planner_getInstance && NDS.Planner_getInstance(),
+	currentChannel, currentProgram, timerProgramData;
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
 	403: 'red', 404: 'green',
@@ -14,6 +15,16 @@ KeyMap.defineKeys(KeyMap.NORMAL, {
 	417: 'forward', 412: 'rewind',
 	462: 'menu', 461: 'back'
 }, true);
+
+var syncProgramData = function () {
+	if (timerProgramData) {
+		clearTimeout(timerProgramData);
+		timerProgramData = undefined;
+	}
+	currentChannel = TVContext && TVContext.getCurrentChannel();
+	currentProgram = currentChannel && currentChannel.getCurrentProgram();
+	timerProgramData = setTimeout(syncProgramData, currentProgram.duration * 1000);
+};
 
 var NDSPlayer = function () {
 	var instance = this,
@@ -41,6 +52,7 @@ var NDSPlayer = function () {
 		fire.call(instance, 'onTimeChange');
 	}
 	function channelChange() {
+		syncProgramData();
 		fire.call(instance, 'onChannelChange');
 	}
 	function start() {
@@ -128,7 +140,7 @@ var NDSPlayer = function () {
 		return false;
 	});
 	getter(instance, 'channel', function () {
-		var channel = TVContext && TVContext.getCurrentChannel() || {};
+		var channel = currentChannel || {};
 		return new TVChannel(channel.number, channel.name);
 	});
 	setter(instance, 'channel', function (number) {
@@ -137,8 +149,7 @@ var NDSPlayer = function () {
 		}
 	});
 	getter(instance, 'program', function () {
-		var channel = TVContext && TVContext.getCurrentChannel(),
-			program = channel && channel.getCurrentProgram() || {};
+		var program = currentProgram || {};
 		return new TVProgram(program.title, program.description, program.startTime, program.duration);
 	});
 	getter(instance, 'startTime', function () {
@@ -385,7 +396,7 @@ plugins.storage = new CookieStorage();
 var NDSProfile = function (name) {
 	var LOCKED = false,
 		ATTEMPTS = 0;
-	var getUserData = function (key) {
+	function getUserData(key) {
 		try {
 			return UserData && UserData.get(key);
 		} catch(err) {}
@@ -443,7 +454,7 @@ var NDSProfile = function (name) {
 	});
 
 	function hasPIN(type) {
-		return true;
+		return true;/*
 		switch (type) {
 			case 'adult':
 				type = User.ADULT_PIN;
@@ -459,7 +470,7 @@ var NDSProfile = function (name) {
 			return UserData && UserData.isPINSet(type) || false;
 		} catch(err) {
 			return false;
-		}
+		}*/
 	}
 	getter(this, 'hasPIN', function () {
 		return hasPIN;
@@ -539,6 +550,7 @@ var getUIWindow = function () {
 
 if (Application) {
 	Application.onShow = function () {
+		syncProgramData();
 		(function () {
 			var UI = getUIWindow();
 			if (UI) {
@@ -563,6 +575,7 @@ if (Application) {
 			}
 		}).delay(1000);
 	};
+	syncProgramData();
 }
 
 window.addEventListener('unload', function () {

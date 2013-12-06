@@ -1,7 +1,7 @@
 Theme.set({
 	BaseFocus: {
 		styles: {
-			backgroundColor: 'rgba(255,255,255,.5)'
+			backgroundColor: 'rgba(3,138,224,.5)'
 		}
 	}
 });

@@ -71,16 +71,18 @@ var loadTemplate = (function () {
 						{ value: '@AppButtonSidebarVideoSize', label: 'arrows-alt', action: 'viewport-toggle' }
 					], last;
 
-					if (app.widget.profile !== false) {
-						last = sidebarButtons.pop();
-						sidebarButtons.push({ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' });
-						sidebarButtons.push(last);
-					}
+					if (app.widget.dialogs !== false) {
+						if (app.widget.profile !== false) {
+							last = sidebarButtons.pop();
+							sidebarButtons.push({ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' });
+							sidebarButtons.push(last);
+						}
 
-					if (Muzzley.enabled) {
-						last = sidebarButtons.pop();
-						sidebarButtons.push({ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' });
-						sidebarButtons.push(last);
+						if (Muzzley.enabled && app.widget.muzzley !== false) {
+							last = sidebarButtons.pop();
+							sidebarButtons.push({ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' });
+							sidebarButtons.push(last);
+						}
 					}
 
 					if (identifier === widget.identifier) {
@@ -316,6 +318,8 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'muzzley':
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
+							break;
 						case 'facebook-login':
 							buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
