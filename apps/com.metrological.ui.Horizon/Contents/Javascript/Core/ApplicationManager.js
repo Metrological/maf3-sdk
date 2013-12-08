@@ -1033,8 +1033,10 @@ widget.handleHostEvent = function (event) {
 						bounds = mediaplayer && mediaplayer.getViewportBounds();
 					if (bounds && bounds.width === 1920) {
 						mediaplayer.setViewportBounds(624, 176, 1280, 720);
+						Horizon.setSidebarBackground(true);
 					} else if (bounds) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
+						Horizon.setSidebarBackground(false);
 					}
 					break;
 				case 'switch-profile':
@@ -1117,6 +1119,7 @@ widget.handleHostEvent = function (event) {
 			}
 			break;
 		case 'onActivateSnippet':
+			Horizon.reset();
 			if (event.id !== widget.identifier) {
 				Horizon.hide();
 			}

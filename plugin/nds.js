@@ -17,12 +17,23 @@ KeyMap.defineKeys(KeyMap.NORMAL, {
 }, true);
 
 var syncProgramData = function () {
+	var player = MAE.blocked && plugins.players[0];
 	if (timerProgramData) {
 		clearTimeout(timerProgramData);
 		timerProgramData = undefined;
 	}
 	currentChannel = TVContext && TVContext.getCurrentChannel();
-	currentProgram = currentChannel && currentChannel.getCurrentProgram();
+	if (!MAE.blocked || MAE.blocked.indexOf(currentChannel.number) === -1) {
+		if (player && player.muted) {
+			player.show();
+			player.muted = false;
+		}
+		currentProgram = currentChannel && currentChannel.getCurrentProgram();
+	} else if (player) {
+		player.hide();
+		player.muted = true;
+		currentProgram = undefined;
+	}
 	timerProgramData = setTimeout(syncProgramData, currentProgram.duration * 1000);
 };
 

@@ -5,6 +5,7 @@ var AppsView = new MAF.Class({
 
 	state: null,
 	firstCategory: 1,
+	delayedInitialFocus: 800,
 
 	initialize: function () {
 		this.parent();
