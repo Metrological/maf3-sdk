@@ -46,6 +46,7 @@ var NDSPlayer = function () {
 		paused = false,
 		currentSource = null,
 		previousState = null,
+		maxStartCounter = 10,
 		startCounter = 0,
 		startTimer, timeTimer;
 
@@ -70,9 +71,9 @@ var NDSPlayer = function () {
 		if (currentSource && !canPlay) {
 			//screen.log('START');
 			VideoPlayer.start();
-			if (startCounter < 5) {
+			if (startCounter < maxStartCounter) {
 				//VideoPlayer.setURI(currentSource);
-				startTimer = setTimeout(start, (5 - startCounter) * 1000);
+				startTimer = setTimeout(start, (maxStartCounter - startCounter) * 1000);
 				startCounter++;
 			} else {
 				startCounter = 0;
