@@ -108,7 +108,7 @@ var Horizon = (function (body) {
 	}
 
 	function hideNowPlaying(callback) {
-		if (!visible) {
+		if (!visible && !Browser.activevideo) {
 			updateHeader();
 			body.animate({
 				scale: 1.6,
@@ -123,7 +123,7 @@ var Horizon = (function (body) {
 	}
 
 	function showNowPlaying(callback) {
-		if (!visible) {
+		if (!visible && !Browser.activevideo) {
 			updateHeader();
 			body.animate({
 				scale: 1,

@@ -52,6 +52,50 @@ var NDSPlayer = function () {
 
 	instance.subscribers = {};
 
+	function getRate(rate) {
+		switch(rate) {
+			case 30:
+				return VideoPlayer.PLAYER_SPD_FWD30X;
+			case 12:
+				return VideoPlayer.PLAYER_SPD_FWD12X;
+			case 6:
+				return VideoPlayer.PLAYER_SPD_FWD6X;
+			case 2:
+				return VideoPlayer.PLAYER_SPD_FWD2X;
+			case -30:
+				return VideoPlayer.PLAYER_SPD_REW30X;
+			case -12:
+				return VideoPlayer.PLAYER_SPD_REW12X;
+			case -6:
+				return VideoPlayer.PLAYER_SPD_REW6X;
+			case -2:
+				return VideoPlayer.PLAYER_SPD_REW2X;
+			default:
+				return VideoPlayer.PLAYER_SPD_PLAY;
+		}
+	}
+	function getRateByRate(rate) {
+		switch(rate) {
+			case VideoPlayer.PLAYER_SPD_FWD30X:
+				return 30;
+			case VideoPlayer.PLAYER_SPD_FWD12X:
+				return 12;
+			case VideoPlayer.PLAYER_SPD_FWD6X:
+				return 6;
+			case VideoPlayer.PLAYER_SPD_FWD2X:
+				return 2;
+			case VideoPlayer.PLAYER_SPD_REW30X:
+				return -30;
+			case VideoPlayer.PLAYER_SPD_REW12X:
+				return -12;
+			case VideoPlayer.PLAYER_SPD_REW6X:
+				return -6;
+			case VideoPlayer.PLAYER_SPD_REW2X:
+				return -2;
+			default:
+				return 1;
+		}
+	}
 	function stateChange(state) {
 		if (previousState !== state) {
 			fire.call(instance, 'onStateChange', {
@@ -141,7 +185,7 @@ var NDSPlayer = function () {
 
 	function notify(icon, message, type, identifier) {
 		type = type || 'alert';
-		identifier = identifier || active
+		identifier = identifier || active;
 		try {
 			var notification = NDS && NDS.Notification_getInstance();
 			if (!notification) {
@@ -222,10 +266,13 @@ var NDSPlayer = function () {
 			} catch(err) {}
 		}
 	});
+	getter(instance, 'rates', function () {
+		return [1,2,6,12,30];
+	});
 	getter(instance, 'rate', function () {
 		if (canPlay && VideoPlayer) {
 			try {
-				return VideoPlayer.speed || 0;
+				return getRate(VideoPlayer.speed) || 1;
 			} catch(err) {
 				return 1;
 			}
@@ -233,19 +280,23 @@ var NDSPlayer = function () {
 			return 1;
 		}
 	});
-	setter(instance, 'rate', function (rate) {/*
+	setter(instance, 'rate', function (rate) {
 		if (VideoPlayer && canPlay && this.rate !== rate) {
-			VideoPlayer.setSpeed(rate);
+			try {
+				VideoPlayer.setSpeed(getRateByInt(rate));
+			} catch(err) {
+				return;
+			}
 			if (rate < 0) {
 				stateChange(Player.state.REWIND);
-			} else if (rate === 1) {
+			} else if (rate == 1) {
 				stateChange(Player.state.PLAY);
 			} else if (rate > 0) {
 				stateChange(Player.state.FORWARD);
 			} else {
 				stateChange(Player.state.PAUSE);
 			}
-		}*/
+		}
 	});
 	getter(instance, 'duration', function () {
 		try {

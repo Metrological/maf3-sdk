@@ -85,6 +85,10 @@ var loadTemplate = (function () {
 						}
 					}
 
+					if (Browser.activevideo) {
+						sidebarButtons.pop();
+					}
+
 					if (identifier === widget.identifier) {
 						sidebarButtons.shift();
 					}
