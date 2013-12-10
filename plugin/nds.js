@@ -139,6 +139,45 @@ var NDSPlayer = function () {
 		return true;
 	}
 
+	function notify(icon, message, type, identifier) {
+		type = type || 'alert';
+		identifier = identifier || active
+		try {
+			var notification = NDS && NDS.Notification_getInstance();
+			if (!notification) {
+				return;
+			}
+			if (icon && notification.setIconURL) {
+				notification.setIconURL(icon);
+			}
+			switch(typeOf(message)) {
+				case 'array':
+					notification.setMessageStrings(message);
+					break;
+				case 'string':
+					notification.setMessageStrings(message.split(', '));
+					break;
+				default:
+					return;
+			}
+			switch(type) {
+				case 'alert':
+					notification.setType(notification.NOTIFICATION_TYPE_ALERT);
+					break;
+				case 'c2a':
+					if (MAE.pait && MAE.pait[identifier]) {
+						notification.setType(notification.NOTIFICATION_TYPE_CALL2ACTION);
+						notification.setCall2ActionTarget('app:' + MAE.pait[identifier]);
+						break;
+					}
+					return;
+				default:
+					return;
+			}
+			notification.post();
+		} catch(err) {}
+	}
+
 	getter(instance, 'id', function () {
 		return Player.TV;
 	});
@@ -363,6 +402,9 @@ var NDSPlayer = function () {
 			VideoPlayer.move(b[0], b[1]);
 		}
 		currentBounds = b;
+	});
+	getter(instance, 'notify', function () {
+		return notify;
 	});
 };
 NDSPlayer.prototype = new Player();
@@ -604,3 +646,12 @@ window.addEventListener('blur', function () {
 		UI.visible = false;
 	}
 });
+
+// Test Notification
+if (MAE.pait) {
+	(function () {
+		var id = 'com.metrological.widgets.tv.Youtube',
+			icon = ApplicationManager.getAboutIcon(id);
+		plugins.players[0].notify(icon, ['YouTube', 'Press OK'], 'c2a', id);
+	}).delay(60000);
+}
