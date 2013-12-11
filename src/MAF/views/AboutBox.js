@@ -84,19 +84,21 @@ define('MAF.views.AboutBox', function () {
 			var metadataDescription = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataDescription',
 				label: widget.getLocalizedString(widget.description),
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataDescription', 'fontSize'),
-					vOffset: metadataName.outerHeight
+					vOffset: metadataName.outerHeight,
+					wrap: true,
+					truncation: 'end'
 				}
 			}).appendTo(contentContainer);
+
+			metadataDescription.visibleLines = 3;
 
 			var PAD = Theme.get('AboutBoxViewMetadataAuthorNote', 'PAD_TOP');
 
 			var metadataAuthorNote = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataAuthorNote',
 				label: widget.getLocalizedString('WIDGET_BY') + '...',
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataAuthorNote', 'fontSize'),
 					vOffset: metadataDescription.outerHeight + PAD
@@ -106,7 +108,6 @@ define('MAF.views.AboutBox', function () {
 			var metadataAuthor = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataAuthor',
 				label: ((!widget.author) || widget.author.length === 0 || (widget.author === widget.company) ? (widget.company || '') : widget.author + ', ' + (widget.company || '')),
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataAuthor', 'fontSize'),
 					vOffset: metadataAuthorNote.outerHeight
@@ -116,7 +117,6 @@ define('MAF.views.AboutBox', function () {
 			var metadataVersion = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataVersion',
 				label: widget.version,
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataVersion', 'fontSize'),
 					vOffset: metadataAuthor.outerHeight
@@ -129,7 +129,6 @@ define('MAF.views.AboutBox', function () {
 				var metadataUrlNote = new MAF.element.Text({
 					ClassName: 'AboutBoxViewMetadataUrlNote',
 					label: widget.getLocalizedString('MORE_INFO') + '...',
-					visibleLines: 1,
 					styles: {
 						fontSize: Theme.getStyles('AboutBoxViewMetadataUrlNote', 'fontSize'),
 						vOffset: metadataVersion.outerHeight + PAD
@@ -139,7 +138,6 @@ define('MAF.views.AboutBox', function () {
 				var metadataUrl = new MAF.element.Text({
 					ClassName: 'AboutBoxViewMetadataUrl',
 					label: widget.authorURL || widget.url,
-					visibleLines: 1,
 					styles: {
 						fontSize: Theme.getStyles('AboutBoxViewMetadataUrl', 'fontSize'),
 						vOffset: metadataUrlNote.outerHeight
@@ -152,7 +150,6 @@ define('MAF.views.AboutBox', function () {
 			var metadataCopyright = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataCopyright',
 				label: widget.getLocalizedString('COPYRIGHT', (new Date()).getFullYear()) + ' ' + widget.copyright,
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataCopyright', 'fontSize'),
 					vOffset: contentContainer.height - PAD
@@ -164,7 +161,6 @@ define('MAF.views.AboutBox', function () {
 			var metadataReserved = new MAF.element.Text({
 				ClassName: 'AboutBoxViewMetadataReserved',
 				label: widget.getLocalizedString('RIGHTS_RESERVED'),
-				visibleLines: 1,
 				styles: {
 					fontSize: Theme.getStyles('AboutBoxViewMetadataReserved', 'fontSize'),
 					vOffset: contentContainer.height - PAD
@@ -232,7 +228,6 @@ define('MAF.views.AboutBox', function () {
 			width: '100%',
 			paddingLeft: 5,
 			paddingRight: 5,
-			truncation: 'end',
 			fontSize: 18,
 			fontWeight: 'bold'
 		}

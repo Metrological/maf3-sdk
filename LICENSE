@@ -1,1 +1,1760 @@
-﻿
+﻿PLEASE READ AND AGREE TO THIS AGREEMENT BEFORE USING THE SDK.
+
+BY CHECKING THE ACCEPTANCE BOX AND/OR USING THE SDK, YOU ACCEPT WITHOUT
+RESERVATION ALL TERMS AND CONDITIONS IN THIS AGREEMENT AND THE TERMS 
+AND CONDITIONS SET FORTH IN ITS ANNEX(ES) CONCLUDED BETWEEN YOU AND 
+METROLOGICAL.
+
+IF YOU DO NOT AGREE WITH THE TERMS AND CONDITIONS IN THIS AGREEMENT AND
+IN ITS ANNEX(ES), DO NOT CHECK THE ACCEPTANCE BOX AND/OR DO NOT USE THE
+SDK.
+
+IF YOU WANT TO ACCEPT THE TERMS AND CONDITIONS IN THIS AGREEMENT AND IN
+ITS ANNEX(ES) ON BEHALF OF YOUR EMPLOYER OR ANY LEGAL ENTITY, YOU 
+WARRANT THAT YOU HAVE THE AUTHORITY TO ACCEPT THE TERMS AND CONDITIONS 
+OF THE AGREEMENT AND ITS ANNEX(ES) ON BEHALF OF YOUR COMPANY OR ANY
+OTHER LEGAL ENTITY AND TO LEGALLY BIND YOUR COMPANY OR SUCH LEGAL ENTITY.
+
+
+
+
+Metrological Software Development Kit License Agreement
+
+
+This Software Development Kit License Agreement (the “Agreement”) is 
+entered into by and between Metrological Media Innovations B.V., 
+Mariniersweg 151, 3011 NK Rotterdam, The Netherlands (“Metrological”), 
+and you (also defined below as Developer).
+
+Metrological shall provide the SDK (as defined below) to you as 
+described in accordance with the terms and conditions in this Agreement
+including its Annex(es).
+
+1.	Purpose
+1.1.	The purpose of this Agreement is to define the terms and 
+	conditions under which you are permitted to use the SDK in order
+	to develop and/or test under your own responsibility App(s) 
+	which may, upon validation by Metrological, be included in
+	the App Catalogue and distributed through Operator Stores.
+
+2.	Definitions
+2.1.	The Annex(es) specified hereunder (hereinafter: “Annex(es)”) 
+	will be attached to the Agreement and form an integral part 
+	thereof:
+
+	Annex A: Metrological App Catalogue Terms and Conditions
+
+	Annex B: GNU Affero General Public License Terms and Conditions
+
+
+2.2.	In this Agreement expressions below shall have the meaning 		
+	assigned to them in this article:
+
+	“App” shall mean a software application or user interface 
+	developed by the developer by using the SDK;
+
+	“App Catalogue” shall mean the library of Apps that Metro-
+	logical makes available	to operators of Operator Stores and 
+	from which operators make a selection to be included in their 
+	Operator Store;
+
+	“App Catalogue Agreement” shall mean the agreement to be entered
+	into by Metrological and Developer in accordance with article 3 
+	of the Metrological App Catalogue Terms and Conditions (attached
+	as Annex A to this Agreement);
+
+	“Confidential Information” shall mean the term as defined in 
+	article 7.1 of this Agreement;
+
+	“Developer” shall mean you, a physical person, or if you are 
+	accepting these terms on behalf of a legal entity (such as a 
+	corporation, partnership or government agency), “Developer” or 
+	“Developer’s” means such legal entity;
+
+	“Feedback” shall mean the term as defined in article 7.3 of this 
+	Agreement;
+
+	“Modified OSS” shall mean the term as defined in article 6.2 of 
+	this Agreement;
+
+	“Operator Store” shall mean a customized app store that enables 
+	an operator to sell or provide content to end-users through an App 
+	if an operator has selected the App from the App Catalogue;
+
+	“OSS” (Open Source Software) shall mean any software that requires
+	as a condition of use, copying, modification and/or distribution of 
+	such software that such software or other software incorporated 
+	into, derived from or distributed with such software (a) be disclosed 
+	or distributed in source code form, and (b) be licensed for the purpose 
+	of making and/or distributing derivative works, and (c) be 
+	redistributable at no charge;
+
+	“OSS parts of the SDK” shall mean the term as defined in article 6.2 
+	of this Agreement;
+
+	“SDK” (Software Development Kit) shall mean any software (source code 
+	and object code), documentation, applications, libraries, APIs, instruc-
+	tions, data, files, sample code, emulator, tools, and other materials 	
+	including any Updates provided by Metrological and/or affiliates for 
+	use by Developer to develop or test App(s);
+
+	“Term” shall mean the term as defined in article 13.1 of this Agreement;
+
+	“Updates” shall mean the term as defined in article 8.1 of this 
+	Agreement.
+
+
+3.	License
+	Metrological grants Developer during the Term a worldwide, royalty-
+	free, personal, revocable, non-exclusive, non-sublicenseable, and non-
+	transferable license to access, download, and use a reasonable num-
+	ber of copies of the SDK on the computers owned or controlled by 
+	Developer, for the sole purpose of developing or testing the App, 
+	and further subject to the restrictions and conditions set forth in 
+	this Agreement.
+
+4.	Restrictions and Conditions
+	The use of the SDK by Developer under this Agreement is subject to the 
+	following restrictions and conditions:
+
+4.1.	Developer may not decompile, decrypt, create derivative works, 
+	disassemble, modify, or reverse engineer the SDK in any way, except 
+	as otherwise expressly permitted in this Agreement.
+
+4.2.	Developer may not (attempt to) distribute or otherwise (commercially) 
+	exploit the App by any means other than through the App Catalogue 
+	offered by Metrological, its affiliates, or its distribution partners. 
+	The terms and conditions regarding distribution of Apps through the 
+	App Catalogue are set forth in Annex A. By checking the acceptance box, 
+	and/or using the SDK, Developer has accepted without reservation all 
+	terms and conditions in Annex A. In the event Developer develops and/or 
+	tests the App for a third-party and as such has no intention to dis-
+	tribute the App through the App Catalogue, the terms and conditions set 
+	forth in Annex A will not apply and  the Developer shall provide the 
+	third party with the terms and conditions set forth in Annex A. 
+
+4.3.	Developer may not use the SDK to develop and/or test anything else than 
+	App(s).
+
+4.4.	Developer may not sell, distribute, rent, lease, lend, sublicense, 
+	upload to or host on any website or server the SDK in whole or any non-
+	OSS parts of the SDK. 
+
+4.5.	Developer may not incorporate any OSS into the SDK in such a way that 
+	the non-OSS parts of the SDK would become subject to any licensing 
+	obligations associated with OSS, or that the OSS parts of the SDK would 
+	become subject to other OSS licensing obligations than the OSS licensing 
+	obligations pursuant to this Agreement.
+
+4.6.	Developer may not incorporate any OSS part of the SDK in any other plat-
+	form, application, software or otherwise.
+
+4.7.	Developer may not develop App(s) to operate nuclear facilities, 
+	life support, or other mission critical application where human 
+	life or property may be at stake.
+
+4.8.	Developer may not use the SDK for any unlawful or illegal activity, 
+	nor develop Apps that would commit or facilitate (the commission of) a 
+	crime, or other unlawful or illegal acts.
+
+4.9.	Developer may not delete or alter any disclaimers, warning, copyright 
+	or other proprietary notices accompanying the SDK.
+
+4.10.	Developer may not develop App(s) that infringe copyright, design, 
+	know-how, trademarks, model, know-how, patents, commercial secrets and 
+	any intellectual property rights belonging to Metrological or to third 
+	parties.
+
+4.11.	Developer will use the SDK in accordance with all applicable laws, 
+	regulations and requirements, especially regarding the collection of 
+	user data by the App.
+
+5.	Validation
+5.1.	Developer acknowledges that the App requires validation and consent 
+	by Metrological before the App may be included in the App Catalogue. 
+	Metrological may withhold such validation and/or consent for the App 
+	to be included in the App Catalogue at its sole discretion.
+
+5.2.	In no event shall Metrological be liable for any direct, indirect or 
+	consequential damages or purely financial loss such as, but not limited 
+	to, missed business opportunities, lost sales, volume and profit, and 
+	data loss resulting from Metrological’s refusal to validate or provide 
+	consent to include the App in the App Catalogue.
+
+6.	Ownership and Intellectual Property
+6.1.	Metrological and its affiliates remain the owner of all right, title, 
+	and interest in and to the non-OSS parts of the SDK and any Updates 
+	thereof. Developer shall not mortgage, pledge or encumber the SDK in 
+	any way.
+
+6.2.	Certain components of the SDK and certain software li-braries 
+	included in the SDK are OSS (“OSS parts of the SDK”) and licensed under 
+	the terms of the GNU Affero General Public License (AGPL). The terms and 
+	conditions of AGPL are attached to this Agreement as Annex B and can 
+	also be found online here: https://www.gnu.org/licenses/agpl-3.0.html. 
+	The OSS parts of the SDK will be marked as such. Developer may modify or 
+	replace only the OSS parts of the SDK (“Modified OSS”) provided that (i) 
+	the Modified OSS will solely be used in combination with the SDK, (ii) 
+	the Modified OSS is used in accordance with the restrictions and condi-
+	tions set forth in this Agreement, and (iii) otherwise complies with the 
+	terms and conditions of this Agreement and the terms and conditions of 
+	AGPL.
+
+7.	Confidentiality and Feedback
+7.1.	Developer shall consider versions of the SDK that have not yet been 
+	publicly released and any other non-public information, including about 
+	Metrological’s business, designs, developments, finances, know-how, 
+	products, personnel or research, that Developer learns by using the 
+	SDK, as confidential information (“Confidential Information”) under 
+	this Agreement.
+
+	
+7.2.	Developer shall protect Confidential Information using at least the 
+	same degree of care that Developer uses to protect his own confidential 
+	information of similar importance, but no less than a reasonable degree 
+	of care. Developer may use Confidential Information solely for the pur-
+	pose of exercising his rights and performing his obligations under this 
+	Agreement. Developer may not use Confidential Information for any other 
+	purposes without Metrological’s prior written consent. Developer may 
+	disclose Confidential Information to the extent required by law, 
+	provided that Developer takes reasonable steps to notify Metrological of 
+	such requirements before disclosing the Confidential Information and to 
+	obtain protective treatment of the Confidential Information.
+
+7.3.	Developer acknowledges that if he provides Metrological with any sugges-
+	tions, comments, or other feedback about the SDK (“Feedback”) such 
+	Feedback is given voluntarily. Developer also acknowledges that even if 
+	he designates such Feedback as confidential, unless the parties enter 
+	into a separate subsequent written agreement, the Feedback will not be 
+	confidential and Metrological will be free to use, disclose, reproduce, 
+	license, or otherwise distribute or exploit the Feedback at its sole 
+	discretion without any obligations or restrictions of any kind, 
+	including without limitation, intellectual property rights or licensing 
+	obligations. Developer warrants that he will not provide Metrological 
+	with any Feedback that is subject to license terms that seek to require 
+	any Metrological product, technology, service or documentation incor-
+	porating or derived from such Feedback, or any Metrological intellectual 
+	property, to be licensed or otherwise shared with any third party.
+
+8.	Updates
+8.1.	Metrological may extend, enhance or otherwise modify the SDK at its 
+	sole discretion and without notice (“Updates”), but Metrological shall 
+	not be obligated to provide Developer with any such Updates. If Updates 
+	are made available by Metrological, the terms of this Agreement will 
+	govern the use of and access to such Updates. Metrological is not 
+	obligated to provide any maintenance, technical or other support for 
+	the SDK.
+
+8.2.	Metrological may at its sole discretion include Modified OSS in any 
+	Updates, but Metrological shall not be obliged to do this. In no event 
+	shall Metrological be liable for any direct, indirect or consequential 
+	damages or purely financial loss such as, but not limited to, missed 
+	business opportunities, lost sales, volume and profit, and data loss 
+	resulting from any Update, including Metrological’s decision not to 
+	include (certain) Modified OSS in any Updates.
+
+9.	Press releases
+	The Developer may not issue any press releases or make any other public 
+	statements regarding this Agreement, its terms and conditions, the 
+	App(s), or the relationship of the Developer and Metrological, 
+	without Metrological’s express prior written consent, which may be 
+	withheld at Metrological’s discretion. 
+
+10.	Warranty disclaimer
+	The SDK is provided “as is”, without warranty of any kind, express or 
+	implied. Metrological and its suppliers make no representations or 
+	warranties with respect to the SDK, either express or implied, 
+	including, but not limited to, fitness for a particular purpose, 
+	availability, security, title, non-infringement or backward compati-
+	bility. Metrological and its affiliates do not warrant that the SDK 
+	is free of bugs, errors, inaccuracies, or interruptions, or is 
+	accurate, complete, compliant to any specifications, reliable, or 
+	otherwise valid.
+
+11.	Limitation of liability
+	In no event shall Metrological and/or its affiliates be liable for 
+	direct, indirect and/or consequential damages or purely financial loss 
+	such as, but not limited to, missed business opportunities, lost sales, 
+	volume and profit, and data loss in connection with or arising out of 
+	this Agreement.
+
+12.	Indemnification
+	Developer shall indemnify and hold Metrological harmless against all 
+	claims, costs, damages, expenses and reasonable attorney fees arising 
+	out of, directly or indirectly, the use of the SDK by Developer, and 
+	any claim of product liability, personal injury or death associated with 
+	any unintended use, even if such claim alleges that Metrological was 
+	negligent regarding the design or manufacture of the SDK.
+
+13.	Termination and its Consequences
+13.1.	The Agreement shall be in effect until terminated by either Developer or 
+	Metrological (the “Term”). Developer may terminate this Agreement at 
+	his convenience by discontinuing his use of the SDK. Metrological may 
+	terminate this Agreement immediately in writing (including email or text
+	message) to the Developer, without prior written notice, when the 
+	Developer fails to comply with any term(s) of this Agreement, or for 
+	convenience upon ten (10) days prior written notice (including email 
+	or text message) to Developer. The terms of this Agreement that by 
+	their nature should survive termination shall survive termination.
+
+13.2.	Developer shall immediately destroy all his copies of the SDK upon 
+	termination of this Agreement, unless Metrological agrees in writing
+	to a written request of Developer for continuation of the use of the 
+	SDK 	beyond the Term. In such event, Metrological may demand for its 
+	convenience immediate destruction by the Developer of all his copies 
+	of the SDK.
+
+13.3.	In the event of termination of this Agreement, Metrological is entitled
+	to remove relevant App(s) from the App Catalogue, and terminate the App 
+	Catalogue Agreement between Metrological and Developer at its sole 
+	discretion. In no event shall Metrological be liable for any direct, 
+	indirect or consequential damages, or purely financial loss such as, 
+	but not limited to, missed business opportunities, lost sales, volume 
+	and profit, and data loss resulting from Metrological’s removal of the 
+	App from the App Catalogue.
+
+14.	General
+14.1.	Entire agreement
+	This Agreement including its Annex(es) sets forth the entire agreement 
+	and understanding between Metrological and the Developer with respect 
+	to the subject matter hereof.
+
+14.2.	Assignment
+	Developer may not assign or subcontract any of its obligations under 
+	this Agreement without Metrological’s prior written consent. 
+	Metrological may assign or subcontract any of its obligations under 
+	this Agreement at its sole discretion.
+
+14.3.	Severability
+	In the event that any provision of this Agreement shall be unenfor-
+	ceable or invalid under any applicable law or be so held by applicable 
+	court decision, such unenforceability or invalidity shall not render 
+	this Agreement unenforceable or invalid as a whole, and, in such event,
+	such provision shall be changed and interpreted so as to best accom-
+	plish the objectives of such unenforceable or invalid provision within 
+	the limits of applicable law or applicable court decisions.
+
+14.4.	Non waiver
+	The failure of Metrological to give notice to Developer of any breach 
+	or non-fulfilment of any provision, term or clause of this Agreement 
+	shall not constitute a waiver thereof, nor shall the waiver of any 
+	breach or non-fulfilment of any provision, term or clause hereof 
+	constitute a waiver of any other provision, term or clause thereof.
+
+14.5.	Applicable law and jurisdiction
+	This Agreement shall be governed by and shall be construed in 
+	accordance with the laws of the Netherlands. Any dispute, which may 
+	arise between Metrological and Developer as a result of this Agreement,
+	shall be exclusively submitted to the competent court in Rotterdam, 
+	the Netherlands.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Annex A: App Catalogue Terms and Conditions
+
+1.	Annexes and Definitions
+1.1.	The Annex specified hereunder (hereinafter: “Annex”) will be attached to
+	these Metrological terms and conditions (hereinafter: “Terms and Con-
+	ditions”) and form an integral part thereof:
+	Annex A1: Instructions for Minimum Terms and Conditions of Developer’s 
+	End-User License Agreement
+
+1.2.	In the event that any terms of these Terms and Conditions conflict with
+	the terms contained in the Annex, the terms contained in the Terms and 
+	Conditions shall prevail unless explicitly indicated otherwise in the 
+	Annex.
+
+1.3.	In these Terms and Conditions and in any Agreements the expressions 
+	below shall have the meaning assigned to them in this article:
+	“Agreement” shall mean the App Catalogue Agreement, to be entered into 
+	by Metrological and Developer in accordance with article 3, on the Ef-
+	fective Date, including the annexes thereto and any future written and 
+	executed amendments thereof, containing the information provided to 
+	Metrological during the submission process of the App;
+
+	“Amendment” shall mean the document by which changes to these Terms and
+ 	Conditions and/or the Agreement are effected pursuant to article 4;
+
+	“App” shall mean the software application through which the totality of
+ 	the Content is delivered by Developer for provision to End-users via an 
+	Operator Store;
+
+	“App Catalogue” shall mean the library of Apps that Metrological makes 
+	available to Operator Store Owners and from which Operator Store Owners
+ 	make a selection to be included in the Operator Store of a specific 
+	Operator Store Owner;
+
+	“Content” shall mean the entire substance and content of an App, in-
+	cluding materials of an audiovisual or other nature (including but 
+	not limited to games and information) as specified in the Agreement 
+	including its Annexes;
+
+	“Content Fee” shall mean the price which the End-user must pay to De-
+	veloper or Operator Store Owner in order to be able to view a particu-
+	lar Content Item;
+
+	“Content Item” shall mean an individually identifiable piece of Content,
+ 	such as a film, TV program or game, offered to End-users through the 
+	provision of Content Services;
+
+	“Content Services” shall mean all media and information services 
+	provided by Developer to End-users via the Operator Store, including 
+	audio-visual media services as defined in Directive 2010/13/EU and 
+	information society services as defined in Directive 2000/31/EC;
+	“Developer” shall mean a (future) customer of Metrological that has 
+	developed an App for inclusion in the App Catalogue;
+
+	“End-user” shall mean the customer of Developer who is the final or 
+	ultimate user of the Content Services;
+
+	“Intellectual Property Rights” shall mean any and all rights, including
+ 	future rights, in inventions, patents, designs, copyrights, trademarks,
+ 	service marks, database and topography rights (whether or not any of 
+	the foregoing have been registered, and including applications for 
+	registration of any of the foregoing), together with all trade secrets, 
+	know-how and rights or forms of protection of a similar nature or 
+	having a similar effect to any of the foregoing which may exist anywhere
+	in the world;
+
+	“Legal Requirements” shall mean any international, European Union, 
+	Federal, national, State, provincial or local law, regulation, order, 
+	statute, administrative order or treaty, judgment, court order, code 
+	of conduct (whether or not binding), guidance and other requirements 
+	of any relevant government or governmental agency or regulatory 
+	authority as they apply from time to time in the Netherlands or any 
+	other place where the Content Services may be provided;
+
+	“Metrological” shall mean Metrological Widgets B.V., a private company 
+	with limited liability incorporated under the laws of the Netherlands, 
+	whose corporate seat is at Rotterdam and whose principal office is 
+	located at Mariniersweg 151, 3011 NK Rotterdam, the Netherlands;
+
+	“Operator Store” shall mean a customized app store for which an 
+	Operator Store Owner has selected Apps from the App Catalogue. 
+	The Operator Store enables Developer to sell Content to End-Users 
+	through an App, if an Operator Store Owner has selected the App from 
+	the App Catalogue for its Operator Store;
+
+	“Operator Store Owner” shall mean a third party that is the owner of an
+ 	Operator Store;
+
+	“Parties” shall mean Metrological and Developer;
+
+	“Party” shall mean either Metrological or Developer;
+
+	“Personal Data” shall mean information related to an identified or 
+	identifiable natural person as defined in Directive 95/46/EC;
+
+	“SDK License Agreement” shall the agreement between Metrological and 
+	Developer that enables Developer to develop and test the App by means 
+	of Metrological’s Software Development Kit.
+
+2.	Scope
+2.1.	Metrological will host the App in the App Catalogue in accordance with 
+	the terms and conditions of these Terms and Conditions and the 
+	Agreement.
+
+2.2.	The development of the App is beyond the scope of the Agreement. 
+	Developer has developed or will develop the App by itself.
+
+2.3.	Developer is responsible for the uninterrupted supply of the Content 
+	to Metrological and for any external data feeds.
+
+2.4.	Any and all services to be provided by Metrological under these Terms 
+	and Conditions and/or the Agreement will be provided on a best effort 
+	basis, unless explicitly stated otherwise in respect of a specific 
+	service.
+
+3.	Agreement
+	Developer will provide the information requested during the submission 
+	process of the App to be included in the App Catalogue. If Metrological 
+	approves the information submitted by Developer and has validated the 
+	App in conformity with article 5 of the SDK License Agreement, it will 
+	send a confirmation of approval to Developer. The sending of such con-
+	firmation of approval constitutes a legally binding agreement between 
+	both Parties (the “Agreement”). 
+	These Terms and Conditions form an integral part of the Agreement.
+
+4.	Effective Date, Term and renewal
+	The Agreement shall commence on the Effective Date and shall continue 
+	for a period of 1 year(s) (the “Initial Period”). After the Initial 
+	Period the Agreement will be renewed automatically by 1 year terms, 
+	unless Parties agree 2 months before the end of the Initial Period or 
+	any renewal period thereafter on an Amendment. If one of the Parties 
+	desires any changes with respect to the terms of the Agreement it will 
+	notify the other Party at least 4 months before the end of the Initial 
+	Period or any renewal period thereafter and Parties will start good-
+	faith negotiations. To the extent that the Agreement provides with re-
+	spect to certain terms of the Agreement for an alternative method of 
+	agreeing on changes that method will prevail. If Parties have not agreed
+	on an Amendment, the Agreement will continue on the same basis or either
+ 	Party may terminate the Agreement. Either Party may terminate the Agree-
+	ment by sending a written notice 2 months prior to the end of the 
+	Initial Period or any renewal period.
+
+5.	Fees and Payment
+5.1.	In the event that Parties have agreed in the Agreement that it will 
+	include paid App(s), the following will apply.
+
+5.2.	The fees to be paid by Metrological to Developer amount to 50 % of the 
+	Content Fee, less Value Added Taxes, less Metrological’s transaction 
+	and other costs as determined by Metrological and the Operator Store 
+	Owner. Transaction costs will among others include server costs and 
+	billing costs. The transaction costs will not be deducted if Developer 
+	is responsible for billing the Content Fees to End-user 
+
+5.3.	Developer shall determine the Content Fees.
+
+5.4.	Billing of the Content Fees will be done either by (a) Operator Store 
+	Owner or (b) Developer.   
+        (a)  The following applies if Operator Store Owner is responsible for 
+	billing to End-users. 
+	The Content Fees will be paid by End-users to the Operator Store Owner. 
+	The Operator Store Owner will pay Metrological and Metrological will 
+	pay the under 5.2 agreed fee to Developer.
+	Metrological will provide Developer within (30) thirty days after the 
+	end of a calendar month with an overview of the Content Fees received 
+	in the preceding month and the amount due to Developer as to be cal-
+	culated in accordance with article 5.2. On the basis of this overview 
+	Developer will provide Metrological with an invoice for the total amount
+ 	of Content Fees due to and to be transferred to Developer. If any re-
+	conciliation adjustments arise after Developer has provided Metrological
+ 	with an invoice, an appropriate balancing payment shall be made in the 
+	following month.
+        (b)  The following applies if Developer is responsible for billing to 
+	End-users. 
+	The Content Fees will be paid by End-users to Developer. Developer will
+ 	pay Metrological and Metrological will pay to Operator Store Owner its 
+	share.
+
+5.5.	Developer will provide Metrological within (30) thirty days after the 
+	end of the calendar month with an overview of the Content fees in the 
+	preceding month. On the basis of this overview Metrological shall cal-
+	culate in accordance with the revenue model set out in article 5.2 the 
+	amount that it is entitled to and will provide Developer with an invoice
+	for such amount, which amount will be paid within ten (10) days by De-
+	veloper to Metrological. Developer is solely responsible for remitting 
+	total VAT and sales tax collected from End-users. If any reconciliation
+ 	adjustments arise an appropriate balancing payment shall be made in the 
+	following month.
+
+5.6.	All prices are in Euros and exclude VAT and possible other taxes and 
+	levies.
+
+5.7.	No more than once during any twelve (12) month period, upon at least 
+	thirty (30) days prior written notice, Developer may, at its expense, 
+	engage an independent auditor to review the records of Metrological for 
+	the sole purpose of verifying Metrological’s compliance with its 
+	reporting and payment obligations hereunder. Should such audit discover 
+	an underpayment that results from understated reporting of the Content 
+	Fees in the amount of 10 percent (10%) or more of the net fees to be 
+	paid to Developer for any calendar quarter, Developer shall be reim-
+	bursed for the reasonable costs of such audit in addition to receiving 
+	the adjusted payment.
+
+5.8.	In case Developer fails to deliver Content to End-user in any way, 
+	Metrological may where applicable, and at its sole discretion re-provide
+ 	this Content to End-user. Alternatively, Developer will re-provide the 
+	Content at the request of Metrological. In such an event, the 
+	re-providing of Content will be free of charge, and this transaction 
+	will not be included in any invoice from Developer to Metrological. 
+	In the event that the (i) End-user has paid to get access to the Con-	
+	tent, (ii) due to Developer, Metrological and/or Operator Store Owner 
+	there is a failure in the delivery of the Content to End-user and (iii)
+ 	End-user terminates its agreement pursuant to which it has paid for the 
+	Content, or is for any other reason entitled to reimbursement of its 
+	payment, the Operator Store Owner shall reimburse the payment to End-
+	user. Developer shall reimburse the payment to Operator Store Owner.
+
+5.9.	Any and all revenues generated by Developer with the App, like revenues
+ 	from advertisement, will be shared in accordance with the percentages 
+	mentioned in article 5.2. Developer is explicitly not entitled to 
+	separately sell or place advertisements around the Content and/or Con-
+	tent Items delivered through the App without the prior written consent 
+	of Metrological. Such consent may be conditioned upon Developer using 
+	the advertisement insertion framework of Metrological for selling and 
+	placing advertisements.
+
+6.	Content
+6.1.	Developer will deliver at its sole expense any App, App information 
+	and associated metadata to Metrological in a (technological) quality and
+ 	standard prescribed by Metrological, as required for including the App 
+	in the App Catalogue. The metadata that Developer will deliver to 
+	Metrological will include (i) the title and the version number of each 
+	App; (ii) the territories Developer designates, in which Developer 
+	wishes Metrological to allow Operator Store Owners to make available the
+ 	Apps through their Operator Stores to End-users and; (iii) any copyright
+ 	notices.
+
+6.2.	Developer may request Metrological to withdraw any App from the App 
+	Catalogue and, if applicable, Operator Stores upon 90 days’notice. 
+	Metrological will do its best to remove such App as soon as possible. 
+	Notwithstanding the right of Developer to request Metrological to with-
+	draw any  App from the App Catalogue and, if applicable, Operator Stores
+ 	with a prior written notice of 90 days, Developer shall have the right 
+	to require from Metrological that it withdraws any Content Item im-
+	mediately from an App in the event that Developer determines at its 
+	sole discretion that the provision of that Content Item would or might 
+	(i) infringe upon the rights of others, (ii) violate any Legal Re-
+	quirement, or iii) subject either Party to any liability or litigation.
+
+6.3.	Notwithstanding the right of Metrological to withdraw (i) any Content 
+	Item from the App or (ii) any App with a prior written notice of 90 
+	days, Metrological shall have the right to withdraw any Content Item 
+	immediately from the App in the event that Metrological determines, at 
+	its sole discretion, that the provision of that Content Item would or 
+	might i) infringe upon the rights of others, ii) violate any Legal Re-
+	quirement, iii) subject either Party to any liability or litigation, or
+ 	(iv) does not comply with (technological) quality or ethical standards 
+	as determined solely by Metrological, such as negatively influencing 
+	the stability of the platforms of Metrological, and, if applicable, any 
+	Operator Store Owner.
+
+6.4.	Developer may indicate that it does not want its App to be included in 
+	any particular Operator Store. Metrological will on a best effort basis 
+	eliminate or withhold this App from that particular Operator Store.
+
+6.5.	Developer has secured and will maintain at its sole expense all perfor-
+	ming rights and licenses (such as BUMA-STEMRA, broadcasting licenses) 
+	necessary to publicly perform the music in the Content and Developer 
+	shall hold Metrological harmless and indemnifies it against any and all 
+	claims arising out of Developer’s failure to do so.
+
+6.6.	In relation to the delivery of the Content Services to End-users, 
+	Parties assess and assume that Developer will be deemed to be the media 
+	service provider as defined in Directive 2010/13/EU and the entity re-
+	sponsible for all communication to the public and/or making available 
+	of Content as defined in Article 3 of Directive 2001/29/EC. Developer 
+	accepts these responsibilities and will comply with all Legal Require-
+	ments in this regard. Developer holds Metrological harmless and will 
+	indemnify it against any and all claims arising out of any failure to 
+	comply with any Legal Requirement.
+
+7.	Ownership and End-user licensing
+7.1.	Parties acknowledge and agree that Metrological shall not acquire any 
+	ownership to any of the Apps, and Developer shall at all times be re-
+	sponsible for and have control over the Apps and Content.
+
+7.2.	Developer shall deliver to Metrological its own EULA for any App and 
+	Content. This EULA must include and may not be inconsistent with the 
+	minimum terms and conditions as specified in Annex A1 and must comply 
+	with all applicable Legal Requirements. Metrological shall agree with 
+	Operator Store Owners that Operator Store Owners shall notify each End-
+	user that the End-users use of Developer’s App and Content is subject 
+	to the terms and conditions of Developer’s EULA and/or the end-user 
+	license terms that Operator Store Owner may, as (sub)agent of Developer,
+	impose upon End-users on behalf of Developer. The right for Operator 
+	Store Owner to impose end-user license terms on behalf of Developer 
+	shall be restricted in  such manner a that any such terms may not 
+	deviate from the terms and conditions specified in Annex A1 in a manner
+ 	that is detrimental to Developer. Metrological does not accept any lia-
+	bility for the contents of the EULA provided by Developer, other than 
+	the contents specified in Annex A1. 
+
+7.3.	Developer hereby acknowledges that the EULA for each of the Apps and 
+	the Content is solely binding between Developer and End-user.
+
+8.	Intellectual Property Rights
+8.1.	Developer and/or its third party suppliers are/is the owner of the 
+	Intellectual Property Rights with respect to the Content and any other 
+	information and materials provided to Metrological under the Agreement.
+
+8.2.	Developer hereby grants Metrological for the duration of the contract 
+	term the non-exclusive and locally unrestricted right of use of the 
+	Content. The right of use includes particularly the right to reproduce 
+	and to publish the Content to the extent required to execute the obli-
+	gations under the Agreement. The right of use also includes unknown 
+	types of use that might become essential for potential future services 
+	under the Agreement.
+
+9.	Indemnification Developer shall indemnify, defend and hold harmless 
+	Metrological as well as Operator Store Owners and the End-users from 
+	any and all liability, suits, losses, damages, judgments and expenses 
+	(including reasonable attorney fees) arising directly or indirectly out
+ 	of i) any claim by any third party that the making available, com-
+	munication to the public and/or reproduction of the Content in accor-
+	dance with the terms of this Agreement and the Developer’s EULA violates
+ 	the property rights of a third party, ii) any claim relating to the Con-
+	tent, quality or performance of the Content, including, but not limited 
+	to, any damaging elements in the Content, or iii) any claim relating to 
+	the withdrawal of the App. Metrological shall notify Developer if 
+	Metrological becomes aware of any claim referred to under i), ii) or 
+	iii). Metrological shall allow Developer to control the defense against
+ 	such claim. 
+
+10.	Warranties
+10.1.	Developer warrants that it has during the term of the Agreement the 
+	necessary rights to provide to Metrological the Content in order to 
+	enable Metrological to provide the Services to Developer as well as to 
+	comply with any other terms and conditions of these Terms and Condi-
+	tions, and the Agreement.
+
+10.2.	Developer warrants that it will ensure the uninterrupted supply of the 
+	Content.
+
+10.3.	Developer warrants that it will secure any external data feeds.
+
+10.4.	Developer warrants that it will follow Metrological’s instructions 
+	regarding the (technical) specifications of the App.
+
+10.5.	Metrological does not warrant to Developer that an Operator Store Owner 
+	will select the App to be included in the Operator Store of such Opera-
+	tor Store Owner.
+
+11.	Liability
+11.1.	Metrological’s liability for damages arising out of or in any way 
+	relating to the Agreement is limited to the maximum amount of 
+	Metrological’s net revenue from the applicable App during the 3 months 
+	period immediately preceding the event from which the damages arise.
+
+11.2.	In no event shall either Party be liable to the other for indirect 
+	and/or consequential damages or purely financial loss such as missed 
+	business opportunities, lost sales, volume and profit, and data loss 
+	in connection with or arising out of the Agreement.
+
+11.3.	The limitations of liability referred to 11.1 and 11.2 shall not 
+	apply : (i) In case any negligence on the part of the liable Party leads
+ 	to death or physical injury; (ii) in the event damages arise from the 
+	willful misconduct or gross negligence of the liable Party and in the 
+	event of a breach of article 10 (warranties).
+
+11.4.	Metrological shall not be liable for any consumer behavior regarding 
+	Content or App(s) in whatever form.
+
+12.	Termination
+12.1.	Each Party may with immediate effect rescind the Agreement if:
+  12.1.1.  the other Party is permanently unable to meet its obligations under
+ 	   the Agreement;
+  12.1.2.  the other Party’s bankruptcy has been requested or declared, or the 
+	   other Party’s suspension of payment has been requested or granted;
+  12.1.3.  a considerable portion of the assets of the other Party has been 
+	   attached;
+  12.1.4.  the other Party has its company liquidated or closed down for a 
+	   reason other than solvent amalgamation, reconstruction and/or 
+           merger; or
+  12.1.5.  the SDK License Agreement is terminated for whatever reason and 
+	   Metrological at its own discretion has decided that it will not 
+	   provide support for the App.
+
+12.2.	Each Party may rescind the Agreement at any time in the event of a 
+	breach of the terms hereof by the other Party and such Party shall fail
+ 	to cure such breach within 30 days (or any other reasonable period as to
+ 	be determined by the non-breaching Party) after receipt of written 
+	notice thereof.
+
+13.	Consequences of Termination
+13.1.	In the event of termination, Metrological will remove relevant App(s) 
+	from the App Catalogue and, if applicable, any Operator Store.
+
+14.	Confidentiality
+14.1.	Each Party shall keep confidential and shall not without the other Par-
+	ty’s prior written consent copy or disclose to any third party any 
+	document or information of a confidential nature acquired from the other
+ 	Party pursuant to the Agreement and such confidential documents and in-
+	formation shall only be used for the purpose of the Agreement, provided 
+	however that nothing shall prevent either Party from disclosing infor-
+	mation which:
+  14.1.1.   is in its possession with the full rights disclosed prior to 
+            receiving it from the other Party;
+  14.1.2.   is or later becomes public knowledge other than by breach of this 
+	    clause 13.1; 
+  14.1.3.   it may independently receive from a third Party with a full right 
+            to disclose;
+  14.1.4.   is developed independently of the information disclosed under this 
+	    clause; or
+  14.1.5.   is required by law to be disclosed.
+
+14.2.	The Parties shall obtain the written approval of the other Party con-
+	cerning the content and timing of news releases, articles, brochures, 
+	advertisements, prepared speeches and other information released con-
+	cerning the Agreement.
+
+14.3.	Each Party shall cause its employees to comply with the provisions of 
+	this clause.
+
+15.	Data Protection
+15.1.	Developer acknowledges that all Personal Data stored within, processed 
+	or conveyed in relation to the services belong to Metrological and 
+	undertakes that no data shall be used or accessed by Developer or by any
+ 	of its employees for any purpose other than necessary or required for 
+	the execution of the Agreement, subject to statutory provisions to the 
+	contrary.
+
+15.2.	Developer may process and disclose the Personal Data for purposes con-
+	nected with the Agreement and the provision of services to the End-
+	users. To the extent a permit for the transfer of Personal Data outside 
+	the European Union is needed Developer will cooperate with Metrological 
+	in order to obtain such a permit.
+
+15.3.	The Parties agree that in respect of the Personal Data processed in con-
+	nection with the Agreement
+  15.3.1.   Metrological retains the position of data controller (“verantwoorde-
+	    lijke”) as defined in the Dutch Data Protection Act (“Wet 
+	    Bescherming Persoonsgegevens”), unless explicitly agreed otherwise. 
+            Accordingly, Metrological shall solely determine the purpose for 
+            which and the manner in which the Personal Data shall be processed 
+            in connection with this Agreement, and
+  15.3.2.   Developer shall be the data processor (“bewerker”) as defined in 
+            the Dutch Data Protection Act.
+
+15.4.	Developer shall:
+  15.4.1.   not disclose personal data to any person save to the extent (i) man-
+	    datory under the Dutch Data Protection Act, (ii) necessary for the 
+	    proper performance of Developer's obligations under this Agreement 
+	    where such performance does not result in a breach of the Dutch 
+            Data Protection Act, or (iii) with Metrological prior written con-
+            sent stating the nature of the disclosure and all details concern-
+            ing the disclosure provided the disclosure does not result in a 
+            breach of the Dutch Data Protection Act.
+  15.4.2.   be compliant with all procedures for protecting the personal data 
+	    against accidental or unlawful destruction or accidental loss, 
+	    alteration, unauthorized disclosure or access, such procedures to 
+            be provided to Developer by Metrological.
+  15.4.3.   only process personal data by order and on behalf of Metrological 
+            and in accordance with Metrological’s instructions, subject to 
+            statutory provisions to the contrary.
+
+15.5.	Developer shall indemnify Metrological against all third party claims, 
+	including that of End-users, which may be filed against Metrological 
+	because of violation of the Dutch Data Protection Act and/or any other 
+	laws concerning Personal Data provided that Metrological shall forthwith
+ 	inform Developer in writing about the existence and substance of the 
+	action at law and leave dealing with the case entirely to Developer, 
+	including the reaching of amicable settlements.
+
+15.6.	Developer shall indemnify Metrological against all claims of third 
+	parties, including government bodies, which may be filed against Metro-
+	logical because of a violation of a Legal Requirement provided that 
+	Metrological shall forthwith inform Developer in writing about the 	
+	existence and substance of the action at law and leave the dealing with 
+	the case entirely to Developer, including the amicable settlements. 
+
+16.	Notices
+16.1.	Any and all notices or other information required or given by one Party 
+	to the other shall be deemed sufficiently given when forwarded by pre-
+	paid registered mail, by facsimile or hand delivered to the other Party 
+	at the following addresses:
+	Metrological Widgets B.V. To the attention of: Legal department 
+	Postbus 635, 3000 AP Rotterdam The Netherlands
+	The contact information provided by Developer during the submission 
+	process of the App as described in article 3 of these Terms and Con-
+	ditions.
+
+16.2.	Such notices shall be deemed to have been received 5 business days 
+	after mailing if sent by registered mail, and following business day if 
+	sent by email, facsimile or hand delivered.
+
+17.	Applicable law and Dispute resolution
+17.1.	These Terms and Conditions and the Agreement shall be governed by and 
+	shall be construed in accordance with the laws of the Netherlands.
+
+17.2.	Any dispute, which may arise between Parties as a result of these Terms
+ 	and Conditions and/or the Agreement, shall be exclusively submitted to 
+	the competent court in Rotterdam.
+
+18.	Assignment
+18.1.	The Agreement shall be binding upon and inure to the benefit of the 
+	Parties thereto.
+
+18.2.	Both Developer and Metrological may not assign or subcontract any of its
+ 	obligations under the Agreement without the prior written consent of the
+ 	other party.
+
+19.	Force Majeure
+19.1.	In the event of force majeure Parties will be released from all its 
+	obligations arising from the Agreement.
+
+19.2.	Under force majeure on the part of Parties shall be understood any in-
+	dependent circumstance that prevents compliance with the Agreement, be 
+	it temporarily or permanently, including war, state of siege, the threat
+ 	of war, civil war, riot, strike, exclusion of workers, problems in 
+	transport, fire, epidemics, quarantine, circumstances concerning the 
+	weather, interruptions in the operations of Parties, also including mal-
+	functioning of the software or hardware of Parties, incomplete, overdue 
+	delivery, if at all, from its suppliers and all obstructions caused by 
+	actions from the government. All this regardless of whether the indepen-
+	dent circumstance was foreseeable upon entering into the Agreement.
+
+20.	Non waiver
+	The failure of either Party to give notice to the other Party of any 
+	breach or non fulfillment of any provision, term or clause of these 
+	Terms and Conditions and/or the Agreement shall not constitute a waiver 
+	thereof, nor shall the waiver of any breach or non fulfillment of any 
+	provision, term or clause hereof constitute a waiver of any other 
+	provision, term or clause hereof.
+
+21.	Entire Agreement
+21.1.	These Terms and Conditions including its Annex(es) and the Agreement 
+	including its Annex(es) set forth the entire agreement and understan-
+	ding between the Parties with respect to the subject matter hereof. 
+
+21.2.	There are no understandings, representations, conditions, or warranties,
+ 	express or implied, statutory or otherwise, made or issued by the Par-
+	ties other than those expressly contained in these Terms and Conditions 
+	and the Agreement
+
+21.3.	Any changes to the wording of these Terms and Conditions and/or the 
+	Agreement require an Amendment in order to have a binding effect on 
+	Parties.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Annex A1 to App Catalogue Terms and Conditions
+
+
+Instructions for Minimum Terms and Conditions of Developer’s End-User License 
+Agreement
+
+1.	Definitions
+	For the purpose of the provisions hereunder, terms will have the meaning
+ 	as assigned to them by the App Catalogue Terms and Conditions between 
+	Metrological and Developer, notwithstanding the following definition:
+   1.	  End-user is also referred to as “You”
+   2.	  “Content Provider” refers to Developer.
+   3.	  “EULA” refers to the End-user License Agreement between Developer and 
+	   End-user
+	Content Provider will agree as a minimum the following terms and con-
+	ditions with End-user in the EULA. Content Provider warrants that it 
+	will not agree any terms and conditions with End-user that are in con-
+	flict with the Terms and Conditions and/or the Agreement, or with any 
+	Legal Requirements. 
+
+2.	Acknowledgement
+	You acknowledge that this EULA shall constitute an agreement with Con-
+	tent Provider and not with Metrological.
+
+3.	Scope of License 
+	The EULA applies to the access and use by You of Content Services pro-
+	vided by Content Provider to You via an Operator Store.
+
+4.	Developer Name and Address
+	Content Provider must state in the EULA its name and address, and the 
+	contact information (telephone number; E-mail address) to which any 
+	End-user questions, complaints or claims with respect to Apps and/or 
+	Content should be directed in the EULA.
+
+5.	Maintenance and Support
+	Content Provider agrees to be solely responsible for providing any 
+	maintenance and support services with respect to its Apps and its Con-
+	tent.
+
+6.	Content Services
+	You and Content Provider agree that:
+   1.	  You acknowledge that Content Provider offers You the Content Services 
+	  in collaboration with third parties. You acknowledge that the form 
+          and nature of the Content Services may change from time to time with-
+          out prior notice to You.
+   2.	  You shall use the Content Services only for purposes that are permit-
+          ted by this EULA and by any applicable law, regulation or generally 
+          accepted practices or guidelines.
+   3.	  You agree to not access or attempt to access any of the Content Ser-
+          vices by any means other than through an Operator Store.
+   4.	  You agree that You will not engage in any activity that interferes 
+          with or disrupts the Content Services (or the servers and networks 
+          which are connected to the Content Services).
+
+7.	Content 
+	You and Content Provider agree that:
+   1.	  You agree You may not modify, rent, lease, loan, sell, distribute or 
+	  create derivative works based on Content (either in whole or in part) 
+	  unless You have been specifically authorized to do so by Content Pro-
+	  vider.
+   2.	  You acknowledge that Content Provider offers You Content through an 
+	  Operator Store. You agree that third parties, such as an Operator 
+          Store Owner, reserve the right (but shall have no obligation) to mo-
+          dify, refuse or remove Content.
+   3.	  You acknowledge that by using the Content You may be exposed to 
+          Content that You may find offensive, indecent or objectionable and 
+          that, in this respect, You agree that use of the Content Services 
+          is at your own risk.
+
+8.	Product Claims
+	You and Content Provider acknowledge that Content Provider will be 
+	solely responsible for addressing any claims of You or any third party 
+	relating to the App, Content or Your possession and/or use of such App 
+	or of such Content, including, but not limited to:
+   1.	  product liability claims;
+   2.	  any claim that an App and/or Content fails to conform to any Legal 
+	  Requirement; and
+   3.	  claims arising under consumer protection or similar legislation.
+	  The EULA may not limit Content Provider’s liability to You beyond 
+          what is permitted by applicable law.
+
+9.	Warranty
+	Content Provider agrees to be solely responsible for any warranties with
+ 	regard to Apps or Content, whether express or implied by law, to the ex-
+	tent not effectively disclaimed.
+
+10.	Intellectual Property Rights 
+	You and Content Provider acknowledge that, in the event of any third 
+	party claim that the App and/or Content or Your possession and use of 
+	that App and/or Content infringes that third party’s Intellectual Pro-
+	perty Rights, Content Provider will be solely responsible for the in-
+	vestigation, defense, settlement and discharge of any such intellectual 
+	property infringement claim.
+
+11.	Legal Compliance 
+	You agree that Content Provider may process your Personal Data in rela-
+	tion to the provision of Content Services to You. Content Provider 
+	agrees to process Your Personal Data in accordance with the Dutch Data 
+	Protection Act and agrees to be solely responsible for addressing any 
+	claims which may be filed because of violation of the Dutch Data Pro-
+	tection Act or any other laws concerning Personal Data.
+
+12.	Amendments
+	Content Provider may amend the EULA from time to time. When these amend-
+	ments are made, Content Provider will notify You of such amendments and 
+	make a new copy of the EULA available as required by applicable law. 
+	You acknowledge and agree that by using the Content Services after the 
+	date on which the EULA has been changed, You accept the changed End-user
+ 	terms and conditions.
+
+13.	Termination
+	You agree that (i) the EULA will continue to be in force until termi-
+	nated by You and Content Provider, (ii) You may terminate the EULA at 
+	any time by providing Content Provider prior written notice of [include
+ 	a minimum term] and (iii) that Content Provider may at any time termi-
+	nate this EULA if:
+   1.	  You have breached any provision of the EULA (or had acted in a manner 
+	  which clearly shows that You do not intent to, or are unable to 
+          comply with the provisions of this EULA);
+   2.	  Content Provider is required to do so by law;
+   3.	  the partner with who Content Provider offers the Content Services re-
+	  quires Content Provider to terminate the Content Services to You or 
+	  makes the provision of Content Services to You impossible; or
+   4.	  the provision of the Content Services is no longer commercially 
+          viable. You and Content Provider acknowledge that the provisions of 
+          this EULA, which by their nature are intended to survive termination, 
+          will remain in effect after termination of this EULA.
+
+14.	Third Party Terms of Agreement
+	You and Content Provider agree that You must comply with applicable 
+	third party terms when using the Content Services and that the EULA 
+	thus apply without prejudice to any applicable third party terms.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Annex B: GNU Affero General Public License Terms and Conditions
+
+                    GNU AFFERO GENERAL PUBLIC LICENSE
+                       Version 3, 19 November 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+                            Preamble
+
+  The GNU Affero General Public License is a free, copyleft license for
+software and other kinds of works, specifically designed to ensure
+cooperation with the community in the case of network server software.
+
+  The licenses for most software and other practical works are designed
+to take away your freedom to share and change the works.  By contrast,
+our General Public Licenses are intended to guarantee your freedom to
+share and change all versions of a program to make sure it remains free
+software for all its users.
+
+  When we speak of free software, we are referring to freedom, not
+price.  Our General Public Licenses are designed to make sure that you
+have the freedom to distribute copies of free software (and charge for
+them if you wish), that you receive source code or can get it if you
+want it, that you can change the software or use pieces of it in new
+free programs, and that you know you can do these things.
+
+  Developers that use our General Public Licenses protect your rights
+with two steps: (1) assert copyright on the software, and (2) offer
+you this License which gives you legal permission to copy, distribute
+and/or modify the software.
+
+  A secondary benefit of defending all users' freedom is that
+improvements made in alternate versions of the program, if they
+receive widespread use, become available for other developers to
+incorporate.  Many developers of free software are heartened and
+encouraged by the resulting cooperation.  However, in the case of
+software used on network servers, this result may fail to come about.
+The GNU General Public License permits making a modified version and
+letting the public access it on a server without ever releasing its
+source code to the public.
+
+  The GNU Affero General Public License is designed specifically to
+ensure that, in such cases, the modified source code becomes available
+to the community.  It requires the operator of a network server to
+provide the source code of the modified version running there to the
+users of that server.  Therefore, public use of a modified version, on
+a publicly accessible server, gives the public access to the source
+code of the modified version.
+
+  An older license, called the Affero General Public License and
+published by Affero, was designed to accomplish similar goals.  This is
+a different license, not a version of the Affero GPL, but Affero has
+released a new version of the Affero GPL which permits relicensing under
+this license.
+
+  The precise terms and conditions for copying, distribution and
+modification follow.
+
+                       TERMS AND CONDITIONS
+
+  0. Definitions.
+
+  "This License" refers to version 3 of the GNU Affero General Public License.
+
+  "Copyright" also means copyright-like laws that apply to other kinds of
+works, such as semiconductor masks.
+
+  "The Program" refers to any copyrightable work licensed under this
+License.  Each licensee is addressed as "you".  "Licensees" and
+"recipients" may be individuals or organizations.
+
+  To "modify" a work means to copy from or adapt all or part of the work
+in a fashion requiring copyright permission, other than the making of an
+exact copy.  The resulting work is called a "modified version" of the
+earlier work or a work "based on" the earlier work.
+
+  A "covered work" means either the unmodified Program or a work based
+on the Program.
+
+  To "propagate" a work means to do anything with it that, without
+permission, would make you directly or secondarily liable for
+infringement under applicable copyright law, except executing it on a
+computer or modifying a private copy.  Propagation includes copying,
+distribution (with or without modification), making available to the
+public, and in some countries other activities as well.
+
+  To "convey" a work means any kind of propagation that enables other
+parties to make or receive copies.  Mere interaction with a user through
+a computer network, with no transfer of a copy, is not conveying.
+
+  An interactive user interface displays "Appropriate Legal Notices"
+to the extent that it includes a convenient and prominently visible
+feature that (1) displays an appropriate copyright notice, and (2)
+tells the user that there is no warranty for the work (except to the
+extent that warranties are provided), that licensees may convey the
+work under this License, and how to view a copy of this License.  If
+the interface presents a list of user commands or options, such as a
+menu, a prominent item in the list meets this criterion.
+
+  1. Source Code.
+
+  The "source code" for a work means the preferred form of the work
+for making modifications to it.  "Object code" means any non-source
+form of a work.
+
+  A "Standard Interface" means an interface that either is an official
+standard defined by a recognized standards body, or, in the case of
+interfaces specified for a particular programming language, one that
+is widely used among developers working in that language.
+
+  The "System Libraries" of an executable work include anything, other
+than the work as a whole, that (a) is included in the normal form of
+packaging a Major Component, but which is not part of that Major
+Component, and (b) serves only to enable use of the work with that
+Major Component, or to implement a Standard Interface for which an
+implementation is available to the public in source code form.  A
+"Major Component", in this context, means a major essential component
+(kernel, window system, and so on) of the specific operating system
+(if any) on which the executable work runs, or a compiler used to
+produce the work, or an object code interpreter used to run it.
+
+  The "Corresponding Source" for a work in object code form means all
+the source code needed to generate, install, and (for an executable
+work) run the object code and to modify the work, including scripts to
+control those activities.  However, it does not include the work's
+System Libraries, or general-purpose tools or generally available free
+programs which are used unmodified in performing those activities but
+which are not part of the work.  For example, Corresponding Source
+includes interface definition files associated with source files for
+the work, and the source code for shared libraries and dynamically
+linked subprograms that the work is specifically designed to require,
+such as by intimate data communication or control flow between those
+subprograms and other parts of the work.
+
+  The Corresponding Source need not include anything that users
+can regenerate automatically from other parts of the Corresponding
+Source.
+
+  The Corresponding Source for a work in source code form is that
+same work.
+
+  2. Basic Permissions.
+
+  All rights granted under this License are granted for the term of
+copyright on the Program, and are irrevocable provided the stated
+conditions are met.  This License explicitly affirms your unlimited
+permission to run the unmodified Program.  The output from running a
+covered work is covered by this License only if the output, given its
+content, constitutes a covered work.  This License acknowledges your
+rights of fair use or other equivalent, as provided by copyright law.
+
+  You may make, run and propagate covered works that you do not
+convey, without conditions so long as your license otherwise remains
+in force.  You may convey covered works to others for the sole purpose
+of having them make modifications exclusively for you, or provide you
+with facilities for running those works, provided that you comply with
+the terms of this License in conveying all material for which you do
+not control copyright.  Those thus making or running the covered works
+for you must do so exclusively on your behalf, under your direction
+and control, on terms that prohibit them from making any copies of
+your copyrighted material outside their relationship with you.
+
+  Conveying under any other circumstances is permitted solely under
+the conditions stated below.  Sublicensing is not allowed; section 10
+makes it unnecessary.
+
+  3. Protecting Users' Legal Rights From Anti-Circumvention Law.
+
+  No covered work shall be deemed part of an effective technological
+measure under any applicable law fulfilling obligations under article
+11 of the WIPO copyright treaty adopted on 20 December 1996, or
+similar laws prohibiting or restricting circumvention of such
+measures.
+
+  When you convey a covered work, you waive any legal power to forbid
+circumvention of technological measures to the extent such circumvention
+is effected by exercising rights under this License with respect to
+the covered work, and you disclaim any intention to limit operation or
+modification of the work as a means of enforcing, against the work's
+users, your or third parties' legal rights to forbid circumvention of
+technological measures.
+
+  4. Conveying Verbatim Copies.
+
+  You may convey verbatim copies of the Program's source code as you
+receive it, in any medium, provided that you conspicuously and
+appropriately publish on each copy an appropriate copyright notice;
+keep intact all notices stating that this License and any
+non-permissive terms added in accord with section 7 apply to the code;
+keep intact all notices of the absence of any warranty; and give all
+recipients a copy of this License along with the Program.
+
+  You may charge any price or no price for each copy that you convey,
+and you may offer support or warranty protection for a fee.
+
+  5. Conveying Modified Source Versions.
+
+  You may convey a work based on the Program, or the modifications to
+produce it from the Program, in the form of source code under the
+terms of section 4, provided that you also meet all of these conditions:
+
+    a) The work must carry prominent notices stating that you modified
+    it, and giving a relevant date.
+
+    b) The work must carry prominent notices stating that it is
+    released under this License and any conditions added under section
+    7.  This requirement modifies the requirement in section 4 to
+    "keep intact all notices".
+
+    c) You must license the entire work, as a whole, under this
+    License to anyone who comes into possession of a copy.  This
+    License will therefore apply, along with any applicable section 7
+    additional terms, to the whole of the work, and all its parts,
+    regardless of how they are packaged.  This License gives no
+    permission to license the work in any other way, but it does not
+    invalidate such permission if you have separately received it.
+
+    d) If the work has interactive user interfaces, each must display
+    Appropriate Legal Notices; however, if the Program has interactive
+    interfaces that do not display Appropriate Legal Notices, your
+    work need not make them do so.
+
+  A compilation of a covered work with other separate and independent
+works, which are not by their nature extensions of the covered work,
+and which are not combined with it such as to form a larger program,
+in or on a volume of a storage or distribution medium, is called an
+"aggregate" if the compilation and its resulting copyright are not
+used to limit the access or legal rights of the compilation's users
+beyond what the individual works permit.  Inclusion of a covered work
+in an aggregate does not cause this License to apply to the other
+parts of the aggregate.
+
+  6. Conveying Non-Source Forms.
+
+  You may convey a covered work in object code form under the terms
+of sections 4 and 5, provided that you also convey the
+machine-readable Corresponding Source under the terms of this License,
+in one of these ways:
+
+    a) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by the
+    Corresponding Source fixed on a durable physical medium
+    customarily used for software interchange.
+
+    b) Convey the object code in, or embodied in, a physical product
+    (including a physical distribution medium), accompanied by a
+    written offer, valid for at least three years and valid for as
+    long as you offer spare parts or customer support for that product
+    model, to give anyone who possesses the object code either (1) a
+    copy of the Corresponding Source for all the software in the
+    product that is covered by this License, on a durable physical
+    medium customarily used for software interchange, for a price no
+    more than your reasonable cost of physically performing this
+    conveying of source, or (2) access to copy the
+    Corresponding Source from a network server at no charge.
+
+    c) Convey individual copies of the object code with a copy of the
+    written offer to provide the Corresponding Source.  This
+    alternative is allowed only occasionally and noncommercially, and
+    only if you received the object code with such an offer, in accord
+    with subsection 6b.
+
+    d) Convey the object code by offering access from a designated
+    place (gratis or for a charge), and offer equivalent access to the
+    Corresponding Source in the same way through the same place at no
+    further charge.  You need not require recipients to copy the
+    Corresponding Source along with the object code.  If the place to
+    copy the object code is a network server, the Corresponding Source
+    may be on a different server (operated by you or a third party)
+    that supports equivalent copying facilities, provided you maintain
+    clear directions next to the object code saying where to find the
+    Corresponding Source.  Regardless of what server hosts the
+    Corresponding Source, you remain obligated to ensure that it is
+    available for as long as needed to satisfy these requirements.
+
+    e) Convey the object code using peer-to-peer transmission, provided
+    you inform other peers where the object code and Corresponding
+    Source of the work are being offered to the general public at no
+    charge under subsection 6d.
+
+  A separable portion of the object code, whose source code is excluded
+from the Corresponding Source as a System Library, need not be
+included in conveying the object code work.
+
+  A "User Product" is either (1) a "consumer product", which means any
+tangible personal property which is normally used for personal, family,
+or household purposes, or (2) anything designed or sold for incorporation
+into a dwelling.  In determining whether a product is a consumer product,
+doubtful cases shall be resolved in favor of coverage.  For a particular
+product received by a particular user, "normally used" refers to a
+typical or common use of that class of product, regardless of the status
+of the particular user or of the way in which the particular user
+actually uses, or expects or is expected to use, the product.  A product
+is a consumer product regardless of whether the product has substantial
+commercial, industrial or non-consumer uses, unless such uses represent
+the only significant mode of use of the product.
+
+  "Installation Information" for a User Product means any methods,
+procedures, authorization keys, or other information required to install
+and execute modified versions of a covered work in that User Product from
+a modified version of its Corresponding Source.  The information must
+suffice to ensure that the continued functioning of the modified object
+code is in no case prevented or interfered with solely because
+modification has been made.
+
+  If you convey an object code work under this section in, or with, or
+specifically for use in, a User Product, and the conveying occurs as
+part of a transaction in which the right of possession and use of the
+User Product is transferred to the recipient in perpetuity or for a
+fixed term (regardless of how the transaction is characterized), the
+Corresponding Source conveyed under this section must be accompanied
+by the Installation Information.  But this requirement does not apply
+if neither you nor any third party retains the ability to install
+modified object code on the User Product (for example, the work has
+been installed in ROM).
+
+  The requirement to provide Installation Information does not include a
+requirement to continue to provide support service, warranty, or updates
+for a work that has been modified or installed by the recipient, or for
+the User Product in which it has been modified or installed.  Access to a
+network may be denied when the modification itself materially and
+adversely affects the operation of the network or violates the rules and
+protocols for communication across the network.
+
+  Corresponding Source conveyed, and Installation Information provided,
+in accord with this section must be in a format that is publicly
+documented (and with an implementation available to the public in
+source code form), and must require no special password or key for
+unpacking, reading or copying.
+
+  7. Additional Terms.
+
+  "Additional permissions" are terms that supplement the terms of this
+License by making exceptions from one or more of its conditions.
+Additional permissions that are applicable to the entire Program shall
+be treated as though they were included in this License, to the extent
+that they are valid under applicable law.  If additional permissions
+apply only to part of the Program, that part may be used separately
+under those permissions, but the entire Program remains governed by
+this License without regard to the additional permissions.
+
+  When you convey a copy of a covered work, you may at your option
+remove any additional permissions from that copy, or from any part of
+it.  (Additional permissions may be written to require their own
+removal in certain cases when you modify the work.)  You may place
+additional permissions on material, added by you to a covered work,
+for which you have or can give appropriate copyright permission.
+
+  Notwithstanding any other provision of this License, for material you
+add to a covered work, you may (if authorized by the copyright holders of
+that material) supplement the terms of this License with terms:
+
+    a) Disclaiming warranty or limiting liability differently from the
+    terms of sections 15 and 16 of this License; or
+
+    b) Requiring preservation of specified reasonable legal notices or
+    author attributions in that material or in the Appropriate Legal
+    Notices displayed by works containing it; or
+
+    c) Prohibiting misrepresentation of the origin of that material, or
+    requiring that modified versions of such material be marked in
+    reasonable ways as different from the original version; or
+
+    d) Limiting the use for publicity purposes of names of licensors or
+    authors of the material; or
+
+    e) Declining to grant rights under trademark law for use of some
+    trade names, trademarks, or service marks; or
+
+    f) Requiring indemnification of licensors and authors of that
+    material by anyone who conveys the material (or modified versions of
+    it) with contractual assumptions of liability to the recipient, for
+    any liability that these contractual assumptions directly impose on
+    those licensors and authors.
+
+  All other non-permissive additional terms are considered "further
+restrictions" within the meaning of section 10.  If the Program as you
+received it, or any part of it, contains a notice stating that it is
+governed by this License along with a term that is a further
+restriction, you may remove that term.  If a license document contains
+a further restriction but permits relicensing or conveying under this
+License, you may add to a covered work material governed by the terms
+of that license document, provided that the further restriction does
+not survive such relicensing or conveying.
+
+  If you add terms to a covered work in accord with this section, you
+must place, in the relevant source files, a statement of the
+additional terms that apply to those files, or a notice indicating
+where to find the applicable terms.
+
+  Additional terms, permissive or non-permissive, may be stated in the
+form of a separately written license, or stated as exceptions;
+the above requirements apply either way.
+
+  8. Termination.
+
+  You may not propagate or modify a covered work except as expressly
+provided under this License.  Any attempt otherwise to propagate or
+modify it is void, and will automatically terminate your rights under
+this License (including any patent licenses granted under the third
+paragraph of section 11).
+
+  However, if you cease all violation of this License, then your
+license from a particular copyright holder is reinstated (a)
+provisionally, unless and until the copyright holder explicitly and
+finally terminates your license, and (b) permanently, if the copyright
+holder fails to notify you of the violation by some reasonable means
+prior to 60 days after the cessation.
+
+  Moreover, your license from a particular copyright holder is
+reinstated permanently if the copyright holder notifies you of the
+violation by some reasonable means, this is the first time you have
+received notice of violation of this License (for any work) from that
+copyright holder, and you cure the violation prior to 30 days after
+your receipt of the notice.
+
+  Termination of your rights under this section does not terminate the
+licenses of parties who have received copies or rights from you under
+this License.  If your rights have been terminated and not permanently
+reinstated, you do not qualify to receive new licenses for the same
+material under section 10.
+
+  9. Acceptance Not Required for Having Copies.
+
+  You are not required to accept this License in order to receive or
+run a copy of the Program.  Ancillary propagation of a covered work
+occurring solely as a consequence of using peer-to-peer transmission
+to receive a copy likewise does not require acceptance.  However,
+nothing other than this License grants you permission to propagate or
+modify any covered work.  These actions infringe copyright if you do
+not accept this License.  Therefore, by modifying or propagating a
+covered work, you indicate your acceptance of this License to do so.
+
+  10. Automatic Licensing of Downstream Recipients.
+
+  Each time you convey a covered work, the recipient automatically
+receives a license from the original licensors, to run, modify and
+propagate that work, subject to this License.  You are not responsible
+for enforcing compliance by third parties with this License.
+
+  An "entity transaction" is a transaction transferring control of an
+organization, or substantially all assets of one, or subdividing an
+organization, or merging organizations.  If propagation of a covered
+work results from an entity transaction, each party to that
+transaction who receives a copy of the work also receives whatever
+licenses to the work the party's predecessor in interest had or could
+give under the previous paragraph, plus a right to possession of the
+Corresponding Source of the work from the predecessor in interest, if
+the predecessor has it or can get it with reasonable efforts.
+
+  You may not impose any further restrictions on the exercise of the
+rights granted or affirmed under this License.  For example, you may
+not impose a license fee, royalty, or other charge for exercise of
+rights granted under this License, and you may not initiate litigation
+(including a cross-claim or counterclaim in a lawsuit) alleging that
+any patent claim is infringed by making, using, selling, offering for
+sale, or importing the Program or any portion of it.
+
+  11. Patents.
+
+  A "contributor" is a copyright holder who authorizes use under this
+License of the Program or a work on which the Program is based.  The
+work thus licensed is called the contributor's "contributor version".
+
+  A contributor's "essential patent claims" are all patent claims
+owned or controlled by the contributor, whether already acquired or
+hereafter acquired, that would be infringed by some manner, permitted
+by this License, of making, using, or selling its contributor version,
+but do not include claims that would be infringed only as a
+consequence of further modification of the contributor version.  For
+purposes of this definition, "control" includes the right to grant
+patent sublicenses in a manner consistent with the requirements of
+this License.
+
+  Each contributor grants you a non-exclusive, worldwide, royalty-free
+patent license under the contributor's essential patent claims, to
+make, use, sell, offer for sale, import and otherwise run, modify and
+propagate the contents of its contributor version.
+
+  In the following three paragraphs, a "patent license" is any express
+agreement or commitment, however denominated, not to enforce a patent
+(such as an express permission to practice a patent or covenant not to
+sue for patent infringement).  To "grant" such a patent license to a
+party means to make such an agreement or commitment not to enforce a
+patent against the party.
+
+  If you convey a covered work, knowingly relying on a patent license,
+and the Corresponding Source of the work is not available for anyone
+to copy, free of charge and under the terms of this License, through a
+publicly available network server or other readily accessible means,
+then you must either (1) cause the Corresponding Source to be so
+available, or (2) arrange to deprive yourself of the benefit of the
+patent license for this particular work, or (3) arrange, in a manner
+consistent with the requirements of this License, to extend the patent
+license to downstream recipients.  "Knowingly relying" means you have
+actual knowledge that, but for the patent license, your conveying the
+covered work in a country, or your recipient's use of the covered work
+in a country, would infringe one or more identifiable patents in that
+country that you have reason to believe are valid.
+
+  If, pursuant to or in connection with a single transaction or
+arrangement, you convey, or propagate by procuring conveyance of, a
+covered work, and grant a patent license to some of the parties
+receiving the covered work authorizing them to use, propagate, modify
+or convey a specific copy of the covered work, then the patent license
+you grant is automatically extended to all recipients of the covered
+work and works based on it.
+
+  A patent license is "discriminatory" if it does not include within
+the scope of its coverage, prohibits the exercise of, or is
+conditioned on the non-exercise of one or more of the rights that are
+specifically granted under this License.  You may not convey a covered
+work if you are a party to an arrangement with a third party that is
+in the business of distributing software, under which you make payment
+to the third party based on the extent of your activity of conveying
+the work, and under which the third party grants, to any of the
+parties who would receive the covered work from you, a discriminatory
+patent license (a) in connection with copies of the covered work
+conveyed by you (or copies made from those copies), or (b) primarily
+for and in connection with specific products or compilations that
+contain the covered work, unless you entered into that arrangement,
+or that patent license was granted, prior to 28 March 2007.
+
+  Nothing in this License shall be construed as excluding or limiting
+any implied license or other defenses to infringement that may
+otherwise be available to you under applicable patent law.
+
+  12. No Surrender of Others' Freedom.
+
+  If conditions are imposed on you (whether by court order, agreement or
+otherwise) that contradict the conditions of this License, they do not
+excuse you from the conditions of this License.  If you cannot convey a
+covered work so as to satisfy simultaneously your obligations under this
+License and any other pertinent obligations, then as a consequence you may
+not convey it at all.  For example, if you agree to terms that obligate you
+to collect a royalty for further conveying from those to whom you convey
+the Program, the only way you could satisfy both those terms and this
+License would be to refrain entirely from conveying the Program.
+
+  13. Remote Network Interaction; Use with the GNU General Public License.
+
+  Notwithstanding any other provision of this License, if you modify the
+Program, your modified version must prominently offer all users
+interacting with it remotely through a computer network (if your version
+supports such interaction) an opportunity to receive the Corresponding
+Source of your version by providing access to the Corresponding Source
+from a network server at no charge, through some standard or customary
+means of facilitating copying of software.  This Corresponding Source
+shall include the Corresponding Source for any work covered by version 3
+of the GNU General Public License that is incorporated pursuant to the
+following paragraph.
+
+  Notwithstanding any other provision of this License, you have
+permission to link or combine any covered work with a work licensed
+under version 3 of the GNU General Public License into a single
+combined work, and to convey the resulting work.  The terms of this
+License will continue to apply to the part which is the covered work,
+but the work with which it is combined will remain governed by version
+3 of the GNU General Public License.
+
+  14. Revised Versions of this License.
+
+  The Free Software Foundation may publish revised and/or new versions of
+the GNU Affero General Public License from time to time.  Such new versions
+will be similar in spirit to the present version, but may differ in detail to
+address new problems or concerns.
+
+  Each version is given a distinguishing version number.  If the
+Program specifies that a certain numbered version of the GNU Affero General
+Public License "or any later version" applies to it, you have the
+option of following the terms and conditions either of that numbered
+version or of any later version published by the Free Software
+Foundation.  If the Program does not specify a version number of the
+GNU Affero General Public License, you may choose any version ever published
+by the Free Software Foundation.
+
+  If the Program specifies that a proxy can decide which future
+versions of the GNU Affero General Public License can be used, that proxy's
+public statement of acceptance of a version permanently authorizes you
+to choose that version for the Program.
+
+  Later license versions may give you additional or different
+permissions.  However, no additional obligations are imposed on any
+author or copyright holder as a result of your choosing to follow a
+later version.
+
+  15. Disclaimer of Warranty.
+
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+  16. Limitation of Liability.
+
+  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
+
+  17. Interpretation of Sections 15 and 16.
+
+  If the disclaimer of warranty and limitation of liability provided
+above cannot be given local legal effect according to their terms,
+reviewing courts shall apply local law that most closely approximates
+an absolute waiver of all civil liability in connection with the
+Program, unless a warranty or assumption of liability accompanies a
+copy of the Program in return for a fee.
+
+                     END OF TERMS AND CONDITIONS
+
+            How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+state the exclusion of warranty; and each file should have at least
+the "copyright" line and a pointer to where the full notice is found.
+
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Also add information on how to contact you by electronic and paper mail.
+
+  If your software can interact with users remotely through a computer
+network, you should also make sure that it provides a way for users to
+get its source.  For example, if your program is a web application, its
+interface could display a "Source" link that leads users to an archive
+of the code.  There are many ways you could offer source, and different
+solutions will be better for different programs; see section 13 for the
+specific requirements.
+
+  You should also get your employer (if you work as a programmer) or school,
+if any, to sign a "copyright disclaimer" for the program, if necessary.
+For more information on this, and how to apply and follow the GNU AGPL, see
+<http://www.gnu.org/licenses/>.
+
+
+
