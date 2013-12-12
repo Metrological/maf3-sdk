@@ -103,21 +103,33 @@ var Horizon = (function (body) {
 		playing.data = now;
 	}
 
+	function blocked() {
+		return !visible && MAF.mediaplayer.isTVActive && !MAF.mediaplayer.currentAsset.title;
+	}
+
 	function updateHeader() {
+		if (blocked()) {
+			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
+		} else if (sideBySide) {
+			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
+		} else if (!visible) {
+			body.setStyle('backgroundImage', null);
+		}
 		container.setStyle('backgroundImage', widget.getPath(ApplicationManager.active === widget.identifier ? 'Images/Horizon/HeaderBig.png' : 'Images/Horizon/Header.png'));
 	}
 
 	function hideNowPlaying(callback) {
-		if (!visible && !Browser.activevideo) {
+		if (!visible && !sideBySide && !blocked() && !Browser.activevideo) {
 			updateHeader();
 			body.animate({
 				scale: 1.6,
 //				opacity: 0,
 				delay: 5,
 				duration: 0.6,
-				callback: callback
+				callback: callback && callback.call ? callback : null
 			});
-		} else if (callback) {
+		} else if (callback && callback.call) {
+			body.setStyle('transition', null);
 			callback();
 		}
 	}
@@ -129,9 +141,10 @@ var Horizon = (function (body) {
 				scale: 1,
 //				opacity: 1,
 				duration: 0.6,
-				callback: callback
+				callback: callback && callback.call ? callback : null
 			});
-		} else if (callback) {
+		} else if (callback && callback.call) {
+			body.setStyle('transition', null);
 			callback();
 		}
 	}
@@ -146,7 +159,7 @@ var Horizon = (function (body) {
 			case states.PAUSE:
 			case states.PLAY:
 				updateNowPlaying.delay(300);
-				showNowPlaying(!sideBySide && hideNowPlaying);
+				showNowPlaying(hideNowPlaying);
 				break;
 		}
 	}).subscribeTo(MAF.mediaplayer, 'onStateChange');
@@ -156,12 +169,16 @@ var Horizon = (function (body) {
 		if (ApplicationManager.active === widget.identifier || visible) {
 			return;
 		}
-		showNowPlaying(!sideBySide && hideNowPlaying);
+		showNowPlaying(hideNowPlaying);
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
 
 	function hide() {
 		visible = false;
-		body.setStyle('backgroundImage', null);
+		if (!MAF.mediaplayer.currentAsset.title && MAF.mediaplayer.isTVActive && !visible) {
+			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
+		} else {
+			body.setStyle('backgroundImage', null);
+		}
 		hideNowPlaying();
 		container.setStyle('backgroundImage', widget.getPath('Images/Horizon/Header.png'));
 	}
@@ -181,12 +198,11 @@ var Horizon = (function (body) {
 		sideBySide = show;
 		if (show) {
 			showNowPlaying();
-			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
 		} else {
 			hideNowPlaying();
-			body.setStyle('backgroundImage', null);
 		}
 	}
+
 	updateNowPlaying();
 
 	return {

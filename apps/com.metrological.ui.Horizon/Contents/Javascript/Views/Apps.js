@@ -270,6 +270,7 @@ var AppsView = new MAF.Class({
 		var scroll = new MAF.control.ScrollIndicator({
 			focus: false,
 			styles: {
+				width: 14,
 				height: (cellSize * cellRows) - 42,
 				hAlign: 'right',
 				vAlign: 'bottom',
@@ -623,6 +624,7 @@ var AppsView = new MAF.Class({
 				width: this.width - this.elements.appTitle.hOffset - 140,
 				hOffset: this.elements.appTitle.hOffset,
 				vOffset: this.elements.appTitle.outerHeight + 25,
+				fontSize: '1.1em',
 				fontFamily: 'UPCDigital-Regular',
 				wrap: true,
 				truncation: 'end'
