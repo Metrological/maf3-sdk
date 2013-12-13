@@ -354,10 +354,6 @@ var NDSPlayer = function () {
 			}
 			//screen.log('BUFFERING');
 			stateChange(Player.state.BUFFERING);
-			//if (src.length > 512) {
-			//	stateChange(Player.state.ERROR);
-			//	return;
-			//}
 			if (!grabbed) {
 				try {
 					VideoPlayer.grab();

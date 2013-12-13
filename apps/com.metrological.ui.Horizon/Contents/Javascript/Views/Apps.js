@@ -624,7 +624,7 @@ var AppsView = new MAF.Class({
 				width: this.width - this.elements.appTitle.hOffset - 140,
 				hOffset: this.elements.appTitle.hOffset,
 				vOffset: this.elements.appTitle.outerHeight + 25,
-				fontSize: '1.1em',
+				fontSize: '1.15em',
 				fontFamily: 'UPCDigital-Regular',
 				wrap: true,
 				truncation: 'end'
