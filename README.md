@@ -79,6 +79,11 @@ In the "index.html" add your App identifier to the "apps" array of the profile i
 		"com.metrological.widget.Example"
 	]
 
+License
+-------
+
+Please read and agree the the [LICENSE](LICENSE) before using the SDK.
+
 Contribute
 ----------
 
