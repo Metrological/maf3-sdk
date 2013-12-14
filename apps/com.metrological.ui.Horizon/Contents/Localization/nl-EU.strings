@@ -21,14 +21,14 @@
 "LIVE_TV" = "LIVE TV";
 "FORGOT_PIN" = "Pincode vergeten?";
 "ADD_PROFILE" = "Profiel toevoegen";
-"PAGE" = "Pagina %s van %s";
+"PAGE" = "PAGINA %s VAN %s";
 "WIDGET_BY" = "App van";
 "MORE_INFO" = "Meer informatie";
 "COPYRIGHT" = "Copyright & copy; %s";
 "RIGHTS_RESERVED" = "Alle rechten voorbehouden";
 "SPACE" = "Spatie";
-"DATE_FORMAT" = "d MMM yyyy HH:mm";
-"DATE_PARSE" = "yyyy-MM-dd HH:mm:ss";
+"DATE_FORMAT" = "D MMM YYYY HH:mm";
+"DATE_PARSE" = "YYYY-MM-DD HH:mm:ss";
 "PROFILE_REQUIRED" = "Kies een profiel";
 "PROFILE_TITLE" = "Profielnaam";
 "PROFILE_MESSAGE" = "Kies onderstaand profiel";

@@ -27,8 +27,8 @@
 "COPYRIGHT" = "Copyright & ©; %s";
 "RIGHTS_RESERVED" = "Alle Rechte vorbehalten";
 "SPACE" = "Leerzeichen";
-"DATE_FORMAT" = "dd MM yyyy HH:mm";
-"DATE_PARSE" = "jjjj-MM-tt HH:mm:ss";
+"DATE_FORMAT" = "D MMM YYYY HH:mm";
+"DATE_PARSE" = "YYYY-MM-DD HH:mm:ss";
 "PROFILE_REQUIRED" = "Bitte w&auml;hlen Sie ein Profil.";
 "PROFILE_TITLE" = "Profil";
 "PROFILE_MESSAGE" = "W&auml;hlen Sie eines der nachfolgenden Profile aus.";

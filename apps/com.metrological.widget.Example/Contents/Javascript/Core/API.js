@@ -27,13 +27,13 @@ var getRestaurants = function () {
 		}
 	}).get();
 };
-
+/*
+log(Date.format(new Date()));
+log(Date.format(new Date(), DateFormat.RFC2822, 'fr'));
+log(Date.parse('di, 13 aug. 2013 00:00:00 +0200', DateFormat.RSS, 'nl'));
+log(Date.parse((new Date()).toString(), DateFormat.JS));
+*/
 var getPagingData = function (fetchParams, nonpaging) {
-	/*log(Date.format(new Date()));
-	log(Date.format(new Date(), DateFormat.RFC2822, 'nl-NL'));
-	log(Date.parse('2006/01/06', 'yyyy/dd/MM'));
-	log(Date.parse('di, 13 aug. 2013 00:00:00 +0200', DateFormat.RSS, 'nl-NL'));*/
-
 	var totalItems = 38;
 	if (nonpaging) {
 		fetchParams = {

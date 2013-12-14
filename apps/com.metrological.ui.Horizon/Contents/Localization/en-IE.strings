@@ -27,8 +27,8 @@
 "COPYRIGHT" = "Copyright &copy; %s";
 "RIGHTS_RESERVED" = "All rights reserved";
 "SPACE" = "SPACE";
-"DATE_FORMAT" = "d MMM yyyy HH:mm";
-"DATE_PARSE" = "yyyy-MM-dd HH:mm:ss";
+"DATE_FORMAT" = "D MMM YYYY HH:mm";
+"DATE_PARSE" = "YYYY-MM-DD HH:mm:ss";
 "PROFILE_REQUIRED" = "Please select a profile.";
 "PROFILE_TITLE" = "Profile";
 "PROFILE_MESSAGE" = "Select profile below.";

@@ -33,7 +33,7 @@ var UI = new MAF.Class({
 	},
 
 	setClock: function () {
-		this.elements.datetime.setText(Date.format(new Date(), 'dd MMM yyyy HH:mm'));
+		this.elements.datetime.setText(Date.format(new Date(), 'D MMM YYYY HH:mm'));
 	},
 
 	animteBar: function (fadeIn, fadeOut, barHeight, barOffset){
@@ -115,7 +115,7 @@ var UI = new MAF.Class({
 		}).appendTo(this);
 
 		this.elements.datetime = new MAF.element.Text({
-			label: Date.format(new Date(), 'dd MMM yyyy HH:mm'),
+			label: Date.format(new Date(), 'D MMM YYYY HH:mm'),
 			styles: {
 				fontSize: 25,
 				opacity: 0.7,

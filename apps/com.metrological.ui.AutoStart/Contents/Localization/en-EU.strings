@@ -12,8 +12,8 @@
 "COPYRIGHT" = "Copyright &copy; %s";
 "RIGHTS_RESERVED" = "All rights reserved";
 "SPACE" = "SPACE";
-"DATE_FORMAT" = "d MMM yyyy HH:mm";
-"DATE_PARSE" = "yyyy-MM-dd HH:mm:ss";
+"DATE_FORMAT" = "D MMM YYYY HH:mm";
+"DATE_PARSE" = "YYYY-MM-DD HH:mm:ss";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Login to Twitter and enter below the 7 digit code you receive.";
 "TWITTER_METHOD" = "Connection method for twitter:";
