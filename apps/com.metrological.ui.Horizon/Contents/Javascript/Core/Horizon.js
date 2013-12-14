@@ -56,7 +56,7 @@ var Horizon = (function (body) {
 	}).inject(container);
 
 	var clock = new Text({
-		label: Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd d MMM').toUpperCase(),
+		label: Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase(),
 		styles: {
 			hAlign: 'right',
 			hOffset: 134,
@@ -70,7 +70,7 @@ var Horizon = (function (body) {
 	}).inject(container);
 
 	(function updateClock() {
-		clock.data = Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd d MMM').toUpperCase();
+		clock.data = Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase();
 	}).periodical(60000);
 
 	var playing = new Text({
