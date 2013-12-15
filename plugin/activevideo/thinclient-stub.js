@@ -1,0 +1,1 @@
+this.ThinClient = TVEmulator;
