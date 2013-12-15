@@ -1,0 +1,15 @@
+{
+	"identifier": "com.metrological.ui.D4A",
+	"name": "D4A UI",
+	"version": "2.0.0",
+	"author": "Liberty Global",
+	"company": "Liberty Global",
+	"copyright": "Liberty Global",
+	"description": "D4A UI",
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
