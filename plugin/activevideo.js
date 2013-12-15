@@ -1,4 +1,4 @@
-include('activevideo/thinclient-stub.js');
+include('activevideo/thinclient.js');
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
 	19: 'pause', 413: 'stop', 415: 'play',
