@@ -35,7 +35,7 @@ var Kraken = (function () {
 										if (b && b.length > 0 && callback) {
 											callback(Object.merge({}, b[0], {
 												channel: s[0].name,
-												udpStreamLink: s[0].udpStreamLink
+												stream: s[0].udpStreamLink.href
 											}));
 										}
 									}
@@ -67,8 +67,9 @@ this.ThinClient = (function () {
 		}
 		Kraken.getCurrentChannel(function (data) {
 			currentProgram = data;
-			var update = (+moment.utc(data.end)) - Date.now();
-			programTimer = setTimeout(updateNowPlaying, update);
+			var timeout = (+moment.utc(data.end)) - Date.now();
+			programTimer = setTimeout(updateNowPlaying, timeout);
+			video.src = currentProgram.stream;
 			if (instance.onChannelChanged) {
 				instance.onChannelChanged();
 			}
@@ -78,43 +79,24 @@ this.ThinClient = (function () {
 		video = video || body.getElementsByTagName('video')[0];
 		if (video) {
 			video.setAttribute('autoplay', '');
-			setChannel();
+			updateNowPlaying();
 		}
-	}
-	function channelUp() {
-		currentChannel++;
-		if (currentChannel === 1000) {
-			currentChannel = 1;
-		}
-		setChannel();
-	}
-	function channelDown() {
-		currentChannel--;
-		if (currentChannel === 0) {
-			currentChannel = 999;
-		}
-		setChannel();
-	}
-	function setChannel(channel) {
-		channel = channel || currentChannel;
-		currentChannel = channel;
-		updateNowPlaying();
 	}
 
 	getter(instance, 'init', function () {
 		return init;
 	});
 	getter(instance, 'up', function () {
-		return channelUp;
+		return emptyFn;
 	});
 	getter(instance, 'down', function () {
-		return channelDown;
+		return emptyFn;
 	});
 	getter(instance, 'channel', function () {
-		return new TVChannel(currentChannel, '');
+		return new TVChannel(currentChannel, currentProgram.channel);
 	});
 	setter(instance, 'channel', function (channel) {
-		setChannel(channel);
+		updateNowPlaying();
 	});
 	getter(instance, 'program', function () {
 		return new TVProgram(currentProgram.title, currentProgram.synopsis, +moment.utc(currentProgram.start), +moment.utc(currentProgram.end));
