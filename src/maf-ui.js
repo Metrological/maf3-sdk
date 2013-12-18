@@ -66,6 +66,7 @@ include('MAF/control/MetadataDisplay.js');
 include('MAF/control/Grid.js');
 include('MAF/control/GridCell.js');
 include('MAF/control/PhotoGridCell.js');
+include('MAF/control/MediaTransportOverlay.js');
 
 include('MAF/dialogs/BaseDialogImplementation.js');
 include('MAF/dialogs/Alert.js');
