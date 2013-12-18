@@ -37,7 +37,7 @@ var AccenturePlayer = function () {
 	}
 
 	function supports(mimetype) {
-		return OTT && OTT.supports && OTT.supports(mimetype) || false;
+		return mimetype.indexOf('video/mp4') !== -1; //OTT && OTT.supports && OTT.supports(mimetype) || false;
 	}
 	function r(c) {
 		return Math.floor(c * scale);

@@ -180,7 +180,16 @@ var NDSPlayer = function () {
 	}
 
 	function supports(mimetype) {
-		return true;
+		return mimetype.indexOf('video/mp4') !== -1;/*
+		try {
+			var mimes = VideoPlayer && VideoPlayer.getSupportedMimeTypes() || [];
+			for (var i = 0; i < mimes.length; i++) {
+				if (mimes[i].indexOf(mimetype) !== -1) {
+					return true;
+				}
+			}
+		} catch(err) {}
+		return false;*/
 	}
 
 	function notify(icon, message, type, identifier) {

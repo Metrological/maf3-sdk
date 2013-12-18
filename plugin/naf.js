@@ -1,3 +1,4 @@
+//var version = '1.0.8s4c2r99';
 var version = '1.0.9s4c2r122';
 
 NAF = {};
@@ -83,9 +84,9 @@ controller.on('model.initialized', function () {
 
 	function getApplicationsByChannelId(channelId) {
 		var result = [],
-			channel = model.channels.filter(function (c) {
+			channel = model.channels && model.channels.filter(function (c) {
 				return c.id === channelId;
-			});
+			}) || [];
 		if (channel.length > 0) {
 			ApplicationManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
 				result.push({
