@@ -5,7 +5,8 @@ var AppsView = new MAF.Class({
 
 	state: null,
 	firstCategory: 1,
-	delayedInitialFocus: 800,
+	disableResetFocus: true,
+	delayedInitialFocus: 600,
 
 	initialize: function () {
 		this.parent();
@@ -632,6 +633,11 @@ var AppsView = new MAF.Class({
 		}).appendTo(this);
 	},
 
+	updateView: function () {
+		this.elements.appTitle.setText('');
+		this.elements.appDescription.setText('');
+	},
+
 	updateCategory: function () {
 		if (this.category) {
 			Horizon.setText($_('CATEGORY_' + this.category.toUpperCase()) + ' ' + (this.controls.apps.getCurrentPage() + 1) + '/' + (this.controls.apps.getPageCount() || 1));
@@ -645,7 +651,6 @@ var AppsView = new MAF.Class({
 	},
 
 	selectView: function () {
-		this.disableResetFocus = false;
 		if (MAF.messages.exists('myApps') && !this.ready) {
 			this.appsReady();
 		} else if (currentAppConfig.get('tos') !== TOS) {
