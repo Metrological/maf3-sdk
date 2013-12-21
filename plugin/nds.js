@@ -48,6 +48,8 @@ var NDSPlayer = function () {
 		previousState = null,
 		maxStartCounter = 10,
 		startCounter = 0,
+		currentDuration = 0,
+		currentRate = 1,
 		startTimer, timeTimer;
 
 	instance.subscribers = {};
@@ -74,28 +76,6 @@ var NDSPlayer = function () {
 				return VideoPlayer.PLAYER_SPD_PLAY;
 		}
 	}
-	function getRateByRate(rate) {
-		switch(rate) {
-			case VideoPlayer.PLAYER_SPD_FWD30X:
-				return 30;
-			case VideoPlayer.PLAYER_SPD_FWD12X:
-				return 12;
-			case VideoPlayer.PLAYER_SPD_FWD6X:
-				return 6;
-			case VideoPlayer.PLAYER_SPD_FWD2X:
-				return 2;
-			case VideoPlayer.PLAYER_SPD_REW30X:
-				return -30;
-			case VideoPlayer.PLAYER_SPD_REW12X:
-				return -12;
-			case VideoPlayer.PLAYER_SPD_REW6X:
-				return -6;
-			case VideoPlayer.PLAYER_SPD_REW2X:
-				return -2;
-			default:
-				return 1;
-		}
-	}
 	function stateChange(state) {
 		if (previousState !== state) {
 			fire.call(instance, 'onStateChange', {
@@ -112,7 +92,7 @@ var NDSPlayer = function () {
 		fire.call(instance, 'onChannelChange');
 	}
 	function start() {
-		if (currentSource && !canPlay) {
+		if (currentSource && !canPlay && previousState !== Player.state.ERROR) {
 			//screen.log('START');
 			VideoPlayer.start();
 			if (startCounter < maxStartCounter) {
@@ -279,23 +259,16 @@ var NDSPlayer = function () {
 		return [1,2,6,12,30];
 	});
 	getter(instance, 'rate', function () {
-		if (canPlay && VideoPlayer) {
-			try {
-				return getRate(VideoPlayer.speed) || 1;
-			} catch(err) {
-				return 1;
-			}
-		} else {
-			return 1;
-		}
+		return currentRate;
 	});
 	setter(instance, 'rate', function (rate) {
-		if (VideoPlayer && canPlay && this.rate !== rate) {
+		if (VideoPlayer && canPlay && currentRate !== rate) {
 			try {
-				VideoPlayer.setSpeed(getRateByInt(rate));
+				VideoPlayer.setSpeed(getRate(rate));
 			} catch(err) {
 				return;
 			}
+			currentRate = rate;
 			if (rate < 0) {
 				stateChange(Player.state.REWIND);
 			} else if (rate == 1) {
@@ -308,11 +281,13 @@ var NDSPlayer = function () {
 		}
 	});
 	getter(instance, 'duration', function () {
-		try {
-			return VideoPlayer && VideoPlayer.getPlaybackDuration() || 0;
-		} catch(err) {
-			return 0;
+		if (currentDuration > 0) {
+			return currentDuration;
 		}
+		try {
+			currentDuration = VideoPlayer && VideoPlayer.getPlaybackDuration() || 0;
+		} catch(err) {}
+		return currentDuration;
 	});
 	getter(instance, 'buffered', function () {
 		return 100;
@@ -376,6 +351,8 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 			try {
+				currentRate = 1;
+				currentDuration = 0;
 				//screen.log('LOAD');
 				VideoPlayer.setURI(src);
 				currentSource = src;
@@ -537,15 +514,17 @@ var NDSProfile = function (name) {
 	getter(this, 'country', function () {
 		return GEO && GEO.geo && GEO.geo.countryName;
 	});
+	var countryCode = UserData && getUserData(UserData.KEY_PROFILE_COUNTRY);
 	getter(this, 'countryCode', function () {
-		var c = (UserData && getUserData(UserData.KEY_PROFILE_COUNTRY) || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
+		var c = (countryCode || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
 		return NDSCOUNTRIES[c] || c;
 	});
 	getter(this, 'language', function () {
 		return LANGUAGES[this.languageCode];
 	});
+	var languageCode = UserData && getUserData(UserData.KEY_PROFILE_UI_LANG);
 	getter(this, 'languageCode', function () {
-		var l = (UserData && getUserData(UserData.KEY_PROFILE_UI_LANG) || (MAE.language || html.lang || 'en')).toLowerCase();
+		var l = (languageCode || (MAE.language || html.lang || 'en')).toLowerCase();
 		return NDSLANGUAGES[l] || l;
 	});
 	getter(this, 'city', function () {
