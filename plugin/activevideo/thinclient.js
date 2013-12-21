@@ -1,52 +1,65 @@
 var Kraken = (function () {
-	var instance = {};
+	var instance = {},
+		mockTriplet = '1537.99.9907';
+	function sendMessage(msg, callback) {
+		new Request({
+			url: 'http://session/client/send?protocolid=D4A',
+			data: msg,
+			proxy: false,
+			onSuccess: function (data) {
+				new Request({
+					url: 'http://session/client/send?protocolid=D4A',
+					proxy: false,
+					data: data,
+					onSuccess: function (response) {
+						callback(response);
+					}
+				}).send();
+			}
+		}).send();
+	}
 	function getCurrentChannel(callback) {
 		new Request({
 			url: 'http://session/client/properties.json',
 			proxy: false,
-			onComplete: function (response) {
-				var json = response.responseText || {
-					channel: 'tv:1537.99.9907'
-				};
-				if (typeOf(json) === 'string') {
-					json = JSON.parse(json);
-				}
-				if (json && json.channel) {
-					new Request({
-						url: 'http://appdev.io/kraken/v2/schedule/networks/HU/services.json',
-						proxy: false,
-						data: {
-							maxBatchSize: 1,
-							show: 'name,udpStreamLink,channel.ref',
-							dvbDec: json.channel.split(':')[1]
-						},
-						onSuccess: function (services) {
-							var s = services && services.data;
-							if (s && s.length > 0) {
-								new Request({
-									url: String.sprintf('http://appdev.io/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
-									proxy: false,
-									data: {
-										maxBatchSize: 1,
-										show: 'ageRating,end,start,title,synopsis'
-									},
-									onSuccess: function (broadcast) {
-										var b = broadcast && broadcast.data;
-										if (b && b.length > 0 && callback) {
-											callback(Object.merge({}, b[0], {
-												channel: s[0].name,
-												stream: s[0].udpStreamLink.href
-											}));
-										}
+			onSuccess: function (json) {
+				new Request({
+					url: 'http://appdev.io/kraken/v2/schedule/networks/HU/services.json',
+					proxy: false,
+					data: {
+						maxBatchSize: 1,
+						show: 'name,udpStreamLink,channel.ref',
+						dvbDec: json.channel && json.channel.split(':')[1] || mockTriplet
+					},
+					onSuccess: function (services) {
+						var s = services && services.data;
+						if (s && s.length > 0) {
+							new Request({
+								url: String.sprintf('http://appdev.io/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
+								proxy: false,
+								data: {
+									maxBatchSize: 1,
+									show: 'ageRating,end,start,title,synopsis'
+								},
+								onSuccess: function (broadcast) {
+									var b = broadcast && broadcast.data;
+									if (b && b.length > 0 && callback) {
+										callback(Object.merge({}, b[0], {
+											channel: s[0].name,
+											stream: s[0].udpStreamLink.href
+										}));
 									}
-								}).send();
-							}
+								}
+							}).send();
 						}
-					}).send();
-				}
+					}
+				}).send();
 			}
 		}).send();
 	}
+	getter(instance, 'sendMessage', function () {
+		return sendMessage;
+	});
 	getter(instance, 'getCurrentChannel', function () {
 		return getCurrentChannel;
 	});
@@ -58,18 +71,31 @@ this.ThinClient = (function () {
 		instance = {},
 		currentChannel = 1,
 		currentProgram = {},
+		ageRating,
 		programTimer,
 		video;
 
+	function getAgeRating(callback) {
+		Kraken.sendMessage(String.fromCharCode(6), function (data) {
+			ageRating = parseInt(data && data.substr(4) || -1, 10);
+			callback();
+		});
+	}
 	function updateNowPlaying() {
 		if (programTimer) {
 			clearTimeout(programTimer);
 		}
 		Kraken.getCurrentChannel(function (data) {
-			currentProgram = data;
-			var timeout = (+moment.utc(data.end)) - Date.now();
-			programTimer = setTimeout(updateNowPlaying, timeout);
-			video.src = currentProgram.stream;
+			if (ageRating === -1 || data.ageRating < ageRating) {
+				currentProgram = data;
+				video.src = data.stream;
+				video.play();
+			} else {
+				currentProgram = { title: 'Szülői zár' };
+				video.src = '';
+				video.load();
+			}
+			programTimer = setTimeout(updateNowPlaying, (+moment.utc(data.end)) - Date.now());
 			if (instance.onChannelChanged) {
 				instance.onChannelChanged();
 			}
@@ -78,8 +104,7 @@ this.ThinClient = (function () {
 	function init() {
 		video = video || body.getElementsByTagName('video')[0];
 		if (video) {
-			video.setAttribute('autoplay', '');
-			updateNowPlaying();
+			getAgeRating(updateNowPlaying);
 		}
 	}
 
