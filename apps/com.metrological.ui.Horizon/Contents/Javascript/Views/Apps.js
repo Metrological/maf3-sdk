@@ -655,6 +655,12 @@ var AppsView = new MAF.Class({
 			this.appsReady();
 		} else if (currentAppConfig.get('tos') !== TOS) {
 			this.showTOSDialog();
+		} else if (this.ready) {
+			(function () {
+				if (!document.activeElement) {
+					this.controls.categories.focus();
+				}
+			}).delay(800, this);
 		}
 		if (this.ready) {
 			this.updateCategory();
