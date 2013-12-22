@@ -5,6 +5,7 @@ var AppsView = new MAF.Class({
 
 	state: null,
 	firstCategory: 1,
+	disableResetFocus: true,
 	oldFocus: 'categories',
 
 	initialize: function () {
@@ -34,8 +35,7 @@ var AppsView = new MAF.Class({
 				data = ApplicationManager.getApplicationsByCategory(this.category);
 			}
 			this.controls.apps.changeDataset(data, true);
-			event.stopPropagation();
-			event.preventDefault();
+			event.stop();
 		}
 	},
 
@@ -229,14 +229,12 @@ var AppsView = new MAF.Class({
 	},
 
 	handleKeys: function (event) {
-		if (!this.frozen) {//TODO: REMOVE 0
+		if (!this.frozen) {
 			switch(event.payload.key){
-				case '0':
 				case 'blue':
 					this.showTOSDialog();
 					break;
 				case 'back':
-				case 'backspace':
 					if (this.tos && this.tos.visible){
 						this.tos.visible = false;
 						delete this.tos;
@@ -245,6 +243,7 @@ var AppsView = new MAF.Class({
 							this.controls.categories.focus();
 						else
 							this.controls.apps.focus();
+						event.stop();
 					}
 					break;
 				default:
@@ -809,7 +808,6 @@ var AppsView = new MAF.Class({
 	},
 
 	selectView: function () {
-		this.disableResetFocus = false;
 		if (MAF.messages.exists('myApps') && !this.ready) {
 			this.appsReady();
 		} else if (currentAppConfig.get('tos') !== TOS) {
