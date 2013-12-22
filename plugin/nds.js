@@ -147,6 +147,22 @@ var NDSPlayer = function () {
 		};
 	}
 	if (TVContext) {
+		TVContext.onPINRequested = function () {
+		};
+		TVContext.onContentSelectionError = function (err) {
+		};
+		TVContext.onPresentationChanged = function (type) {
+			switch (type) {
+				case TVContext.CONTENT_ACCESS_DENIED:
+				case TVContext.CONTENT_PRESENTATION_BLOCKED:
+				case TVContext.CONTENT_SOURCE_UNAVAILABLE:
+				case TVContext.CONTENT_UNKNOWN:
+				case TVContext.UNSPECIFIED_ERROR:
+					break;
+				default:
+					break;
+			}
+		};
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
 				//screen.log('CHANNEL CHANGE');
