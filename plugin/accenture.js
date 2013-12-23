@@ -2,7 +2,10 @@ var UTC = window.UTC,
 	OTT = UTC && UTC.OTT || false;
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
-	123: 'blue', 122: 'yellow', 121: 'green', 120: 'red'
+	114: 'playpause', 118: 'rewind', 117: 'forward', 115: 'stop',
+	123: 'blue', 122: 'yellow', 121: 'green', 120: 'red',
+	119: 'record',
+	175: 'volume-up', 174: 'volume-down', 173: 'mute'
 }, true);
 
 var AccenturePlayer = function () {
@@ -107,9 +110,16 @@ var AccenturePlayer = function () {
 			if (OTT.viewMode) {
 				OTT.viewMode('full');
 			}
+			if (currentSource) {
+				currentSource = null;
+				paused = false;
+				OTT.stop();
+			}
 			currentSource = src;
 			paused = false;
-			OTT.load(src, false);
+			(function () {
+				OTT.load(src, false);
+			}).delay(300);
 		} else if (OTT && currentSource) {
 			currentSource = null;
 			paused = false;
@@ -149,19 +159,34 @@ AccenturePlayer.prototype.constructor = AccenturePlayer;
 
 plugins.players.push(new AccenturePlayer());
 
+var getUIWindow = function () {
+	return apps[ui] && apps[ui].document.body;
+};
+
 var onShow = function () {
-		screen.log('ONSHOW');
+		//screen.log('ONSHOW');
+		var UI = getUIWindow();
+		if (UI) {
+			UI.visible = true;
+		}
 		if (active && apps[active]) {
-			ApplicationManager.send(active, 'onSelect', {
+			ApplicationManager.fire(active, 'onSelect', {
 				id: apps[active].currentViewId
 			});
 		}
 	},
 	onHide = function () {
-		screen.log('ONHIDE');
-		var player = plugins.players[0];
+		//screen.log('ONHIDE');
+		var player = plugins.players[0],
+			UI = getUIWindow();
 		if (player) {
 			player.src = '';
+		}
+		if (UI) {
+			UI.visible = false;
+		}
+		if (active && active !== ui) {
+			ApplicationManager.close(active);
 		}
 	};
 
@@ -171,11 +196,11 @@ if (OTT && OTT.onShow) {
 if (OTT && OTT.onHide) {
 	OTT.onHide(onHide);
 }
-
+/*
 window.addEventListener('unload', function () {
 	onHide();
 });
-
+*/
 window.addEventListener('blur', function () {
 	onHide();
 	if (OTT && OTT.exit) {
@@ -186,7 +211,8 @@ window.addEventListener('blur', function () {
 if (OTT && OTT.viewMode) {
 	OTT.viewMode('overlay');
 }
-
+/*
 window.addEventListener('keydown', function (event) {
 	screen.log('KEYDOWN: ' + event.keyCode);
 });
+*/
