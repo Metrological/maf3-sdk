@@ -17,12 +17,17 @@ KeyMap.defineKeys(KeyMap.NORMAL, {
 }, true);
 
 var syncProgramData = function () {
-	var player = MAE.blocked && plugins.players[0];
+	var player = MAE.blocked && plugins.players[0],
+		previousChannel = currentChannel && currentChannel.number,
+		showEnded = Math.floor(Date.now() / 1000) - (currentProgram ? (currentProgram.startTime + currentProgram.duration) : 0);
+	currentChannel = TVContext && TVContext.getCurrentChannel();
+	if (previousChannel === currentChannel.number && showEnded < 0) {
+		return;
+	}
 	if (timerProgramData) {
 		clearTimeout(timerProgramData);
 		timerProgramData = undefined;
 	}
-	currentChannel = TVContext && TVContext.getCurrentChannel();
 	if (!MAE.blocked || MAE.blocked.indexOf(currentChannel.number) === -1) {
 		if (player && player.muted) {
 			player.show();
@@ -49,6 +54,7 @@ var NDSPlayer = function () {
 		maxStartCounter = 10,
 		startCounter = 0,
 		currentDuration = 0,
+		position = 0,
 		currentRate = 1,
 		startTimer, timeTimer;
 
@@ -85,6 +91,11 @@ var NDSPlayer = function () {
 		}
 	}
 	function timeChange() {
+		try {
+			position = grabbed ? VideoPlayer && (VideoPlayer.position / 1000) || 0 : 0;
+		} catch(err) {
+			position = 0;
+		}
 		fire.call(instance, 'onTimeChange');
 	}
 	function channelChange() {
@@ -131,7 +142,7 @@ var NDSPlayer = function () {
 		};
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
 			if (grabbed && currentSource && canPlay) {
-				//screen.log('STOPPED');
+				//screen.log('STOPPED UNEXPECTED');
 				stateChange(Player.state.STOP);
 				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
@@ -152,6 +163,24 @@ var NDSPlayer = function () {
 		TVContext.onContentSelectionError = function (err) {
 		};
 		TVContext.onPresentationChanged = function (type) {
+			if (grabbed && currentSource && canPlay) {
+				//screen.log('STOPPED PRESENTATION CHANGED');
+				canPlay = false;
+				currentSource = null;
+				previousState = null;
+				paused = false;
+				if (timeTimer) {
+					clearInterval(timeTimer);
+					timeTimer = null;
+				}
+				position = 0;
+				if (startTimer) {
+					clearTimeout(startTimer);
+					startTimer = null;
+				}
+				stateChange(Player.state.STOP);
+				grabbed = false;
+			}/*
 			switch (type) {
 				case TVContext.CONTENT_ACCESS_DENIED:
 				case TVContext.CONTENT_PRESENTATION_BLOCKED:
@@ -161,7 +190,7 @@ var NDSPlayer = function () {
 					break;
 				default:
 					break;
-			}
+			}*/
 		};
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
@@ -250,7 +279,7 @@ var NDSPlayer = function () {
 	});
 	getter(instance, 'program', function () {
 		var program = currentProgram || {};
-		return new TVProgram(program.title, program.description, program.startTime, program.duration);
+		return new TVProgram(program.title, program.description, (program.startTime || 0) * 1000, program.duration);
 	});
 	getter(instance, 'startTime', function () {
 		return 0;
@@ -258,11 +287,7 @@ var NDSPlayer = function () {
 	setter(instance, 'startTime', function (time) {
 	});
 	getter(instance, 'currentTime', function () {
-		try {
-			return VideoPlayer && (VideoPlayer.position / 1000) || 0;
-		} catch(err) {
-			return 0;
-		}
+		return grabbed ? position : 0;
 	});
 	setter(instance, 'currentTime', function (time) {
 		if (VideoPlayer) {
@@ -367,6 +392,7 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 			try {
+				position = 0;
 				currentRate = 1;
 				currentDuration = 0;
 				//screen.log('LOAD');
@@ -386,6 +412,7 @@ var NDSPlayer = function () {
 				clearInterval(timeTimer);
 				timeTimer = null;
 			}
+			position = 0;
 			if (startTimer) {
 				clearTimeout(startTimer);
 				startTimer = null;
@@ -428,13 +455,12 @@ var NDSPlayer = function () {
 				} catch(err) {}
 			}
 		}
-		if (paused) {
-			if (timeTimer) {
-				clearInterval(timeTimer);
-				timeTimer = null;
-			}
-		} else {
-			timeTimer = setInterval(timeChange, 1000);
+		if (timeTimer) {
+			clearInterval(timeTimer);
+			timeTimer = null;
+		}
+		if (!paused) {
+			timeTimer = setInterval(timeChange, 2000);
 		}
 		//screen.log(paused ? 'PAUSED' : 'RESUME');
 		stateChange(paused ? Player.state.PAUSE : Player.state.PLAY);
@@ -504,6 +530,9 @@ var NDSProfile = function (name) {
 	var LOCKED = false,
 		ATTEMPTS = 0;
 	function getUserData(key) {
+		if (!key) {
+			return null;
+		}
 		try {
 			return UserData && UserData.get(key);
 		} catch(err) {}
@@ -512,14 +541,17 @@ var NDSProfile = function (name) {
 	getter(this, 'id', function () {
 		return md5(this.household + '|' + (name || ''));
 	});
+	var profileName = getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
 	getter(this, 'name', function () {
-		return name || getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
+		return profileName;
 	});
+	var ageRating = getUserData(UserData.KEY_PROFILE_PARENTAL_AGE);
 	getter(this, 'ageRating', function () {
-		return getUserData(UserData.KEY_PROFILE_PARENTAL_AGE) || 0;
+		return ageRating || 0;
 	});
+	var uid = getUserData(UserData.KEY_PROFILE_USER_ID);
 	getter(this, 'household', function () {
-		return md5(this.operator + (UserData && getUserData(UserData.KEY_PROFILE_USER_ID) || 0));
+		return md5(this.operator + (uid || 0));
 	});
 	getter(this, 'operator', function () {
 		return 'horizon';
@@ -530,7 +562,7 @@ var NDSProfile = function (name) {
 	getter(this, 'country', function () {
 		return GEO && GEO.geo && GEO.geo.countryName;
 	});
-	var countryCode = UserData && getUserData(UserData.KEY_PROFILE_COUNTRY);
+	var countryCode = getUserData(UserData.KEY_PROFILE_COUNTRY);
 	getter(this, 'countryCode', function () {
 		var c = (countryCode || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
 		return NDSCOUNTRIES[c] || c;
@@ -538,7 +570,7 @@ var NDSProfile = function (name) {
 	getter(this, 'language', function () {
 		return LANGUAGES[this.languageCode];
 	});
-	var languageCode = UserData && getUserData(UserData.KEY_PROFILE_UI_LANG);
+	var languageCode = getUserData(UserData.KEY_PROFILE_UI_LANG);
 	getter(this, 'languageCode', function () {
 		var l = (languageCode || (MAE.language || html.lang || 'en')).toLowerCase();
 		return NDSLANGUAGES[l] || l;
