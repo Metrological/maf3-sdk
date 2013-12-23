@@ -5,10 +5,11 @@ var Kraken = (function () {
 		new Request({
 			url: 'http://session/client/send?protocolid=D4A',
 			data: msg,
+			method: 'POST',
 			proxy: false,
 			onSuccess: function (data) {
 				new Request({
-					url: 'http://session/client/send?protocolid=D4A',
+					url: 'http://session/client/poll?protocolid=D4A',
 					proxy: false,
 					data: data,
 					onSuccess: function (response) {
@@ -77,6 +78,7 @@ this.ThinClient = (function () {
 
 	function getAgeRating(callback) {
 		Kraken.sendMessage(String.fromCharCode(6), function (data) {
+			//screen.log('AGE RATING: ' + (data && data.substr(4) || 'NO DATA'));
 			ageRating = parseInt(data && data.substr(4) || -1, 10);
 			callback();
 		});
@@ -86,7 +88,7 @@ this.ThinClient = (function () {
 			clearTimeout(programTimer);
 		}
 		Kraken.getCurrentChannel(function (data) {
-			if (ageRating === -1 || data.ageRating < ageRating) {
+			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
 				currentProgram = data;
 				video.src = data.stream;
 				video.play();
