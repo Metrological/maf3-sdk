@@ -15,9 +15,13 @@ var model = new WebApp.Model(),
 
 controller.registerPMRPC();
 
-controller.on('model.initialized', function () {
-	var doFn = controller['do'],
-		internalIndex = controller.getApplicationIndex;
+var doFn = controller['do'],
+	onFn = controller.on;
+
+onFn('model.initialized', function () {
+	var internalIndex = controller.getApplicationIndex;
+
+	log('naf: base init');
 
 	function getApplicationIndex() {
 		return internalIndex ? internalIndex() : 1;
@@ -44,7 +48,7 @@ controller.on('model.initialized', function () {
 		}
 	});
 
-	controller.on('model.state.key', function () {
+	onFn('model.state.key', function () {
 		var ev = model.state.key,
 			keyCode = parseInt(ev.keyCode, 10),
 			keyState = ev.keyState.toLowerCase(),
@@ -126,7 +130,7 @@ controller.on('model.initialized', function () {
 		}
 	}
 
-	controller.on('model.state.applications.' + getApplicationIndex() + '.appMsg', onMessageCallback);
+	onFn('model.state.applications.' + getApplicationIndex() + '.appMsg', onMessageCallback);
 
 	if (ApplicationManager.complete) {
 		getMainMenuApplications();
@@ -134,5 +138,127 @@ controller.on('model.initialized', function () {
 		ApplicationManager.onComplete = getMainMenuApplications;
 	}
 });
+
+var NAFPlayer = function () {
+	var instance = this,
+		internal = {},
+		initialized = false;
+
+	instance.subscribers = {};
+
+	getter(internal, 'player', function () {
+		return initialized ? model.state.players[0] : {};
+	});
+
+	onFn('model.initialized', function () {
+		log('naf: video init');
+		initialized = true;
+
+		onFn('model.state.players.0.currentProgram', function () {
+			fire.call(instance, 'onChannelChange');
+		});
+	});
+
+	function supports(mime) {
+		return mime.indexOf('video/mp4') !== -1;
+	}
+	function notify() {
+	}
+
+	getter(instance, 'id', function () {
+		return Player.TV;
+	});
+	getter(instance, 'type', function () {
+		return Player.type.VIDEO;
+	});
+	getter(instance, 'supports', function () {
+		return supports;
+	});
+	getter(instance, 'waitIndicator', function () {
+		return false;
+	});
+	getter(instance, 'channel', function () {
+		var channel = internal.player.currentChannel || {};
+		return new TVChannel(channel.lcn, channel.name);
+	});
+	setter(instance, 'channel', function (number) {
+		//@TODO
+	});
+	getter(instance, 'program', function () {
+		var program = internal.player.currentProgram || {};
+		return new TVProgram(program.title, program.description, program.startTime, program.duration);
+	});
+	getter(instance, 'startTime', function () {
+		return 0;
+	});
+	setter(instance, 'startTime', function (time) {
+		//@TODO
+	});
+	getter(instance, 'currentTime', function () {
+		//@TODO
+		return 0;
+	});
+	setter(instance, 'currentTime', function (time) {
+		//@TODO
+	});
+	getter(instance, 'rates', function () {
+		return [1,2,6,12,30];
+	});
+	getter(instance, 'rate', function () {
+		return 1;
+	});
+	setter(instance, 'rate', function (rate) {
+		//@TODO
+	});
+	getter(instance, 'duration', function () {
+		//@TODO
+		return 0;
+	});
+	getter(instance, 'buffered', function () {
+		//@TODO
+		return 100;
+	});
+	getter(instance, 'muted', function () {
+		//@TODO
+		return false;
+	});
+	setter(instance, 'muted', function (mute) {
+		//@TODO
+	});
+	getter(instance, 'volume', function () {
+		//@TODO
+		return 1;
+	});
+	setter(instance, 'volume', function (volume) {
+		//@TODO
+	});
+	getter(instance, 'src', function () {
+		//@TODO
+		return null;
+	});
+	setter(instance, 'src', function (src) {
+		//@TODO
+	});
+	getter(instance, 'paused', function () {
+		return internal.player.playRate === '0x';
+	});
+	setter(instance, 'paused', function (p) {
+		//@TODO
+	});
+	getter(instance, 'bounds', function () {
+		//@TODO
+		return Player.prototype.bounds;
+	});
+	setter(instance, 'bounds', function (b) {
+		//@TODO
+	});
+	getter(instance, 'notify', function () {
+		return notify;
+	});
+};
+NAFPlayer.prototype = new Player();
+NAFPlayer.prototype.constructor = NAFPlayer;
+
+plugins.players.push(new NAFPlayer());
 
 controller.init();
