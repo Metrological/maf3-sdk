@@ -432,6 +432,10 @@ var AppsView = new MAF.Class({
 								if (view.cell === this) {
 									this.icon.setSource(view.icon);
 								} else if (view.cell) {
+									if (view.cell.original) {
+										view.cell.icon.setSource(view.cell.original);
+										delete view.cell.original;
+									}
 									this.original = currentIcon;
 									this.icon.setSource(view.icon);
 									if (view.cell.icon) {
@@ -477,8 +481,6 @@ var AppsView = new MAF.Class({
 							}
 							if (view.reorder && view.cell && this.original && this.retrieve('favbutton') !== true) {
 								view.cell = this;
-								this.icon.setSource(this.original);
-								delete this.original;
 							}
 						}
 					}
