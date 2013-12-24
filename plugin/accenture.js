@@ -159,6 +159,96 @@ AccenturePlayer.prototype.constructor = AccenturePlayer;
 
 plugins.players.push(new AccenturePlayer());
 
+var AccentureProfile = function (name) {
+	function getProfileId() {
+		return OTT && OTT.getProfileId && OTT.getProfileId() || {};
+	}
+	getter(this, 'id', function () {
+		return md5(this.household + '|' + (name || ''));
+	});
+	getter(this, 'name', function () {
+		return name || (OTT && OTT.getProfileName && OTT.getProfileName() || '');
+	});
+	getter(this, 'ageRating', function () {
+		return OTT && OTT.getAgeRating && OTT.getAgeRating() || 0;
+	});
+	getter(this, 'household', function () {
+		return md5(this.operator + (getProfileId().id || 0));
+	});
+	getter(this, 'operator', function () {
+		return 'kpn';
+	});
+	getter(this, 'packages', function () {
+		return OTT && OTT.getPackages && OTT.getPackages() || [];
+	});
+	getter(this, 'country', function () {
+		return GEO && GEO.geo && GEO.geo.countryName;
+	});
+	getter(this, 'countryCode', function () {
+		return OTT && OTT.getCountry && OTT.getCountry().toLowerCase() || 'nl';
+	});
+	getter(this, 'language', function () {
+		return LANGUAGES[this.languageCode];
+	});
+	getter(this, 'languageCode', function () {
+		var l = OTT && OTT.getLanguage && OTT.getLanguage().toLowerCase();
+		switch (l) {
+			case 'nederlands':
+			case 'dutch':
+				return 'nl';
+			default:
+				return 'en';
+		}
+	});
+	getter(this, 'city', function () {
+		return GEO && GEO.geo && GEO.geo.city;
+	});
+	getter(this, 'latlon', function () {
+		return GEO && GEO.geo && GEO.geo.ll || [];
+	});
+	getter(this, 'ip', function () {
+		return GEO && GEO.ip || '127.0.0.1';
+	});
+	getter(this, 'mac', function () {
+		return getProfileId().mac || '00:00:00:00:00:00';
+	});
+	getter(this, 'locale', function () {
+		return this.languageCode + '-' + this.countryCode.toUpperCase();
+	});
+	getter(this, 'locked', function () {
+		return false;
+	});
+	function hasPIN(type) {
+		return true;
+	}
+	function validatePIN(value, type) {
+		if (!hasPIN(type)) {
+			return true;
+		}
+		switch (type) {
+			case 'adult':
+			case 'youth':
+				return OTT && OTT.verifyPIN ? OTT.verifyPIN(value) === 1 : false;
+			default:
+				return false;
+		}
+	}
+	getter(this, 'hasPIN', function () {
+		return hasPIN;
+	});
+	getter(this, 'validatePIN', function () {
+		return validatePIN;
+	});
+	var passport = new GenericStorage('pp', true);
+	getter(this, 'passport', function () {
+		return passport;
+	});
+};
+AccentureProfile.prototype = new Profile();
+AccentureProfile.prototype.constructor = AccentureProfile;
+
+plugins.profile = AccentureProfile;
+
 var getUIWindow = function () {
 	return apps[ui] && apps[ui].document.body;
 };
