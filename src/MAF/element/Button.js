@@ -15,6 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+
+/** 
+ * @class MAF.element.Button
+ * @extends MAF.element.Container
+ */
 define('MAF.element.Button', function () {
 	var onSecureNeeded = function (event) {
 		var config = this.config,
@@ -66,7 +71,10 @@ define('MAF.element.Button', function () {
 			this.setSecure(this.config.secure);
 			delete this.config.secure;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#generateStatePacket
+		 */
 		generateStatePacket: function (packet) {
 			return Object.merge({
 				focused: this.element.hasFocus,
@@ -74,7 +82,10 @@ define('MAF.element.Button', function () {
 				secure: this.secure
 			}, packet || {});
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#inspectStatePacket
+		 */
 		inspectStatePacket: function (packet, focusOnly) {
 			if (!this.config.guid) {
 				return packet;
@@ -113,7 +124,10 @@ define('MAF.element.Button', function () {
 			}
 			return data;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#appendTo
+		 */
 		appendTo: function (parent) {
 			var appended = this.parent(parent);
 			if (appended && this.getSubscriberCount('onBroadcast')) {
@@ -124,29 +138,45 @@ define('MAF.element.Button', function () {
 			}
 			return this;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#setDisabled
+		 */
 		setDisabled: function (disabled) {
 			this.disabled = disabled === true;
 			this.setStyle('opacity', this.disabled ? 0.5 : null);
 			return this;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#toggleDisabled
+		 */
 		toggleDisabled: function () {
 			this.setDisabled(!this.disabled);
 			return this;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#setSecure
+		 * @param {boolean} secure
+		 */
 		setSecure: function (secure) {
 			secure = secure === true;
 			this.secure = secure;
 			this.fire('onChangeSecure', { secure: secure });
 			return this;
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#toggleSecure
+		 */
 		toggleSecure: function () {
 			return this.setSecure(!this.secure);
 		},
-
+		/**
+		 * 
+		 * @method MAF.element.Button#verifySecure
+		 */
 		verifySecure: function (verify) {
 			var result = true;
 			verify(result);

@@ -15,6 +15,31 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+
+/**
+ * @class MAF.element.Core
+ * @classdesc > This is the base class for all MAF components. This component does not act on events from its element. Extended classes should define if they want to act on them.
+ * @memberof MAF.element
+ * @param {object} config
+ * @param {string} config.id
+ * @param {object} config.styles
+ * @param {number} config.styles.width
+ * @param {number} config.styles.height
+ * @param {number} config.styles.hAlign
+ * @param {number} config.styles.vAlign
+ * @param {number} config.styles.hOffset
+ * @param {number} config.styles.vOffset
+ * @property {number} width Width of the component
+ * @property {number} height Height of the component
+ * @property {string} hAlign
+ * @property {string} vAlign
+ * @property {number} hOffset
+ * @property {number} vOffset
+ */
+
+ /**
+  * @event MAF.element.Core#onAppend
+  */
 define('MAF.element.Core', function () {
 	return new MAF.Class({
 		ClassName: 'BaseCore',
@@ -113,37 +138,62 @@ define('MAF.element.Core', function () {
 		config: {
 			element: Frame
 		},
-
+		/**
+		 * Initialize the class
+		 * @method MAF.element.Core#initialize
+		 */
 		initialize: function () {
 			this.initElement();
 			this.children = [];
 			this.setStyles(this.config.styles);
 		},
 
+		/**
+		 * @method MAF.element.Core#getView
+		 * @return {class} Returns the view this class is placed on
+		 */
 		getView: function () {
 			return this.getWindow();
 		},
 
+		/**
+		 * Shows this component.
+		 * @method MAF.element.Core#show
+		 */
 		show: function () {
 			this.element.visible = true;
 			return this;
 		},
-
+		/**
+		 * Hides this component.
+		 * @method MAF.element.Core#hide
+		 */
 		hide: function () {
 			this.element.visible = false;
 			return this;
 		},
-
+		/**
+		 * Freezes this component. Screen renders no longer trigger until thawed.
+		 * @method MAF.element.Core#freeze
+		 */
 		freeze: function () {
 			this.element.updatesEnabled = false;
 			return this;
 		},
-
+		/**
+		 * Thawes this component. Screen renders can trigger again.
+		 * @method MAF.element.Core#thaw
+		 */
 		thaw: function () {
 			this.element.updatesEnabled = true;
 			return this;
 		},
 
+		/**
+		 * @method MAF.element.Core#animate
+		 * @param {object} config A config object
+		 * @fires MAF.element.Core#onAnimationEnded
+		 */
 		animate: function (config) {
 			var callback;
 			if (config.events && config.events.onAnimationEnded) {
@@ -161,6 +211,9 @@ define('MAF.element.Core', function () {
 			return this.element && this.element.animate.call(this, config);
 		},
 
+		/**
+		 * @method MAF.element.Core#getAbsolutePosition
+		 */
 		getAbsolutePosition: function () {
 			var hPosition = this.hOffset,
 				vPosition = this.vOffset,

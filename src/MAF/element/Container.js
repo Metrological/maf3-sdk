@@ -15,6 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/** 
+ * @class MAF.element.Container
+ * @extends MAF.element.Core
+ * @param {object} config
+ * @property {string} label
+ */
+
+/**
+ * @event MAF.element.Container#onFocus
+ */
+/**
+ * @event MAF.element.Container#onBlur
+ */
+/**
+ * @event MAF.element.Container#onSelect
+ */
+/**
+ * @event MAF.element.Container#onNavigate
+ */
 define('MAF.element.Container', function () {
 	return new MAF.Class({
 		ClassName: 'BaseContainer',
@@ -72,7 +91,10 @@ define('MAF.element.Container', function () {
 				delete this.config.content;
 			}
 		},
-
+		/**
+		 * This will try and focus this component. If it cannot recieve focus, this focus will stay on the current focused component.
+		 * @method MAF.element.Container#focus
+		 */
 		focus: function () {
 			if (this.element.hasFocus) {
 				return true;
