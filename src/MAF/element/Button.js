@@ -1,6 +1,6 @@
 /**
  * Metrological Application Framework 3.0 - SDK
- * Copyright (c) 2013  Metrological
+ * Copyright (c) 2014  Metrological
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -19,6 +19,10 @@
 /** 
  * @class MAF.element.Button
  * @extends MAF.element.Container
+ */
+/**
+ * Fired when the component is secured and it fails to verify the security after a select.
+ * @event MAF.element.Button#onSecureFailed
  */
 define('MAF.element.Button', function () {
 	var onSecureNeeded = function (event) {
@@ -74,6 +78,7 @@ define('MAF.element.Button', function () {
 		/**
 		 * 
 		 * @method MAF.element.Button#generateStatePacket
+		 * @private
 		 */
 		generateStatePacket: function (packet) {
 			return Object.merge({

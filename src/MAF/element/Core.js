@@ -1,6 +1,6 @@
 /**
  * Metrological Application Framework 3.0 - SDK
- * Copyright (c) 2013  Metrological
+ * Copyright (c) 2014  Metrological
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -38,6 +38,7 @@
  */
 
  /**
+  * Fired when component has appended to a parent. Update visual appearances by applying a Theme style and rendering the skin.
   * @event MAF.element.Core#onAppend
   */
 define('MAF.element.Core', function () {
@@ -150,7 +151,7 @@ define('MAF.element.Core', function () {
 
 		/**
 		 * @method MAF.element.Core#getView
-		 * @return {class} Returns the view this class is placed on
+		 * @return {class} Returns the view this class is appended on.
 		 */
 		getView: function () {
 			return this.getWindow();

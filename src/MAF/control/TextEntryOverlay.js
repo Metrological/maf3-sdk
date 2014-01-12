@@ -1,6 +1,6 @@
 /**
  * Metrological Application Framework 3.0 - SDK
- * Copyright (c) 2013  Metrological
+ * Copyright (c) 2014  Metrological
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,6 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/** 
+ * @class MAF.control.TextEntryOverlay
+ * @extends MAF.element.Container
+ */
 define('MAF.control.TextEntryOverlay', function () {
 	var ValueManagers = {};
 	var hideOverlay = function () {
@@ -145,8 +149,8 @@ define('MAF.control.TextEntryOverlay', function () {
 					labelStyles = Theme.getStyles('ControlTextEntryButtonLabel'),
 					bpad = Theme.get('ControlTextEntryButton').submitButtonPadding || 0,
 					buttonStyles = Theme.getStyles('ControlTextEntryTextButtonText'),
-					submitText = this.config.creator.config.submitButtonLabel || 'OK',
-					cancelText = this.config.creator.config.cancelButtonLabel || 'Cancel';
+					submitText = this.config.creator.config.submitButtonLabel || widget.getLocalizedString('OK'),
+					cancelText = this.config.creator.config.cancelButtonLabel || widget.getLocalizedString('CANCEL');
 
 				this.form = new MAF.element.Container({
 					styles: {

@@ -1,6 +1,6 @@
 /**
  * Metrological Application Framework 3.0 - SDK
- * Copyright (c) 2013  Metrological
+ * Copyright (c) 2014  Metrological
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,6 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/** 
+ * @class MAF.element.TextGrid
+ * @extends MAF.element.Text
+ */
 define('MAF.element.TextGrid', function () {
 	return new MAF.Class({
 		ClassName: 'BaseTextGrid',
