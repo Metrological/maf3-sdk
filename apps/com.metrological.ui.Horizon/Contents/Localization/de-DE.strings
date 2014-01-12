@@ -60,8 +60,8 @@
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Gehen Sie zu facebook.com/device und geben Sie folgenden Code ein: %s";
 "CATEGORY_FAVORITES" = "FAVORITEN";
-"CATEGORY_VIDEO" = "TV & VIDEO";
-"CATEGORY_NEWS" = "NEWS & INFOS";
+"CATEGORY_VIDEODE" = "TV & VIDEO";
+"CATEGORY_NEWSDE" = "NEWS & INFOS";
 "CATEGORY_SOCIAL" = "SOCIAL TV";
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";

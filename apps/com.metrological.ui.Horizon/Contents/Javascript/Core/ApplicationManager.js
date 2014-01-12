@@ -1169,6 +1169,10 @@ widget.handleHostEvent = function (event) {
 			//log(event.data);
 			MAF.messages.store('myApps', event.getData());
 			break;
+		case 'onHashChange':
+			data = event.data;
+			//MAF.application.loadView(data, null, true);
+			break;
 		case 'onApplicationStartupRequest':
 			data = event.data;
 			ApplicationManager.load(data);

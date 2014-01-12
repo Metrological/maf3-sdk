@@ -79,3 +79,4 @@
 "REORDERFAVO_APP" = "Move %s";
 "START_REORDERFAVO" = "Press OK to move App in FAVOURITES. Press BACK at any time to cancel";
 "STOP_REORDERFAVO" = "Press UP, LEFT, RIGHT and DOWN to reposition the App and press OK to confirm the new position. Press BACK at any time to cancel";
+"BLOCKEDTEXT" = "Press BACK to return to Live TV";

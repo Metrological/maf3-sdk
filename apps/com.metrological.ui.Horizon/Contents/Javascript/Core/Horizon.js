@@ -22,6 +22,21 @@ var Horizon = (function (body) {
 		backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png')
 	});
 
+	var blockedText = new Text({
+		label: $_('BLOCKEDTEXT'),
+		styles: {
+			width: 1920 - 664,
+			hOffset: 644,
+			vAlign: 'center',
+			color: fontColor,
+			fontFamily: 'InterstatePro-Light',
+			fontSize: '1.15em',
+			textAlign: 'center',
+			zOrder: 1,
+			visible: false
+		}
+	}).inject(body);
+
 	var container = new Frame({
 		styles: {
 			width: 'inherit',
@@ -110,9 +125,16 @@ var Horizon = (function (body) {
 	function updateHeader() {
 		if (blocked()) {
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
+			blockedText.visible = true;
 		} else if (sideBySide) {
+			if (blockedText.visible) {
+				blockedText.visible = false;
+			}
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
 		} else if (!visible) {
+			if (blockedText.visible) {
+				blockedText.visible = false;
+			}
 			body.setStyle('backgroundImage', null);
 		}
 		container.setStyle('backgroundImage', widget.getPath(ApplicationManager.active === widget.identifier ? 'Images/Horizon/HeaderBig.png' : 'Images/Horizon/Header.png'));

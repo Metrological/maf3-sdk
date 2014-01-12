@@ -79,3 +79,4 @@
 "REORDERFAVO_APP" = "Przenieś %s";
 "START_REORDERFAVO" = "Naciśnij przycisk OK, aby przesunąć aplikację w ULUBIONYCH. Aby anulować, naciśnij w dowolnym momencie przycisk WSTECZ ";
 "STOP_REORDERFAVO" = "Do zmiany pozycji aplikacji możesz używać przycisków W GÓRĘ, W LEWO, W PRAWO i W DÓŁ. Aby potwierdzić nową pozycję, naciśnij przycisk OK. Aby anulować, naciśnij w dowolnym momencie przycisk WSTECZ";
+"BLOCKEDTEXT" = "Naciśnij przycisk WSTECZ, aby powrócić do telewizji na żywo";
