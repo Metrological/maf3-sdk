@@ -27,8 +27,8 @@
 "COPYRIGHT" = "Copyright &copy; %s";
 "RIGHTS_RESERVED" = "Minden jog fenntartva";
 "SPACE" = "SZÓKÖZ";
-"DATE_FORMAT" = "n HHH éééé ÓÓ:PP";
-"DATE_PARSE" = "éééé-MM-nn ÓÓ:pp:mp";
+"DATE_FORMAT" = "D MMM YYYY HH:mm";
+"DATE_PARSE" = "YYYY-MM-DD HH:mm:ss";
 "PROFILE_REQUIRED" = "Kérjük válasszon profilt.";
 "PROFILE_TITLE" = "Profil";
 "PROFILE_MESSAGE" = "Válasszon profilt.";

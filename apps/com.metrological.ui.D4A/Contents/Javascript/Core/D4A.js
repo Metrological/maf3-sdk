@@ -28,6 +28,7 @@ var D4A = (function (body) {
 	var clock = new Text({
 		label: Date.format(new Date(), 'ddd D MMM').toLowerCase() + ' ' + Date.format(new Date(), 'HH:mm'),
 		styles: {
+			opacity: 0.7,
 			hAlign: 'right',
 			hOffset: 153,
 			vOffset: 127,
@@ -44,8 +45,9 @@ var D4A = (function (body) {
 
 	var playing = new Text({
 		styles: {
-			width: 950,
-			hOffset: 560,
+			opacity: 0.7,
+			width: 634,
+			hOffset: 692,
 			vOffset: 127,
 			fontSize: '1.4em',
 			color: 'white',
@@ -56,7 +58,7 @@ var D4A = (function (body) {
 	}).inject(container);
 
 	function updateNowPlaying() {
-		playing.data = MAF.mediaplayer.currentAsset.title;
+		playing.data = $_('NOW_PLAYING') + ' ' + MAF.mediaplayer.currentAsset.title;
 	}
 
 	(function playerEvents(event) {
