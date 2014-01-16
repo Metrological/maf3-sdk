@@ -255,15 +255,17 @@ var getUIWindow = function () {
 
 var onShow = function () {
 		//screen.log('ONSHOW');
-		var UI = getUIWindow();
-		if (UI) {
-			UI.visible = true;
-		}
-		if (active && apps[active]) {
-			ApplicationManager.fire(active, 'onSelect', {
-				id: apps[active].currentViewId
-			});
-		}
+		(function () {
+			var UI = getUIWindow();
+			if (UI) {
+				UI.visible = true;
+			}
+			if (active && apps[active]) {
+				ApplicationManager.fire(active, 'onSelect', {
+					id: apps[active].currentViewId
+				});
+			}
+		}).delay(800);
 	},
 	onHide = function () {
 		//screen.log('ONHIDE');
