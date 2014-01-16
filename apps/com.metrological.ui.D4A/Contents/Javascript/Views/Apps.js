@@ -146,6 +146,7 @@ var AppsView = new MAF.Class({
 					visibleLines: 10,
 					label: tos,
 					styles: {
+						fontFamily: 'UPCDigital-Regular',
 						opacity: 0.7,
 						width: view.tos.content[0].width - 135,
 						hOffset: 45,
@@ -161,9 +162,9 @@ var AppsView = new MAF.Class({
 					styles: {
 						backgroundColor: 'rgba(255,255,255,.2)',
 						height: grid.height,
-						width: 45,
+						width: 30,
 						hOffset: grid.outerWidth + 20,
-						vOffset: 135
+						vOffset: 130
 					},
 					events:{
 						onNavigate: function(event){
@@ -177,9 +178,9 @@ var AppsView = new MAF.Class({
 					styles: {
 						opacity: grid.getPageCount() === 1 ? 0.1 : 1,
 						hOffset: view.tosscroll.hOffset,
-						vOffset: view.tosscroll.vOffset - 60,
+						vOffset: view.tosscroll.vOffset - 40,
 						fontFamily: 'UPCDigital-Bold',
-						fontSize: '3.2em'
+						fontSize: '2em'
 					}
 				}).appendTo(view.tos.content[0]);
 
@@ -188,9 +189,9 @@ var AppsView = new MAF.Class({
 					styles: {
 						opacity: grid.getPageCount() === 1 ? 0.1 : 1,
 						hOffset: view.tosscroll.hOffset,
-						vOffset: view.tosscroll.outerHeight - 20,
+						vOffset: view.tosscroll.outerHeight - 10,
 						fontFamily: 'UPCDigital-Bold',
-						fontSize: '3.2em'
+						fontSize: '2em'
 					}
 				}).appendTo(view.tos.content[0]);
 
@@ -229,6 +230,7 @@ var AppsView = new MAF.Class({
 		if (!this.frozen) {
 			switch(event.payload.key){
 				case 'blue':
+				case '0':
 					this.showTOSDialog();
 					break;
 				case 'back':
@@ -327,8 +329,9 @@ var AppsView = new MAF.Class({
 
 				cell.category = new MAF.element.Text({
 					styles: {
+						fontFamily: 'UPCDigital-Regular',
 						color: 'white',
-						hOffset: 5,
+						hOffset: 24,
 						width: cell.width - 10,
 						height: cell.height,
 						fontSize: '1.4em',

@@ -153,6 +153,7 @@ var loadTemplate = (function () {
 						label: FontAwesome.get('home'),
 						frozen: true,
 						styles: {
+							fontFamily: 'UPCDigital-Regular',
 							width: 64,
 							height: 42,
 							hAlign: 'right',
@@ -195,6 +196,7 @@ var loadTemplate = (function () {
 						label: FontAwesome.get('refresh'),
 						frozen: true,
 						styles: {
+							fontFamily: 'UPCDigital-Regular',
 							backgroundColor: 'black',
 							opacity: 0.7,
 							zIndex: Animator.ZORDER + 1,
@@ -213,6 +215,7 @@ var loadTemplate = (function () {
 							focus: true,
 							label: FontAwesome.get(btnConfig.label),
 							styles: {
+								fontFamily: 'UPCDigital-Regular',
 								width: 58,
 								height: 23,
 								hAlign: 'center',
@@ -266,6 +269,7 @@ var loadTemplate = (function () {
 						label: FontAwesome.get('refresh'),
 						frozen: true,
 						styles: {
+							fontFamily: 'UPCDigital-Regular',
 							backgroundColor: 'black',
 							opacity: 0.7,
 							zIndex: Animator.ZORDER + 1,
@@ -477,6 +481,7 @@ var loadTemplate = (function () {
 						id: '@' + type + '-title',
 						label: widget.getLocalizedString(dialogConfig.title || ''),
 						styles: {
+							fontFamily: 'UPCDigital-Regular',
 							width: '100%',
 							height: 64,
 							paddingLeft: 10,
@@ -491,6 +496,7 @@ var loadTemplate = (function () {
 							id: '@' + type + '-profile',
 							label: FontAwesome.get('user') + ' ' + profile.name,
 							styles: {
+								fontFamily: 'UPCDigital-Regular',
 								width: '100%',
 								height: 64,
 								paddingLeft: 10,
@@ -535,6 +541,7 @@ var loadTemplate = (function () {
 						id: '@' + type + '-message',
 						label: messageLabel,
 						styles: {
+							fontFamily: 'UPCDigital-Regular',
 							width: '100%',
 							paddingLeft: 10,
 							paddingRight: 10,
@@ -634,6 +641,7 @@ var loadTemplate = (function () {
 						new Text({
 							label: buttonLabel,
 							styles: {
+								fontFamily: 'UPCDigital-Regular',
 								width: '100%',
 								height: 'inherit',
 								paddingLeft: 10,
@@ -823,6 +831,7 @@ var loadTemplate = (function () {
 								var input = new Text({
 									editable: true,
 									styles: {
+										fontFamily: 'UPCDigital-Regular',
 										vAlign: 'bottom',
 										vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height + 10,
 										width: 470,
@@ -876,6 +885,7 @@ var loadTemplate = (function () {
 								new Text({
 									data: FontAwesome.get('times'),
 									styles: {
+										fontFamily: 'UPCDigital-Regular',
 										width: '100%',
 										height: '100%',
 										anchorStyle: 'center'
@@ -913,6 +923,7 @@ var loadTemplate = (function () {
 								for (var i = 0; i < 4; i++) {
 									new Text({
 										styles: {
+											fontFamily: 'UPCDigital-Regular',
 											fontSize: 50,
 											borderRadius: '15px',
 											backgroundColor: 'grey',

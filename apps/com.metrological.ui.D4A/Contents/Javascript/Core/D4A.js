@@ -28,6 +28,7 @@ var D4A = (function (body) {
 	var clock = new Text({
 		label: Date.format(new Date(), 'ddd D MMM').toLowerCase() + ' ' + Date.format(new Date(), 'HH:mm'),
 		styles: {
+			fontFamily: fontFamily,
 			opacity: 0.7,
 			hAlign: 'right',
 			hOffset: 153,
@@ -45,6 +46,7 @@ var D4A = (function (body) {
 
 	var playing = new Text({
 		styles: {
+			fontFamily: fontFamily,
 			opacity: 0.7,
 			width: 634,
 			hOffset: 692,
