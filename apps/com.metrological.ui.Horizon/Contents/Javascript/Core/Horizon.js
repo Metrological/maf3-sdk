@@ -125,7 +125,9 @@ var Horizon = (function (body) {
 	function updateHeader() {
 		if (blocked()) {
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
-			blockedText.visible = true;
+			if (ApplicationManager.active !== widget.identifier) {
+				blockedText.visible = true;
+			}
 		} else if (sideBySide) {
 			if (blockedText.visible) {
 				blockedText.visible = false;

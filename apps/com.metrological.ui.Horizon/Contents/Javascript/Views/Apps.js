@@ -567,6 +567,7 @@ var AppsView = new MAF.Class({
 				onNavigateOutOfBounds: function (event) {
 					var view = this.owner;
 					if (view.state !== 'reorderfavo' && (event.payload.direction === 'right' || event.payload.direction === 'left')) {
+						view.controls.categories.setDisabled(false);
 						view.controls.categories.focus();
 						event.preventDefault();
 					} else {
