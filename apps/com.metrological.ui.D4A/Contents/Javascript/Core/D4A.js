@@ -60,7 +60,7 @@ var D4A = (function (body) {
 	}).inject(container);
 
 	function updateNowPlaying() {
-		playing.data = $_('NOW_PLAYING') + ' ' + MAF.mediaplayer.currentAsset.title;
+		playing.data = $_('NOW_PLAYING') + ': ' + MAF.mediaplayer.currentAsset.title;
 	}
 
 	(function playerEvents(event) {

@@ -230,7 +230,6 @@ var AppsView = new MAF.Class({
 		if (!this.frozen) {
 			switch(event.payload.key){
 				case 'blue':
-				case '0':
 					this.showTOSDialog();
 					break;
 				case 'back':
@@ -295,6 +294,7 @@ var AppsView = new MAF.Class({
 									if (first && view.getFavorites().length === 0 && !view.first) {
 										view.first = true;
 										grid.focusCell.defer(100, grid, [view.firstCategory]);
+										grid.cells[view.firstCategory].setStyle.defer(210, grid.cells[view.firstCategory], ['backgroundImage', 'Images/CategorySelected.png']);
 									} else {
 										view.category = category;
 										view.controls.apps.changeDataset(data || [], true);
@@ -305,7 +305,7 @@ var AppsView = new MAF.Class({
 									}
 								}
 							},
-							onBlur: function () {
+							onBlur: function (event) {
 								var cell = this,
 									grid = cell.grid,
 									view = grid.owner;
@@ -316,7 +316,6 @@ var AppsView = new MAF.Class({
 									(function () {
 									if (this.getCellDataItem() !== view.category) {
 										this.category.animate({
-											//scale: 1,
 											color: 'white',
 											fontFamily: 'UPCDigital-Regular',
 											duration: 0.2
@@ -354,19 +353,13 @@ var AppsView = new MAF.Class({
 				vOffset: 290
 			},
 			events: {
-				onBlur: function() {
-					this.cells[this.getFocusIndex()].category.animate({
-						color: 'white',
-						fontFamily: 'UPCDigital-Regular',
-						duration: 0.2
-					});
-				},
 				onNavigateOutOfBounds: function (event) {
 					var direction = event.payload.direction;
 					if (direction === 'right' || direction === 'left') {
 						var apps = this.owner.controls.apps;
 						apps.focus();
 						apps.focusCell(direction === 'left' ? Math.min(apps.cells.length, apps.config.columns - 1) : 0);
+						this.cells[this.getFocusIndex()].setStyle.defer(10, this.cells[this.getFocusIndex()], ['backgroundImage', 'Images/CategorySelected.png']);
 						event.preventDefault();
 					}
 				}
@@ -738,6 +731,7 @@ var AppsView = new MAF.Class({
 						}
 						view.controls.categories.focus();
 						view.controls.categories.focusCell(idx);
+						view.controls.categories.cells[idx].setStyle.defer(20, view.controls.categories.cells[idx], ['backgroundImage', 'Images/CategorySelected.png']);
 						this.focus();
 						this.focusCell(0);
 						event.preventDefault();
