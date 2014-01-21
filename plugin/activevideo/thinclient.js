@@ -50,6 +50,11 @@ var Kraken = (function () {
 									channel: s[0].name,
 									stream: s[0].udpStreamLink.href
 								}));
+							} else {
+								callback({
+									channel: s[0].name,
+									stream: s[0].udpStreamLink.href
+								});
 							}
 						}
 					}).send();
@@ -97,18 +102,31 @@ this.ThinClient = (function () {
 	function updateNowPlaying() {
 		if (programTimer) {
 			clearTimeout(programTimer);
+			programTimer = undefined;
+			if (!video.src || video.src.indexOf('udp://') === -1) {
+				return;
+			}
 		}
 		Kraken.getCurrentChannel(function (data) {
 			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
 				currentProgram = data;
-				video.src = data.stream;
-				video.play();
+				if (data.stream !== video.src) {
+					log('UPDATE UDP');
+					video.src = data.stream;
+					video.load();
+					video.play();
+				}
 			} else {
 				currentProgram = { title: 'Szülői zár' };
 				video.src = '';
 				video.load();
 			}
-			programTimer = setTimeout(updateNowPlaying, (+moment.utc(data.end)) - Date.now());
+			var now = Date.now(),
+				expire = (+moment.utc(data.end || now) - now);
+			if (expire < 1000) {
+				expire = 5000;
+			}
+			programTimer = setTimeout(updateNowPlaying, expire);
 			if (instance.onChannelChanged) {
 				instance.onChannelChanged();
 			}
@@ -120,6 +138,31 @@ this.ThinClient = (function () {
 			getAgeRating(updateNowPlaying);
 		}
 	}
+
+	function visibilityChanged() {
+		var state = document.webkitVisibilityState || document.visibilityState;
+		switch(state) {
+			case 'hidden':
+				if (programTimer) {
+					clearTimeout(programTimer);
+					programTimer = undefined;
+				}
+				if (video) {
+					video.src = '';
+					video.load();
+				}
+				break;
+			case 'visible':
+				if (programTimer) {
+					clearTimeout(programTimer);
+					programTimer = undefined;
+				}
+				updateNowPlaying();
+				break;
+		}
+	}
+	document.addEventListener('webkitvisibilitychange', visibilityChanged);
+	document.addEventListener('visibilitychange', visibilityChanged);
 
 	getter(instance, 'init', function () {
 		return init;
