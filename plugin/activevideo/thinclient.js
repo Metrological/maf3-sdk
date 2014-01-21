@@ -103,9 +103,6 @@ this.ThinClient = (function () {
 		if (programTimer) {
 			clearTimeout(programTimer);
 			programTimer = undefined;
-			if (!video.src || video.src.indexOf('udp://') === -1) {
-				return;
-			}
 		}
 		Kraken.getCurrentChannel(function (data) {
 			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
@@ -142,27 +139,22 @@ this.ThinClient = (function () {
 	function visibilityChanged() {
 		var state = document.webkitVisibilityState || document.visibilityState;
 		switch(state) {
+			case 'webkitHidden':
 			case 'hidden':
-				if (programTimer) {
-					clearTimeout(programTimer);
-					programTimer = undefined;
-				}
 				if (video) {
-					video.src = '';
-					video.load();
+					video.muted = true;
 				}
 				break;
+			case 'webkitVisible':
 			case 'visible':
-				if (programTimer) {
-					clearTimeout(programTimer);
-					programTimer = undefined;
+				if (video) {
+					video.muted = false;
 				}
-				updateNowPlaying();
 				break;
 		}
 	}
-	document.addEventListener('webkitvisibilitychange', visibilityChanged);
-	document.addEventListener('visibilitychange', visibilityChanged);
+	document.addEventListener('webkitvisibilitychange', visibilityChanged, false);
+	document.addEventListener('visibilitychange', visibilityChanged, false);
 
 	getter(instance, 'init', function () {
 		return init;
