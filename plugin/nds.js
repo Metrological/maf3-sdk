@@ -6,6 +6,7 @@ var NDS = createPluginObject('my_user_api', 'my_user_api', 'application/x-jsuser
 	User        = NDS.UserAuthentication_getInstance && NDS.UserAuthentication_getInstance(),
 	UserData    = TVContext && TVContext.getUserData(),
 	Planner     = NDS.Planner_getInstance && NDS.Planner_getInstance(),
+	isEnabled   = false,
 	currentChannel, currentProgram, timerProgramData;
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
@@ -29,17 +30,21 @@ var syncProgramData = function () {
 		timerProgramData = undefined;
 	}
 	if (!MAE.blocked || MAE.blocked.indexOf(currentChannel.number) === -1) {
-		if (player && player.muted) {
+		if (player) {
 			player.show();
-			player.muted = false;
+			if (player.muted) {
+				player.muted = false;
+			}
 		}
 		currentProgram = currentChannel && currentChannel.getCurrentProgram();
 	} else if (player) {
 		player.hide();
-		player.muted = true;
+		if (isEnabled) {
+			player.muted = true;
+		}
 		currentProgram = undefined;
 	}
-	timerProgramData = setTimeout(syncProgramData, currentProgram.duration * 1000);
+	timerProgramData = setTimeout(syncProgramData, (currentProgram && currentProgram.duration || 60) * 1000);
 };
 
 var NDSPlayer = function () {
@@ -131,6 +136,10 @@ var NDSPlayer = function () {
 			if (grabbed && currentSource && VideoPlayer) {
 				canPlay = true;
 				//screen.log('INFOLOADED');
+				if (MAE.blocked && !currentProgram) {
+					instance.show();
+					instance.muted = false;
+				}
 				stateChange(Player.state.INFOLOADED);
 			}
 		};
@@ -682,6 +691,9 @@ var resetNDSPlayer = function () {
 	var player = plugins.players[0];
 	if (player) {
 		player.src = '';
+		if (player.muted) {
+			player.muted = false;
+		}
 	}
 };
 
@@ -691,6 +703,7 @@ var getUIWindow = function () {
 
 if (Application) {
 	Application.onShow = function () {
+		isEnabled = true;
 		syncProgramData();
 		(function () {
 			var UI = getUIWindow();
@@ -709,6 +722,7 @@ if (Application) {
 			//screen.log('ONHIDE');
 			UI.visible = false;
 		}
+		isEnabled = false;
 		resetNDSPlayer();
 		(function () {
 			if (active && active !== ui) {
@@ -732,6 +746,7 @@ window.addEventListener('blur', function () {
 		//screen.log('HIDE');
 		UI.visible = false;
 	}
+	isEnabled = false;
 });
 
 // Test Notification
