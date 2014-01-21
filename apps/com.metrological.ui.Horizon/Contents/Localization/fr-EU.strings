@@ -65,7 +65,11 @@
 "CATEGORY_SOCIAL" = "TV SOCIALE";
 "CATEGORY_GAMES" = "JEUX";
 "CATEGORY_SPORT" = "SPORT";
+"CATEGORY_GAMESCH" = "JEUX";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_VIDEOCH" = "VIDEO & MUSIQUE";
+"CATEGORY_NEWSCH" = "NEWS";
+"CATEGORY_INFOCH" = "INFORMATION";
 "ADDFAVO" = "Ajouter/retirer les apps favorites";
 "ADDFAVO_DESC" = "Cliquez sur OK pour commencer &agrave; g&eacute;rer vos apps favorites";
 "ADDFAVO_SELECTED" = "Rendez-vous sur votre app favorite et cliquez sur OK pour l’ajouter aux FAVORIS. Cliquez sur RETOUR pour annuler";

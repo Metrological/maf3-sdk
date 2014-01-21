@@ -68,6 +68,10 @@
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_GAMESCH" = "GAMES";
+"CATEGORY_VIDEOCH" = "VIDEO & MUSIC";
+"CATEGORY_NEWSCH" = "NEWS";
+"CATEGORY_INFOCH" = "INFORMATION";
 "ADDFAVO" = "Add/remove favourite Apps";
 "ADDFAVO_DESC" = "Press OK to start managing your favourite Apps";
 "ADDFAVO_SELECTED" = "Navigate to your favourite App and press OK to add the App to FAVOURITES. Press BACK at any time to cancel";

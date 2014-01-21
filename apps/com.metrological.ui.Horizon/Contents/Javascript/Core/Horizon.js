@@ -1,6 +1,7 @@
 var Horizon = (function (body) {
 	var fontSize = '1em',
 		fontColor = 'rgba(255,255,255,.4)',
+		showing = true,
 		visible = true,
 		sideBySide = false;
 
@@ -119,24 +120,18 @@ var Horizon = (function (body) {
 	}
 
 	function blocked() {
-		return !visible && MAF.mediaplayer.isTVActive && !MAF.mediaplayer.currentAsset.title;
+		return !showing && MAF.mediaplayer.isTVActive && !MAF.mediaplayer.currentAsset.title;
 	}
 
 	function updateHeader() {
 		if (blocked()) {
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
-			if (ApplicationManager.active !== widget.identifier) {
-				blockedText.visible = true;
-			}
+			blockedText.visible = !showing;
 		} else if (sideBySide) {
-			if (blockedText.visible) {
-				blockedText.visible = false;
-			}
+			blockedText.visible = false;
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
 		} else if (!visible) {
-			if (blockedText.visible) {
-				blockedText.visible = false;
-			}
+			blockedText.visible = false;
 			body.setStyle('backgroundImage', null);
 		}
 		container.setStyle('backgroundImage', widget.getPath(ApplicationManager.active === widget.identifier ? 'Images/Horizon/HeaderBig.png' : 'Images/Horizon/Header.png'));
@@ -197,6 +192,7 @@ var Horizon = (function (body) {
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
 
 	function hide() {
+		showing = false;
 		visible = false;
 		if (!MAF.mediaplayer.currentAsset.title && MAF.mediaplayer.isTVActive && !visible) {
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
@@ -208,6 +204,7 @@ var Horizon = (function (body) {
 	}
 
 	function show() {
+		showing = true;
 		showNowPlaying();
 		body.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
 		container.setStyle('backgroundImage', widget.getPath('Images/Horizon/HeaderBig.png'));

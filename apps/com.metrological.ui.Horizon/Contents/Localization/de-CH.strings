@@ -60,11 +60,12 @@
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Bei facebook.com/device Code: %s eingeben";
 "CATEGORY_FAVORITES" = "FAVORITEN";
-"CATEGORY_VIDEO" = "TV & VIDEO";
-"CATEGORY_NEWS" = "NEWS & INFO";
+"CATEGORY_VIDEOCH" = "VIDEO & MUSIC";
+"CATEGORY_NEWSCH" = "NEWS";
 "CATEGORY_SOCIAL" = "SOCIAL TV";
-"CATEGORY_GAMES" = "SPIELE";
-"CATEGORY_SPORT" = "SPORT";
+"CATEGORY_GAMES" = "GAMES";
+"CATEGORY_GAMESCH" = "GAMES";
+"CATEGORY_INFOCH" = "INFORMATION";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
 "ADDFAVO" = "Favoriten-Apps hinzuf&uuml;gen/entfernen";
 "ADDFAVO_DESC" = "OK dr&uuml;cken, um Ihre Favoriten-Apps zu verwalten";

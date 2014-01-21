@@ -1035,13 +1035,13 @@ widget.handleHostEvent = function (event) {
 				case 'viewport-toggle':
 					var mediaplayer = this.MAF.mediaplayer,
 						bounds = mediaplayer && mediaplayer.getViewportBounds();
-					if (bounds && bounds.width === 1920) {
+					if (bounds && bounds.height === 1080) {
 						mediaplayer.setViewportBounds(624, 176, 1280, 720);
-						Horizon.setSidebarBackground(true);
 					} else if (bounds) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
-						Horizon.setSidebarBackground(false);
 					}
+					bounds = mediaplayer && mediaplayer.getViewportBounds();
+					Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
 					break;
 				case 'switch-profile':
 					loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }});
