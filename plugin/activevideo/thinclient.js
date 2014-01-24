@@ -147,6 +147,7 @@ this.ThinClient = (function () {
 				break;
 			case 'webkitVisible':
 			case 'visible':
+				updateNowPlaying();
 				if (video) {
 					video.muted = false;
 				}
