@@ -64,7 +64,7 @@ var Kraken = (function () {
 	}
 	function getCurrentChannel(callback) {
 		new Request({
-			url: 'http://session/client/properties.json',
+			url: 'http://session/client/properties.json?t=' + Date.now(),
 			proxy: false,
 			onSuccess: function (json) {
 				getCurrentChannelByProperties(callback, json);
