@@ -1,5 +1,5 @@
 //var version = '1.0.8s4c2r99';
-var version = '1.0.9s4c2r131';
+var version = '1.0.9s4c2r136';
 
 NAF = {};
 WebApp = {};
@@ -16,16 +16,19 @@ var model = new WebApp.Model(),
 controller.registerPMRPC();
 
 var doFn = controller['do'],
-	onFn = controller.on;
+	onFn = controller.on,
+	offFn = controller.off;
+
+var getApplicationIndex = (function () {
+	var internalIndex = controller.getApplicationIndex;
+	return function () {
+		return internalIndex ? internalIndex() : 1;
+	};
+}());
 
 onFn('model.initialized', function () {
-	var internalIndex = controller.getApplicationIndex;
 
 	log('naf: base init');
-
-	function getApplicationIndex() {
-		return internalIndex ? internalIndex() : 1;
-	}
 
 	window.addEventListener('focus', function () {
 		var i = getApplicationIndex();
@@ -142,6 +145,10 @@ onFn('model.initialized', function () {
 var NAFPlayer = function () {
 	var instance = this,
 		internal = {},
+		scale = 720 / 1080,
+		states = Player.state,
+		currentBounds = Player.prototype.bounds,
+		currentSource,
 		initialized = false;
 
 	instance.subscribers = {};
@@ -150,12 +157,40 @@ var NAFPlayer = function () {
 		return initialized ? model.state.players[0] : {};
 	});
 
+	function stateChange(state) {
+		fire.call(instance, 'onStateChange', {
+			state: state
+		});
+	}
+
 	onFn('model.initialized', function () {
 		log('naf: video init');
+
 		initialized = true;
 
 		onFn('model.state.players.0.currentProgram', function () {
 			fire.call(instance, 'onChannelChange');
+		});
+
+		onFn('model.state.players.0.status', function () {
+			if (!instance.src) {
+				return;
+			}
+			var status = internal.player.status;
+			if (status) {
+				switch (status.code) {
+					case 204:
+					case 202:
+						stateChange(states.PLAY);
+						break;
+					case 203:
+						stateChange(states.STOP);
+						currentSource = undefined;
+						break;
+					default:
+						break;
+				}
+			}
 		});
 	});
 
@@ -163,6 +198,9 @@ var NAFPlayer = function () {
 		return mime.indexOf('video/mp4') !== -1;
 	}
 	function notify() {
+	}
+	function r(c) {
+		return Math.floor(c * scale);
 	}
 
 	getter(instance, 'id', function () {
@@ -182,7 +220,13 @@ var NAFPlayer = function () {
 		return new TVChannel(channel.lcn, channel.name);
 	});
 	setter(instance, 'channel', function (number) {
-		//@TODO
+		var channels = model.channels || [];
+		channels.forEach(function (channel, i) {
+			if (channel.lcn === number) {
+				doFn('model.state.players.0', 'model.channels.' + i);
+				return;
+			}
+		});
 	});
 	getter(instance, 'program', function () {
 		var program = internal.player.currentProgram || {};
@@ -195,24 +239,26 @@ var NAFPlayer = function () {
 		//@TODO
 	});
 	getter(instance, 'currentTime', function () {
-		//@TODO
-		return 0;
+		return parseFloat(internal.player.position);
 	});
 	setter(instance, 'currentTime', function (time) {
-		//@TODO
+		if (this.src) {
+			doFn('model.state.players.0?position=' + time + 's');
+		}
 	});
 	getter(instance, 'rates', function () {
 		return [1,2,6,12,30];
 	});
 	getter(instance, 'rate', function () {
-		return 1;
+		return parseInt(internal.player.playRate, 10);
 	});
 	setter(instance, 'rate', function (rate) {
-		//@TODO
+		if (this.rates.indexOf(rate) > -1) {
+			doFn('model.state.players.0?playrate=' + rate + 'x');
+		}
 	});
 	getter(instance, 'duration', function () {
-		//@TODO
-		return 0;
+		return parseInt(internal.player.duration, 10);
 	});
 	getter(instance, 'buffered', function () {
 		//@TODO
@@ -233,24 +279,38 @@ var NAFPlayer = function () {
 		//@TODO
 	});
 	getter(instance, 'src', function () {
-		//@TODO
-		return null;
+		return currentSource;
 	});
 	setter(instance, 'src', function (src) {
-		//@TODO
+		if (!initialized) {
+			return;
+		} else if (src) {
+			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
+			currentSource = src;
+			doFn('model.state.applications.' + i + '.media', asset);
+		} else if (this.src) {
+			doFn('model.state.players.0', '');
+			currentSource = undefined;
+			// revert to previously tuned channel?
+			//doFn('model.state.players.0', 'model.state.players.0.currentChannel');
+		}
 	});
 	getter(instance, 'paused', function () {
 		return internal.player.playRate === '0x';
 	});
 	setter(instance, 'paused', function (p) {
-		//@TODO
+		if (this.src) {
+			doFn('model.state.players.0?playrate=' + (p ? 0 : 1) + 'x');
+		}
 	});
 	getter(instance, 'bounds', function () {
-		//@TODO
-		return Player.prototype.bounds;
+		return currentBounds;
 	});
 	setter(instance, 'bounds', function (b) {
-		//@TODO
+		if (b && b.length === 4) {
+			doFn('model.state.players.0?window=' + r(b[0]) + ',' + r(b[1]) + ',' + r(b[2]) + ',' + r(b[3]));
+			currentBounds = b;
+		}
 	});
 	getter(instance, 'notify', function () {
 		return notify;
