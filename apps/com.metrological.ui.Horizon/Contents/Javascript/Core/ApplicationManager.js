@@ -10,7 +10,7 @@ var loadTemplate = (function () {
 		'profile-pincreation',
 		'profile-pin'
 	];
-	return function ApplicationManager_loadTemplate(data) {
+	return function (data) {
 		var type = data.type,
 			id = data.id;
 		if (!type) {
@@ -268,7 +268,8 @@ var loadTemplate = (function () {
 					body.appendChild(fragment);
 					break;
 				case 'dialog':
-					var currentStyle = getElementById('@' + current[identifier]).style,
+					var dialogElement = getElementById('@' + current[identifier]), 
+						currentStyle = dialogElement.style || {},
 						focusAfterDialog = app.document.activeElement,
 						totalHeight = 0,
 						buttons = [],
@@ -962,7 +963,10 @@ var loadTemplate = (function () {
 			template.frozen = false;
 		}
 		if (current[identifier] && current[identifier] !== type) {
-			getElementById('@' + current[identifier]).frozen = true;
+			var currentView = getElementById('@' + current[identifier]);
+			if (currentView) {
+				currentView.frozen = true;
+			}
 		}
 		if (!getElementById(id)) {
 			new View({

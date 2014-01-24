@@ -72,9 +72,9 @@
 "ADDFAVO_APP" = "%s hinzuf&uuml;gen";
 "REMOVEFAVO_APP" = "%s entfernen";
 "CONFIRM_ADDFAVO" = "Drücken Sie OK, um die App zu Ihren FAVORITEN hinzuzuf&uuml;gen. Dr&uuml;cken Sie BACK zum Beenden.";
-"CONFIRM_REMOVEFAVO" = "Dr&uuml;cken Sie OK, um die App aus Ihren FAVORITEN zu entfernen. Dr&uuml;cken Sie BACK zum Abbrechen.";
+"CONFIRM_REMOVEFAVO" = "Dr&uuml;cken Sie OK, um die App aus Ihren FAVORITEN zu entfernen. Dr&uuml;cken Sie BACK zum Beenden.";
 "REORDERFAVO" = "FAVORITEN sortieren";
-"REORDERFAVO_DESC" = "Dr&uuml;cken Sie OK, um die Sortierung Ihrer Apps in den FAVORITEN zu &auml;ndern. Dr&uuml;cken Sie BACK zum Abbrechen.";
+"REORDERFAVO_DESC" = "Dr&uuml;cken Sie OK, um die Sortierung Ihrer Apps in den FAVORITEN zu &auml;ndern. Dr&uuml;cken Sie BACK zum Beenden.";
 "REORDERFAVO_SELECTED" = "Navigieren Sie zu einer App dessen Position Sie &auml;ndern möchten und dr&uuml;cken Sie OK. Die Pfeile zeigen Ihnen, in welche Richtung Sie die App bewegen k&ouml;nnen.";
 "REORDERFAVO_APP" = "%s bewegen";
 "START_REORDERFAVO" = "Dr&uuml;cken Sie OK, um die App innerhalb Ihrer FAVORITEN zu bewegen. Dr&uuml;cken Sie BACK zum Beenden.";
