@@ -131,6 +131,17 @@ this.ThinClient = (function () {
 	}
 	function init() {
 		video = video || body.getElementsByTagName('video')[0];
+		new Request({
+			url: 'http://session/client/properties.json?t=' + Date.now(),
+			async: false,
+			proxy: false,
+			onSuccess: function (json) {
+				window.MAE.language = json.lang || window.MAE.language;
+			},
+			onFailure: function () {
+				log('NO LANGUAGE');
+			}
+		}).send();
 		if (video) {
 			getAgeRating(updateNowPlaying);
 		}
