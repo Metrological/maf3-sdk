@@ -185,7 +185,7 @@ var AccentureProfile = function (name) {
 		return GEO && GEO.geo && GEO.geo.countryName;
 	});
 	getter(this, 'countryCode', function () {
-		return OTT && OTT.getCountry && OTT.getCountry().toLowerCase() || 'nl';
+		return OTT && OTT.getCountry && OTT.getCountry().toLowerCase() || window.MAE.country || 'nl';
 	});
 	getter(this, 'language', function () {
 		return LANGUAGES[this.languageCode];
@@ -197,7 +197,7 @@ var AccentureProfile = function (name) {
 			case 'dutch':
 				return 'nl';
 			default:
-				return 'en';
+				return window.MAE.language || 'en';
 		}
 	});
 	getter(this, 'city', function () {
