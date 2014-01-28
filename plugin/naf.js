@@ -285,7 +285,8 @@ var NAFPlayer = function () {
 		if (!initialized) {
 			return;
 		} else if (src) {
-			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
+			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null),
+				i = getApplicationIndex();
 			currentSource = src;
 			doFn('model.state.applications.' + i + '.media', asset);
 		} else if (this.src) {
