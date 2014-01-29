@@ -1323,7 +1323,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				fragment = createDocumentFragment();
 
 			if (this.config.autoAdjust) {
-				var externalStyles = Theme.getStyles('ReuseKeyboard .item'),
+				var externalStyles = window.Theme.getStyles('ReuseKeyboard .item'),
 					externalWidth = 0,
 					externalHeight = 0;
 
