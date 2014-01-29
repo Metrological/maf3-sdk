@@ -55,8 +55,8 @@
 "TWITTER_METHOD" = "Verbindungsmethode f&uuml;r Twitter:";
 "TWITTER_EMAIL" = "Bitte geben Sie unten Ihre E-Mail Adresse ein. Eine E-Mail wird an diese Adresse gesendet mit einem Link zu einem Code, der erforderlich ist, um die Aktivierung abzuschlie&szlig;en.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
-"TWITTER_EMAIL_SUBJECT" = "Aktivierungscode f&uuml;r Ihre Twitter App";
-"TWITTER_EMAIL_BODY" = "Sie haben uns mitgeteilt, dass Sie die Twitter App auf Ihrer Horizon Box verwenden möchten. Ein 7-stelliger Code wird ben&ouml;tigt, um die App zu aktivieren. Klicken Sie auf den nachfolgenden Link, um den 7-stelligen Code zu erhalten und um damit die Twitter App auf Ihrer Horizon Box aktivieren können. %s Wir w&uuml;nschen viel Vergn&uuml;gen mit der Twitter App. Mit freundlichen Grüßen, UPC";
+"TWITTER_EMAIL_SUBJECT" = "Aktivierungscode fuer Ihre Twitter App";
+"TWITTER_EMAIL_BODY" = "Sie haben uns mitgeteilt, dass Sie die Twitter App auf Ihrer Horizon Box verwenden möchten. Ein 7-stelliger Code wird benoetigt, um die App zu aktivieren. Klicken Sie auf den nachfolgenden Link, um den 7-stelligen Code zu erhalten und um damit die Twitter App auf Ihrer Horizon Box zu aktivieren. %s Wir wuenschen viel Vergnuegen mit der Twitter App. Mit freundlichen Grüßen, UPC";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Gehen Sie zu facebook.com/device und geben Sie folgenden Code ein: %s";
 "CATEGORY_FAVORITES" = "FAVORITEN";
