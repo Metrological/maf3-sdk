@@ -1,2 +1,7 @@
-
-.DS_Store
+docs
+node_modules
+*.DS_Store
+*.svn
+*.orig
+*.rej
+*~
