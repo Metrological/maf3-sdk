@@ -254,7 +254,7 @@ var NAFPlayer = function () {
 	});
 	setter(instance, 'rate', function (rate) {
 		if (this.rates.indexOf(rate) > -1) {
-			doFn('model.state.players.0?playrate=' + rate + 'x');
+			doFn('model.state.players.0?playRate=' + rate + 'x');
 		}
 	});
 	getter(instance, 'duration', function () {
@@ -301,7 +301,12 @@ var NAFPlayer = function () {
 	});
 	setter(instance, 'paused', function (p) {
 		if (this.src) {
-			doFn('model.state.players.0?playrate=' + (p ? 0 : 1) + 'x');
+			if (!p && internal.player.playRate === '1x') {
+				var i = getApplicationIndex();
+				doFn('model.state.players.0', 'model.state.applications.' + i + '.media.assets.0');
+			} else {
+				doFn('model.state.players.0?playRate=' + (p ? 0 : 1) + 'x');
+			}
 		}
 	});
 	getter(instance, 'bounds', function () {
