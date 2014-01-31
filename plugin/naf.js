@@ -164,9 +164,15 @@ var NAFPlayer = function () {
 	}
 
 	onFn('model.initialized', function () {
+		var i = getApplicationIndex();
+
 		log('naf: video init');
 
 		initialized = true;
+
+		onFn('model.state.applications.' + i + '.media.assets.*', function () {
+			stateChange(states.INFOLOADED);
+		});
 
 		onFn('model.state.players.0.currentProgram', function () {
 			fire.call(instance, 'onChannelChange');
@@ -288,6 +294,7 @@ var NAFPlayer = function () {
 			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null),
 				i = getApplicationIndex();
 			currentSource = src;
+			stateChange(states.BUFFERING);
 			doFn('model.state.applications.' + i + '.media', asset);
 		} else if (this.src) {
 			doFn('model.state.players.0', '');
