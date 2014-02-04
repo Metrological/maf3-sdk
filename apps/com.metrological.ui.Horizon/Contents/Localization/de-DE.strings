@@ -56,7 +56,7 @@
 "TWITTER_EMAIL" = "Bitte geben Sie unten Ihre E-Mail Adresse ein. Eine E-Mail wird an diese Adresse gesendet mit einem Link zu einem Code, der erforderlich ist, um die Aktivierung abzuschlie&szlig;en.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Aktivierungscode fuer Ihre Twitter App";
-"TWITTER_EMAIL_BODY" = "Sie haben uns mitgeteilt, dass Sie die Twitter App auf Ihrer Horizon Box verwenden möchten. Ein 7-stelliger Code wird benoetigt, um die App zu aktivieren. Klicken Sie auf den nachfolgenden Link, um den 7-stelligen Code zu erhalten und um damit die Twitter App auf Ihrer Horizon Box zu aktivieren. %s Wir wuenschen viel Vergnuegen mit der Twitter App. Mit freundlichen Grüßen, UPC";
+"TWITTER_EMAIL_BODY" = "Sie haben uns mitgeteilt, dass Sie die Twitter App auf Ihrer Horizon Box verwenden möchten. Ein 7-stelliger Code wird benoetigt, um die App zu aktivieren. Klicken Sie auf den nachfolgenden Link, um den 7-stelligen Code zu erhalten und um damit die Twitter App auf Ihrer Horizon Box zu aktivieren. %s Wir wuenschen viel Vergnuegen mit der Twitter App.";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Gehen Sie zu facebook.com/device und geben Sie folgenden Code ein: %s";
 "CATEGORY_FAVORITES" = "FAVORITEN";
@@ -74,8 +74,8 @@
 "CONFIRM_ADDFAVO" = "Drücken Sie OK, um die App zu Ihren FAVORITEN hinzuzuf&uuml;gen. Dr&uuml;cken Sie BACK zum Beenden.";
 "CONFIRM_REMOVEFAVO" = "Dr&uuml;cken Sie OK, um die App aus Ihren FAVORITEN zu entfernen. Dr&uuml;cken Sie BACK zum Beenden.";
 "REORDERFAVO" = "FAVORITEN sortieren";
-"REORDERFAVO_DESC" = "Dr&uuml;cken Sie OK, um die Sortierung Ihrer Apps in den FAVORITEN zu &auml;ndern. Dr&uuml;cken Sie BACK zum Beenden.";
-"REORDERFAVO_SELECTED" = "Navigieren Sie zu einer App dessen Position Sie &auml;ndern möchten und dr&uuml;cken Sie OK. Die Pfeile zeigen Ihnen, in welche Richtung Sie die App bewegen k&ouml;nnen.";
+"REORDERFAVO_DESC" = "Dr&uuml;cken Sie OK, um die Sortierung Ihrer Apps innerhalb der FAVORITEN zu &auml;ndern.";
+"REORDERFAVO_SELECTED" = "Navigieren Sie zu einer App, deren Position Sie &auml;ndern m&ouml;chten und dr&uuml;cken Sie OK. Die Pfeile zeigen Ihnen, in welche Richtung Sie die App bewegen k&ouml;nnen";
 "REORDERFAVO_APP" = "%s bewegen";
 "START_REORDERFAVO" = "Dr&uuml;cken Sie OK, um die App innerhalb Ihrer FAVORITEN zu bewegen. Dr&uuml;cken Sie BACK zum Beenden.";
 "STOP_REORDERFAVO" = "Dr&uuml;cken Sie HOCH, LINKS, RECHTS und RUNTER um die App zu bewegen und dr&uuml;cken Sie OK, um die neue Position zu best&auml;tigen. Drücken Sie BACK zum Beenden.";

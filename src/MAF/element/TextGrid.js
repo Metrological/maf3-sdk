@@ -54,7 +54,7 @@ define('MAF.element.TextGrid', function () {
 		},
 
 		getPageCount: function () {
-			return Math.ceil(this.totalLines / this.visibleLines);
+			return Math.floor(this.totalLines / this.visibleLines);
 		},
 
 		getStartLine: function (pagenum) {
