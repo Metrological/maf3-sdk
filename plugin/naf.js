@@ -292,11 +292,11 @@ var NAFPlayer = function () {
 		return currentSource;
 	});
 	setter(instance, 'src', function (src) {
+		var i = getApplicationIndex();
 		if (!initialized) {
 			return;
 		} else if (src) {
-			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null),
-				i = getApplicationIndex();
+			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
 			if (currentSource) {
 				stateChange(states.STOP);
 				currentSource = undefined
