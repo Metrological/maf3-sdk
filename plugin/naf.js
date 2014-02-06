@@ -5,6 +5,8 @@ NAF = {};
 WebApp = {};
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
+	19: 'pause', 413: 'stop', 415: 'play',
+	417: 'forward', 412: 'rewind',
 	3: 'back'
 }, true);
 
@@ -171,7 +173,9 @@ var NAFPlayer = function () {
 		initialized = true;
 
 		onFn('model.state.applications.' + i + '.media.assets.*', function () {
-			stateChange(states.INFOLOADED);
+			if (instance.src) {
+				stateChange(states.INFOLOADED);
+			}
 		});
 
 		onFn('model.state.players.0.currentProgram', function () {
@@ -293,14 +297,18 @@ var NAFPlayer = function () {
 		} else if (src) {
 			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null),
 				i = getApplicationIndex();
+			if (currentSource) {
+				stateChange(states.STOP);
+				currentSource = undefined
+				doFn('model.state.applications.' + i + '.media', '');
+			}
 			currentSource = src;
 			stateChange(states.BUFFERING);
 			doFn('model.state.applications.' + i + '.media', asset);
 		} else if (this.src) {
-			doFn('model.state.players.0', '');
+			doFn('model.state.players.0', 'model.state.players.0.currentChannel');
 			currentSource = undefined;
-			// revert to previously tuned channel?
-			//doFn('model.state.players.0', 'model.state.players.0.currentChannel');
+			doFn('model.state.applications.' + i + '.media', '');
 		}
 	});
 	getter(instance, 'paused', function () {
