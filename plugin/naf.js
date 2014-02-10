@@ -151,7 +151,8 @@ var NAFPlayer = function () {
 		states = Player.state,
 		currentBounds = Player.prototype.bounds,
 		currentSource,
-		initialized = false;
+		initialized = false,
+		forcePlay = false;
 
 	instance.subscribers = {};
 
@@ -173,7 +174,8 @@ var NAFPlayer = function () {
 		initialized = true;
 
 		onFn('model.state.applications.' + i + '.media.assets.*', function () {
-			if (instance.src) {
+			if (instance.src && !forcePlay) {
+				forcePlay = true;
 				stateChange(states.INFOLOADED);
 			}
 		});
@@ -298,10 +300,11 @@ var NAFPlayer = function () {
 		} else if (src) {
 			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
 			if (currentSource) {
-				stateChange(states.STOP);
+				//stateChange(states.STOP);
 				currentSource = undefined
 				doFn('model.state.applications.' + i + '.media', '');
 			}
+			forcePlay = false;
 			currentSource = src;
 			stateChange(states.BUFFERING);
 			doFn('model.state.applications.' + i + '.media', asset);
@@ -309,6 +312,7 @@ var NAFPlayer = function () {
 			doFn('model.state.players.0', 'model.state.players.0.currentChannel');
 			currentSource = undefined;
 			doFn('model.state.applications.' + i + '.media', '');
+			forcePlay = false;
 		}
 	});
 	getter(instance, 'paused', function () {
@@ -316,9 +320,10 @@ var NAFPlayer = function () {
 	});
 	setter(instance, 'paused', function (p) {
 		if (this.src) {
-			if (!p && internal.player.playRate === '1x') {
+			if (!p && forcePlay) {
 				var i = getApplicationIndex();
 				doFn('model.state.players.0', 'model.state.applications.' + i + '.media.assets.0');
+				forcePlay = false;
 			} else {
 				doFn('model.state.players.0?playRate=' + (p ? 0 : 1) + 'x');
 			}
