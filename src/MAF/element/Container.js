@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 /** 
+ * Container extends MAF.element.Core
  * @class MAF.element.Container
  * @extends MAF.element.Core
  * @param {object} config
- * @property {string} label
  */
 
 /**
@@ -96,7 +96,7 @@ define('MAF.element.Container', function () {
 			}
 		},
 		/**
-		 * This will try and focus this component. If it cannot recieve focus, this focus will stay on the current focused component.
+		 * This will try and focus this component. If it cannot recieve focus, this focus will stay on the currently focused component.
 		 * @method MAF.element.Container#focus
 		 */
 		focus: function () {

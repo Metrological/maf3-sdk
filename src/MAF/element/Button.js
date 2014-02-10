@@ -15,10 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-
 /** 
+ * @classdesc <p>This is a button component without styling.</p><p>This component extends from the MAF.element.Container and adds ability for securing the action behind onSelect.</p>
  * @class MAF.element.Button
  * @extends MAF.element.Container
+ */
+/**
+ * @cfg {Boolean} focus Initializes the component with the ability to focus or not. Default is true (enabled focus).
+ * @memberof MAF.element.Button
+ */
+/**
+ * @cfg {Boolean} secure Secure state the component gets initialized with. Default is false.
+ * @memberof MAF.element.Button
  */
 /**
  * Fired when the component is secured and it fails to verify the security after a select.
@@ -76,7 +84,7 @@ define('MAF.element.Button', function () {
 			delete this.config.secure;
 		},
 		/**
-		 * 
+		 * Gives a object containing values needed for keeping the state of this component between different views.
 		 * @method MAF.element.Button#generateStatePacket
 		 * @private
 		 */
@@ -88,7 +96,7 @@ define('MAF.element.Button', function () {
 			}, packet || {});
 		},
 		/**
-		 * 
+		 * Handle the state of this component for example when returning on the view it is on.
 		 * @method MAF.element.Button#inspectStatePacket
 		 */
 		inspectStatePacket: function (packet, focusOnly) {
@@ -130,8 +138,9 @@ define('MAF.element.Button', function () {
 			return data;
 		},
 		/**
-		 * 
+		 * Appends this component to a parent.
 		 * @method MAF.element.Button#appendTo
+		 * @return {Class} This component.
 		 */
 		appendTo: function (parent) {
 			var appended = this.parent(parent);
@@ -144,8 +153,9 @@ define('MAF.element.Button', function () {
 			return this;
 		},
 		/**
-		 * 
+		 * <p>Change the disabled state of the component. A disabled component will not be able to recieve focus.</p><p>If not changed in extended component it will also set opacity to 05 when disabled.</p>
 		 * @method MAF.element.Button#setDisabled
+		 * @param {boolean} [disabled=false] True will disable the component, false will enable it. 
 		 */
 		setDisabled: function (disabled) {
 			this.disabled = disabled === true;
@@ -153,8 +163,9 @@ define('MAF.element.Button', function () {
 			return this;
 		},
 		/**
-		 * 
+		 * Toggle between the disable states of the component.
 		 * @method MAF.element.Button#toggleDisabled
+		 * @return {Class} This component.
 		 */
 		toggleDisabled: function () {
 			this.setDisabled(!this.disabled);
@@ -164,6 +175,7 @@ define('MAF.element.Button', function () {
 		 * 
 		 * @method MAF.element.Button#setSecure
 		 * @param {boolean} secure
+		 * @return {Class} This component.
 		 */
 		setSecure: function (secure) {
 			secure = secure === true;
@@ -172,8 +184,9 @@ define('MAF.element.Button', function () {
 			return this;
 		},
 		/**
-		 * 
+		 * Toggle between the secure states of the component.
 		 * @method MAF.element.Button#toggleSecure
+		 * @return {Class} This component.
 		 */
 		toggleSecure: function () {
 			return this.setSecure(!this.secure);

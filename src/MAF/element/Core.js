@@ -20,27 +20,49 @@
  * @class MAF.element.Core
  * @classdesc > This is the base class for all MAF components. This component does not act on events from its element. Extended classes should define if they want to act on them.
  * @memberof MAF.element
- * @param {object} config
- * @param {string} config.id
- * @param {object} config.styles
- * @param {number} config.styles.width
- * @param {number} config.styles.height
- * @param {number} config.styles.hAlign
- * @param {number} config.styles.vAlign
- * @param {number} config.styles.hOffset
- * @param {number} config.styles.vOffset
- * @property {number} width Width of the component
- * @property {number} height Height of the component
- * @property {string} hAlign
- * @property {string} vAlign
- * @property {number} hOffset
- * @property {number} vOffset
+ * @property {Number} width Width of the component
+ * @property {Number} height Height of the component
+ * @property {String} hAlign
+ * @property {String} vAlign
+ * @property {Number} hOffset
+ * @property {Number} vOffset
  */
 
- /**
-  * Fired when component has appended to a parent. Update visual appearances by applying a Theme style and rendering the skin.
-  * @event MAF.element.Core#onAppend
-  */
+/**
+ * @cfg {Object} events A object containing one or more event handlers to be added to this object during initialization. 
+ * > The possible events are defined on each component.
+ * @example MAF.element.Core({
+ *    events: {
+ *       onAppend: function () {
+ *       	// do something
+ *       }
+ *    }
+ * }).appendTo(this);
+ * @memberof MAF.element.Core
+ */
+/**
+ * @cfg {String} id The unique id of this class
+ * @memberof MAF.element.Core
+ */
+/**
+ * @cfg {Object} styles CSS styles for the component:
+ * @param {Number} width The width of this component in pixels.
+ * @param {Number} height The height of this component in pixels.
+ * @param {String} [hAlign=left] Horizontal alignment of this component. (left, center, right)
+ * @param {String} [vAlign=top] Vertical alignment of this component. (top, center, bottom)
+ * @param {Number} [hOffset] Horizontal offset of this component in pixels.
+ * @param {Number} [vOffset] Vertical offset of this component.
+ * @memberof MAF.element.Core
+ */
+
+/**
+ * Fired when component has appended to a parent. Update visual appearances by applying a Theme style and rendering the skin.
+ * @event MAF.element.Core#onAppend
+ */
+/**
+ * Fired when a animation on this component has ended.
+ * @event MAF.element.Core#onAnimationEnded
+ */
 define('MAF.element.Core', function () {
 	return new MAF.Class({
 		ClassName: 'BaseCore',
@@ -151,7 +173,7 @@ define('MAF.element.Core', function () {
 
 		/**
 		 * @method MAF.element.Core#getView
-		 * @return {class} Returns the view this class is appended on.
+		 * @return {Class} Returns the view this class is appended on.
 		 */
 		getView: function () {
 			return this.getWindow();
@@ -160,6 +182,7 @@ define('MAF.element.Core', function () {
 		/**
 		 * Shows this component.
 		 * @method MAF.element.Core#show
+		 * @return {Class} This component.
 		 */
 		show: function () {
 			this.element.visible = true;
@@ -168,6 +191,7 @@ define('MAF.element.Core', function () {
 		/**
 		 * Hides this component.
 		 * @method MAF.element.Core#hide
+		 * @return {Class} This component.
 		 */
 		hide: function () {
 			this.element.visible = false;
@@ -176,6 +200,7 @@ define('MAF.element.Core', function () {
 		/**
 		 * Freezes this component. Screen renders no longer trigger until thawed.
 		 * @method MAF.element.Core#freeze
+		 * @return {Class} This component.
 		 */
 		freeze: function () {
 			this.element.updatesEnabled = false;
@@ -184,6 +209,7 @@ define('MAF.element.Core', function () {
 		/**
 		 * Thawes this component. Screen renders can trigger again.
 		 * @method MAF.element.Core#thaw
+		 * @return {Class} This component.
 		 */
 		thaw: function () {
 			this.element.updatesEnabled = true;
@@ -192,7 +218,7 @@ define('MAF.element.Core', function () {
 
 		/**
 		 * @method MAF.element.Core#animate
-		 * @param {object} config A config object
+		 * @param {Object} config A config object
 		 * @fires MAF.element.Core#onAnimationEnded
 		 */
 		animate: function (config) {
@@ -213,7 +239,9 @@ define('MAF.element.Core', function () {
 		},
 
 		/**
+		 * Give back the position relative to its first positioned ancestor element
 		 * @method MAF.element.Core#getAbsolutePosition
+		 * @return {Object} {hOffset:Number, vOffset: Number}
 		 */
 		getAbsolutePosition: function () {
 			var hPosition = this.hOffset,

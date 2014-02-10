@@ -18,7 +18,13 @@
 /** 
  * @class MAF.element.Grid
  * @extends MAF.element.Container
+ * @config {string} [title] The new job title.
  */
+
+ /**
+  * Fired when the data set of the grid has changed.
+  * @event MAF.element.Grid#onDatasetChanged
+  */
 define('MAF.element.Grid', function () {
 	var onAppend = function () {
 		if (this.config.render) {
@@ -364,6 +370,10 @@ define('MAF.element.Grid', function () {
 			delete this.config.dataSet;
 		},
 
+		/**
+		 * @method MAF.element.Grid#setFilter
+		 * @param {Function} fn [description]
+		 */
 		setFilter: function (fn) {
 			if (this.pager) {
 				this.pager.setFilter(fn);
@@ -382,6 +392,14 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
+		/**
+		 * @method MAF.element.Grid#changeDataset
+		 * @param  {array} data Data objects that will change the content content of the grid.
+		 * @param  {boolean} [reset=false] This will reset the page the grid will display to 0 when true.
+		 * @param  {number} [dataLength] When the data set will be larger then the passed in array in data.
+		 * @fires MAF.element.Grid#onDatasetChanged
+		 * @return {MAF.element.Grid}
+		 */
 		changeDataset: function (data, reset, dataLength) {
 			data = data && data.length ? data : [];
 			dataLength = dataLength && (dataLength > data.length) ? dataLength : data.length;
@@ -398,14 +416,29 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
+		/**
+		 * Get the data item with the specified index.
+		 * @method MAF.element.Grid#getDataItem
+		 * @param  {index} index The index of the data item to find.
+		 * @return {object} The data item with the passed index. 
+		 */
 		getDataItem: function (index) {
 			return this.pager.getItem(index);
 		},
 
+		/**
+		 * @method MAF.element.Grid#getState
+		 * @return {object} [description]
+		 */
 		getState: function () {
 			return this.retrieve('state');
 		},
 
+		/**
+		 * @method MAF.element.Grid#updateState
+		 * @param  {object} state Object to update the states of the grid with.
+		 * @return {object} The updated state.
+		 */
 		updateState: function (state) {
 			var newState = Object.merge(this.getState(), state || {});
 			this.store('state', newState);
@@ -413,6 +446,13 @@ define('MAF.element.Grid', function () {
 			return newState;
 		},
 
+		/**
+		 * @deprecated This will probably be removed in the next major MAF release.
+		 * @method MAF.element.Grid#releaseFocus
+		 * @param  {string} direction The direction to release the focus too.
+		 * @param  {event} [event]
+		 * @return {boolean} Always will return true now.
+		 */
 		releaseFocus: function (direction, event) {
 			return true;
 		},

@@ -19,6 +19,33 @@
  * @class MAF.element.Text
  * @extends MAF.element.Core
  */
+
+/**
+ * @cfg {String} anchorStyle Controls how the text is aligned in the component.
+ * @memberof MAF.element.Text
+ */
+/**
+ * @cfg {String} data The text that the component will display.
+ * @memberof MAF.element.Text
+ */
+/**
+ * @cfg {Number} firstLine First line of text.
+ * @memberof MAF.element.Text
+ */
+/**
+ * @cfg {Object} styles CSS styles for the component:
+ * @param {String} truncation Indicate if the text will not fit inside the component box if it should truncate. Default it will not.
+ * @param {Boolean} wrap Display text in a single line or wrap the text. When setting the wrap property the styles.width config is required. Default is false.
+ * @memberof MAF.element.Text
+ */
+/**
+ * @cfg {Number} totalLines Total lines of text.
+ * @memberof MAF.element.Text
+ */
+/**
+ * @cfg {Number} visibleLines Number of text lines visible.
+ * @memberof MAF.element.Text
+ */
 define('MAF.element.Text', function () {
 	return new MAF.Class({
 		ClassName: 'BaseText',
@@ -88,6 +115,11 @@ define('MAF.element.Text', function () {
 			this.setText(this.config.data || this.config.text || this.config.label);
 		},
 
+		/**
+		 * Set which text to display on this component.
+		 * @param {String} text The text
+		 * @method MAF.element.Text#setText
+		 */
 		setText: function (text) {
 			this.element.data = text;
 		}

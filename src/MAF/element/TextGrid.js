@@ -49,18 +49,36 @@ define('MAF.element.TextGrid', function () {
 			this.element.textPaging = true;
 		},
 
+		/**
+		 * @method MAF.element.TextGrid#getCurrentPage
+		 * @return {Number} The page the component is currently on.
+		 */
 		getCurrentPage: function () {
 			return Math.ceil(this.getPageCount() * this.firstLine / this.totalLines);
 		},
 
+		/**
+		 * @method MAF.element.TextGrid#getPageCount
+		 * @return {Number} The number of pages this component has.
+		 */
 		getPageCount: function () {
 			return Math.floor(this.totalLines / this.visibleLines);
 		},
 
+		/**
+		 * @method MAF.element.TextGrid#getStartLine
+		 * @param {Number} pagenum Pagenumber
+		 * @return {Number} The first line of the page supplied by pagenum.
+		 */
 		getStartLine: function (pagenum) {
 			return pagenum * this.visibleLines;
 		},
 
+		/**
+		 * @method MAF.element.TextGrid#shift
+		 * @param {String} direction A direction the page will change to. (left,right)
+		 * @return {Class} This component.
+		 */
 		shift: function (direction) {
 			var current = this.getCurrentPage(),
 				lastpage = this.getPageCount(),
@@ -78,6 +96,12 @@ define('MAF.element.TextGrid', function () {
 			return this;
 		},
 
+		/**
+		 * This will take a single component and attach it to this component. This will trigger events to the class.
+		 * @method MAF.element.TextGrid#attachAccessory
+		 * @param {Class} accessory Class which is able to attach to a source component.
+		 * @return {Class} This component.
+		 */
 		attachAccessory: function (accessory) {
 			if (accessory && accessory.attachToSource) {
 				accessory.attachToSource(this);
@@ -85,11 +109,22 @@ define('MAF.element.TextGrid', function () {
 			return this;
 		},
 
+		/**
+		 * This will take a array of components and will attach them to this component using the attachAccessory method.
+		 * @method MAF.element.TextGrid#attachAccessories
+		 * @param {Array} arguments Array with classes able to attach to a source component.
+		 * @return {Class} This component.
+		 */
 		attachAccessories: function () {
 			Array.slice(arguments).forEach(this.attachAccessory, this);
 			return this;
 		},
 
+		/**
+		 * Set which text to display on this component.
+		 * @method MAF.element.TextGrid#setText
+		 * @param {String} text The text
+		 */
 		setText: function (text) {
 			this.firstLine = 0;
 			this.parent(text);
