@@ -26,7 +26,7 @@ var D4A = (function (body) {
 	}).inject(body);
 
 	var clock = new Text({
-		label: Date.format(new Date(), 'ddd D MMM').toLowerCase() + ' ' + Date.format(new Date(), 'HH:mm'),
+		label: Date.format(new Date(), 'ddd D MMM') + ' ' + Date.format(new Date(), 'HH:mm'),
 		styles: {
 			fontFamily: fontFamily,
 			opacity: 0.7,
@@ -41,7 +41,7 @@ var D4A = (function (body) {
 	}).inject(container);
 
 	(function updateClock() {
-		clock.data = Date.format(new Date(), 'ddd D MMM').toLowerCase() + ' ' + Date.format(new Date(), 'HH:mm');
+		clock.data = Date.format(new Date(), 'ddd D MMM') + ' ' + Date.format(new Date(), 'HH:mm');
 	}).periodical(60000);
 
 	var playing = new Text({

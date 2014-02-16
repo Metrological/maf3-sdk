@@ -417,7 +417,9 @@ var AppsView = new MAF.Class({
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
-						transform: 'translateZ(0)'
+						transform: 'translateZ(0)',
+						backgroundRepeat: 'no-repeat',
+						backgroundPosition: '5'
 					}),
 					events: {
 						onSelect: function (event) {
