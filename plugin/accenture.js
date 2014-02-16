@@ -294,10 +294,10 @@ window.addEventListener('unload', function () {
 });
 */
 window.addEventListener('blur', function () {
-	onHide();
+	onHide();/*
 	if (OTT && OTT.exit) {
 		OTT.exit();
-	}
+	}*/
 });
 
 if (OTT && OTT.viewMode) {
