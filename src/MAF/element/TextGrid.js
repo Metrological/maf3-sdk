@@ -18,6 +18,27 @@
 /** 
  * @class MAF.element.TextGrid
  * @extends MAF.element.Text
+ * @classdesc > Provides paging functionality on very long text through the use of a page or scroll indicator.
+ * @example createView: function () {
+ *    this.controls.scrollIndication = new MAF.control.ScrollIndicator({
+ *       styles: {
+ *          width: 20,
+ *          height: this.height,
+ *          hAlign: 'right'
+ *       }
+ *    }).appendTo(this);
+ *
+ *    this.controls.textGrid = new KONtx.element.TextGrid({
+ *       styles: {
+ *          width: this.width - this.controls.scrollIndication.width,
+ *          height: this.height
+ *       }
+ *    }).appendTo(this).attachAccessories(this.controls.scrollIndication);
+ * }
+ */
+/**
+ * @cfg {Boolean} carousel Defines if the grid needs to behave like a carousel. True will show the first view again after the last view has passed. Default false.
+ * @memberof MAF.element.TextGrid
  */
 define('MAF.element.TextGrid', function () {
 	return new MAF.Class({
@@ -51,7 +72,7 @@ define('MAF.element.TextGrid', function () {
 
 		/**
 		 * @method MAF.element.TextGrid#getCurrentPage
-		 * @return {Number} The page the component is currently on.
+		 * @return {Number} The page the component is currently on. Pages start at 0.
 		 */
 		getCurrentPage: function () {
 			return Math.ceil(this.getPageCount() * this.firstLine / this.totalLines);

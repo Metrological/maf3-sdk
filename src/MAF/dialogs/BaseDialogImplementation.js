@@ -17,6 +17,11 @@
  **/
 /** 
  * @class MAF.dialogs.BaseDialogImplementation
+ * @classdesc > Base dialog class implementation for all dialog boxes.
+ */
+/**
+ * @cfg {Class} focusOnCompletion Component which will recieve focus after the dialog is dismissed.
+ * @memberof MAF.dialogs.BaseDialogImplementation
  */
 define('MAF.dialogs.BaseDialogImplementation', function () {
 	var boundDispatchers = {};
@@ -42,10 +47,19 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			isModal: false
 		},
 
+		/**
+		 * Initialize the class
+		 * @method MAF.dialogs.BaseDialogImplementation#initialize
+		 */
 		initialize: function () {
 			this.store('key', md5(this._classID));
 		},
 
+		/**
+		 * Shows the dialog.
+		 * @method MAF.dialogs.BaseDialogImplementation#show
+		 * @return {Class} This component.
+		 */
 		show: function() {
 			if (!MAF.application.isSidebarLoaded()) {
 				return;
@@ -58,6 +72,11 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			return this;
 		},
 
+		/**
+		 * Hide the dialog.
+		 * @method MAF.dialogs.BaseDialogImplementation#hide
+		 * @return {Class} This component.
+		 */
 		hide: function() {
 			this.removeHandler();
 			MAF.HostEventManager.send('hideDialog', this.getDialogConfig());
@@ -83,12 +102,20 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 			}
 		},
 
+		/**
+		 * Produces an error if a subclass does not override this method.
+		 * @method MAF.dialogs.BaseDialogImplementation#getDialogConfig
+		 */
 		getDialogConfig: function() {
 			if (DEBUG) {
 				throw new Error("All subclasses must provide this method!");
 			}
 		},
 
+		/**
+		 * Produces an error if a subclass does not override this method.
+		 * @method MAF.dialogs.BaseDialogImplementation#handleCallback
+		 */
 		handleCallback: function(response) {
 			if (DEBUG) {
 				throw new Error("All subclasses must provide this method!");

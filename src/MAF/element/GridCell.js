@@ -117,22 +117,42 @@ define('MAF.element.GridCell', function () {
 			element: Item
 		},
 
+		/**
+		 * @method MAF.element.GridCell#getCellDimensions
+		 * @return {Object} With the width and height of the cells for the grid.
+		 */
 		getCellDimensions: function () {
 			return this.grid && this.grid.getCellDimensions() || {};
 		},
 
+		/**
+		 * @method MAF.element.GridCell#getCellCoordinates
+		 * @return {Object} With row, column, rows and columns
+		 */
 		getCellCoordinates: function () {
 			return this.grid && this.grid.getCellCoordinates(this);
 		},
 
+		/**
+		 * @method MAF.element.GridCell#getCellIndex
+		 * @return {Number} Index of the cell if found. Otherwise it returns -1.
+		 */
 		getCellIndex: function () {
 			return this.grid && this.grid.getCellIndex(this);
 		},
 
+		/**
+		 * @method MAF.element.GridCell#getCellDataIndex
+		 * @return {Number} Dataset Index.
+		 */
 		getCellDataIndex: function () {
 			return this.grid && this.grid.getCellDataIndex(this);
 		},
 
+		/**
+		 * @method MAF.element.GridCell#getCellDataItem
+		 * @return {Mixed} Returns a dataset item.
+		 */
 		getCellDataItem: function () {
 			return this.grid && this.grid.getCellDataItem(this);
 		},

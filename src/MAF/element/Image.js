@@ -18,6 +18,56 @@
 /** 
  * @class MAF.element.Image
  * @extends MAF.element.Core
+ * @classdesc > This is a base image component.
+ */
+/**
+ * @cfg {Boolean} hideWhileLoading Do not show the src image while loading. Default true.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Boolean} autoShow Show the src image when it is done loading.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Boolean} manageWaitIndicator Show the framework waitindicator while image is loading. Default false.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {String} src Path of the image.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {String} source Path of the image.
+ * @memberof MAF.element.Image
+ * @deprecated Will be removed in a future release, use src instead.
+ */
+/**
+ * @cfg {String} missingSrc When the src image has problems loading this image will be shown in its place.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Number} aspect This will put a aspect on the image based on the size of this component.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Number} srcWidth If you know the width of the image you can define it here. Not all browsers get this info in time.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Number} srcHeight If you know the height of the image you can define it here. Not all browsers get this info in time.
+ * @memberof MAF.element.Image
+ */
+/**
+ * @cfg {Number} remoteAsync The image is loaded asynchronously. You can place a alternative image in its place while it is loading. Default is true.
+ * @memberof MAF.element.Image
+ */
+/**
+ * Fired when the source image finished loading.
+ * @event MAF.element.Text#onLoaded
+ */
+/**
+ * Fired when the source image had problems loading.
+ * @event MAF.element.Text#onError
  */
 define('MAF.element.Image', function () {
 	return new MAF.Class({
@@ -95,14 +145,34 @@ define('MAF.element.Image', function () {
 			this.setSources(this.config);
 		},
 
+		/**
+		 * Returns the src path of the image currently on this component.
+		 * @method MAF.element.Image#getSource
+		 */
 		getSource: function () {
 			return this.source;
 		},
 
+		/**
+		 * Set the src config of this component with a new image path.
+		 * @param {String} source Path of the image.
+		 * @method MAF.element.Image#setSource
+		 */
 		setSource: function (source) {
 			return this.setSources({ src: source });
 		},
 
+		/**
+		 * Set the sources of the this component.
+		 * @param {Object} object Can contain src/missingSrc image path.
+		 * ```
+		 * image.setSources({
+		 *    src: 'path/to/image.png',
+		 *    missingSrc: 'path/to/missing.png'
+		 * })
+		 * ```
+		 * @method MAF.element.Image#setSources
+		 */
 		setSources: function (object) {
 			object = object || {};
 			var img = this.element,
@@ -137,6 +207,11 @@ define('MAF.element.Image', function () {
 			return this;
 		},
 
+		/**
+		 * The image will be resized maintaining aspect ratio. Will try maximize the image's width.
+		 * @param {Number} size Will resize based on this parameter in pixels
+		 * @method MAF.element.Image#aspectSizeMax
+		 */
 		aspectSizeMax: function (size) {
 			var h, w, ratio = this.srcWidth / this.srcHeight;
 			if (ratio >= 1) {
@@ -152,6 +227,11 @@ define('MAF.element.Image', function () {
 			});
 		},
 
+		/**
+		 * The image will be resized maintaining aspect ratio. Will maximize the image's height.
+		 * @param {Number} size Will resize based on this parameter in pixels
+		 * @method MAF.element.Image#aspectSizeMin
+		 */
 		aspectSizeMin: function (size) {
 			var h, w, ratio = this.srcWidth / this.srcHeight;
 			if (ratio >= 1) {
@@ -167,6 +247,13 @@ define('MAF.element.Image', function () {
 			});
 		},
 
+		/**
+		 * While keeping aspect this method tries to fit the image in a certain space as best as possible.
+		 * @param {Number} width How wide the space is in pixels.
+		 * @param {Number} height How high the space is in pixels.
+		 * @param {String} preferredSide Define which side is the prefered side to be maximized in size.
+		 * @method MAF.element.Image#aspectSizeBestFit
+		 */
 		aspectSizeBestFit: function (width, height, preferredSide) {
 			var scale = 0;
 			if (preferredSide === 'height') {
@@ -200,11 +287,19 @@ define('MAF.element.Image', function () {
 			}
 		},
 
+		/**
+		 * Based on the parents width and height the image will be resized maintaining aspect ratio. Will maximize the image's height. Returns null if there is no parent.
+		 * @method MAF.element.Image#fitToParent
+		 */
 		fitToParent: function () {
 			var pn = this.element && this.element.parentNode;
 			return pn ? this.aspectSizeMax(Math.min(pn.width, pn.height)) : null;
 		},
 
+		/**
+		 * Based on the parents width and height the image will be resized maintaining aspect ratio. Will maximize the image's width. Returns null if there is no parent.
+		 * @method MAF.element.Image#fillParent
+		 */
 		fillParent: function () {
 			var pn = this.element && this.element.parentNode;
 			return pn ? this.aspectSizeMin(Math.max(pn.width, pn.height)) : null;

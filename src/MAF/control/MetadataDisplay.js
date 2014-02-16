@@ -18,6 +18,14 @@
 /** 
  * @class MAF.control.MetadataDisplay
  * @extends MAF.control.Button
+ * @example
+ * 		var metaData = new MAF.control.MetadataDisplay({
+			updateMethod: function (data) {
+				this.setText('Metadata grid: ' + data.text);
+			}
+		}).appendTo(this);
+
+		metaData.attachToSource(grid);
  */
 define('MAF.control.MetadataDisplay', function () {
 	return new MAF.Class({

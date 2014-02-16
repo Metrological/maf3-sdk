@@ -18,13 +18,81 @@
 /** 
  * @class MAF.element.Grid
  * @extends MAF.element.Container
+ * @classdesc
+ * * Each cell is fixed in size.
+ * * The grid is a container recieving info from its cells to have a single entry point to listen on.
+ * * All cells are based on descendants of MAF.element.GridCell
+ * * cellCreator() is a required method that returns a cell with no data.
+ * * cellUpdator() is a required method that will update a cell with data.
+ * @example new MAF.element.Grid({
+ *    rows: 2,
+ *    columns: 2,
+ *    cellCreator: function () {
+ *       var cell = new MAF.element.GridCell({
+ *          events: {
+ *             onSelect: function(event) {
+ *                log('Selected', this.getDataItem());
+ *             } 
+ *          }
+ *       });
+ *
+ *       cell.text = new MAF.element.Text({
+ *          styles: {
+ *             color: 'white'
+ *          }
+ *       }).appendTo(cell);
+ *       return cell;
+ *    },
+ *    cellUpdator: function (cell, data) {
+ *       cell.text.setText(data.label);
+ *    }
+ * }).appendTo(this);
  * @config {string} [title] The new job title.
  */
-
- /**
-  * Fired when the data set of the grid has changed.
-  * @event MAF.element.Grid#onDatasetChanged
-  */
+/**
+ * @cfg {Number} rows Number of rows in the grid.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Number} columns Number of columns in the grid.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {String} orientation Horizontal or verticale orientation of the grid.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Boolean} carousel Defines if the grid needs to behave like a carousel. True will show the first page again after the last page has passed. Default false.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Boolean} render Defines if the grid should be rendered automatically. Default true.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Boolean} focus Defines if the grid is allowed to get focus. Default true.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Boolean} manageWaitIndicator Show the framework waitindicator while grid is loading or changing pages. Default true.
+ * @memberof MAF.element.Grid
+ */
+/**
+ * Fired when the data set of the grid has changed.
+ * @event MAF.element.Grid#onDatasetChanged
+ */
+/**
+ * Fired when state of the grid is updated/changed.
+ * @event MAF.element.Grid#onStateUpdated
+ */
+/**
+ * Fired before a page on the grid will be changed.
+ * @event MAF.element.Grid#onChangePage
+ */
+/**
+ * Fired after a page on the grid has changed.
+ * @event MAF.element.Grid#onPageChanged
+ */
 define('MAF.element.Grid', function () {
 	var onAppend = function () {
 		if (this.config.render) {
@@ -372,7 +440,11 @@ define('MAF.element.Grid', function () {
 
 		/**
 		 * @method MAF.element.Grid#setFilter
-		 * @param {Function} fn [description]
+		 * @param {Function} fn A function used as a test for each element in the data set.
+		 * @example grid.setFilter(function (value) {
+		 *    if (value.type === 'demo')
+		 *       return value;
+		 * });
 		 */
 		setFilter: function (fn) {
 			if (this.pager) {
@@ -394,9 +466,9 @@ define('MAF.element.Grid', function () {
 
 		/**
 		 * @method MAF.element.Grid#changeDataset
-		 * @param  {array} data Data objects that will change the content content of the grid.
-		 * @param  {boolean} [reset=false] This will reset the page the grid will display to 0 when true.
-		 * @param  {number} [dataLength] When the data set will be larger then the passed in array in data.
+		 * @param {Array} data Data objects that will change the content content of the grid.
+		 * @param {Boolean} [reset=false] This will reset the page the grid will display to 0 when true.
+		 * @param {Number} [dataLength] When the data set will be larger then the passed in array in data.
 		 * @fires MAF.element.Grid#onDatasetChanged
 		 * @return {MAF.element.Grid}
 		 */
@@ -428,7 +500,7 @@ define('MAF.element.Grid', function () {
 
 		/**
 		 * @method MAF.element.Grid#getState
-		 * @return {object} [description]
+		 * @return {Object} State object of the grid.
 		 */
 		getState: function () {
 			return this.retrieve('state');
@@ -436,8 +508,8 @@ define('MAF.element.Grid', function () {
 
 		/**
 		 * @method MAF.element.Grid#updateState
-		 * @param  {object} state Object to update the states of the grid with.
-		 * @return {object} The updated state.
+		 * @param  {Object} state Object to update the states of the grid with.
+		 * @return {Object} The updated state.
 		 */
 		updateState: function (state) {
 			var newState = Object.merge(this.getState(), state || {});
@@ -457,6 +529,18 @@ define('MAF.element.Grid', function () {
 			return true;
 		},
 
+		/**
+		 * Shifts the grid to the page based on the parameter type.
+		 * @method MAF.element.Grid#shift
+		 * @param {String} type **You can use:**
+		 * * first - Shift grid to the first page.
+		 * * last - Shift grid to the last page.
+		 * * up - Shift grid to the previous page.
+		 * * down - Shift grid to the next page.
+		 * * left - Shift grid to the previous page.
+		 * * right - Shift grid to the next page.
+		 * @param {Object} options Options to change the state of the grid.
+		 */
 		shift: function (type, options) {
 			var target   = false,
 				state    = this.getState(),
@@ -498,6 +582,12 @@ define('MAF.element.Grid', function () {
 			}
 		},
 
+		/**
+		 * Change page of the grid.
+		 * @method MAF.element.Grid#changePage
+		 * @param {Number} pagenum Number of the page to change to.
+		 * @param {Object} options Options to change the state of the grid.
+		 */
 		changePage: function (pagenum, options) {
 			var count = this.getCellCount(),
 				state = this.getState(),
@@ -517,6 +607,10 @@ define('MAF.element.Grid', function () {
 			this.pager.getPage(index);
 		},
 
+		/**
+		 * @method MAF.element.Grid#normalizeIndex
+		 * @return {Number} Starting index of the page containing the desired data item.
+		 */
 		normalizeIndex: function (i) {
 			var c = this.pager.getPageSize(),
 				d = this.pager.getDataSize(),
@@ -532,28 +626,53 @@ define('MAF.element.Grid', function () {
 			else return Math.floor(i / c) * c;
 		},
 
+		/**
+		 * Returns the cell count of a fully populated grid page. Returns this.config.rows * this.config.columns.
+		 * @method MAF.element.Grid#getCellCount
+		 * @return {Number} The total number of cells on a grid page.
+		 */
 		getCellCount: function () {
 			return this.config.rows * this.config.columns;
 		},
 
+		/**
+		 * Returns the cell count of currently visible cells.
+		 * @method MAF.element.Grid#getVisibleCellCount
+		 */
 		getVisibleCellCount: function () {
 			return this.cells && this.cells.filter(function (c) {
 				return c && c.visible;
 			}).length || this.cells.length;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getPageCount
+		 * @return this.pager.getNumPages(). The number of pages in the dataset.
+		 */
 		getPageCount: function () {
 			return this.pager.getNumPages();
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCurrentPage
+		 * @return The zero-based index of the current page of data.
+		 */
 		getCurrentPage: function () {
 			return this.getState().currentPage || 0;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getStartIndex
+		 * @return The dataset index of the first cell on the current page.
+		 */
 		getStartIndex: function () {
 			return this.getState().startIndex;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getFocusIndex
+		 * @return Index of last focused cell.
+		 */
 		getFocusIndex: function () {
 			var active = document.activeElement,
 				state = this.getState(),
@@ -567,10 +686,18 @@ define('MAF.element.Grid', function () {
 			return idx;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getFocusCoordinates
+		 * @return {Object} Row and column properties of the last focused cell.
+		 */
 		getFocusCoordinates: function () {
 			return this.getState().focusCoordinates;
 		},
 
+		/**
+		 * Give the grid focus.
+		 * @method MAF.element.Grid#focus
+		 */
 		focus: function () {
 			if (this.getVisibleCellCount()) {
 				this.updateState({
@@ -580,6 +707,12 @@ define('MAF.element.Grid', function () {
 			}
 		},
 
+		/**
+		 * Change focus to the given parameter target.
+		 * @method MAF.element.Grid#focusCell
+		 * @param {Mixed} target Can be a cell, an index, or coordinates of where to set focus
+		 * @return This component.
+		 */
 		focusCell: function (target) {
 			var state    = this.getState(),
 				focused  = state.focusIndex,
@@ -606,6 +739,11 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
+		/**
+		 * Blur focus of the given parameter target, which can be a cell, an index, or coordinates of where to blur focus.
+		 * @method MAF.element.Grid#blurCell
+		 * @return This component.
+		 */
 		blurCell: function (target) {
 			target = parseInt(target, 10) > -1 ? target : this.getState().focusCoordinates;
 			var index = this.getCellIndex(target);
@@ -615,6 +753,10 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCellDimensions
+		 * @return {Object} With the width and height of the cells for the grid.
+		 */
 		getCellDimensions: function () {
 			return {
 				width:  Math.floor(this.width / this.config.columns),
@@ -622,6 +764,10 @@ define('MAF.element.Grid', function () {
 			};
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCellCoordinates
+		 * @return {Object} With row, column, rows and columns
+		 */
 		getCellCoordinates: function (c) {
 			var index = this.cells.indexOf(c);
 			try {
@@ -637,6 +783,12 @@ define('MAF.element.Grid', function () {
 			};
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCellIndex
+		 * @param {Object|Number} a Can be a Cell, index or a row.
+		 * @param {Number} b Row
+		 * @return {Number} Index of the cell if found. Otherwise it returns -1.
+		 */
 		getCellIndex: function (a, b) {
 			var index = this.cells.indexOf(a),
 				cols  = this.config.columns;
@@ -655,6 +807,11 @@ define('MAF.element.Grid', function () {
 			return index;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCellDataIndex
+		 * @param {Object|Number} c Can be a Cell, index or a row.
+		 * @return {Number} Dataset Index.
+		 */
 		getCellDataIndex: function (c) {
 			var state = this.getState(),
 				start = state.pageRequested && state.pageRequested.index,
@@ -662,11 +819,22 @@ define('MAF.element.Grid', function () {
 			return parseInt(start, 10) > -1 && index > -1 ? start+index : false;
 		},
 
+		/**
+		 * @method MAF.element.Grid#getCellDataItem
+		 * @param {Mixed} c Can be a cell, index, or row.
+		 * @return {Mixed} Returns a dataset item.
+		 */
 		getCellDataItem: function (c) {
 			var index = this.getCellDataIndex(c);
 			return parseInt(index, 10) > -1 && this.pager.getItem(index);
 		},
 
+		/**
+		 * Attach a accessory component to this component so it can update on grid events.
+		 * @method MAF.element.Grid#attachAccessory
+		 * @param {Class} accessory The accessory component.
+		 * @return This component.
+		 */
 		attachAccessory: function (accessory) {
 			if (accessory && accessory.attachToSource) {
 				accessory.attachToSource(this);
@@ -674,6 +842,12 @@ define('MAF.element.Grid', function () {
 			return this;
 		},
 
+		/**
+		 * Attach multiple accessory components to this component.
+		 * @method MAF.element.Grid#attachAccessories
+		 * @param {Array} arguments Contains muliple accessory components.
+		 * @return This component.
+		 */
 		attachAccessories: function () {
 			Array.slice(arguments).forEach(this.attachAccessory, this);
 			return this;

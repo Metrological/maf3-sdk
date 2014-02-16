@@ -58,7 +58,10 @@ define('MAF.control.ScrollIndicator', function () {
 
 		config: {
 			autoHideWhenEmpty: true,
-			autoDisableWhenEmpty: true
+			autoDisableWhenEmpty: true,
+			animation: {
+				duration: 0.3
+			}
 		},
 
 		initialize: function () {
@@ -113,7 +116,7 @@ define('MAF.control.ScrollIndicator', function () {
 				this.content.store('offset', offset);
 				this.content.animate({
 					properties: ['top'],
-					duration: 0.3,
+					duration: this.config.animation && (typeOf(this.config.animation.duration) === 'number' ? this.config.animation.duration : 0.3),
 					top: offset
 				});
 			}
@@ -123,6 +126,10 @@ define('MAF.control.ScrollIndicator', function () {
 				this.element.wantsFocus = true;
 			}
 			return this;
+		},
+
+		updateAnimation: function (animation) {
+			this.config.animation = typeOf(animation) === 'object' ? Object.merge(this.config.animation, animation) : this.config.animation;
 		},
 
 		shiftSource: function (direction) {

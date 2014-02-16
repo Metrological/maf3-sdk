@@ -46,6 +46,14 @@
  * @cfg {Number} visibleLines Number of text lines visible.
  * @memberof MAF.element.Text
  */
+/**
+ * Fired when a change happened.
+ * @event MAF.element.Text#onChange
+ */
+/**
+ * Fired when a the layout of the component has changed.
+ * @event MAF.element.Text#onLayoutChange
+ */
 define('MAF.element.Text', function () {
 	return new MAF.Class({
 		ClassName: 'BaseText',

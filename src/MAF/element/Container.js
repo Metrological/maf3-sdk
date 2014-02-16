@@ -38,6 +38,18 @@
  * Fired when a navigation happens when the component has focus.
  * @event MAF.element.Container#onNavigate
  */
+/**
+ * Fired when this component changes it state to enabled.
+ * @event MAF.element.Grid#onEnable
+ */
+/**
+ * Fired when this component changes it state to disabled.
+ * @event MAF.element.Grid#onDisable
+ */
+/**
+ * Fired when this component changes it enabled or disabled state.
+ * @event MAF.element.Grid#onChangeDisabled
+ */
 define('MAF.element.Container', function () {
 	return new MAF.Class({
 		ClassName: 'BaseContainer',

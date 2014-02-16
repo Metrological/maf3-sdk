@@ -19,6 +19,22 @@
  * @class MAF.element.TextField
  * @extends MAF.element.Text
  */
+/**
+ * @cfg {Boolean} editable True will make this component reachable by navigating. In this state when this component has focus text can be typed directly without a onscreen keyboard. 
+ * @memberof MAF.element.TextField
+ */
+/**
+ * Fired when the component recieves focus.
+ * @event MAF.element.Container#onFocus
+ */
+/**
+ * Fired when the component is blurred.
+ * @event MAF.element.Container#onBlur
+ */
+/**
+ * Fired when a navigation happens when the component has focus.
+ * @event MAF.element.TextField#onNavigate
+ */
 define('MAF.element.TextField', function () {
 	return new MAF.Class({
 		ClassName: 'BaseTextField',

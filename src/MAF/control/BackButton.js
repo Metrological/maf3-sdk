@@ -18,6 +18,10 @@
 /** 
  * @class MAF.control.BackButton
  * @extends MAF.control.Button
+ * @example
+ * new MAF.control.BackButton({
+ *    label: 'Back'
+ * }).appendTo(this);
  */
 define('MAF.control.BackButton', function () {
 	return new MAF.Class({

@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-
 /**
  * @class MAF.element.Core
  * @classdesc > This is the base class for all MAF components. This component does not act on events from its element. Extended classes should define if they want to act on them.
@@ -27,7 +26,6 @@
  * @property {Number} hOffset
  * @property {Number} vOffset
  */
-
 /**
  * @cfg {Object} events A object containing one or more event handlers to be added to this object during initialization. 
  * > The possible events are defined on each component.
@@ -54,7 +52,6 @@
  * @param {Number} [vOffset] Vertical offset of this component.
  * @memberof MAF.element.Core
  */
-
 /**
  * Fired when component has appended to a parent. Update visual appearances by applying a Theme style and rendering the skin.
  * @event MAF.element.Core#onAppend

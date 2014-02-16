@@ -18,6 +18,15 @@
 /** 
  * @class MAF.control.TextButton
  * @extends MAF.control.Button
+ * @example
+ * 		var button3 = new MAF.control.TextButton({
+			label: 'Text Button'
+			events: {
+				onSelect: function () {
+					log('Button has been selected.');
+				}
+			}
+		}).appendTo(this);
  */
 define('MAF.control.TextButton', function () {
 	return new MAF.Class({
