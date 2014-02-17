@@ -66,9 +66,14 @@ define('MAF.element.Carousel', function () {
 				if (count > 0 && count > this.cells.length) {
 					var fragment = createDocumentFragment(),
 						dims = {
-							width: ((1 / this.config.columns) * 100)/((this.config.orientation === 'horizontal') ? this.getPageCount() : 1) + '%',
-							height: ((1 / this.config.rows) * 100)/((this.config.orientation === 'horizontal') ? 1 : this.getPageCount()) + '%'
+							width: ((1 / this.config.columns) * 100),
+							height: ((1 / this.config.rows) * 100)
 						};
+					if (this.config.orientation === 'horizontal') {
+						dims.width /= this.getPageCount();
+					}
+					dims.width += '%';
+					dims.height += '%';
 					for (var i = this.cells.length; i < count; i++) {
 						var cell = this.config.cellCreator.call(this).setStyles(dims);
 						cell.carousel = this;
