@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Metrological Application Framework - API documentation</title>
+
+		<script src="scripts/prettify/prettify.js"> </script>
+		<script src="scripts/prettify/lang-css.js"> </script>
+		<!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href="styles/bootstrap.css" rel="stylesheet">
+		<link href="styles/docs.css" rel="stylesheet">
+		<link href="styles/bootstrap-custom.css" rel="stylesheet">
+
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+		<script class="cssdeck" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var tabTemplate = "<li tabname=#{classid}><a href='#{href}'>#{label}</a> <span class='ui-icon ui-icon-close' style='display:inline-block'>Remove Tab</span></li>",
+				tabCounter = 1,
+				hash = '';
+
+				var getTree = function () {
+					var openTree = {};
+					try {
+						openTree = JSON.parse(localStorage.getItem('classTree') || {});
+					} catch (e) {
+						console.log('error');
+					}
+					return openTree;
+				};
+
+				var toggleTree = function (cl) {
+					var tree = getTree();
+					
+					if (cl.children('i').hasClass('icon-collapse')) {
+						cl.children('i').toggleClass('icon-collapse icon-collapse-top');
+						tree[cl.attr('id')] = '2';
+					} else {
+						cl.children('i').toggleClass('icon-collapse-top icon-collapse');
+						tree[cl.attr('id')] = '1';
+					}
+					localStorage.setItem('classTree', JSON.stringify(tree));
+				};
+
+				var addTab = function (label) {
+					var tabs = $( "#classtabs" ).tabs();
+					var label = label,
+					li = $( tabTemplate.replace( /#\{classid\}/g, label ).replace( /#\{href\}/g, label ).replace( /#\{label\}/g, label.replace('.html', '') ) );
+					tabs.find( ".ui-tabs-nav" ).append( li );
+					tabs.tabs( "refresh" );
+					tabs.tabs( "option", "active", tabCounter );
+					tabCounter++;
+				};
+
+				$.each(getTree(), function( index, value ) {
+					if (value === '2') {
+						$('#'+index).parent().children('ul.tree').toggle(300);
+						$('#'+index).children('i').toggleClass('icon-collapse icon-collapse-top');
+					}
+				});
+
+				$("[rel=tooltip]").tooltip({placement: 'top'});
+				$( "#classtabs" ).tabs({
+					load: function () {
+						var item = $('h4[anchor="' + hash + '"]');
+						if (item && item.length > 0) {
+							item.get(0).scrollIntoView();
+						}
+					},
+					beforeLoad: function( event, ui ) {
+						ui.jqXHR.error(function() {
+							ui.panel.html("Couldn't load this tab. We'll try to fix this as soon as possible. ");
+						});
+					}
+				});
+
+				$( "#classtabs" ).delegate( "span.ui-icon-close", "click", function() {
+					var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+					$( "#" + panelId ).remove();
+					$( "#classtabs" ).tabs( "refresh" );
+					tabCounter--;
+					hash = '';
+				});
+
+				$('label.tree-toggler').click(function () {
+					$(this).parent().children('ul.tree').toggle(300);
+					toggleTree($(this));
+				});
+
+				$('div.row-fluid').delegate("a.class-tree-node", "click", function (e) {
+					e.preventDefault();
+
+					hash = $(this).attr('href') || '';
+					var href = $(this).attr('href').replace(this.hash, '');
+					hash = (this.hash) ? $(this).html() : '';
+					var doesexist = $( "#classtabs" ).find("li[tabname|='"+href+"']");
+					if (doesexist && doesexist.length > 0) {
+						$( "#classtabs" ).tabs( "option", "active", doesexist.index() );
+					} else {
+						addTab(href);
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<header class="header navbar navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a class="brand" href="#"><strong>Metrological Application Framework</strong> API documentation</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+					<div class="span4">
+							<div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Classes</li><li><label class="tree-toggler" style="margin-bottom:0px;color: #0186d1">MAF</label><ul class="nav nav-list tree" style="padding-left:5px"><li><a href="MAF.application.html" class="class-tree-node"><i class="icon-shield" style="color: #993300;font-size:13px"></i> application</a></li><li><label id="control" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> control</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.control.BackButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> BackButton</a></li><li><a href="MAF.control.Button.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Button</a></li><li><a href="MAF.control.EmptySpace.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> EmptySpace</a></li><li><a href="MAF.control.FixedTab.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> FixedTab</a></li><li><a href="MAF.control.Grid.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Grid</a></li><li><a href="MAF.control.GridCell.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> GridCell</a></li><li><a href="MAF.control.Header.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Header</a></li><li><a href="MAF.control.ImageToggleButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> ImageToggleButton</a></li><li><a href="MAF.control.InputButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> InputButton</a></li><li><a href="MAF.control.Keyboard.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Keyboard</a></li><li><a href="MAF.control.MediaTransportOverlay.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> MediaTransportOverlay</a></li><li><a href="MAF.control.MetadataDisplay.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> MetadataDisplay</a></li><li><a href="MAF.control.PageIndicator.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> PageIndicator</a></li><li><a href="MAF.control.PhotoBackButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> PhotoBackButton</a></li><li><a href="MAF.control.PhotoGridCell.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> PhotoGridCell</a></li><li><a href="MAF.control.PromptButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> PromptButton</a></li><li><a href="MAF.control.ScrollIndicator.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> ScrollIndicator</a></li><li><a href="MAF.control.SelectButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> SelectButton</a></li><li><a href="MAF.control.SingleTab.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> SingleTab</a></li><li><a href="MAF.control.TabPipe.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TabPipe</a></li><li><a href="MAF.control.TabPipeButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TabPipeButton</a></li><li><a href="MAF.control.TabStrip.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TabStrip</a></li><li><a href="MAF.control.TabStripButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TabStripButton</a></li><li><a href="MAF.control.TextButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextButton</a></li><li><a href="MAF.control.TextEntryButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextEntryButton</a></li><li><a href="MAF.control.TextEntryOverlay.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextEntryOverlay</a></li><li><a href="MAF.control.ToggleButton.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> ToggleButton</a></li><li><a href="MAF.control.ValueDisplay.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> ValueDisplay</a></li></li></ul><li><label id="dialogs" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> dialogs</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.dialogs.Alert.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Alert</a></li><li><a href="MAF.dialogs.BaseDialogImplementation.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> BaseDialogImplementation</a></li><li><a href="MAF.dialogs.Login.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Login</a></li><li><a href="MAF.dialogs.TextEntry.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextEntry</a></li><li><a href="MAF.dialogs.VerifyPin.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> VerifyPin</a></li></li></ul><li><label id="element" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> element</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.element.Button.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Button</a></li><li><a href="MAF.element.Carousel.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Carousel</a></li><li><a href="MAF.element.CarouselCell.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> CarouselCell</a></li><li><a href="MAF.element.Container.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Container</a></li><li><a href="MAF.element.Core.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Core</a></li><li><a href="MAF.element.Grid.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Grid</a></li><li><a href="MAF.element.GridCell.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> GridCell</a></li><li><a href="MAF.element.Image.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Image</a></li><li><a href="MAF.element.Text.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Text</a></li><li><a href="MAF.element.TextField.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextField</a></li><li><a href="MAF.element.TextGrid.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> TextGrid</a></li></li></ul><li><a href="MAF.HostEventManager.html" class="class-tree-node"><i class="icon-shield" style="color: #993300;font-size:13px"></i> HostEventManager</a></li></li><li><label id="media" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> media</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.media.Playlist.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> Playlist</a></li><li><a href="MAF.media.PlaylistEntry.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> PlaylistEntry</a></li></li></ul><li><a href="MAF.mediaplayer.html" class="class-tree-node"><i class="icon-shield" style="color: #993300;font-size:13px"></i> mediaplayer</a></li></li><li><a href="MAF.messages.html" class="class-tree-node"><i class="icon-shield" style="color: #993300;font-size:13px"></i> messages</a></li></li><li><label id="system" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> system</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.system.AboutDocView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> AboutDocView</a></li><li><a href="MAF.system.BaseView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> BaseView</a></li><li><a href="MAF.system.FullscreenView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> FullscreenView</a></li><li><a href="MAF.system.IconView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> IconView</a></li><li><a href="MAF.system.OptionSelectView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> OptionSelectView</a></li><li><a href="MAF.system.SidebarView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> SidebarView</a></li><li><a href="MAF.system.SnippetView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> SnippetView</a></li><li><a href="MAF.system.WindowedView.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> WindowedView</a></li></li></ul><li><label id="views" class="tree-toggler" style="margin-bottom:0px;color: #0186d1"><i class="icon-collapse" style="color: #999999;font-size:13px"></i> views</label><ul class="nav nav-list tree" style="display:none"><li><a href="MAF.views.AboutBox.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> AboutBox</a></li><li><a href="MAF.views.SearchSuggest.html" class="class-tree-node"><i class="icon-shield" style="color: #0186d1;font-size:13px"></i> SearchSuggest</a></li></li></ul></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Public Events</li><li><a href="MAF.application.html#event:getSnippetConfs" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> getSnippetConfs <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateApp" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateApp <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateBackButton" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateBackButton <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateFavButton" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateFavButton <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateHomeButton" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateHomeButton <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateSettingsButton" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateSettingsButton <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onActivateSnippet" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onActivateSnippet <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onApplicationShutdown" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onApplicationShutdown <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onApplicationStartup" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onApplicationStartup <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onDialogCancelled" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onDialogCancelled <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onDialogDone" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onDialogDone <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onHideView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onHideView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onLoadProfile" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onLoadProfile <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onLoadView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onLoadView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onPlayControlKeyPress" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onPlayControlKeyPress <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onSelectView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onSelectView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onShowView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onShowView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onUnloadProfile" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onUnloadProfile <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onUnloadView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onUnloadView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onUnselectView" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onUnselectView <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onViewChangeInitiated" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onViewChangeInitiated <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.application.html#event:onWidgetKeyPress" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onWidgetKeyPress <span class="label label-inverse pull-right">MAF.application</span></a></li><li><a href="MAF.element.Button.html#event:onSecureFailed" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onSecureFailed <span class="label label-inverse pull-right">MAF.element.Button</span></a></li><li><a href="MAF.element.Container.html#event:onBlur" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onBlur <span class="label label-inverse pull-right">MAF.element.Container</span></a></li><li><a href="MAF.element.Container.html#event:onFocus" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onFocus <span class="label label-inverse pull-right">MAF.element.Container</span></a></li><li><a href="MAF.element.Container.html#event:onNavigate" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onNavigate <span class="label label-inverse pull-right">MAF.element.Container</span></a></li><li><a href="MAF.element.Container.html#event:onSelect" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onSelect <span class="label label-inverse pull-right">MAF.element.Container</span></a></li><li><a href="MAF.element.Core.html#event:onAnimationEnded" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onAnimationEnded <span class="label label-inverse pull-right">MAF.element.Core</span></a></li><li><a href="MAF.element.Core.html#event:onAppend" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onAppend <span class="label label-inverse pull-right">MAF.element.Core</span></a></li><li><a href="MAF.element.Grid.html#event:onChangeDisabled" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onChangeDisabled <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onChangePage" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onChangePage <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onDatasetChanged" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onDatasetChanged <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onDisable" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onDisable <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onEnable" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onEnable <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onPageChanged" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onPageChanged <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Grid.html#event:onStateUpdated" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onStateUpdated <span class="label label-inverse pull-right">MAF.element.Grid</span></a></li><li><a href="MAF.element.Text.html#event:onChange" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onChange <span class="label label-inverse pull-right">MAF.element.Text</span></a></li><li><a href="MAF.element.Text.html#event:onError" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onError <span class="label label-inverse pull-right">MAF.element.Text</span></a></li><li><a href="MAF.element.Text.html#event:onLayoutChange" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onLayoutChange <span class="label label-inverse pull-right">MAF.element.Text</span></a></li><li><a href="MAF.element.Text.html#event:onLoaded" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onLoaded <span class="label label-inverse pull-right">MAF.element.Text</span></a></li><li><a href="MAF.element.TextField.html#event:onNavigate" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onNavigate <span class="label label-inverse pull-right">MAF.element.TextField</span></a></li><li><a href="MAF.messages.html#event:onBroadcast" class="class-tree-node"><i class="icon-bell-alt" style="color: #999999"></i> onBroadcast <span class="label label-inverse pull-right">MAF.messages</span></a></li></ul></div><div class="well well-small"><ul class="nav nav-list"><li class="nav-header">Private Events</li></ul></div>
+					</div>
+
+					<div class="span8">
+						<div id="classtabs" style="">
+							<ul>
+								<li><a href="#tabs-default">index</a></li>
+							</ul>
+							<div id="tabs-default">
+								<h1 class="page-header">Index</h1>
+								
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><p>Documentation</p>
+<p>link: <a href="http://the.link.com">link description</a></p></article>
+    </section>
+
+
+
+
+
+
+							</div>
+						</div>
+					</div>
+			</div>
+			<br clear="both">
+
+			<footer style="font-Size:10px">
+				Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Wed Feb 19 2014 21:17:26 GMT+0100 (CET)
+				<br>
+			</footer>
+			<script> prettyPrint(); </script>
+		</div>
+	</body>
+</html>

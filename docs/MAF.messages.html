@@ -1,0 +1,914 @@
+<div>
+	<h1 class="page-header"><i class="icon-shield" style="color:#993300"></i> MAF.messages<span style="font-size:10px;color:grey"> Singleton</span></h1>
+	
+
+
+
+<section>
+    
+<header>
+    <!--h2>
+    MAF.messages
+    </h2-->
+    
+        <div class="class-description"><p>MAF.messages provides a persist key-based hash table to store messages combined with broadcast events when hash data is added or updated.</p></div>
+    
+</header>  
+
+<article>
+    <div class="container-overview hero-unit">
+    
+
+    
+
+    
+    
+    
+        
+<dt>
+    <h4 class="name" anchor="MAF.messages" id="messages">MAF.messages<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var valueChanged = function (event) {
+   log("Key: ", event.payload.key, " changed value to: ",event.payload.value);
+};
+valueChanged.subscribeTo(KONtx.messages, KONtx.messages.eventType);
+MAF.messages.store('numbers', [9,15,1,30]);</code></pre>
+
+    
+</dd>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="bs-docs-example bs-methods">
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#exists" id="exists">exists<span class="signature">(key)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Checks if a given key exists.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">key</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key to look for in the Hash table.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+
+<span class="param-desc">
+    <p>If the key exists 'true' will be returned.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#fetch" id="fetch">fetch<span class="signature">(key)</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Retrieves the value associated with the given key from the hash table. Returns null if not found.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">key</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key to look for in the Hash table.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            <div class="returns">
+
+
+
+<span class="param-desc">
+    <p>The value associated with the given key.</p>
+</span>
+
+</div>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#forEach" id="forEach">forEach<span class="signature">(fn, scope)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Iterate through all keys in the hash table.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">fn</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Key will be the parameter.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">scope</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mixed</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Scope in which to run the function in.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>MAF.messages.forEach(function(key){
+  if (key === 'example')
+     console.log('This key has already data stored.', MAF.messages.fetch(key));
+});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#remove" id="remove">remove<span class="signature">(key)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Deletes the value associated with the given key from the hash table. Notifies all event listeners for the given key that the value has changed (deleted).</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">key</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Deletes the value associated with the given key.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#reset" id="reset">reset<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Resets the hash table and list of event listeners to null.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#store" id="store">store<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Updates the value associated with the given key in the hash table. Notifies all event listeners for the given key with the new value.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">key</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Updates the value associated with the given key.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">value</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mixed</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Value to store on the given key. The value can be an object, array, or any primitive type.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Events</h3>
+        
+        <dl class="bs-docs-example bs-events">
+            
+<dt>
+    <h4 class="name" anchor="MAF.messages#event:onBroadcast" id="event:onBroadcast">onBroadcast</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Fired when values in the messages hash table is changed.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
