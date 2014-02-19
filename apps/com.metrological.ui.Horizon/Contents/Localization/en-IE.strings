@@ -62,10 +62,14 @@
 "CATEGORY_FAVORITES" = "FAVOURITES";
 "CATEGORY_VIDEO" = "TV & VIDEO";
 "CATEGORY_NEWS" = "NEWS & INFO";
+"CATEGORY_NEWSIE" = "NEWS & SPORT";
+"CATEGORY_GAMESIE" = "GAMES";
 "CATEGORY_SOCIAL" = "SOCIAL TV";
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";
+"CATEGORY_TRAFFICIE" = "TRAFFIC & WEATHER";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_LIFESTYLEIE" = "LIFESTYLE";
 "ADDFAVO" = "Add/remove favourite Apps";
 "ADDFAVO_DESC" = "Press OK to start managing your favourite Apps";
 "ADDFAVO_SELECTED" = "Navigate to your favourite App and press OK to add the App to FAVOURITES. Press BACK at any time to cancel";
