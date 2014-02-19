@@ -51,8 +51,8 @@ plugins.players.push(new AVNPlayer());
 
 plugins.storage = new CookieStorage();
 
-window.addEventListener('blur', function () {
+plugins.exit = function () {
 	if (active === ui) {
 		window.close();
 	}
-});
+};

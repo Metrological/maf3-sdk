@@ -737,7 +737,7 @@ window.addEventListener('unload', function () {
 	resetNDSPlayer();
 });
 
-window.addEventListener('blur', function () {
+plugins.exit = function () {
 	if (Application) {
 		Application.pause();
 	}
@@ -747,7 +747,7 @@ window.addEventListener('blur', function () {
 		UI.visible = false;
 	}
 	isEnabled = false;
-});
+};
 
 // Test Notification
 if (MAE.pait) {

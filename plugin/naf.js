@@ -28,6 +28,17 @@ var getApplicationIndex = (function () {
 	};
 }());
 
+
+var exitToMenu = function () {
+	var i = getApplicationIndex();
+	doFn('model.state.applications.' + i + '.appMsg', {
+		method: 'paused',
+		message: {}
+	});
+};
+
+plugins.exit = exitToMenu;
+
 onFn('model.initialized', function () {
 
 	log('naf: base init');
@@ -43,11 +54,6 @@ onFn('model.initialized', function () {
 	});
 
 	window.addEventListener('blur', function () {
-		var i = getApplicationIndex();
-		doFn('model.state.applications.' + i + '.appMsg', {
-			method: 'paused',
-			message: {}
-		});
 		if (active && active !== ui) {
 			ApplicationManager.close(active);
 		}

@@ -191,14 +191,14 @@ var AccentureProfile = function (name) {
 		return LANGUAGES[this.languageCode];
 	});
 	getter(this, 'languageCode', function () {
-		var l = OTT && OTT.getLanguage && OTT.getLanguage().toLowerCase();
+		/*var l = OTT && OTT.getLanguage && OTT.getLanguage().toLowerCase();
 		switch (l) {
 			case 'nederlands':
 			case 'dutch':
 				return 'nl';
-			default:
+			default:*/
 				return window.MAE.language || 'en';
-		}
+		//}
 	});
 	getter(this, 'city', function () {
 		return GEO && GEO.geo && GEO.geo.city;
@@ -288,18 +288,17 @@ if (OTT && OTT.onShow) {
 if (OTT && OTT.onHide) {
 	OTT.onHide(onHide);
 }
+
+plugins.exit = function () {
+	if (OTT && OTT.exit) {
+		OTT.exit();
+	}
+};
 /*
-window.addEventListener('unload', function () {
+window.addEventListener('blur', function () {
 	onHide();
 });
 */
-window.addEventListener('blur', function () {
-	onHide();/*
-	if (OTT && OTT.exit) {
-		OTT.exit();
-	}*/
-});
-
 if (OTT && OTT.viewMode) {
 	OTT.viewMode('overlay');
 }
