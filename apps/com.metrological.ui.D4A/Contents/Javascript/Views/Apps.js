@@ -551,7 +551,7 @@ var AppsView = new MAF.Class({
 										view.elements.appDescription.setText($_('STOP_REORDERFAVO'));
 									}
 								} else {
-									view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
+									view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['smile-o', 'half', 'middle']) : ''));
 									view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
 								}
 							}

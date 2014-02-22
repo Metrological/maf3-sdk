@@ -113,7 +113,7 @@ var loadTemplate = (function () {
 							width: 588,
 							height: 1032,
 							top: 22,
-							left: 22
+							left: 32
 						},
 						events: {
 							select: function (event) {
