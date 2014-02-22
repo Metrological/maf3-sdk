@@ -6,7 +6,8 @@ Theme.set({
 	}
 });
 
-var TOS = 1;
+var TOS = 1,
+	Horizon;
 
 include('Javascript/Core/ApplicationManager.js');
 include('Javascript/Views/Apps.js');

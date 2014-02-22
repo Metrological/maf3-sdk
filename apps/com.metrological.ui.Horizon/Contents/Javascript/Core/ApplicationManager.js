@@ -1045,7 +1045,9 @@ widget.handleHostEvent = function (event) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}
 					bounds = mediaplayer && mediaplayer.getViewportBounds();
-					Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
+					if (Horizon) {
+						Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
+					}
 					break;
 				case 'switch-profile':
 					loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }});
@@ -1127,8 +1129,10 @@ widget.handleHostEvent = function (event) {
 			}
 			break;
 		case 'onActivateSnippet':
-			Horizon.reset();
-			if (event.id !== widget.identifier) {
+			if (Horizon) {
+				Horizon.reset();
+			}
+			if (event.id !== widget.identifier && Horizon) {
 				Horizon.hide();
 			}
 			loadTemplate.call(this, event.getResult());
@@ -1138,7 +1142,7 @@ widget.handleHostEvent = function (event) {
 				warn('Their are issues closing your App, please check your code');
 				return false;
 			}
-			if (event.id !== widget.identifier) {
+			if (event.id !== widget.identifier && Horizon) {
 				Horizon.show();
 			}
 			break;
