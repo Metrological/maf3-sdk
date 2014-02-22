@@ -288,7 +288,7 @@ var NDSPlayer = function () {
 	});
 	getter(instance, 'program', function () {
 		var program = currentProgram || {};
-		return new TVProgram(program.title, program.description, (program.startTime || 0) * 1000, program.duration);
+		return new TVProgram(program.title, /*isEnable && program.description ||*/ '', (program.startTime || 0) * 1000, program.duration);
 	});
 	getter(instance, 'startTime', function () {
 		return 0;
