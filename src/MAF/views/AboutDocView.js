@@ -16,17 +16,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 /** 
- * @class MAF.system.AboutDocView
+ * @class MAF.views.AboutDocView
+ * @classdesc > <p>This is view already configured with a BackButton, TextGrid and a PageIndicator.</p>
+ * MAF.views.AboutBox uses this view class for viewing its pages config options.
+ * * this.controls.backButton - contains a MAF.control.BackButton
+ * * this.elements.textGrid - contains a MAF.element.TextGrid
+ * * this.controls.pageIndicator -  contains a MAF.control.PageIndicator
  * @extends MAF.system.SidebarView
  */
-define('MAF.system.AboutDocView', function () {
+define('MAF.views.AboutDocView', function () {
 	return new MAF.Class({
 		ClassName: 'AboutDocView',
 		Extends: MAF.system.SidebarView,
 
 		config: {
 			data: {
-				backLabel: 'Back'
+				backLabel: 'Back',
+				value: ''
 			}
 		},
 

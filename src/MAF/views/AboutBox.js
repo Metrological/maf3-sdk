@@ -217,7 +217,7 @@ define('MAF.views.AboutBox', function () {
 											backLabel: this.config.label,
 											value: this.config.value
 										},
-										viewClass: MAF.system.AboutDocView
+										viewClass: MAF.views.AboutDocView
 									};
 									MAF.application.addViewConfig(viewConfig);
 									MAF.application.loadView(viewConfig.id, {

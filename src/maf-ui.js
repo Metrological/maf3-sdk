@@ -80,10 +80,10 @@ include('MAF/system/SidebarView.js');
 include('MAF/system/FullscreenView.js');
 include('MAF/system/SnippetView.js');
 include('MAF/system/IconView.js');
-include('MAF/system/AboutDocView.js');
 
 include('MAF/system/OptionSelectView.js');
 include('MAF/control/SelectButton.js');
 
+include('MAF/views/AboutDocView.js');
 include('MAF/views/AboutBox.js');
 include('MAF/views/SearchSuggest.js');
