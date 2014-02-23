@@ -36,6 +36,8 @@ var AppsView = new MAF.Class({
 			}
 			this.controls.apps.changeDataset(data, true);
 			event.stop();
+		} else if (!this.frozen) {
+			ApplicationManager.exit();
 		}
 	},
 
