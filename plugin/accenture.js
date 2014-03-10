@@ -24,6 +24,9 @@ var AccenturePlayer = function () {
 				state: state
 			});
 			previousState = state;
+			if (state === Player.state.ERROR) {
+				instance.src = null;
+			}
 		}
 	}
 	function timeChange() {
@@ -35,8 +38,8 @@ var AccenturePlayer = function () {
 	if (OTT && OTT.onPlaybackEvent) {
 		OTT.onPlaybackEvent(stateChange);
 	}
-	if (OTT && OTT.onChannelEvent) {
-		OTT.onChannelEvent(channelChange);
+	if (OTT && OTT.onChannelChange) {
+		OTT.onChannelChange(channelChange);
 	}
 
 	function supports(mimetype) {
@@ -119,11 +122,12 @@ var AccenturePlayer = function () {
 			paused = false;
 			(function () {
 				OTT.load(src, false);
-			}).delay(300);
+			}).delay(400);
 		} else if (OTT && currentSource) {
 			currentSource = null;
 			paused = false;
 			OTT.stop();
+			OTT.viewMode('overlay');
 		}
 
 	});
@@ -272,6 +276,7 @@ var onShow = function () {
 		var player = plugins.players[0],
 			UI = getUIWindow();
 		if (player) {
+			player.bounds = [0,0,1920,1080];
 			player.src = '';
 		}
 		if (UI) {
@@ -290,6 +295,11 @@ if (OTT && OTT.onHide) {
 }
 
 plugins.exit = function () {
+	var player = plugins.player[0];
+	if (player) {
+		player.bounds = [0,0,1920,1080];
+		player.src = '';
+	}
 	if (OTT && OTT.exit) {
 		OTT.exit();
 	}
