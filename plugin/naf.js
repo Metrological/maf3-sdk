@@ -1,5 +1,5 @@
 //var version = '1.0.8s4c2r99';
-var version = '1.0.9s4c2r139';
+var version = '1.0.9s4c2r148';
 
 NAF = {};
 WebApp = {};
@@ -28,35 +28,46 @@ var getApplicationIndex = (function () {
 	};
 }());
 
-
-var exitToMenu = function () {
-	var i = getApplicationIndex();
-	doFn('model.state.applications.' + i + '.appMsg', {
-		method: 'paused',
-		message: {}
-	});
-};
-
-plugins.exit = exitToMenu;
-
 onFn('model.initialized', function () {
+	var i = getApplicationIndex();
 
 	log('naf: base init');
 
-	window.addEventListener('focus', function () {
-		var i = getApplicationIndex();
-		doFn('model.state.applications.' + i + '?state=running');
-		if (active && apps[active]) {
-			ApplicationManager.fire(active, 'onSelect', {
-				id: apps[active].currentViewId
-			});
-		}
-	});
+	document.body.visible = false;
 
-	window.addEventListener('blur', function () {
-		if (active && active !== ui) {
-			ApplicationManager.close(active);
+	plugins.exit = function () {
+		doFn('model.state.applications.' + i + '.appMsg', {
+			method: 'paused',
+			message: {}
+		});
+	};
+
+	var currentState;
+	onFn('model.state.applications.' + i + '.state', function () {
+		var state = model.state.applications[i].state;
+		if (currentState === state) {
+			return;
 		}
+		switch (state) {
+			case 'paused':
+				document.body.visible = false;
+				plugins.players[0].src = null;
+				if (active && active !== ui) {
+					ApplicationManager.close(active);
+				}
+				break;
+			case 'running':
+				(function () {
+					document.body.visible = true;
+					if (active && apps[active]) {
+						ApplicationManager.fire(active, 'onSelect', {
+							id: apps[active].currentViewId
+						});
+					}
+				}).delay(500);
+				break;
+		}
+		currentState = state;
 	});
 
 	onFn('model.state.key', function () {
@@ -76,7 +87,7 @@ onFn('model.initialized', function () {
 
 	function getMainMenuApplications(apps) {
 		apps = apps || ApplicationManager.getApplications();
-		var i = getApplicationIndex();
+		var j = (i+1),
 			ids = apps.filter(function (id) {
 				return meta[id].menu === true;
 			});
@@ -84,7 +95,7 @@ onFn('model.initialized', function () {
 			var name = ApplicationManager.getMetadataByKey(id, 'name'),
 				image = ApplicationManager.getIcon(id),
 				url = ApplicationManager.getLaunchURL(id);
-			doFn('model.state.applications.' + (++i) +
+			doFn('model.state.applications.' + (j++) +
 				'?name=' + name +
 				'&type=webapp' + 
 				'&id=' + id + 
@@ -94,7 +105,7 @@ onFn('model.initialized', function () {
 				'&viewState=hidden' +
 				'&pictures=[' + image + ']');
 		});
-		doFn('model.state.applications.' + getApplicationIndex() + '?state=loaded');
+		doFn('model.state.applications.' + i + '?state=loaded');
 	}
 
 	function getApplicationsByChannelId(channelId) {
@@ -121,8 +132,7 @@ onFn('model.initialized', function () {
 	}
 
 	function onMessageCallback() {
-		var i = getApplicationIndex(),
-			msg = model.state.applications[i].appMsg,
+		var msg = model.state.applications[i].appMsg,
 			uiId = model.state.applications[0].id,
 			message;
 		if (msg.sourceId !== uiId) {
@@ -141,7 +151,7 @@ onFn('model.initialized', function () {
 		}
 	}
 
-	onFn('model.state.applications.' + getApplicationIndex() + '.appMsg', onMessageCallback);
+	onFn('model.state.applications.' + i + '.appMsg', onMessageCallback);
 
 	if (ApplicationManager.complete) {
 		getMainMenuApplications();
@@ -158,7 +168,7 @@ var NAFPlayer = function () {
 		currentBounds = Player.prototype.bounds,
 		currentSource,
 		initialized = false,
-		isPlaying = false,
+		//isPlaying = false,
 		forcePlay = false;
 
 	instance.subscribers = {};
@@ -181,7 +191,7 @@ var NAFPlayer = function () {
 		initialized = true;
 
 		onFn('model.state.applications.' + i + '.media.assets.*', function () {
-			if (instance.src && !forcePlay) {
+			if (currentSource && !forcePlay) {
 				forcePlay = true;
 				stateChange(states.INFOLOADED);
 			}
@@ -220,7 +230,38 @@ var NAFPlayer = function () {
 	function supports(mime) {
 		return mime.indexOf('video/mp4') !== -1;
 	}
-	function notify() {
+	function notify(icon, message, type, identifier) {
+		var t;
+		switch(type) {
+			case 'c2a':
+				t = 'call2action';
+				break;
+			case 'alert':
+				t = 'notification';
+				break;
+			case 'autostart':
+				t = 'autostart';
+				break;
+			default:
+				return;
+		}
+		var image = identifier && ApplicationManager.getIcon(identifier),
+			url = identifier && ApplicationManager.getLaunchURL(identifier);
+		doFn('model.state.applications.0.appMsg', {
+			method: 'announceNotifications',
+			message: [{
+				id: identifier,
+				image: image,
+				url: url,
+				event: {
+					type: t,
+					time: Date.now(),
+					timeout: 30,
+					message: message || '',
+					image: image
+				}
+			}]
+		});
 	}
 	function r(c) {
 		return Math.floor(c * scale);
@@ -312,22 +353,23 @@ var NAFPlayer = function () {
 			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
 			if (currentSource) {
 				//stateChange(states.STOP);
+				forcePlay = true;
 				currentSource = undefined
 				doFn('model.state.applications.' + i + '.media.assets.0', '');
 			}
-			forcePlay = false;
 			currentSource = src;
 			stateChange(states.BUFFERING);
-			doFn('model.state.applications.' + i + '.media', asset);
-		} else if (this.src) {
-			if (!isPlaying && !forcePlay) {
+			(function () {
+				forcePlay = false;
+				doFn('model.state.applications.' + i + '.media', asset);
+			}).delay(500);
+		} else if (currentSource && !src) {
+			currentSource = undefined;
+			if (forcePlay) {
 				doFn('model.state.players.0', 'model.state.players.0.currentChannel');
 			}
-			if (currentSource) {
-				currentSource = undefined;
-				doFn('model.state.applications.' + i + '.media.assets.0', '');
-			}
-			forcePlay = false;
+			doFn('model.state.applications.' + i + '.media.assets.0', '');
+			stateChange(states.STOP);
 		}
 	});
 	getter(instance, 'paused', function () {
@@ -337,10 +379,14 @@ var NAFPlayer = function () {
 		if (this.src) {
 			if (!p && forcePlay) {
 				var i = getApplicationIndex();
-				doFn('model.state.players.0', 'model.state.applications.' + i + '.media.assets.0');
 				forcePlay = false;
+				(function () {
+					doFn('model.state.players.0', 'model.state.applications.' + i + '.media.assets.0');
+					stateChange(states.PLAY);
+				}).delay(200);
 			} else {
 				doFn('model.state.players.0?playRate=' + (p ? 0 : 1) + 'x');
+				stateChange(p ? states.PAUSE : states.PLAY);
 			}
 		}
 	});
