@@ -1,0 +1,453 @@
+<div>
+	<h1 class="page-header"><i class="icon-shield" style="color:#0186d1"></i> Timer</h1>
+	
+
+
+
+<section>
+    
+<header>
+    <!--h2>
+    Timer
+    </h2-->
+    
+        <div class="class-description"><p>Timer objects allow you to perform a task at a periodic interval or can be used to simply fire once at a later time.</br>
+They allow you to create multiple timers all running on different frequencies.</p>
+<p>They can also be started and stopped without having to delete them.</p></div>
+    
+</header>  
+
+<article>
+    <div class="container-overview hero-unit">
+    
+
+    
+
+    
+    
+    
+        
+
+<div >
+<dt>
+    <h4 class="name" anchor="Timer" id="Timer">new Timer<span class="signature">(interval, callback)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">interval</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Time in seconds.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">callback</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Method to execute when the timer triggers.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name">ticking</td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>This allows you to turn a timer on and off by setting it to true and false, respectively. </p>
+<p>If you want to disable a timer for a while, just set ticking to false. </br>Later, set it to true, and it starts firing again.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+    
+    </div>
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="bs-docs-example bs-methods">
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="Timer#reset" id="reset">reset<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Resets the interval of the timer.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="Timer#start" id="start">start<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>This allows you to start running the timer.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="Timer#stop" id="stop">stop<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>This allows you to stop running the timer.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>

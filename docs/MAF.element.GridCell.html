@@ -28,6 +28,8 @@
     
     
         
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell" id="GridCell">new MAF.element.GridCell<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -85,6 +87,7 @@
     
     
 </dd>
+</div>
 
     
     </div>
@@ -96,6 +99,473 @@
     
 
     
+        <h3 class="subsection-title">Configs</h3>
+        <dl class="bs-docs-example bs-configs">
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="events"><span rel="tooltip" title="Inherited From: MAF.element.Core#events"><a href="MAF.element.Core.html#events" class="label label-info class-tree-node">inherited</a></span> events<span class='type-signature'> : {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>A object containing one or more event handlers to be added to this object during initialization. </p>
+<blockquote>
+<p>The possible events are defined on each component.</p>
+</blockquote>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>MAF.element.Core({
+  events: {
+     onAppend: function () {
+     	// do something
+     }
+  }
+}).appendTo(this);</code></pre>
+
+    
+</dd>
+</div>
+
+        
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="id"><span rel="tooltip" title="Inherited From: MAF.element.Core#id"><a href="MAF.element.Core.html#id" class="label label-info class-tree-node">inherited</a></span> id<span class='type-signature'> : {String}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>The unique id of this class</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+</dd>
+</div>
+
+        
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="styles"><span rel="tooltip" title="Inherited From: MAF.element.Core#styles"><a href="MAF.element.Core.html#styles" class="label label-info class-tree-node">inherited</a></span> styles<span class='type-signature'> : {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>CSS styles for the component:</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+		<th>Default</th>
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">width</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The width of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">height</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The height of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">hAlign</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    left
+                
+                </td>
+            
+
+            <td class="description last"><p>Horizontal alignment of this component. (left, center, right)</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">vAlign</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    top
+                
+                </td>
+            
+
+            <td class="description last"><p>Vertical alignment of this component. (top, center, bottom)</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">hOffset</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Horizontal offset of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">vOffset</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Vertical offset of this component.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+</dd>
+</div>
+
+        </dl>
+
+    
     
     
     
@@ -103,6 +573,8 @@
         
         <dl class="bs-docs-example bs-methods">
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#animate" id="animate"><span rel="tooltip" title="Inherited From: MAF.element.Core#animate"><a href="MAF.element.Core.html#animate" class="label label-info class-tree-node">inherited</a></span> animate<span class="signature">(config)</span><span class="type-signature"></span></h4>
     
@@ -149,6 +621,7 @@
             
                 
 <span class="param-type">Object</span>
+
 
 
             
@@ -214,9 +687,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#focus" id="focus"><span rel="tooltip" title="Inherited From: MAF.element.Container#focus"><a href="MAF.element.Container.html#focus" class="label label-info class-tree-node">inherited</a></span> focus<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -280,9 +756,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#freeze" id="freeze"><span rel="tooltip" title="Inherited From: MAF.element.Core#freeze"><a href="MAF.element.Core.html#freeze" class="label label-info class-tree-node">inherited</a></span> freeze<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -359,9 +838,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getAbsolutePosition" id="getAbsolutePosition"><span rel="tooltip" title="Inherited From: MAF.element.Core#getAbsolutePosition"><a href="MAF.element.Core.html#getAbsolutePosition" class="label label-info class-tree-node">inherited</a></span> getAbsolutePosition<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
@@ -438,9 +920,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getCellCoordinates" id="getCellCoordinates">getCellCoordinates<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
@@ -511,9 +996,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getCellDataIndex" id="getCellDataIndex">getCellDataIndex<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
     
@@ -584,9 +1072,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getCellDataItem" id="getCellDataItem">getCellDataItem<span class="signature">()</span><span class="type-signature"> &rarr; {Mixed}</span></h4>
     
@@ -657,9 +1148,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getCellDimensions" id="getCellDimensions">getCellDimensions<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
@@ -730,9 +1224,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getCellIndex" id="getCellIndex">getCellIndex<span class="signature">()</span><span class="type-signature"> &rarr; {Number}</span></h4>
     
@@ -803,9 +1300,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#getView" id="getView"><span rel="tooltip" title="Inherited From: MAF.element.Core#getView"><a href="MAF.element.Core.html#getView" class="label label-info class-tree-node">inherited</a></span> getView<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -876,9 +1376,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#hide" id="hide"><span rel="tooltip" title="Inherited From: MAF.element.Core#hide"><a href="MAF.element.Core.html#hide" class="label label-info class-tree-node">inherited</a></span> hide<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -955,9 +1458,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#initialize" id="initialize"><span rel="tooltip" title="Inherited From: MAF.element.Core#initialize"><a href="MAF.element.Core.html#initialize" class="label label-info class-tree-node">inherited</a></span> initialize<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -1021,9 +1527,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#show" id="show"><span rel="tooltip" title="Inherited From: MAF.element.Core#show"><a href="MAF.element.Core.html#show" class="label label-info class-tree-node">inherited</a></span> show<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -1100,9 +1609,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#thaw" id="thaw"><span rel="tooltip" title="Inherited From: MAF.element.Core#thaw"><a href="MAF.element.Core.html#thaw" class="label label-info class-tree-node">inherited</a></span> thaw<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -1179,6 +1691,7 @@
     
     
 </dd>
+</div>
 
         </dl>
     
@@ -1190,6 +1703,8 @@
         
         <dl class="bs-docs-example bs-events">
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onAnimationEnded" id="event:onAnimationEnded">onAnimationEnded</h4>
     
@@ -1253,9 +1768,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onAppend" id="event:onAppend">onAppend</h4>
     
@@ -1319,9 +1837,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onBlur" id="event:onBlur">onBlur</h4>
     
@@ -1385,75 +1906,12 @@
     
     
 </dd>
+</div>
 
         
             
-<dt>
-    <h4 class="name" anchor="MAF.element.GridCell#event:onBlur" id="event:onBlur">onBlur</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Fired when the component is blurred.</p>
-        </p>
-    </div>
-    
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onFocus" id="event:onFocus">onFocus</h4>
     
@@ -1517,75 +1975,12 @@
     
     
 </dd>
+</div>
 
         
             
-<dt>
-    <h4 class="name" anchor="MAF.element.GridCell#event:onFocus" id="event:onFocus">onFocus</h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>
-        <p>Fired when the component recieves focus.</p>
-        </p>
-    </div>
-    
 
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onNavigate" id="event:onNavigate">onNavigate</h4>
     
@@ -1649,9 +2044,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.element.GridCell#event:onSelect" id="event:onSelect">onSelect</h4>
     
@@ -1715,6 +2113,7 @@
     
     
 </dd>
+</div>
 
         </dl>
     

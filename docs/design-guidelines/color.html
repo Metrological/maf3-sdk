@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>MAF: Design Guidelines</title>
+<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<header>
+	<div class="wrapper">
+		<a class="header-text" href="">MAF Developer Library</a>
+		<a href="http://www.metrological.com" target="_new"><img src="images/logo_small.png" alt="logo"></a>
+	</div>
+</header>
+
+<div class="wrapper">
+	<nav>
+		<ul>
+			<li><a href="">UI Basics</a></li>
+				<ul class="sub">
+					<li><a href="index.html">Layout</a></li>
+					<li><a href="navigation.html">Navigation</a></li>
+					<li><a href="animation.html">Animation</a></li>
+					<li><a href="branding.html">Branding</a></li>
+					<li><a class="active" href="color.html">Color and Typography</a></li>
+				</ul>
+			<li><a href="">UI Elements</a></li>
+				<ul class="sub">
+					<li><a href="">Sidebar (soon)</a></li>
+					<li><a href="">Fullscreen (soon)</a></li>
+					<li><a href="">Slider (soon)</a></li>
+					<li><a href="">Carousel (soon)</a></li>
+				</ul>
+			<li><a href="">Icon and Image Design</a></li>
+				<ul class="sub">
+					<li><a href="icon.html">Icon design</a></li>
+					<li><a href="">Image usage (soon)</a></li>
+				</ul>
+		</ul>
+	</nav>
+
+	<article>
+
+		<h1>Color and Typography</h1>
+
+		On a Television color helps to indicate interactivity. On a smartphone or computer the user uses his finger or cursor to navigate inside the application. On a television we dont have this indicator, so the application needs a clear <b>focus color</b> to show the users location. 
+
+		<div class="image">
+			<div class="recommended">
+				<span>Recommended</span>
+				<div class="high-contrast">
+					<div class="contrast-box color-1"></div>
+					<div class="contrast-box color-2"></div>
+					<div class="contrast-box color-3"></div>
+					<div class="contrast-box color-4"></div>
+				</div>
+			</div>
+			<div class="not-recommended">
+				<span>Not Recommended</span>
+				<div class="low-contrast">
+					<div class="contrast-box color-5"></div>
+					<div class="contrast-box color-6"></div>
+					<div class="contrast-box color-7"></div>
+					<div class="contrast-box color-8"></div>
+				</div>
+			</div>
+		</div>
+
+		<b class="red">Important note:</b> if you create a new application, make sure the base colors include a high contrast color that indicates the location (focus) on screen. Consider choosing a key color to indicate interactivity and state.
+
+		<h2>Do not use the color white (#FFFFFF)</h2>
+
+		Clear white pops out of the television screen. Instead of using clear white, its better to use off-white (#F1F1F1).
+
+		<h2>Font size matters</h2>
+
+		Because of the high distance between the user an his television text should always be legible. Text should nevver be smaller than - <b> 24 pixels / 18 points</b>.
+
+		<h2>Line height</h2>
+
+		Using a line height of 125% or larger makes text (better) readable from a larger distance. 
+
+		<div class="image">
+			<div class="recommended">
+				<span>Recommended</span>
+				<div class="recommended-text-block">
+					Aliquam rutrum tellus ac quam volutpat, lacinia rutrum velit ultrices. Praesent semper gravida varius. Suspendisse pulvinar augue vel vehicula aliquet. Morbi in nulla mi. Cras id neque vel lacus faucibus mollis ornare id magna. Proin in lobortis nunc, ut fringilla odio.
+					<br /><br />
+					Praesent ut lectus mollis, vehicula dolor sed, placerat nisi.
+				</div>
+			</div>
+
+			<div class="not-recommended">
+				<span>Not Recommended</span>
+				<div class="not-recommended-text-block-2">
+					Aliquam rutrum tellus ac quam volutpat, lacinia rutrum velit ultrices. Praesent semper gravida varius. Suspendisse pulvinar augue vel vehicula aliquet. Morbi in nulla mi. Cras id neque vel lacus faucibus mollis ornare id magna. Proin in lobortis nunc, ut fringilla odio.
+					<br /><br />
+					Praesent ut lectus mollis, vehicula dolor sed, placerat nisi.
+				</div>
+			</div>
+		</div>
+
+		<h2>Font usage</h2>
+
+		In general, MAF applications use a single font. Instead of mixing fonts, it is better to mix different font sizes and weights.
+
+		<h2>Text and image alignment</h2>
+
+		For a clean design it's important to align the text and images by using for example a simple grid structure.
+
+		<div class="image">
+			<div class="recommended">
+				<span>Recommended</span>
+				<div class="recommended-text-block-3">
+					<div class="text-block-header">Header</div>
+					<div class="text-block-content">
+						<b style="display:block;">Title</b>
+						Aliquam rutrum tellus ac quam volutpat, lacinia rutrum velit ultrices. Praesent semper gravida varius. Suspendisse pulvinar augue vel vehicula aliquet. Morbi in nulla mi. Cras id neque vel lacus faucibus mollis ornare id magna. Proin in lobortis nunc, ut fringilla odio.
+						<div class="text-block-content-image">
+							<img src="http://lorempixel.com/300/200/sports/" alt="image">
+						</div>
+						Praesent ut lectus mollis, vehicula dolor sed, placerat nisi.
+					</div>
+				</div>
+			</div>
+
+			<div class="not-recommended">
+				<span>Not Recommended</span>
+				<div class="not-recommended-text-block-3">
+					<div class="text-block-header">Header</div>
+					<div class="text-block-content">
+						<b style="display:block;margin-left: 5px;">Title</b>
+						Aliquam rutrum tellus ac quam volutpat, lacinia rutrum velit ultrices. Praesent semper gravida varius. Suspendisse pulvinar augue vel vehicula aliquet. Morbi in nulla mi. Cras id neque vel lacus faucibus mollis ornare id magna. Proin in lobortis nunc, ut fringilla odio.
+						<div class="text-block-content-image">
+							<img style="margin-left: 30px;" src="http://lorempixel.com/200/200/sports/" alt="image">
+						</div>
+						<div style="margin-left: 10px;">Praesent ut lectus mollis, vehicula dolor sed, placerat nisi.</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</article>
+</div>
+
+</body>
+</html>

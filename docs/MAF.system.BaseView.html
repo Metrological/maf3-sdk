@@ -11,6 +11,8 @@
     MAF.system.BaseView
     </h2-->
     
+        <div class="class-description"><p>This component implements the basics for a view.</p></div>
+    
 </header>  
 
 <article>
@@ -28,6 +30,8 @@
     
     
         
+
+<div >
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView" id="BaseView">new MAF.system.BaseView<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -35,6 +39,19 @@
 </dt>
 <dd>
     
+    
+    <div class="description">
+        <p>
+        <p>The following properties are used in views:</p>
+<ul>
+<li>this.config - properties passed at initiation</li>
+<li>this.persist - Persistant storage for when the view gets reloaded.</li>
+<li>this.cache - For storage of temporary data.</li>
+<li>this.controls - References to view controls that will have state saving.</li>
+<li>this.elements - References to view controls without state saving.</li>
+</ul>
+        </p>
+    </div>
     
 
     
@@ -85,6 +102,7 @@
     
     
 </dd>
+</div>
 
     
     </div>
@@ -96,6 +114,473 @@
     
 
     
+        <h3 class="subsection-title">Configs</h3>
+        <dl class="bs-docs-example bs-configs">
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="events"><span rel="tooltip" title="Inherited From: MAF.element.Core#events"><a href="MAF.element.Core.html#events" class="label label-info class-tree-node">inherited</a></span> events<span class='type-signature'> : {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>A object containing one or more event handlers to be added to this object during initialization. </p>
+<blockquote>
+<p>The possible events are defined on each component.</p>
+</blockquote>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>MAF.element.Core({
+  events: {
+     onAppend: function () {
+     	// do something
+     }
+  }
+}).appendTo(this);</code></pre>
+
+    
+</dd>
+</div>
+
+        
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="id"><span rel="tooltip" title="Inherited From: MAF.element.Core#id"><a href="MAF.element.Core.html#id" class="label label-info class-tree-node">inherited</a></span> id<span class='type-signature'> : {String}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>The unique id of this class</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+</dd>
+</div>
+
+        
+        
+<div class="inherited">
+<dt>
+    <h4 class="name" id="styles"><span rel="tooltip" title="Inherited From: MAF.element.Core#styles"><a href="MAF.element.Core.html#styles" class="label label-info class-tree-node">inherited</a></span> styles<span class='type-signature'> : {Object}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>CSS styles for the component:</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params table table-bordered table-condensed">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+
+		<th>Type</th>
+
+		
+		<th>Argument</th>
+		
+
+		
+		<th>Default</th>
+		
+
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+
+	<tbody>
+	
+
+        <tr>
+            
+                <td class="name">width</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The width of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">height</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The height of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">hAlign</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    left
+                
+                </td>
+            
+
+            <td class="description last"><p>Horizontal alignment of this component. (left, center, right)</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">vAlign</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    top
+                
+                </td>
+            
+
+            <td class="description last"><p>Vertical alignment of this component. (top, center, bottom)</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">hOffset</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Horizontal offset of this component in pixels.</p></td>
+        </tr>
+
+	
+
+        <tr>
+            
+                <td class="name">vOffset</td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    <span class="label">optional</span>&nbsp;
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Vertical offset of this component.</p></td>
+        </tr>
+
+	
+	</tbody>
+</table>
+
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+</dd>
+</div>
+
+        </dl>
+
+    
     
     
     
@@ -103,6 +588,8 @@
         
         <dl class="bs-docs-example bs-methods">
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#animate" id="animate"><span rel="tooltip" title="Inherited From: MAF.element.Core#animate"><a href="MAF.element.Core.html#animate" class="label label-info class-tree-node">inherited</a></span> animate<span class="signature">(config)</span><span class="type-signature"></span></h4>
     
@@ -149,6 +636,7 @@
             
                 
 <span class="param-type">Object</span>
+
 
 
             
@@ -214,9 +702,150 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#createView" id="createView"><span class="label label-info">virtual</span> createView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View creation method that must be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#destroyView" id="destroyView"><span class="label label-info">virtual</span> destroyView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View destruction method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#freeze" id="freeze"><span rel="tooltip" title="Inherited From: MAF.element.Core#freeze"><a href="MAF.element.Core.html#freeze" class="label label-info class-tree-node">inherited</a></span> freeze<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -293,9 +922,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#getAbsolutePosition" id="getAbsolutePosition"><span rel="tooltip" title="Inherited From: MAF.element.Core#getAbsolutePosition"><a href="MAF.element.Core.html#getAbsolutePosition" class="label label-info class-tree-node">inherited</a></span> getAbsolutePosition<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
@@ -372,9 +1004,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#getView" id="getView"><span rel="tooltip" title="Inherited From: MAF.element.Core#getView"><a href="MAF.element.Core.html#getView" class="label label-info class-tree-node">inherited</a></span> getView<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -445,9 +1080,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#hide" id="hide"><span rel="tooltip" title="Inherited From: MAF.element.Core#hide"><a href="MAF.element.Core.html#hide" class="label label-info class-tree-node">inherited</a></span> hide<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -524,9 +1162,81 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#hideView" id="hideView"><span class="label label-info">virtual</span> hideView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View hide method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#initialize" id="initialize"><span rel="tooltip" title="Inherited From: MAF.element.Core#initialize"><a href="MAF.element.Core.html#initialize" class="label label-info class-tree-node">inherited</a></span> initialize<span class="signature">()</span><span class="type-signature"></span></h4>
     
@@ -590,9 +1300,356 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#initView" id="initView"><span class="label label-info">virtual</span> initView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View initialization method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#registerMessageCenterListenerCallback" id="registerMessageCenterListenerCallback">registerMessageCenterListenerCallback<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Register a function for callback on MAF.messages.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var myView = new MAF.Class({
+   initView: function() {
+      this.registerMessageCenterListenerCallback(this.dataChanged);
+      MAF.messages.store('news', 'The news is in.');
+      MAF.messages.store('games', 'What games?');
+   },
+   dataChanged: function (event) {
+      if (event.payload.value && !this.frozen) {
+         switch (event.payload.key) {
+            case 'news':
+               //The view is visible and news is stored in MAF.messages
+               break;
+         }
+      } else {
+         switch (event.payload.key) {
+            case 'news':
+               //news is stored in MAF.messages and the view is not visible
+               break;
+         }
+      }
+      if (event.payload.key === 'games') {
+         //Once this view has loaded we always do something when games is stored on MAF.messages.
+         //Also when a different view is active.
+      }
+   }
+});</code></pre>
+
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#registerMessageCenterListenerControl" id="registerMessageCenterListenerControl">registerMessageCenterListenerControl<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>Register a component for callback on MAF.messages.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>Not working correctly yet.</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var myView = new MAF.Class({
+   createView: function () {
+      this.controls.header = new MAF.control.Header({
+         label: 'Header',
+         events: {
+            onBroadcast: function () {
+               this.setText('Button randomized: ' + MAF.messages.fetch('button'));
+            }
+         }
+      }).appendTo(this);
+
+      this.controls.button = new MAF.control.TextButton({
+         label: 'Random number stored',
+         styles: {
+            vOffset: this.controls.header.outerHeight
+         },
+         events: {
+            onSelect: function () {
+               MAF.messages.store('button', Number.random(1, 1000));
+            }
+         }
+      }).appendTo(this);
+   },
+   updateView: function() {
+      this.registerMessageCenterListenerControl(this.controls.header);
+   }
+});</code></pre>
+
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#selectView" id="selectView"><span class="label label-info">virtual</span> selectView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View has gained focus method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#show" id="show"><span rel="tooltip" title="Inherited From: MAF.element.Core#show"><a href="MAF.element.Core.html#show" class="label label-info class-tree-node">inherited</a></span> show<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -669,9 +1726,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#thaw" id="thaw"><span rel="tooltip" title="Inherited From: MAF.element.Core#thaw"><a href="MAF.element.Core.html#thaw" class="label label-info class-tree-node">inherited</a></span> thaw<span class="signature">()</span><span class="type-signature"> &rarr; {Class}</span></h4>
     
@@ -748,6 +1808,145 @@
     
     
 </dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#unselectView" id="unselectView"><span class="label label-info">virtual</span> unselectView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View has lost focus method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
+
+        
+            
+
+<div >
+<dt>
+    <h4 class="name" anchor="MAF.system.BaseView#updateView" id="updateView"><span class="label label-info">virtual</span> updateView<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>
+        <p>View update method that can be implemented (or overridden) by objects that inherit the member.</p>
+        </p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+</div>
 
         </dl>
     
@@ -759,6 +1958,8 @@
         
         <dl class="bs-docs-example bs-events">
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#event:onAnimationEnded" id="event:onAnimationEnded">onAnimationEnded</h4>
     
@@ -822,9 +2023,12 @@
     
     
 </dd>
+</div>
 
         
             
+
+<div class="inherited">
 <dt>
     <h4 class="name" anchor="MAF.system.BaseView#event:onAppend" id="event:onAppend">onAppend</h4>
     
@@ -888,6 +2092,7 @@
     
     
 </dd>
+</div>
 
         </dl>
     
