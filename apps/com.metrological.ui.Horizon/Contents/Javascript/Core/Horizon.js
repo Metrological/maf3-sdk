@@ -1,4 +1,4 @@
-Horizon = (function (body) {
+var Horizon = (function (body) {
 	var fontSize = '1em',
 		fontColor = 'rgba(255,255,255,.4)',
 		showing = true,

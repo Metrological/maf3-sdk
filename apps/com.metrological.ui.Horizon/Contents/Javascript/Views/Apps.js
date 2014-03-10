@@ -145,9 +145,9 @@ var AppsView = new MAF.Class({
 				apps = view.controls.apps;
 			categories.setDisabled(false);
 			apps.setDisabled(false);
-			if (currentAppConfig.get('tos') === TOS) {
+			if (MAE.tos === false || currentAppConfig.get('tos') === TOS) {
 				categories.focus();
-			} else {
+			} else if (MAE.tos !== false) {
 				view.showTOSDialog();
 			}
 		}
@@ -657,8 +657,8 @@ var AppsView = new MAF.Class({
 
 	selectView: function () {
 		if (MAF.messages.exists('myApps') && !this.ready) {
-			this.appsReady();
-		} else if (currentAppConfig.get('tos') !== TOS) {
+			return this.appsReady();
+		} else if (MAE.tos !== false && currentAppConfig.get('tos') !== TOS) {
 			this.showTOSDialog();
 		} else if (this.ready) {
 			(function () {

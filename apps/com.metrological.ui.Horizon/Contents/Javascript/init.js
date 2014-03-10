@@ -6,9 +6,9 @@ Theme.set({
 	}
 });
 
-var TOS = 1,
-	Horizon;
+var TOS = 1;
 
+include('Javascript/Core/Horizon.js');
 include('Javascript/Core/ApplicationManager.js');
 include('Javascript/Views/Apps.js');
 
@@ -22,5 +22,3 @@ MAF.application.init({
 	defaultViewId: 'view-Apps',
 	settingsViewId: null
 });
-
-include('Javascript/Core/Horizon.js');
