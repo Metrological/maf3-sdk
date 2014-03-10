@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.FixedTab
+ * @classdesc This will create tabs that always has the active tab at a fixed position.
  * @extends MAF.control.SingleTab
  */
 define('MAF.control.FixedTab', function () {

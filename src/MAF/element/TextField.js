@@ -25,11 +25,11 @@
  */
 /**
  * Fired when the component recieves focus.
- * @event MAF.element.Container#onFocus
+ * @event MAF.element.TextField#onFocus
  */
 /**
  * Fired when the component is blurred.
- * @event MAF.element.Container#onBlur
+ * @event MAF.element.TextField#onBlur
  */
 /**
  * Fired when a navigation happens when the component has focus.

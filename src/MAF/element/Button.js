@@ -25,7 +25,7 @@
  * @memberof MAF.element.Button
  */
 /**
- * @cfg {Boolean} secure Secure state the component gets initialized with. Default is false.
+ * @cfg {Boolean} secure Indicates if the button is locked with an Admin PIN. Default is false.
  * @memberof MAF.element.Button
  */
 /**

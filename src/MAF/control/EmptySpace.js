@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.EmptySpace
+ * @classdesc This is base component to fill empty space.
  * @extends MAF.element.Core
  */
 define('MAF.control.EmptySpace', function () {

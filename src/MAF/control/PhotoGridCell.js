@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.PhotoGridCell
+ * @classdesc This is a grid cell that has a default styling asuming it only will display 1 image/photo.
  * @extends MAF.control.GridCell
  */
 define('MAF.control.PhotoGridCell', function () {
@@ -54,10 +55,26 @@ define('MAF.control.PhotoGridCell', function () {
 			this.photo.setSources(this.config);
 		},
 
+		/**
+		 * Set the sources of the this component.
+		 * @param {Object} object Can contain src/missingSrc image path.
+		 * ```
+		 * image.setSources({
+		 *    src: 'path/to/image.png',
+		 *    missingSrc: 'path/to/missing.png'
+		 * })
+		 * ```
+		 * @method MAF.control.PhotoGridCell#setSources
+		 */
 		setSources: function (sources) {
 			return this.photo.setSources(sources);
 		},
 
+		/**
+		 * Set the src config of this component with a new image path.
+		 * @param {String} source Path of the image.
+		 * @method MAF.control.PhotoGridCell#setSource
+		 */
 		setSource: function (source) {
 			return this.photo.setSource(source);
 		}

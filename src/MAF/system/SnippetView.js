@@ -18,6 +18,7 @@
 /** 
  * @class MAF.system.SnippetView
  * @extends MAF.system.BaseView
+ * @ignore
  */
 define('MAF.system.SnippetView', function () {
 	return new MAF.Class({

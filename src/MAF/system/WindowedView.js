@@ -121,8 +121,17 @@ define('MAF.system.WindowedView', function () {
 			}
 		},
 
+		/**
+		 * View focus method that can be implemented (or overridden) by objects that inherit the member. 
+		 * @method MAF.system.WindowedView#focusView
+		 * @abstract
+		 */
 		focusView: emptyFn,
 
+		/**
+		 * Reset the focus on this view by navigating to the first component found from the top.
+		 * @method MAF.system.WindowedView#WindowedView
+		 */
 		resetFocus: function () {
 			if (!this.disableResetFocus && this.element) {
 				if (!this.element.navigate('down', [0, 0])) {

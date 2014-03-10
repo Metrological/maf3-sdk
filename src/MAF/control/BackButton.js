@@ -23,6 +23,10 @@
  *    label: 'Back'
  * }).appendTo(this);
  */
+/**
+ * @cfg {Object} backParams Object of data you want to send to the previous view when selected by a user.
+ * @memberof MAF.control.BackButton
+ */
 define('MAF.control.BackButton', function () {
 	return new MAF.Class({
 		ClassName: 'ControlBackButton',
@@ -48,6 +52,11 @@ define('MAF.control.BackButton', function () {
 			backParams: false
 		},
 
+		/**
+		 * After the component has appended to the view this method can be used to create some more content to be added to this component. 
+		 * Default this will add 2 MAF.element.Text components to the content array of this component. The first has a Fontawesome glyph.
+		 * @method MAF.control.BackButton#createContent
+		 */
 		createContent: function () {
 			this.content = [
 				new MAF.element.Text({
@@ -62,6 +71,11 @@ define('MAF.control.BackButton', function () {
 			];
 		},
 
+		/**
+		 * Set the text for the back button label.
+		 * @method MAF.control.BackButton#setText
+		 * @param {String} text What to display on the back button label.
+		 */
 		setText: function (text) {
 			this.content[1].setText(text);
 		}

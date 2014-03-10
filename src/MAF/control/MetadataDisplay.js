@@ -17,15 +17,20 @@
  **/
 /** 
  * @class MAF.control.MetadataDisplay
+ * @classdesc This is a component that can be attached to a grid to display metadata when a cell is selected. Default it will look for label or text key in the cell data item.
  * @extends MAF.control.Button
- * @example
- * 		var metaData = new MAF.control.MetadataDisplay({
-			updateMethod: function (data) {
-				this.setText('Metadata grid: ' + data.text);
-			}
-		}).appendTo(this);
-
-		metaData.attachToSource(grid);
+ * @example var metaData = new MAF.control.MetadataDisplay({}).appendTo(this);
+ * metaData.attachToSource(grid);
+ */
+/**
+ * @cfg {Object} metadataMap When the metadata you want to be displayed is stored on a different key then the default values (label, text) you can use this. 
+ * @memberof MAF.control.MetadataDisplay
+ * @example var metaData = new MAF.control.MetadataDisplay({
+ *    metadataMap: {
+ *       label: 'description'
+ *    }
+ * }).appendTo(this);
+ * metaData.attachToSource(grid);
  */
 define('MAF.control.MetadataDisplay', function () {
 	return new MAF.Class({
@@ -104,6 +109,10 @@ define('MAF.control.MetadataDisplay', function () {
 			delete this.config.sourceElement;
 		},
 
+		/**
+		 * Attach this to a component to listen to state update events.
+		 * @method MAF.control.MetadataDisplay#attachToSource
+		 */
 		attachToSource: function (source) {
 			if (source === this.source) {
 				return this.update();
@@ -113,18 +122,39 @@ define('MAF.control.MetadataDisplay', function () {
 			return this.updateContent();
 		},
 
+		/**
+		 * Get the start index of the cell on the attached source.
+		 * @method MAF.control.MetadataDisplay#getSourceStartIndex
+		 * @return {Number} Cell index number
+		 */
 		getSourceStartIndex: function () {
 			return this.source && this.source.getStartIndex();
 		},
 
+		/**
+		 * Get the index of the cell that has focused on the attached source.
+		 * @method MAF.control.MetadataDisplay#getSourceFocusIndex
+		 * @return {Number} Cell index number
+		 */
 		getSourceFocusIndex: function () {
 			return this.source && this.source.getFocusIndex();
 		},
 
+		/**
+		 * Get the data object of a cell.
+		 * @method MAF.control.MetadataDisplay#getSourceDataItem
+		 * @param {Number} index Cell index.
+		 * @return {Object} Data object of the cell identified by the index.
+		 */
 		getSourceDataItem: function (index) {
 			return this.source && this.source.getDataItem(index);
 		},
 
+		/**
+		 * Set which text to display on this component.
+		 * @param {String} text The text
+		 * @method MAF.control.MetadataDisplay#setText
+		 */
 		setText: function (text) {
 			this.content.setText(text || '');
 		},

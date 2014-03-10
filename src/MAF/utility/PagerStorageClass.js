@@ -15,6 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/**
+ * @classdesc This is used by the MAF.utility.Pager to store a page size array of items. 
+ * @class MAF.utility.PagerStorageClass
+ * @example var page = new MAF.utility.PagerStorageClass({data: items});
+ */
 define('MAF.utility.PagerStorageClass', function () {
 	return new MAF.Class({
 		ClassName: 'PagerStorageClass',
@@ -28,14 +33,27 @@ define('MAF.utility.PagerStorageClass', function () {
 			}
 		},
 
+		/**
+		 * @method MAF.utility.PagerStorageClass#add
+		 * @deprecated Use {@link MAF.utility.PagerStorageClass#addItems} instead.
+		 */
 		add: function (addItems) {
 			this.addItems(addItems);
 		},
 
+		/**
+		 * @method MAF.utility.PagerStorageClass#addItems
+		 * @param {Array} items These will be added to the Page. Duplicates will be removed.
+		 */
 		addItems: function (items) {
 			this.items = this.items.concat(items || []).unique();
 		},
 
+		/**
+		 * @method MAF.utility.PagerStorageClass#remove
+		 * @param  {Array} o Array of items to remove from this PagerStorageClass
+		 * @param  {Boolean} k
+		 */
 		remove: function (o, k) {
 			o = [].concat(o);
 			k = k === true ? true : false;
@@ -46,10 +64,17 @@ define('MAF.utility.PagerStorageClass', function () {
 			}
 		},
 
-		contains: function (o, byKey) {
-			return Object.contains(o, this.items, byKey);
+		/**
+		 * @method MAF.utility.PagerStorageClass#contains
+		 */
+		contains: function (o, key) {
+			return Object.contains(o, this.items, key);
 		},
 
+		/**
+		 * Clears the items in this storage class.
+		 * @method MAF.utility.PagerStorageClass#truncate
+		 */
 		truncate: function () {
 			this.items = [];
 		}

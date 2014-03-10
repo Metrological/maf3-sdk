@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.system.SidebarView
+ * @classdesc This is a windowed view thats bound by styling to fit in a certain size.
  * @extends MAF.system.WindowedView
  */
 define('MAF.system.SidebarView', function () {

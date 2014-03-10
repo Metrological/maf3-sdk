@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.GridCell
+ * @classdesc Basically the same as MAF.element.GridCell, with the exception that this has default styling.
  * @extends MAF.element.GridCell
  */
 define('MAF.control.GridCell', function () {

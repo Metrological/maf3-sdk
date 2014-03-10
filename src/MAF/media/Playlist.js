@@ -17,6 +17,19 @@
  **/
 /** 
  * @class MAF.media.Playlist
+ * @classdesc Provides media playlist for the media player.
+ */
+/**
+ * @cfg {Boolean} autoStart Start the media when it can play. Default is true.
+ * @memberof MAF.media.Playlist
+ */
+/**
+ * @cfg {Boolean} repeatAll When the last media entry has finished playback, when set to true this will start playback of the first entry again. Default is false.
+ * @memberof MAF.media.Playlist
+ */
+/**
+ * @cfg {Boolean} forcePlay Even when the bandwidth is not high enough for playback this will force playback on the lowest available bitrate stream for each entry.
+ * @memberof MAF.media.Playlist
  */
 define('MAF.media.Playlist', function () {
 	return new MAF.Class({
@@ -59,18 +72,51 @@ define('MAF.media.Playlist', function () {
 			});
 		},
 
+		/**
+		 * Remove the media entry from the playlist at the specified index.
+		 * @method MAF.media.Playlist#removeEntry
+		 * @param {Number} index Media entry index.
+		 */
 		removeEntry: function (index) {
 			this.entries.slice(index);
 		},
 
+		/**
+		 * Clear all media playlist entries from the playlist.
+		 * @method MAF.media.Playlist#clearEntries
+		 */
 		clearEntries: function() {
 			this.entries = [];
 		},
 
+		/**
+		 * Add a media playlist entry to the playlist.
+		 * @method MAF.media.Playlist#addEntry
+		 * @param {MAF.media.PlaylistEntry} entry Media playlist entry to add.
+		 * @return {MAF.media.Playlist} This component.
+		 * @example
+		 * var playlist = new MAF.media.Playlist();
+		 * playlist.addEntry(new MAF.media.PlaylistEntry({
+		 *    url: "http://my.media.nl/video1.mp4",
+		 *    bitrate: 2192
+		 * }));
+		 */
 		addEntry: function(entry) {
 			return this.addEntries([entry]);
 		},
 
+		/**
+		 * Add multiple playlist entries to the playlist.
+		 * @method MAF.media.Playlist#addEntries
+		 * @param {Array} entries Multiple playlist entries in a array.
+		 * @return {MAF.media.Playlist} This component.
+		 * @example
+		 * var playlist = new MAF.media.Playlist();
+		 * var entries = [];
+		 * entries.push(new MAF.media.PlaylistEntry({ url: "http://my.media.nl/video1.mp4", asset: { title: 'Video 1' } }));
+		 * entries.push(new MAF.media.PlaylistEntry({ url: "http://my.media.nl/video2.mp4", asset: { title: 'Video 2' } }));
+		 * playlist.addEntries(entries);
+		 */
 		addEntries: function(entries) {
 			this.entries = this.entries.concat(entries).filter(function (entry) {
 				return entry instanceof MAF.media.PlaylistEntry;
@@ -78,6 +124,16 @@ define('MAF.media.Playlist', function () {
 			return this;
 		},
 
+		/**
+		 * Add a media playlist entry to the playlist defined by a url.
+		 * @method MAF.media.Playlist#addEntryByURL
+		 * @param {String} url Path to the media.
+		 * @param {String} bitrate Bitrate the media has.
+		 * @example
+		 * var playlist = new MAF.media.Playlist();
+		 * playlist.addEntryByURL("http://my.media.nl/video1.mp4", 2192);
+		 * @todo Extend for new playlist entry -> Asset
+		 */
 		addEntryByURL: function(url, bitrate, startIndex) {
 			return this.addEntry(new MAF.media.PlaylistEntry({
 				url: url,

@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.SingleTab
+ * @classdesc This will have a tab mechanism, but it will only show one tab at a time.
  * @extends MAF.control.Button
  */
 define('MAF.control.SingleTab', function () {
@@ -177,6 +178,10 @@ define('MAF.control.SingleTab', function () {
 			this.setValue(options[index].value);
 		},
 
+		/**
+		 * Update this component after initialization and tab switches.
+		 * @param  {Boolean} reset Reset the Tab component.
+		 */
 		update: function (reset) {
 			if (reset === true) {
 				var options = this.getOptions();

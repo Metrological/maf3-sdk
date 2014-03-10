@@ -18,6 +18,7 @@
 /** 
  * @class MAF.control.Button
  * @extends MAF.element.Button
+ * @classdesc Basic button with default styling.
  */
 define('MAF.control.Button', function () {
 	var updateSecureIndicator = function (event) {
@@ -66,6 +67,11 @@ define('MAF.control.Button', function () {
 			updateSecureIndicator.call(this);
 		},
 
+		/**
+		 * After the component has appended to the view this method can be used to create some more content to be added to this component. This can be implemented (or overridden) by objects that inherit the member. 
+		 * @method MAF.control.Button#createContent
+		 * @abstract
+		 */
 		createContent: emptyFn,
 		adjustAccessories: emptyFn,
 

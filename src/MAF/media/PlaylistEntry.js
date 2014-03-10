@@ -17,6 +17,32 @@
  **/
 /** 
  * @class MAF.media.PlaylistEntry
+ * @classdesc This defines a media entry for the playlist in which multiple streams with different bitrates can be added. 
+ * If you provide multiple streams with bitrates the fastest will be selected thats supported by the user's connection speed. 
+ */
+/**
+ * @cfg {String} url Media path
+ * @memberof MAF.media.PlaylistEntry
+ */
+/**
+ * @cfg {Number} bitrate Bitrate of the media.
+ * @memberof MAF.media.PlaylistEntry
+ */
+/**
+ * @cfg {MAF.media.Asset} asset Information about the media.(title, description, poster)
+ * @memberof MAF.media.PlaylistEntry
+ */
+/**
+ * @cfg {Array} streams Array of objects with a url and a bitrate property. When the object contains no bitrate it will inherit from the bitrate config.
+ * @memberof MAF.media.PlaylistEntry
+ * @example <caption>The below example will add 2 streams to the media entry both having a bitrate of 1000</caption>
+ * new MAF.media.PlaylistEntry({
+ *    bitrate: 1000,
+ *    streams: [
+ *       { url: 'http://my.url/video1.mp4' },
+ *       { url: 'http://my.url/video2.mp4' }
+ *    ]
+ * });
  */
 define('MAF.media.PlaylistEntry', function () {
 	var sortOnBitrate = function (streams) {
@@ -70,12 +96,25 @@ define('MAF.media.PlaylistEntry', function () {
 			return true;
 		},
 
+		/**
+		 * Checks if this playlist entry has the url as defined by the parameter.
+		 * @method MAF.media.PlaylistEntry#hasURL
+		 * @param {String} url Media path.
+		 * @return {Boolean} True if the url is already in this playlist entry.
+		 */
 		hasURL: function (url) {
 			return this.streams.filter(function (stream) {
 				return stream.url === url;
 			}).length > 0;
 		},
 
+		/**
+		 * Add a new stream to this media entry.
+		 * @method MAF.media.PlaylistEntry#addURL
+		 * @param {String} url Media path.
+		 * @param {Number} [bitrate] Bitrate of media.
+		 * @return {MAF.media.PlaylistEntry} This component.
+		 */
 		addURL: function (url, bitrate) {
 			if (url) {
 				this.streams.push({

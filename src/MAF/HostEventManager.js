@@ -23,3 +23,24 @@
  * * launchApp
  * @param {Object} args Data you want to send.
  */
+/*
+			var subscribeableHostEvents = [
+				'onAppInit',
+				'onAppFin',
+				'onDialogCancelled',
+				'onDialogDone',
+				'onHideView',
+				'onLoadProfile',
+				'onLoadView',
+				'onShowView',
+				'onUnloadProfile',
+				'onUnloadView',
+				'getSnippetConfs',
+				'onSelect',
+				'onUnselect',
+				'onDispatchedChildEvent',
+				'onActivateAppButton',
+				'onActivateSnippet'
+			];
+
+		*/

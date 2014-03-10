@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.PhotoBackButton
+ * @classdesc This is a back button that also has a additional image.
  * @extends MAF.control.BackButton
  */
 define('MAF.control.PhotoBackButton', function () {
@@ -40,10 +41,26 @@ define('MAF.control.PhotoBackButton', function () {
 			this.photo.setSources(this.config);
 		},
 
+		/**
+		 * Set the src config of this component with a new image path.
+		 * @param {String} source Path of the image.
+		 * @method MAF.control.PhotoBackButton#setSource
+		 */
 		setSource: function (source) {
 			return this.photo.setSource(source);
 		},
 
+		/**
+		 * Set the sources of the this component.
+		 * @param {Object} object Can contain src/missingSrc image path.
+		 * ```
+		 * photobackButton.setSources({
+		 *    src: 'path/to/image.png',
+		 *    missingSrc: 'path/to/missing.png'
+		 * })
+		 * ```
+		 * @method MAF.control.PhotoBackButton#setSources
+		 */
 		setSources: function (sources) {
 			return this.photo.setSources(sources);
 		}

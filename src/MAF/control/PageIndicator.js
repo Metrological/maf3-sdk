@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.control.PageIndicator
+ * @classdesc This is a component that can be attached to a grid to indicate how many data items are in the grid.
  * @extends MAF.control.Button
  */
 define('MAF.control.PageIndicator', function () {
@@ -86,6 +87,10 @@ define('MAF.control.PageIndicator', function () {
 			delete this.config.sourceElement;
 		},
 
+		/**
+		 * Attach this to a source to listen to state update events.
+		 * @method MAF.control.PageIndicator#attachToSource
+		 */
 		attachToSource: function (source) {
 			if (!source || source === this.source) {
 				return this.update();
@@ -95,14 +100,29 @@ define('MAF.control.PageIndicator', function () {
 			return this.update();
 		},
 
+		/**
+		 * What is the currently active page in the attached component.
+		 * @method MAF.control.PageIndicator#getSourceCurrentPage
+		 * @return {Number} Active page.
+		 */
 		getSourceCurrentPage: function () {
 			return this.source ? this.source.getCurrentPage() : 1;
 		},
 
+		/**
+		 * How many pages are in the attached component.
+		 * @method MAF.control.PageIndicator#getSourcePageCount
+		 * @return {Number} Number of pages.
+		 */
 		getSourcePageCount: function () {
 			return this.source ? this.source.getPageCount() : 1;
 		},
 
+		/**
+		 * Check if the attached component is configured to act like a carousel.
+		 * @method MAF.control.PageIndicator#getSourceCarousel
+		 * @return {Boolean} True if source is acting like a carousel.
+		 */
 		getSourceCarousel: function () {
 			return this.source ? this.source.config.carousel : false;
 		},
@@ -134,6 +154,11 @@ define('MAF.control.PageIndicator', function () {
 			return this;
 		},
 
+		/**
+		 * Change the page the attached component is on.
+		 * @method MAF.control.PageIndicator#shiftSource
+		 * @param {String} direction Which direction to change the page to. See for example {@link MAF.element.Grid#shift}
+		 */
 		shiftSource: function (direction) {
 			this.source.shift(direction);
 		},

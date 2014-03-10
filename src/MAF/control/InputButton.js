@@ -19,6 +19,42 @@
  * @class MAF.control.InputButton
  * @extends MAF.control.TextButton
  */
+/**
+ * @cfg {String} label Text to display in this component.
+ * @memberof MAF.control.InputButton
+ */
+/**
+ * @cfg {String} value Value to set after initialization.
+ * @memberof MAF.control.InputButton
+ */
+/**
+ * @cfg {Array} options See the {@link MAF.control.InputButton#setOptions} method.
+ * @memberof MAF.control.InputButton
+ */
+/**
+ * @cfg {Boolean} valueOnSubline If true, the value will be displayed below the label. Default false.
+ * @memberof MAF.control.InputButton
+ */
+/**
+ * Fired when the state packet indicates a cancel or no option was selected.
+ * @event MAF.control.InputButton#onOptionCancelled
+ */
+/**
+ * Fired when options in the component have changed.
+ * @event MAF.control.InputButton#onOptionsChanged
+ */
+/**
+ * Fired when option is selected.
+ * @event MAF.control.InputButton#onOptionSelected
+ */
+/**
+ * Fired by the setValue method when it changes.
+ * @event MAF.control.InputButton#onValueChanged
+ */
+/**
+ * Fired by the setValue method when it gets set for the first time.
+ * @event MAF.control.InputButton#onValueInitialized
+ */
 define('MAF.control.InputButton', function () {
 	var onValueNeeded = function (event) {
 		var config = this.config,
@@ -139,10 +175,21 @@ define('MAF.control.InputButton', function () {
 			createValueDisplay.call(this);
 		},
 
+		/**
+		 * Get the value of component.
+		 * @method MAF.control.InputButton#getValue
+		 * @return {String} The current value of the component or a empty string.
+		 */
 		getValue: function () {
 			return String(this.retrieve('value') || '');
 		},
 
+		/**
+		 * Set the value of the component.
+		 * @method MAF.control.InputButton#setValue
+		 * @param {String} value Value to be set.
+		 * @return {String} The current value of the component or a empty string.
+		 */
 		setValue: function (value) {
 			var firstBlush = isEmpty(this.retrieve('value')),
 				stringValue = value === null ? '' : String(value);
@@ -158,10 +205,22 @@ define('MAF.control.InputButton', function () {
 			return this.getValue();
 		},
 
+		/**
+		 * Calls the supplied callback method.
+		 * @method MAF.control.InputButton#changeValue
+		 * @param {Function} callback Method to return a new value to the component.
+		 * @param {String} value The current value of the component.
+		 */
 		changeValue: function (callback, value) {
 			callback(value);
 		},
 
+		/**
+		 * Without supplying a parameter this will return the label corresponding with the current value of the button.
+		 * @method MAF.control.InputButton#getDisplayValue
+		 * @param  {String} [value] When supplied this will lookup label that belongs with it.
+		 * @return {String} Label
+		 */
 		getDisplayValue: function (value) {
 			value = value || this.getValue();
 			var label = value;
@@ -173,6 +232,19 @@ define('MAF.control.InputButton', function () {
 			return label;
 		},
 
+		/**
+		 * Based on the incomming parameters this fills the components options.
+		 * @method MAF.control.InputButton#setOptions
+		 * @param {Array} values The array can be given in two ways:
+		 * * An Array containing values.
+		 * * An array containing objects with value and label keys:
+		 * @example inputbutton.setOptions([
+		 *    { label: 'Two', value: '2' },
+		 *    { label: 'Three', value: '3' }
+		 * ]);
+		 * @param {Array} [labels] An array containing labels. When not supplied and the first parameter is an 
+		 * Array with values the labels will be the same as the values.
+		 */
 		setOptions: function (values, labels) {
 			values = [].concat(values);
 			var options = values.map(function (value, v) {
@@ -189,16 +261,28 @@ define('MAF.control.InputButton', function () {
 			});
 		},
 
+		/**
+		 * @method MAF.control.InputButton#getOptionValues
+		 * @return {Array} Stored options in this component as objects with value and label keys
+		 */
 		getOptions: function () {
 			return this.retrieve('options') || [];
 		},
 
+		/**
+		 * @method MAF.control.InputButton#getOptionValues
+		 * @return {Array} Stored option values in this component.
+		 */
 		getOptionValues: function () {
 			return this.getOptions().map(function (option) {
 				return option.value;
 			});
 		},
 
+		/**
+		 * @method MAF.control.InputButton#getOptionLabels
+		 * @return {Array} Stored option labels in this component.
+		 */
 		getOptionLabels: function () {
 			return this.getOptions().map(function (option) {
 				return option.label;

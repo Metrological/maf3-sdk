@@ -17,7 +17,22 @@
  **/
 /** 
  * @class MAF.control.SelectButton
+ * @classdesc When selected by the user this will create a new view on which the user can select one of the options
+ * of this component. The view created is default {@link MAF.system.OptionSelectView}
+ * #### Needs to be referenced on the <b>this.controls</b> object of the view. Also needs a guid, otherwise the states will not be stored between the views.
  * @extends MAF.control.InputButton
+ */
+/**
+ * @cfg {Object} optionViewClass View to create and display the options of this component on. Default MAF.system.OptionSelectView.
+ * @memberof MAF.control.SelectButton
+ */
+/**
+ * @cfg {Number} optionGridRows Object of data you want to send to the previous view when selected by a user.
+ * @memberof MAF.control.SelectButton
+ */
+/**
+ * @cfg {Number} optionGridColumns Object of data you want to send to the previous view when selected by a user.
+ * @memberof MAF.control.SelectButton
  */
 define('MAF.control.SelectButton', function () {
 	var buildOptionView = function (value) {

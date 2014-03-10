@@ -17,7 +17,16 @@
  **/
 /** 
  * @class MAF.control.PromptButton
+ * @classdesc Displays a {@link MAF.dialogs.Alert} dialog with the options of this component when selected by a user.
  * @extends MAF.control.InputButton
+ */
+/**
+ * @cfg {String} title Title used in the dialog.
+ * @memberof MAF.control.PromptButton
+ */
+/**
+ * @cfg {String} message Message used in the dialog.
+ * @memberof MAF.control.PromptButton
  */
 define('MAF.control.PromptButton', function () {
 	return new MAF.Class({

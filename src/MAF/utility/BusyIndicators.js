@@ -15,6 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/**
+ * @class MAF.utility.BusyIndicators
+ * @singleton
+ * @ignore
+ */
 define('MAF.utility.BusyIndicators', function () {
 	//0: 'no indicators', 
 	//1: 'small spinner only', 

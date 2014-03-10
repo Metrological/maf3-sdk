@@ -17,6 +17,7 @@
  **/
 /** 
  * @class MAF.system.FullscreenView
+ * @classdesc This is a windowed view thats will fill the complete viewport.
  * @extends MAF.system.WindowedView
  */
 define('MAF.system.FullscreenView', function () {
@@ -31,10 +32,23 @@ define('MAF.system.FullscreenView', function () {
 			showPassthroughVideo: false
 		},
 
+		/**
+		 * Change the position and size of the media plane rectangle.
+		 * @method MAF.system.FullscreenView#setTVViewportSize
+		 * @param {Number} x Position on viewport where to start horizontally
+		 * @param {Number} y Position on viewport where to start vertically
+		 * @param {Number} width Size of the media plane
+		 * @param {Number} height Size of the media plane
+		 */
 		setTVViewportSize: function(x, y, width, height) {
 			MAF.mediaplayer.setViewportBounds(x, y, width, height);
 		},
 
+		/**
+		 * Get the size and position of the media plane.
+		 * @method MAF.system.FullscreenView#getTVViewportSize
+		 * @return {Object} x, y, width and height of the media plane rectangle.
+		 */
 		getTVViewportSize: function() {
 			return MAF.mediaplayer.getViewportBounds();
 		}

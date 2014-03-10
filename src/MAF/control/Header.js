@@ -17,7 +17,20 @@
  **/
 /** 
  * @class MAF.control.Header
+ * @classdesc <p>This creates a styled header. Which can have some text in it.</p><p>Can be used to separate buttons for example.</p>
+ * @example new MAF.control.Header({
+ *    label: 'Display options:',
+ *    headerStyle: 'small'
+ * }).appendTo(this);
  * @extends MAF.element.Container
+ */
+/**
+ * @cfg {String} headerStyle Defines how large the header should be displayed. Possible options: small, large. Default is large.
+ * @memberof MAF.control.Header
+ */
+/**
+ * @cfg {String} label Text to display in this component.
+ * @memberof MAF.control.Header
  */
 define('MAF.control.Header', function () {
 	var createContent = function () {
@@ -47,6 +60,11 @@ define('MAF.control.Header', function () {
 			createContent.call(this);
 		},
 
+		/**
+		 * Set which text to display on this component.
+		 * @param {String} text The text
+		 * @method MAF.control.Header#setText
+		 */
 		setText: function (text) {
 			this.content.setText(text);
 		}

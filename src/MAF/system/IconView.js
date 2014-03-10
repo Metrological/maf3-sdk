@@ -18,6 +18,7 @@
 /** 
  * @class MAF.system.IconView
  * @extends MAF.system.BaseView
+ * @ignore
  */
 define('MAF.system.IconView', function () {
 	return new MAF.Class({

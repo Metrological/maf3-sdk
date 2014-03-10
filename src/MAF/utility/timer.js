@@ -15,29 +15,60 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
+/**
+ * @class MAF.utility.timer
+ * @singleton
+ */
 define('MAF.utility.timer', function () {
 	return {
-		setInterval: function (callback, poll) {
+		/**
+		 * Create a timer that will trigger a callback each time the defined interval has expired.
+		 * @method MAF.utility.timer#setInterval
+		 * @param {Function} callback Method to execute everytime the timer triggers.
+		 * @param {Number} interval Time in miliseconds.
+		 * @return {Timer} The created timer object.
+		 */
+		setInterval: function (callback, interval) {
 			var timer = new Timer();
 			timer.onTimerFired = callback;
-			timer.interval = poll / 1000;
+			timer.interval = interval / 1000;
 			timer.ticking = true;
 			return timer;
 		},
+
+		/**
+		 * Stop and destroy a Timer.
+		 * @method MAF.utility.timer#clearInterval
+		 * @param {Timer} timer The timer to destroy.
+		 */
 		clearInterval: function (timer) {
 			timer.ticking = false;
 			delete timer;
 		},
-		setTimeout: function (callback, poll) {
+
+		/**
+		 * Create a timer that will trigger a callback when the defined interval has expired. After its triggered it will stop.
+		 * @method MAF.utility.timer#setTimeout
+		 * @param {Function} callback Method to execute when the timer triggers.
+		 * @param {Number} interval Time in miliseconds.
+		 * @return {Timer} The created timer object.
+		 */
+		setTimeout: function (callback, interval) {
 			var timer = new Timer();
 			timer.onTimerFired = function() {
 				this.ticking = false;
 				callback();
 			};
-			timer.interval = poll / 1000;
+			timer.interval = interval / 1000;
 			timer.ticking = true;
 			return timer;
 		},
+
+		/**
+		 * Stop and destroy a Timer.
+		 * @method MAF.utility.timer#clearTimeout
+		 * @param {Timer} timer The timer to destroy.
+		 */
 		clearTimeout: function (timer) {
 			timer.ticking = false;
 			delete timer;
