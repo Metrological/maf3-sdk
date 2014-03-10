@@ -110,5 +110,58 @@ var TestView7 = new MAF.Class({
 				vOffset: this.elements.assetTitle.outerHeight + 1
 			}
 		}).appendTo(this);
+
+		this.elements.notification = new MAF.control.TextButton({
+			label: 'Notification in 60 seconds',
+			styles: {
+				vOffset: this.elements.assetWidget.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					var button = this;
+					button.setStyle('backgroundColor', 'red');
+					(function () {
+						MAF.system.notify('http://icons.iconarchive.com/icons/kyo-tux/delikate/64/Internet-icon.png', 'This is an example notification', MAF.Notification.ALERT);
+						if (button) {
+							button.setStyle('backgroundColor', null);
+						}
+					}).delay(60000);
+				}
+			}
+		}).appendTo(this);
+
+		this.elements.startYouTube = new MAF.control.TextButton({
+			label: 'Call 2 Action in 60 seconds',
+			styles: {
+				vOffset: this.elements.notification.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					var button = this;
+					button.setStyle('backgroundColor', 'red');
+					(function () {
+						MAF.system.notify('http://www.icon2s.com/img64/64-6904.png', 'Launch YouTube', MAF.Notification.CALL2ACTION, 'com.metrological.widgets.tv.Youtube');
+						if (button) {
+							button.setStyle('backgroundColor', null);
+						}
+					}).delay(60000);
+				}
+			}
+		}).appendTo(this);
+
+		this.elements.stats = new MAF.control.TextButton({
+			label: 'Stats API',
+			styles: {
+				vOffset: this.elements.startYouTube.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					MAF.Stats.event('myButtom', {
+						click: Date.now(),
+						customId: 123
+					});
+				}
+			}
+		}).appendTo(this);
 	}
 });
