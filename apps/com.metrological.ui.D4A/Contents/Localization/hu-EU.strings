@@ -67,12 +67,12 @@
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "ÉLETSTÍLUS";
 "ADDFAVO" = "Kedvenc alkalmazás hozzáadása/eltávolítása";
-"ADDFAVO_DESC" = "Nyomjon egy OK-t a kedvenc alkalmazások szerkesztéséhez";
+"ADDFAVO_DESC" = "Nyomja meg az OK gombot a kedvencek szerkesztéséhez.";
 "ADDFAVO_SELECTED" = "Menjen a kedvenc alkalmazásához és nyomjon egy OK-t, hogy felvegye a KEDVENCEK közé. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
 "ADDFAVO_APP" = "Hozzáadás %s";
 "REMOVEFAVO_APP" = "Eltávolítás %s";
-"CONFIRM_ADDFAVO" = "Nyomjon egy OK-t, hogy felvegye az alkalmazást a KEDVENCEK közé. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
-"CONFIRM_REMOVEFAVO" = "Nyomjon egy OK-t, hogy eltávolítsa az alkalmazást KEDVENCEK közül. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
+"CONFIRM_ADDFAVO" = "OK gomb: alkalmazás hozzáadása a Kedvencekhez.<br />BACK gomb: művelet megszakítása";
+"CONFIRM_REMOVEFAVO" = "OK gomb: alkalmazás eltávolítása a Kedvencek közül.<br />BACK gomb: művelet megszakítása";
 "REORDERFAVO" = "KEDVENCEK újrarendezése";
 "REORDERFAVO_DESC" = "Nyomja meg az OK gombot az alkalmazásai újrarendezéséhez a KEDVENCEK között. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
 "REORDERFAVO_SELECTED" = "Menjen az alkalmazáshoz, amit új helyre akar mozgatni, vagy nyomja meg az OK gombot a művelet megszakításához. A nyilak mutatják, hogy mely irányba tudja mozgatni az alkalmazást";
@@ -80,4 +80,4 @@
 "START_REORDERFAVO" = "Nyomjon egy OK-t, hogy mozgassa az alkalmazást KEDVENCEK között. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
 "STOP_REORDERFAVO" = "Nyomja meg a FEL, LE, JOBBRA ÉS BALRA gombot az alkalmazásai újrarendezéséhez a KEDVENCEK között. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
 "SHOW_TERMS" = "Felhasználási feltételek";
-"EXITTOS" = "Nyomjuk meg a Vissza a kilépéshez";
+"EXITTOS" = "Nyomja meg a BACK gombot a kilépéshez.";
