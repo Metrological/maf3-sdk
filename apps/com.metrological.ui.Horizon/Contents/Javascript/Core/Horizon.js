@@ -125,10 +125,12 @@ var Horizon = (function (body) {
 
 	function updateHeader() {
 		if (blocked()) {
+			body.setStyle('transition', null);
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
 			blockedText.visible = !showing;
 		} else if (sideBySide) {
 			blockedText.visible = false;
+			body.setStyle('transition', null);
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
 		} else if (!visible) {
 			blockedText.visible = false;
@@ -145,7 +147,9 @@ var Horizon = (function (body) {
 //				opacity: 0,
 				delay: 5,
 				duration: 0.6,
-				callback: callback && callback.call ? callback : null
+				callback: callback && callback.call ? callback : function () {
+					body.setStyle('transition', null);
+				}
 			});
 		} else if (callback && callback.call) {
 			body.setStyle('transition', null);
@@ -160,7 +164,9 @@ var Horizon = (function (body) {
 				scale: 1,
 //				opacity: 1,
 				duration: 0.6,
-				callback: callback && callback.call ? callback : null
+				callback: callback && callback.call ? callback : function () {
+					body.setStyle('transition', null);
+				}
 			});
 		} else if (callback && callback.call) {
 			body.setStyle('transition', null);
