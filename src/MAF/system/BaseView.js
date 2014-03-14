@@ -285,7 +285,6 @@ define('MAF.system.BaseView', function () {
 		 * @todo Not working correctly yet.
 		 */
 		registerMessageCenterListenerControl: function (control) {
-			console.log(control && control.fire);
 			if (control && control.fire) {
 				messagecenterlisteners[this._classID].push(control.fire.subscribeTo(MAF.messages, MAF.messages.eventType, control));
 			}
