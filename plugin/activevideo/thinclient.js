@@ -104,6 +104,10 @@ this.ThinClient = (function () {
 			clearTimeout(programTimer);
 			programTimer = undefined;
 		}
+		if (plugins.players[0] && plugins.players[0].src) {
+			programTimer = setTimeout(updateNowPlaying, 3000);
+			return;
+		}
 		Kraken.getCurrentChannel(function (data) {
 			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
 				currentProgram = data;
