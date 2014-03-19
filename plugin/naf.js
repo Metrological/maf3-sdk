@@ -198,7 +198,9 @@ var NAFPlayer = function () {
 		});
 
 		onFn('model.state.players.0.currentProgram', function () {
-			fire.call(instance, 'onChannelChange');
+			if (!forcePlay) {
+				fire.call(instance, 'onChannelChange');
+			}
 		});
 
 		onFn('model.state.players.0.status', function () {
@@ -210,9 +212,12 @@ var NAFPlayer = function () {
 				switch (status.code) {
 					case 200: 
 						stateChange(states.PLAY);
+						forcePlay = false;
 						break;
 					case 201:
 						//BEGINNING_OF_CONTENT
+						stateChange(states.PLAY);
+						forcePlay = false;
 						break;
 					case 202:
 						stateChange(states.EOF);
@@ -223,9 +228,11 @@ var NAFPlayer = function () {
 					case 470:
 					case 471:
 						stateChange(states.ERROR);
+						isPlaying = false;
 						break;
 					case 472:
 						stateChange(states.STOP);
+						isPlaying = false;
 						break;
 					default:
 						break;
@@ -385,6 +392,7 @@ var NAFPlayer = function () {
 			if (forcePlay && !isPlaying) {
 				var i = getApplicationIndex();
 				isPlaying = true;
+				stateChange(states.PLAY);
 				doFn('model.state.players.0', 'model.state.applications.' + i + '.media.assets.0');
 				return;
 			}
