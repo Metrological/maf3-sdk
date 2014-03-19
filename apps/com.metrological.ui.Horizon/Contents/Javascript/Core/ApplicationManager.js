@@ -982,6 +982,7 @@ var loadTemplate = (function () {
 
 widget.handleChildEvent = function (event) {
 	//log('handleChildEvent', event.subject, event);
+	var data;
 	switch(event.subject) {
 		case 'loadView':
 			if (event.error) {
@@ -992,10 +993,14 @@ widget.handleChildEvent = function (event) {
 				warn('Load view triggered from a non active App: ' + event.id);
 				return false;
 			}
-			loadTemplate.call(this, event.getData());
+			data = event.getData();
+			if (data.type === 'fullscreen' && Horizon) {
+				Horizon.setSidebarBackground(false);
+			}
+			loadTemplate.call(this, data);
 			break;
 		case 'showDialog':
-			var data = event.getData();
+			data = event.getData();
 			data.id = data.type;
 			data.type = 'dialog';
 			data.key = data.conf && data.conf.key;
