@@ -1,5 +1,5 @@
-include('Javascript/Core/ApplicationManager.js');
-include('Javascript/Views/UI.js');
+include('Javascript/core/ApplicationManager.js');
+include('Javascript/views/UI.js');
 
 Facebook.init('183031261739046');
 Twitter.init('183031261739046');

@@ -8,8 +8,8 @@ Theme.set({
 
 var TOS = 1;
 
-include('Javascript/Core/ApplicationManager.js');
-include('Javascript/Views/Apps.js');
+include('Javascript/core/ApplicationManager.js');
+include('Javascript/views/Apps.js');
 
 Facebook.init('183031261739046');
 Twitter.init('requiredATM');
@@ -22,4 +22,4 @@ MAF.application.init({
 	settingsViewId: null
 });
 
-include('Javascript/Core/D4A.js');
+include('Javascript/core/D4A.js');
