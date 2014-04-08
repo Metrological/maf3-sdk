@@ -45,7 +45,7 @@ define('MAF.control.TextEntryButton', function () {
 			secureMask: false,
 			secureMaskType: 'mask-submitted',
 			keyboard: {
-				layout: 'alphanumeric'
+				layout: MAE.keyboard || 'alphanumeric'
 			},
 			overlayBackgroundColor: 'rgba(0,0,0,.7)',
 			formBackgroundColor:    'black'

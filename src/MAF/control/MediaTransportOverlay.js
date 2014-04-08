@@ -247,9 +247,10 @@ define('MAF.control.MediaTransportOverlay', function () {
 			},
 
 			updateState: function (state) {
-				var overlayStyles = Theme.get('ControlMediaTransportOverlay');
+				var states = MAF.mediaplayer.constants.states,
+					overlayStyles = Theme.get('ControlMediaTransportOverlay');
 				switch(state) {
-					case MAF.mediaplayer.constants.states.PAUSE:
+					case states.PAUSE:
 						if (overlayStyles.icons && overlayStyles.icons.playButton) {
 							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
 						} else {
@@ -262,14 +263,16 @@ define('MAF.control.MediaTransportOverlay', function () {
 							}
 						}
 						break;
-					case MAF.mediaplayer.constants.states.PLAY:
-					case MAF.mediaplayer.constants.states.BUFFERING:
+					case states.PLAY:
+					case states.BUFFERING:
 						if (overlayStyles.icons && overlayStyles.icons.playButton) {
 							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.pauseButton));
 						} else {
 							this.controls.playButton.content.setSource(overlayStyles.sources.pauseButton);
 						}
 						break;
+					case states.STOP:
+						this.resetState();
 					default:
 						if (overlayStyles.icons && overlayStyles.icons.playButton) {
 							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
@@ -326,7 +329,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 			}
 			this.updateState(MAF.mediaplayer.constants.states.PAUSE);
 			this.updateTimeIndexDisplay(true);
-			this.moveProgressBar(-1);
+			this.moveProgressBar(0);
 			this.focus();
 		},
 

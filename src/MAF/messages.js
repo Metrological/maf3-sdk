@@ -6,7 +6,7 @@
  *  var valueChanged = function (event) {
  *     log("Key: ", event.payload.key, " changed value to: ",event.payload.value);
  *  };
- *  valueChanged.subscribeTo(KONtx.messages, KONtx.messages.eventType);
+ *  valueChanged.subscribeTo(MAF.messages, MAF.messages.eventType);
  *  MAF.messages.store('numbers', [9,15,1,30]);
  */
 /**

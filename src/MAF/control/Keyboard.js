@@ -83,48 +83,6 @@ define('MAF.control.Keyboard', function () {
 						this.focus();
 						break;
 				}
-			},
-			generateStatePacket: function (packet) {
-				return Object.merge({
-					value: this.getValue(),
-					focused: keyboards[this._classID].element.hasFocus
-				}, packet);
-			},
-			inspectStatePacket: function (packet, focusOnly) {
-				if (!this.config.guid) {
-					return packet;
-				}
-				if (packet && !(this.config.guid in packet)) {
-					return packet;
-				}
-				var data = packet && packet[this.config.guid],
-					type = typeOf(data);
-				if (type === 'null' || type === 'undefined') {
-					return packet;
-				}
-				if (focusOnly) {
-					if (data.focused) {
-						this.focus();
-					}
-				} else {
-					switch (type) {
-						case 'boolean':
-						case 'string':
-							return this.setValue(data);
-						case 'object':
-							for (var item in data) {
-								switch (item) {
-									case 'value':
-										if (data[item]) {
-											this.setValue(data[item]);
-										}
-										break;
-								}
-							}
-							break;
-					}
-				}
-				return data;
 			}
 		},
 
@@ -215,6 +173,50 @@ define('MAF.control.Keyboard', function () {
 
 		getKeyboard: function () {
 			return keyboards[this._classID];
+		},
+
+		generateStatePacket: function (packet) {
+			return Object.merge({
+				value: this.getValue(),
+				focused: keyboards[this._classID].element.hasFocus
+			}, packet);
+		},
+
+		inspectStatePacket: function (packet, focusOnly) {
+			if (!this.config.guid) {
+				return packet;
+			}
+			if (packet && !(this.config.guid in packet)) {
+				return packet;
+			}
+			var data = packet && packet[this.config.guid],
+				type = typeOf(data);
+			if (type === 'null' || type === 'undefined') {
+				return packet;
+			}
+			if (focusOnly) {
+				if (data.focused) {
+					this.focus();
+				}
+			} else {
+				switch (type) {
+					case 'boolean':
+					case 'string':
+						return this.setValue(data);
+					case 'object':
+						for (var item in data) {
+							switch (item) {
+								case 'value':
+									if (data[item]) {
+										this.setValue(data[item]);
+									}
+									break;
+							}
+						}
+						break;
+				}
+			}
+			return data;
 		},
 
 		suicide: function () {

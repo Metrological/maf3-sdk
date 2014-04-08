@@ -13,18 +13,18 @@ Theme.set({
 	}
 });
 
-include('Javascript/core/API.js');
-include('Javascript/views/TestView1.js');
-include('Javascript/views/TestView2.js');
-include('Javascript/views/TestView3.js');
-include('Javascript/views/TestView4.js');
-include('Javascript/views/TestView5a.js');
-include('Javascript/views/TestView5b.js');
-include('Javascript/views/TestView6.js');
-include('Javascript/views/TestView7.js');
-include('Javascript/views/TestView8.js');
-include('Javascript/views/TestView9.js');
-include('Javascript/views/TestView10.js');
+include('Javascript/Core/API.js');
+include('Javascript/Views/TestView1.js');
+include('Javascript/Views/TestView2.js');
+include('Javascript/Views/TestView3.js');
+include('Javascript/Views/TestView4.js');
+include('Javascript/Views/TestView5a.js');
+include('Javascript/Views/TestView5b.js');
+include('Javascript/Views/TestView6.js');
+include('Javascript/Views/TestView7.js');
+include('Javascript/Views/TestView8.js');
+include('Javascript/Views/TestView9.js');
+include('Javascript/Views/TestView10.js');
 
 var photopgr;
 

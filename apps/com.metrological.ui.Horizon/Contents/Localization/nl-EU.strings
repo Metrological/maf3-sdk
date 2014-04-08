@@ -66,6 +66,8 @@
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_FEATURED" = "UITGELICHT";
+"CATEGORY_RECENTLY" = "RECENTE";
 "ADDFAVO" = "Toevoegen/verwijderen favorieten";
 "ADDFAVO_DESC" = "Druk op OK om uw favoriete apps in te stellen";
 "ADDFAVO_SELECTED" = "Kies uw favoriete app en druk op OK om deze aan uw favorieten toe te voegen. Druk op BACK om uw keuze te annuleren.";

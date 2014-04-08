@@ -94,6 +94,8 @@ define('MAF.keyboard.KeyboardValueManager', function (config) {
 				}
 			}
 
+			if (event.payload.update === true)
+				this.deleteLeft();
 			if (event.payload.isChar || event.payload.key === 'space') {
 				var key = event.payload.key === 'space' ? ' ' : event.payload.key;
 				return this.insertCharacters(key);

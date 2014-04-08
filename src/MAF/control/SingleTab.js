@@ -180,6 +180,7 @@ define('MAF.control.SingleTab', function () {
 
 		/**
 		 * Update this component after initialization and tab switches.
+		 * @method MAF.control.SingleTab#update
 		 * @param  {Boolean} reset Reset the Tab component.
 		 */
 		update: function (reset) {

@@ -83,6 +83,7 @@ define('MAF.element.Button', function () {
 			this.setSecure(this.config.secure);
 			delete this.config.secure;
 		},
+
 		/**
 		 * Gives a object containing values needed for keeping the state of this component between different views.
 		 * @method MAF.element.Button#generateStatePacket
@@ -95,6 +96,7 @@ define('MAF.element.Button', function () {
 				secure: this.secure
 			}, packet || {});
 		},
+
 		/**
 		 * Handle the state of this component for example when returning on the view it is on.
 		 * @method MAF.element.Button#inspectStatePacket

@@ -143,41 +143,6 @@ define('MAF.control.TabStrip', function () {
 				}
 				button.tabController = this;
 				return button;
-			},
-			inspectStatePacket: function (packet, focusOnly) {
-				if (!this.config.guid) {
-					return packet;
-				}
-				
-				if (packet && !(this.config.guid in packet)) {
-					return packet;
-				}
-				var data = packet && packet[this.config.guid],
-					type = typeof data;
-				
-				if (type == 'null' || type == 'undefined') {
-					return packet;
-				}
-				if (focusOnly) {
-					if (data.focused) {
-						this.focus();
-					}
-				} else if (type === 'object') {
-					if ('activeIndex' in data) {
-						this.activeIndex = data.activeIndex;
-					}
-					if ('focusIndex' in data) {
-						this.focusIndex = data.focusIndex;
-					}
-				}
-				return data;
-			},
-			generateStatePacket: function (packet) {
-				return Object.merge({
-					activeIndex: this.activeIndex,
-					focusIndex:  this.focusIndex,
-					focused:     this.element.hasFocus
-				}, packet);
 			}
 		},
 
@@ -255,6 +220,42 @@ define('MAF.control.TabStrip', function () {
 			return index > -1 ? Object.clone(this.config.tabs[index]) : false;
 		},
 
+		generateStatePacket: function (packet) {
+			return Object.merge({
+				activeIndex: this.activeIndex,
+				focusIndex:  this.focusIndex,
+				focused:     this.element.hasFocus
+			}, packet);
+		},
+
+		inspectStatePacket: function (packet, focusOnly) {
+			if (!this.config.guid) {
+				return packet;
+			}
+			
+			if (packet && !(this.config.guid in packet)) {
+				return packet;
+			}
+			var data = packet && packet[this.config.guid],
+				type = typeof data;
+			
+			if (type == 'null' || type == 'undefined') {
+				return packet;
+			}
+			if (focusOnly) {
+				if (data.focused) {
+					this.focus();
+				}
+			} else if (type === 'object') {
+				if ('activeIndex' in data) {
+					this.activeIndex = data.activeIndex;
+				}
+				if ('focusIndex' in data) {
+					this.focusIndex = data.focusIndex;
+				}
+			}
+			return data;
+		},
 		suicide: function () {
 			if (this.buttons){
 				while(this.buttons.length) {

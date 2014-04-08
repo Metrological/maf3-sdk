@@ -499,6 +499,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-9":{ normal:"digit-9", shift:"char-quest" },
 				// no shift state on numpad keys? 
 				// need to deal with this on the shift control as well, or just dupe up the shift value here too
+				"multi-0":{ normal:"numpad-0" },
+				"multi-1":{ normal:"numpad-1" },
+				"multi-2":{ normal:"numpad-2" },
+				"multi-3":{ normal:"numpad-3" },
+				"multi-4":{ normal:"numpad-4" },
+				"multi-5":{ normal:"numpad-5" },
+				"multi-6":{ normal:"numpad-6" },
+				"multi-7":{ normal:"numpad-7" },
+				"multi-8":{ normal:"numpad-8" },
+				"multi-9":{ normal:"numpad-9" },
 				"numkey-0":{ normal:"numpad-0" },
 				"numkey-1":{ normal:"numpad-1" },
 				"numkey-2":{ normal:"numpad-2" },
@@ -672,6 +682,22 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					{"keyid":"action-backspace"}
 				]
 			},{
+				id: "multitab",
+				label: "123",
+				glyph: "",
+				keyrows: [
+					[{"keyid":"multi-1"}, {"keyid":"multi-2"}, {"keyid":"multi-3"}],
+					[{"keyid":"multi-4"}, {"keyid":"multi-5"}, {"keyid":"multi-6"}],
+					[{"keyid":"multi-7"}, {"keyid":"multi-8"}, {"keyid":"multi-9"}],
+					[] // empty
+				],
+				controlrow:[
+					{"keyid":"action-nextlayout"}, {"keyid":"multi-0"}, {"keyid":"action-backspace"}
+				],
+				largeNumeric: true,
+				noShift:true,
+				isNumeric: true
+			},{
 				id: "pinentry",
 				label: "PIN",
 				glyph: "",
@@ -690,6 +716,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					{keyid:"action-backspace"}]
 				],
 				controlrow:[],
+				noShift:true,
 				needNumericBackspace: true, 
 				isPin: true, // allows release down
 				isNumeric: true // triggers correct size of backspace key, padding
@@ -756,6 +783,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var getClassnameByKeyId = function (key_id) {
 		var type = '',
 			dims = getDimensions.call(this);
+
 		switch (key_id) {
 			case "action-nextlayout":
 			case "action-shift":
@@ -763,7 +791,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			case "action-backspace":
 				type = "action";
 				// special case for large backspace key in numpad layout
-				if (internals[this._classID].state.currentLayout.isNumeric) {
+				if (internals[this._classID].state.currentLayout.id === 'multitab') {
+					type = 'multikey';
+				} else if (internals[this._classID].state.currentLayout.isNumeric) {
 					type = "numkey";
 				}
 				break;
@@ -774,6 +804,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			case "spacer-numkey":
 				type = "numkey";
 				break;
+			case "multi":
+				type = "multikey";
+				break;
 			default:
 				break;
 		}
@@ -783,6 +816,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 		if (key_id && key_id.indexOf('key-')===0 && !type)
 			type = "key";
+
+		if (key_id && key_id.indexOf('multi-') === 0)
+			type = "multikey";
 
 		return type;
 	};
@@ -852,7 +888,6 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 		keyframe.store('definition', keydef);
 		keyframe.store('keyid', keyid);
-
 		if (keyid.indexOf('spacer-') === 0) {
 			keyframe.opacity = 0;
 			keyframe.wantsFocus = false;
@@ -879,6 +914,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			if (!labelEl) {
 				labelEl = (new Text()).inject(keyframe);
 				labelEl.addClass('ReuseKeyboardLabel');
+				if (sublabel && keyid.indexOf('multi-') === 0) {
+					labelEl.addClass('ReuseKeyboardLabelOffset');
+				}
 				keyframe.store('label', labelEl);
 			}
 
@@ -889,6 +927,19 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				labelEl.data = widget.getLocalizedString('SPACE');
 			} else {
 				labelEl.data = label;
+			}
+		}
+
+		if (keyid.indexOf('multi-') === 0) {
+			if (sublabel) {
+				var sublabelEl = keyframe.retrieve('sublabel');
+				
+				if (!sublabelEl) {
+					sublabelEl = (new Text()).inject(keyframe);
+					sublabelEl.addClass('ReuseKeyboardSubLabel');
+					keyframe.store('label', sublabelEl);
+				}
+				sublabelEl.data = sublabel;
 			}
 		}
 
@@ -1094,17 +1145,55 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		internal.extendedOverlay.visible = false;
 		internal.body.firstChild.allowNavigation = true;
 	};
-
-	var generateKeyDown = function (keytype, keyvalue, shift) {
+	
+	var previousKey = {
+		key: null,
+		when: null,
+		value: null
+	};
+	
+	var generateKeyDown = function (keytype, keyvalue, shift, keydef) {
 		var packet = {};
 		switch (keytype) {
+
+			case 'multi':
+				packet.key = keyvalue;
+				if (keydef && keydef.sublabel && keydef.sublabel.length > 0) {
+					var subArr = keydef.sublabel.split('');
+					if ((new Date() - previousKey.when) < 1000) {
+						if (previousKey.key === keyvalue) {
+							if (typeOf(previousKey.value) === 'number') {
+								if (previousKey.value > 0) {
+									if (previousKey.value >= subArr.length) {
+										previousKey.value = 0;
+									} else {
+										previousKey.value = previousKey.value + 1;
+									}
+								} else {
+									previousKey.value = previousKey.value + 1;
+								}
+								packet.key = (previousKey.value > 0) ? subArr[previousKey.value-1] : keyvalue;
+								packet.update = true;
+							}
+						}
+					} else {
+						previousKey.value = 0;
+					}
+					previousKey.when = new Date();
+					previousKey.key = keyvalue;
+				}
+				packet.shiftKey = shift;
+				packet.isChar = true;
+				packet.isNumeric = true;
+				packet.keyCode = 13;
+				break;
 			case 'key':
 			case 'numkey':
 				packet.shiftKey = shift;
 				packet.isChar = true;
 				packet.isNumeric = true;
-				packet.key = keyvalue;
 				packet.keyCode = 13;
+				packet.key = keyvalue;
 				break;
 			case 'char':
 				packet.shiftKey = shift;
@@ -1135,13 +1224,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		switch (verb) {
 			case 'key':
 			case 'numkey':
+			case 'multi':
 				if (extended && subject !== 'space') {
 					generateExtendedOverlay.call(this.owner, current);
 					current.owner.fire('extendedselect');
 				} else {
 					chardef = getCharacterDefinitionById(keydef[ shift ? 'shift' : 'normal' ]);
 					current.owner.appendToValue(chardef.value || '');
-					generateKeyDown.call(current.owner, verb, chardef.value, shift);
+					generateKeyDown.call(current.owner, verb, chardef.value, shift, chardef);
 				}
 				break;
 			case 'char':
@@ -1170,7 +1260,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 						generateKeyDown.call(current.owner, subject);
 						break;
 					case 'nextlayout':
-						current.owner.loadLayout(getNextLayout.call(this.owner), { focusTarget: current.retrieve('key').key });
+						current.owner.loadLayout(getNextLayout.call(this.owner), current.retrieve('key') || {} );
 						break;
 					case 'closeextendedpanel':
 						refocus = internal.extendedOverlay.retrieve('focusTarget');
@@ -1239,7 +1329,19 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			this.config.element = internals[this._classID].body;
 			this.parent();
 
+			var plugin_tables = (MAE.keyboard === 'multitab') ? {
+				KeyLayoutSets: {
+					'normal': ['multitab', 'alphanumeric', 'symbols']
+				},
+				CharacterDefinitions: {
+					"numpad-0":	{label:"0",sublabel:"",value:"0"},
+					"numpad-1":	{label:"1",sublabel:";@!?",value:"1"}
+				}
+			} : {};
 			['CharacterDefinitions', 'KeyDefinitions', 'KeyLayouts', 'KeyLayoutSets', 'ControlDimensions', 'KeyLabelPresentation', 'KeyImageSources'].forEach(function(table_name){
+				if (plugin_tables[table_name]) {
+					internals.Tables[table_name] = Object.merge(internals.Tables[table_name], plugin_tables[table_name]);
+				}
 				if (this.config[table_name]) {
 					internals.Tables[table_name] = this.config[table_name];
 				}
@@ -1317,7 +1419,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				this.body = (new List()).inject(internal.body, 'top');
 			}
 
-			var row_max = 0,
+			var keys = 0,
+				row_max = 0,
 				column_max = 0,
 				key_idx = 0,
 				fragment = createDocumentFragment();
@@ -1362,6 +1465,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 						running_height = Math.max(row_height, running_height);
 					}
+					keys++;
 				}, this);
 
 				row_max = Math.max(row_max, running_width);
@@ -1376,6 +1480,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 					row_height = 0;
 
+				if (options.row === 'control' && columnKey === options.column) {
+					options.focusTarget = keys;
+				}
 				keyframe.addClass(className);
 				if (this.config.controlSize === 'small') {
 					keyframe.addClass('small');
@@ -1391,7 +1498,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					row_height += externalHeight + styles.height || 0;
 					control_height = Math.max(row_height, control_height);
 				}
-
+				keys++;
 			}, this);
 			column_max += control_height;
 
@@ -1406,8 +1513,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			this.body.appendChild(fragment);
 
-			if (options.focusTarget) {
-				this.body.childNodes[options.focusTarget].focus();
+			if (options && options.focusTarget) {
+				this.body.childNodes[(options.focusTarget < keys) ? options.focusTarget : 0].focus();
 			}
 		},
 		getValue: function () {
@@ -1638,11 +1745,40 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			}
 		}
 	},
+	ReuseKeyboardmultikey: {
+		normal: {
+			styles: {
+				width: 116,
+				height: 80
+			}
+		},
+		small: {
+			styles: {
+				width: 116,
+				height: 80
+			}
+		}
+	},
 	ReuseKeyboardLabel: {
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
 			fontSize: 32,
+			anchorStyle: 'center'
+		}
+	},
+	ReuseKeyboardLabelOffset: {
+		styles: {
+			hOffset: 20
+		}
+	},
+	ReuseKeyboardSubLabel: {
+		styles: {
+			width: 'inherit',
+			height: 'inherit',
+			hAlign: 'right',
+			hOffset: 20,
+			fontSize: 22,
 			anchorStyle: 'center'
 		}
 	},

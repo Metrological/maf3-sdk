@@ -228,9 +228,13 @@ define('MAF.element.Core', function () {
 			}
 			config.callback = function (animator) {
 				if (callback && callback.call) {
-					callback.call(this, animator);
+					try {
+						callback.call(this, animator);
+					} catch(err) {}
 				}
-				this.fire('onAnimationEnded', animator);
+				try {
+					this.fire('onAnimationEnded', animator);
+				} catch(err) {}
 			};
 			return this.element && this.element.animate.call(this, config);
 		},

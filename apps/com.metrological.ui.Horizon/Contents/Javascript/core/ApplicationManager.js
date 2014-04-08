@@ -40,8 +40,15 @@ var loadTemplate = (function () {
 					switch (data.id) {
 						case '0':
 							if (current[identifier] === 'sidebar') {
+								var isDefaultView = app.MAF.application.isDefaultView();
 								smallSpinner.text = FontAwesome.get('home');
-								smallSpinner.frozen = (smallSpinner && smallSpinner.focusable) ? false : true;
+								if (app.widget.hacks && app.widget.hacks.home === false) {
+									smallSpinner.frozen = true;
+									smallSpinner.wantsFocus = false;
+								} else {
+									smallSpinner.frozen = isDefaultView;
+									smallSpinner.wantsFocus = !isDefaultView;
+								}
 							}
 							largeSpinner.text = FontAwesome.get('refresh');
 							largeSpinner.frozen = true;
@@ -50,6 +57,7 @@ var loadTemplate = (function () {
 							if (current[identifier] === 'sidebar') {
 								smallSpinner.text = FontAwesome.get(['refresh', 'spin']);
 								smallSpinner.frozen = false;
+								smallSpinner.wantsFocus = false;
 							}
 							largeSpinner.text = FontAwesome.get('refresh');
 							largeSpinner.frozen = true;
@@ -172,8 +180,9 @@ var loadTemplate = (function () {
 								});
 							},
 							navigate: function (event) {
-								if (event.detail.direction === 'down') {
-									getElementById(this.retrieve('current')).element.navigate('down', [0, 0]);
+								var current = this.retrieve('current');
+								if (current && event.detail.direction === 'down') {
+									getElementById(current).element.navigate('down', [0, 0]);
 								}
 								event.preventDefault();
 							}
@@ -950,12 +959,13 @@ var loadTemplate = (function () {
 			}
 		} else {
 			if (type === 'sidebar') {
-				var home = getElementById('@' + type + '-home');
-				if (app.MAF.application.isDefaultView() || (app.widget.hacks && app.widget.hacks.home === false)) {
+				var home = getElementById('@' + type + '-home'),
+					defaultViewId = app && app.MAF.application.getDefaultViewId();
+				home.store('current', id);
+				if (defaultViewId === id || (app.widget.hacks && app.widget.hacks.home === false)) {
 					home.wantsFocus = false;
 					home.frozen = true;
 				} else {
-					home.store('current', id);
 					home.frozen = false;
 					home.wantsFocus = true;
 				}

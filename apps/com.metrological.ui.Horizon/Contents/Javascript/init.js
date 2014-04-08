@@ -8,9 +8,9 @@ Theme.set({
 
 var TOS = 1;
 
-include('Javascript/core/Horizon.js');
-include('Javascript/core/ApplicationManager.js');
-include('Javascript/views/Apps.js');
+include('Javascript/Core/Horizon.js');
+include('Javascript/Core/ApplicationManager.js');
+include('Javascript/Views/Apps.js');
 
 Facebook.init('183031261739046');
 Twitter.init('requiredATM');

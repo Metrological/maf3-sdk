@@ -76,6 +76,8 @@
 "CATEGORY_VIDEOCH" = "VIDEO & MUSIC";
 "CATEGORY_NEWSCH" = "NEWS";
 "CATEGORY_INFOCH" = "INFORMATION";
+"CATEGORY_FEATURED" = "FEATURED";
+"CATEGORY_RECENTLY" = "RECENTLY";
 "ADDFAVO" = "Add/remove favourite Apps";
 "ADDFAVO_DESC" = "Press OK to start managing your favourite Apps";
 "ADDFAVO_SELECTED" = "Navigate to your favourite App and press OK to add the App to FAVOURITES. Press BACK at any time to cancel";

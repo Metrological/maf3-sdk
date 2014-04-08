@@ -312,7 +312,7 @@ define('MAF.views.SearchSuggest', function () {
 				id: this.config.viewId + '.keyCaps',
 				embedded: false,
 				maxLength: this.config.keyboard.maxLength || 255,
-				layout: 'alphanumeric',
+				layout: MAE.keyboard || 'alphanumeric',
 				controlSize: 'standard',
 				styles: {
 					width: this.width,

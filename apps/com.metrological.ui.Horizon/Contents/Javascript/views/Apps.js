@@ -97,6 +97,16 @@ var AppsView = new MAF.Class({
 		}
 	},
 
+	getRecentlyCategory: function () {
+		return currentAppConfig.get('recentlyApps') && currentAppConfig.get('recentlyApps').filter(function (id) {
+			return ApplicationManager.exists(id);
+		}).reverse() || [];
+	},
+
+	getFeaturedCategory: function () {
+		return ApplicationManager.getFeatured();
+	},
+
 	getFavoriteIndex: function (id) {
 		return this.getFavorites().indexOf(id);
 	},
@@ -170,14 +180,25 @@ var AppsView = new MAF.Class({
 						}),
 						events: {
 							onFocus: function () {
+								if (this.category.element.textWidth > this.category.width)
+									this.category.scrolling = true;
 								var category = this.getCellDataItem(),
 									grid = this.grid,
 									view = grid.owner,
 									data;
-								if (category === 'favorites') {
-									data = view.getFavoritesCategory();
-								} else {
-									data = ApplicationManager.getApplicationsByCategory(category);
+								switch(category){
+									case 'favorites':
+										data = view.getFavoritesCategory();
+										break;
+									case 'featured':
+										data = view.getFeaturedCategory();
+										break;
+									case 'recently':
+										data = view.getRecentlyCategory();
+										break;
+									default:
+										data = ApplicationManager.getApplicationsByCategory(category);
+										break;
 								}
 								this.setStyle('transformOrigin', '0% 50%');
 								this.animate({
@@ -185,27 +206,53 @@ var AppsView = new MAF.Class({
 									origin: ['0%', '50%'],
 									duration: 0.2
 								});
+								//this.category.setStyle('textDecoration', 'underline');
 								this.category.animate({
 									color: 'white',
 									fontFamily: 'InterstatePro-Bold',
+									//textDecoration: 'underline',
 									duration: 0.2
 								});
 								if (view.category !== category) {
-									var first = view.category === undefined;
+									var first = view.category === undefined,
+										apps = view.controls.apps;
 									if (first && view.getFavorites().length === 0 && !view.first) {
 										view.first = true;
 										grid.focusCell.defer(100, grid, [view.firstCategory]);
 									} else {
 										view.category = category;
-										view.controls.apps.changeDataset(data || [], true);
+										apps.changeDataset(data || [], true);
+										if (apps.retrieve('navigating')) {
+											var idx = 0,
+												columns = apps.config.columns,
+												rows = apps.config.rows;
+											if (view.element.currentNavigation === 'up') {
+												var currentFocusIndex = apps.getFocusIndex() || 0;
+												if (data.length > columns) {
+													currentFocusIndex += columns;
+												}
+												var page = Math.floor(data.length / (columns * rows));
+												if (page > 0) {
+													apps.changePage.defer(0, apps, [page]);
+												}
+												idx = Math.min(data.length, currentFocusIndex);
+											} else if (view.element.currentNavigation === 'down') {
+												var currentCoordinates = apps.getFocusCoordinates() || { column: 0 };
+												idx = Math.min(data.length, currentCoordinates.column);
+											}
+											if (idx > 0) {
+												apps.focusCell.defer(0, apps, [idx]);
+											}
+										}
 										if (first || view.first) {
 											delete view.first;
-											view.controls.apps.focus();
+											apps.focus();
 										}
 									}
 								}
 							},
 							onBlur: function () {
+								this.category.scrolling = false;
 								var cell = this,
 									grid = cell.grid,
 									view = grid.owner;
@@ -216,9 +263,11 @@ var AppsView = new MAF.Class({
 								});
 								(function () {
 									if (this.getCellDataItem() !== view.category) {
+										//this.category.setStyle('textDecoration', null);
 										this.category.animate({
 											color: baseFontColor,
 											fontFamily: 'InterstatePro-ExtraLight',
+											//textDecoration: (view.element.currentNavigation === 'right') ? 'underline' : null,
 											duration: 0.2
 										});
 									}
@@ -278,7 +327,8 @@ var AppsView = new MAF.Class({
 				hAlign: 'right',
 				vAlign: 'bottom',
 				hOffset: 134,
-				vOffset: this.controls.categories.vOffset + 10
+				vOffset: this.controls.categories.vOffset + 10,
+				visible: false
 			}
 		}).appendTo(this);
 
@@ -360,6 +410,14 @@ var AppsView = new MAF.Class({
 										break;
 								}
 							} else {
+								var recently = currentAppConfig.get('recentlyApps') || [],
+									curId = recently.indexOf(id);
+								if (curId !== -1)
+									recently.splice(curId, 1);
+								recently.push(id);
+								if (recently.length === 13)
+									recently.shift();
+								currentAppConfig.set('recentlyApps', recently);
 								ApplicationManager.load(id);
 								ApplicationManager.open(id);
 								Horizon.setText('');
@@ -563,6 +621,12 @@ var AppsView = new MAF.Class({
 				vOffset: this.controls.categories.vOffset - 10
 			},
 			events: {
+				onBlur: function () {
+					scroll.visible = false;
+				},
+				onFocus: function () {
+					scroll.visible = (this.getPageCount() > 1);
+				},
 				onPageChanged: function () {
 					this.owner.updateCategory();
 				},
@@ -601,10 +665,11 @@ var AppsView = new MAF.Class({
 							event.preventDefault();
 							return;
 						}
+						this.store('navigating', true);
 						view.controls.categories.focus();
 						view.controls.categories.focusCell(idx);
 						this.focus();
-						this.focusCell(0);
+						this.eliminate('navigating');
 						event.preventDefault();
 					}
 				}

@@ -1,5 +1,5 @@
-include('Javascript/core/ApplicationManager.js');
-include('Javascript/views/AutoStart.js');
+include('Javascript/Core/ApplicationManager.js');
+include('Javascript/Views/AutoStart.js');
 
 MAF.application.init({
 	views: [

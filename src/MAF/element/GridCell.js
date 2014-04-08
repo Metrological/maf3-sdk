@@ -31,7 +31,10 @@ define('MAF.element.GridCell', function () {
 					var coords = this.getCellCoordinates();
 					switch (event.type) {
 						case 'focus':
-							if (this.grid && !this.grid.getState().hasFocus) {
+							if (!this.grid.getState().hasFocus) {
+								this.grid.updateState({
+									hasFocus: true
+								});
 								this.grid.fire('onFocus', coords);
 							} else {
 								this.grid.updateState({
@@ -41,10 +44,14 @@ define('MAF.element.GridCell', function () {
 										column: coords.column
 									}
 								});
+								this.grid.fire('onFocus', coords);
 							}
 							break;
 						case 'blur':
-							if (this.grid && (!this.element.navigateTo || (this.grid.cells && this.grid.cells.indexOf(this.element.navigateTo.owner) === -1))) {
+							if (!this.element.navigateTo || (this.grid.cells && this.grid.cells.indexOf(this.element.navigateTo.owner) === -1)) {
+								this.grid.updateState({
+									hasFocus: false
+								});
 								this.grid.fire('onBlur', coords);
 							}
 							break;

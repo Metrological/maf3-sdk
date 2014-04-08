@@ -28,7 +28,7 @@
  *       }
  *    }).appendTo(this);
  *
- *    this.controls.textGrid = new KONtx.element.TextGrid({
+ *    this.controls.textGrid = new MAF.element.TextGrid({
  *       styles: {
  *          width: this.width - this.controls.scrollIndication.width,
  *          height: this.height
