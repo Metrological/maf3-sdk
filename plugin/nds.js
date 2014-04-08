@@ -481,7 +481,8 @@ var NDSCOUNTRIES = {
 	'fra': 'fr',
 	'ger': 'de',
 	'deu': 'de',
-	'irl': 'ie'
+	'irl': 'ie',
+	'xxx': false
 }, NDSLANGUAGES = {
 	'ang': 'en',
 	'eng': 'en',
@@ -533,7 +534,7 @@ var NDSProfile = function (name) {
 		return md5(this.operator + (uid || 0));
 	});
 	getter(this, 'operator', function () {
-		return 'horizon';
+		return MAE.operator || 'horizon';
 	});
 	getter(this, 'packages', function () {
 		return [];
