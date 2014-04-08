@@ -1,8 +1,7 @@
 var Kraken = (function () {
 	var instance = {},
 		//lgiServer = 'appdev.io',
-		lgiServer = 'lgi.io',
-		mockTriplet = '1537.99.9908';
+		lgiServer = 'lgi.io';
 	function sendMessage(msg, callback) {
 		new Request({
 			url: 'http://session/client/send?protocolid=D4A',
@@ -27,42 +26,50 @@ var Kraken = (function () {
 	}
 	function getCurrentChannelByProperties(callback, properties) {
 		properties = properties || {};
-		new Request({
-			url: 'http://' + lgiServer + '/kraken/v2/schedule/networks/HU/services.json',
-			proxy: false,
-			data: {
-				maxBatchSize: 1,
-				show: 'name,udpStreamLink,channel.ref',
-				dvbDec: properties.channel && properties.channel.split(':')[1] || mockTriplet
-			},
-			onSuccess: function (services) {
-				var s = services && services.data;
-				if (s && s.length > 0) {
-					new Request({
-						url: String.sprintf('http://' + lgiServer + '/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
-						proxy: false,
-						data: {
-							maxBatchSize: 1,
-							show: 'ageRating,end,start,title,synopsis'
-						},
-						onSuccess: function (broadcast) {
-							var b = broadcast && broadcast.data;
-							if (b && b.length > 0 && callback) {
-								callback(Object.merge({}, b[0], {
-									channel: s[0].name,
-									stream: s[0].udpStreamLink.href
-								}));
-							} else {
-								callback({
-									channel: s[0].name,
-									stream: s[0].udpStreamLink.href
-								});
+		if (!properties.channel) {
+			callback({
+				ageRating: -1,
+				channel: '',
+				stream: false
+			});
+		} else {
+			new Request({
+				url: 'http://' + lgiServer + '/kraken/v2/schedule/networks/HU/services.json',
+				proxy: false,
+				data: {
+					maxBatchSize: 1,
+					show: 'name,udpStreamLink,channel.ref',
+					dvbDec: properties.channel && properties.channel.split(':')[1]
+				},
+				onSuccess: function (services) {
+					var s = services && services.data;
+					if (s && s.length > 0) {
+						new Request({
+							url: String.sprintf('http://' + lgiServer + '/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
+							proxy: false,
+							data: {
+								maxBatchSize: 1,
+								show: 'ageRating,end,start,title,synopsis'
+							},
+							onSuccess: function (broadcast) {
+								var b = broadcast && broadcast.data;
+								if (b && b.length > 0 && callback) {
+									callback(Object.merge({}, b[0], {
+										channel: s[0].name,
+										stream: s[0].udpStreamLink.href
+									}));
+								} else {
+									callback({
+										channel: s[0].name,
+										stream: s[0].udpStreamLink.href
+									});
+								}
 							}
-						}
-					}).send();
+						}).send();
+					}
 				}
-			}
-		}).send();
+			}).send();
+		}
 	}
 	function getCurrentChannel(callback) {
 		new Request({
@@ -112,19 +119,20 @@ this.ThinClient = (function () {
 		}
 		Kraken.getCurrentChannel(function (data) {
 			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
-				currentProgram = data;
+				if (!data.stream) {
+					switch (window.MAE.language) {
+						case 'hu':
+							currentProgram = { title: 'Önnek nincs hozzáférése ehhez a csatornához.' };
+							break;
+						default:
+							currentProgram = { title: 'You do not have access to this channel.' };
+							break;
+					}
+				} else {
+					currentProgram = data;
+				}
 				if (data.stream !== video.src) {
 					log('UPDATE UDP');
-					if (!data.stream) {
-						switch (window.MAE.language) {
-							case 'hu':
-								currentProgram.title += '';
-								break;
-							default:
-								currentProgram.title += '';
-								break;
-						}
-					}
 					video.src = data.stream;
 					video.load();
 					video.play();
