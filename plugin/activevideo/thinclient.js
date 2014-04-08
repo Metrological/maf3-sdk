@@ -1,5 +1,7 @@
 var Kraken = (function () {
 	var instance = {},
+		//lgiServer = 'appdev.io',
+		lgiServer = 'lgi.io',
 		mockTriplet = '1537.99.9908';
 	function sendMessage(msg, callback) {
 		new Request({
@@ -26,7 +28,7 @@ var Kraken = (function () {
 	function getCurrentChannelByProperties(callback, properties) {
 		properties = properties || {};
 		new Request({
-			url: 'http://appdev.io/kraken/v2/schedule/networks/HU/services.json',
+			url: 'http://' + lgiServer + '/kraken/v2/schedule/networks/HU/services.json',
 			proxy: false,
 			data: {
 				maxBatchSize: 1,
@@ -37,7 +39,7 @@ var Kraken = (function () {
 				var s = services && services.data;
 				if (s && s.length > 0) {
 					new Request({
-						url: String.sprintf('http://appdev.io/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
+						url: String.sprintf('http://' + lgiServer + '/kraken/v2/schedule/data/HU/channels/%s/broadcasts.json?end>%s', s[0].channel.ref, moment.utc().format('YYYY-MM-DD[T]HH:mm[Z]')),
 						proxy: false,
 						data: {
 							maxBatchSize: 1,
@@ -113,12 +115,29 @@ this.ThinClient = (function () {
 				currentProgram = data;
 				if (data.stream !== video.src) {
 					log('UPDATE UDP');
+					if (!data.stream) {
+						switch (window.MAE.language) {
+							case 'hu':
+								currentProgram.title += '';
+								break;
+							default:
+								currentProgram.title += '';
+								break;
+						}
+					}
 					video.src = data.stream;
 					video.load();
 					video.play();
 				}
 			} else {
-				currentProgram = { title: 'Szülői zár' };
+				switch (window.MAE.language) {
+					case 'hu':
+						currentProgram = { title: 'Felhívjuk figyelmét, hogy a most futó program korhatárhoz kötött.' };
+						break;
+					default:
+						currentProgram = { title: 'Attention! The "Now Playing" program is age restricted!' };
+						break;
+				}
 				video.src = '';
 				video.load();
 			}
