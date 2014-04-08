@@ -109,6 +109,7 @@ var AccenturePlayer = function () {
 		return currentSource;
 	});
 	setter(instance, 'src', function (src) {
+		var delayedPlay = 400;
 		if (OTT && src) {
 			if (OTT.viewMode) {
 				OTT.viewMode('full');
@@ -117,12 +118,13 @@ var AccenturePlayer = function () {
 				currentSource = null;
 				paused = false;
 				OTT.stop();
+				delayedPlay += 400;
 			}
 			currentSource = src;
 			paused = false;
 			(function () {
 				OTT.load(src, false);
-			}).delay(400);
+			}).delay(delayedPlay);
 		} else if (OTT && currentSource) {
 			currentSource = null;
 			paused = false;
@@ -292,6 +294,35 @@ if (OTT && OTT.onShow) {
 }
 if (OTT && OTT.onHide) {
 	OTT.onHide(onHide);
+}
+
+if (OTT && OTT.getContextApplicationsResponse) {
+	screen.log('NMC 3.0 detected');
+	OTT.getContextApplications = function (requestId, context) {
+		screen.log('getContextApplications:' + requestId + ',' + JSON.stringify(context));
+		var result = [];
+		if (context && context.type) {
+			switch(context.type.toLowerCase()) {
+				case 'dtv':
+					ApplicationManager.getApplicationsByChannelName(context.channelName || context.programName).forEach(function (id) {
+						result.push({
+							title: ApplicationManager.getMetadataByKey(id, 'name'),
+							description: ApplicationManager.getMetadataByKey(id, 'description'),
+							iconURL: ApplicationManager.getIcon(id),
+							applicationURL: ApplicationManager.getLaunchURL(id)
+						});
+					});
+					break;
+				case 'vod':
+					break;
+				case 'pg':
+					break;
+				default:
+					break;
+			}
+		}
+		OTT.getContextApplicationsResponse(requestId, result);
+	};
 }
 
 plugins.exit = function () {
