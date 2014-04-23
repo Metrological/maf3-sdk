@@ -66,6 +66,8 @@
 "CATEGORY_GAMES" = "JÁTÉKOK";
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "ÉLETSTÍLUS";
+"CATEGORY_FEATURED" = "ÚJDONSÁGOK";
+"CATEGORY_RECENTLY" = "LEGUTÓBB HASZNÁLTAK";
 "ADDFAVO" = "Kedvenc alkalmazás hozzáadása/eltávolítása";
 "ADDFAVO_DESC" = "Nyomja meg az OK gombot a kedvencek szerkesztéséhez.";
 "ADDFAVO_SELECTED" = "Menjen a kedvenc alkalmazásához és nyomjon egy OK-t, hogy felvegye a KEDVENCEK közé. A VISSZA gomb megnyomásával bármikor megszakíthatja a műveletet.";
