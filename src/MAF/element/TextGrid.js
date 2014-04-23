@@ -55,12 +55,6 @@ define('MAF.element.TextGrid', function () {
 					}, event);
 				}
 				this.parent(event, payload);
-			},
-			registerEvents: function (eventTypes) {
-				this.parent([
-					'change',
-					'layoutchange'
-				].concat(eventTypes || []));
 			}
 		},
 

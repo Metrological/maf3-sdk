@@ -358,7 +358,7 @@ define('MAF.views.SearchSuggest', function () {
 
 		cellContentCreator: function () {
 			return new MAF.element.Text({
-				styles: Theme.getStyles('SearchSuggestResultGridText')
+				styles: Object.merge(Theme.getStyles('SearchSuggestResultGridText'), { width: '90%', truncation: 'end', vOffset: 15, hOffset: 10 })
 			});
 		},
 

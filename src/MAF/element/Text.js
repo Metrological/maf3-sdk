@@ -72,6 +72,9 @@ define('MAF.element.Text', function () {
 						break;
 				}
 			},
+			registerEvents: function (eventTypes) {
+				this.parent(['change', 'layoutchange'].concat(eventTypes || []));
+			},
 			proxyProperties: function (propnames) {
 				this.parent([
 					'data',
