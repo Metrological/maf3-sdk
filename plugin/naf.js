@@ -1,5 +1,5 @@
 //var version = '1.0.8s4c2r99';
-var version = '1.0.9s4c2r148';
+var version = MAE.naf || '1.0.9s4c2r148';
 
 NAF = {};
 WebApp = {};
