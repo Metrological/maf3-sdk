@@ -240,9 +240,7 @@ var AppsView = new MAF.Class({
 												var currentCoordinates = apps.getFocusCoordinates() || { column: 0 };
 												idx = Math.min(data.length, currentCoordinates.column);
 											}
-											if (idx > 0) {
-												apps.focusCell.defer(0, apps, [idx]);
-											}
+											apps.focusCell.defer(0, apps, [idx]);
 										}
 										if (first || view.first) {
 											delete view.first;
@@ -482,7 +480,8 @@ var AppsView = new MAF.Class({
 									}
 								} else {
 									view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
-									view.elements.appDescription.setText(ApplicationManager.getMetadataByKey(id, 'description'));
+									var desc = ApplicationManager.getMetadataByKey(id, 'description') || '';
+									view.elements.appDescription.setText(desc + (desc.length === 0 || (desc[desc.length - 1] === '.' || desc[desc.length - 1] === '!') ? '' : '.'));
 								}
 							}
 							if (view.reorder && view.cell && this.retrieve('favbutton') !== true) {

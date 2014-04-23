@@ -66,6 +66,8 @@
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_FEATURED" = "HIGHLIGHTS";
+"CATEGORY_RECENTLY" = "ZULETZT GENUTZT";
 "ADDFAVO" = "Hinzuf&uuml;gen/Entfernen von favorisierten Apps";
 "ADDFAVO_DESC" = "Dr&uuml;cken Sie OK, um Ihre Favoriten zu verwalten.";
 "ADDFAVO_SELECTED" = "Navigieren Sie zu einer App und dr&uuml;cken Sie OK, um die App zu Ihren FAVORITEN hinzuzuf&uuml;gen. Dr&uuml;cken Sie BACK zum Beenden.";

@@ -60,6 +60,7 @@
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
 "CATEGORY_FAVORITES" = "FAVOURITES";
+"CATEGORY_VIDEOIE" = "TV & VIDEO";
 "CATEGORY_VIDEODE" = "TV & VIDEO";
 "CATEGORY_VIDEO" = "TV & VIDEO";
 "CATEGORY_NEWSDE" = "NEWS & INFO";

@@ -60,6 +60,7 @@
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
 "CATEGORY_FAVORITES" = "FAVOURITES";
+"CATEGORY_VIDEOIE" = "TV & VIDEO";
 "CATEGORY_VIDEO" = "TV & VIDEO";
 "CATEGORY_NEWS" = "NEWS & INFO";
 "CATEGORY_NEWSIE" = "NEWS & SPORT";
@@ -71,7 +72,7 @@
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
 "CATEGORY_LIFESTYLEIE" = "LIFESTYLE";
 "CATEGORY_FEATURED" = "FEATURED";
-"CATEGORY_RECENTLY" = "RECENTLY";
+"CATEGORY_RECENTLY" = "RECENTLY USED";
 "ADDFAVO" = "Add/remove favourite Apps";
 "ADDFAVO_DESC" = "Press OK to start managing your favourite Apps";
 "ADDFAVO_SELECTED" = "Navigate to your favourite App and press OK to add the App to FAVOURITES. Press BACK at any time to cancel";

@@ -67,6 +67,8 @@
 "CATEGORY_GAMESCH" = "GAMES";
 "CATEGORY_INFOCH" = "INFORMATION";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
+"CATEGORY_FEATURED" = "HIGHLIGHTS";
+"CATEGORY_RECENTLY" = "ZULETZT GENUTZT";
 "ADDFAVO" = "Favoriten-Apps hinzuf&uuml;gen/entfernen";
 "ADDFAVO_DESC" = "OK dr&uuml;cken, um Ihre Favoriten-Apps zu verwalten";
 "ADDFAVO_SELECTED" = "Zur gew&uuml;nschten App navigieren und mit OK zu FAVORITEN hinzuf&uuml;gen. Zum Abbrechen BACK dr&uuml;cken";

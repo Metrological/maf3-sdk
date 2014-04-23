@@ -56,7 +56,7 @@
 "TWITTER_EMAIL" = "Please enter your e-mail address below. An e-mail will be sent to this address containing a link to the code required to complete the setup.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Activation code for your Twitter-app";
-"TWITTER_EMAIL_BODY" = "You have informed us that you want to use the Twitter-app on your Horizon TV HD+ Box. A 7-digit code is needed to activate the App. Click the link below to receive the 7-digit code required to activate the Twitter app on your Horizon TV HD+ Box. %s We hope you enjoy the Twitter app. Kind regards, UPC";
+"TWITTER_EMAIL_BODY" = "You have informed us that you want to use the Twitter-app on your Horizon TV HD+ Box. A 7-digit code is needed to activate the App. Click the link below to receive the 7-digit code required to activate the Twitter app on your Horizon TV HD+ Box. %s We hope you enjoy the Twitter app. Kind regards.";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
 "CATEGORY_FAVORITES" = "FAVOURITES";

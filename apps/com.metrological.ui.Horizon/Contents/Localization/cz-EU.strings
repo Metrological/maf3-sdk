@@ -76,6 +76,8 @@
 "CATEGORY_VIDEOCH" = "VIDEO & HUDBA";
 "CATEGORY_NEWSCH" = "ZPRÁVY";
 "CATEGORY_INFOCH" = "INFORMACE";
+"CATEGORY_FEATURED" = "TIPY";
+"CATEGORY_RECENTLY" = "NEDÁVNO OTEVŘENÉ";
 "ADDFAVO" = "Přidat/Smazat oblíbené aplikace";
 "ADDFAVO_DESC" = "Stiskněte OK pro správu Vašich oblíbených aplikací";
 "ADDFAVO_SELECTED" = "Zvolte si Vaší oblíbenou aplikaci a stiskněte OK, čímž jí zařadíte mezi OBLÍBENÉ. Stiskněte ZPĚT pro zrušení";
