@@ -21,8 +21,12 @@ var syncProgramData = function () {
 	var player = MAE.blocked && plugins.players[0],
 		previousChannel = currentChannel && currentChannel.number,
 		showEnded = Math.floor(Date.now() / 1000) - (currentProgram ? (currentProgram.startTime + currentProgram.duration) : 0);
-	currentChannel = TVContext && TVContext.getCurrentChannel();
-	if (previousChannel === currentChannel.number && showEnded < 0) {
+	try {
+		currentChannel = TVContext && TVContext.getCurrentChannel();
+	} catch(err) {
+		return;
+	}
+	if (!currentChannel || previousChannel === currentChannel.number && showEnded < 0) {
 		return;
 	}
 	if (timerProgramData) {
@@ -36,7 +40,9 @@ var syncProgramData = function () {
 				player.muted = false;
 			}
 		}
-		currentProgram = currentChannel && currentChannel.getCurrentProgram();
+		try {
+			currentProgram = currentChannel && currentChannel.getCurrentProgram();
+		} catch(err) {}
 	} else if (player) {
 		player.hide();
 		if (isEnabled) {
