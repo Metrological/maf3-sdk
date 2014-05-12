@@ -296,33 +296,71 @@ if (OTT && OTT.onHide) {
 	OTT.onHide(onHide);
 }
 
-if (OTT && OTT.getContextApplicationsResponse) {
-	screen.log('NMC 3.0 detected');
-	OTT.getContextApplications = function (requestId, context) {
-		screen.log('getContextApplications:' + requestId + ',' + JSON.stringify(context));
-		var result = [];
-		if (context && context.type) {
-			switch(context.type.toLowerCase()) {
-				case 'dtv':
-					ApplicationManager.getApplicationsByChannelName(context.channelName || context.programName).forEach(function (id) {
-						result.push({
-							title: ApplicationManager.getMetadataByKey(id, 'name'),
-							description: ApplicationManager.getMetadataByKey(id, 'description'),
-							iconURL: ApplicationManager.getIcon(id),
-							applicationURL: ApplicationManager.getLaunchURL(id)
+if (OTT && OTT.onContextApplicationQuery) {
+	OTT.onContextApplicationQuery(function (requestId, context) {
+		var result = [],
+			apps = [];
+		screen.log('onContextApplicationQuery: ' + requestId + ',' + JSON.stringify(context));
+		if (context) {
+			if (context.type && content.type.toLowerCase() !== 'dtv'){
+				switch(context.type.toLowerCase()) {
+					case 'vod':
+						ApplicationManager.search(new RegExp('(' + context.title.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
+							result.push({
+								id: app.id,
+								title: ApplicationManager.getMetadataByKey(app.id, 'name'),
+								description: ApplicationManager.getMetadataByKey(app.id, 'description'),
+								iconURL: 'http:' + ApplicationManager.getIcon(app.id),
+								applicationURL: ApplicationManager.getLaunchURL(app.id)
+							});
 						});
+						ApplicationManager.getApplicationsByCategory(context.catName).forEach(function (id) {
+							result.push({
+								id: id,
+								title: ApplicationManager.getMetadataByKey(id, 'name'),
+								description: ApplicationManager.getMetadataByKey(id, 'description'),
+								iconURL: 'http:' + ApplicationManager.getIcon(id),
+								applicationURL: ApplicationManager.getLaunchURL(id)
+							});
+						});
+						break;
+					case 'pg':
+						//.subType = "PerOmroep;.type="PG"
+						break;
+					default:
+						break;
+				}
+			} else {
+				ApplicationManager.search(new RegExp('(' + context.programName.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
+					result.push({
+						id: app.id,
+						title: ApplicationManager.getMetadataByKey(app.id, 'name'),
+						description: ApplicationManager.getMetadataByKey(app.id, 'description'),
+						iconURL: 'http:' + ApplicationManager.getIcon(app.id),
+						applicationURL: ApplicationManager.getLaunchURL(app.id)
 					});
-					break;
-				case 'vod':
-					break;
-				case 'pg':
-					break;
-				default:
-					break;
+				});
+				ApplicationManager.getApplicationsByChannelName(context.channelName).forEach(function (id) {
+					result.push({
+						id: id,
+						title: ApplicationManager.getMetadataByKey(id, 'name'),
+						description: ApplicationManager.getMetadataByKey(id, 'description'),
+						iconURL: 'http:' + ApplicationManager.getIcon(id),
+						applicationURL: ApplicationManager.getLaunchURL(id)
+					});
+				});
 			}
 		}
-		OTT.getContextApplicationsResponse(requestId, result);
-	};
+		result.forEach(function(app) {
+			if (apps.pluck('id').indexOf(app.id) === -1) {
+				apps.push(app);
+			}
+		});
+		try {
+			OTT.contextApplicationQueryResponse(requestId, apps);
+		} catch(err) {
+		}
+	});
 }
 
 plugins.exit = function () {

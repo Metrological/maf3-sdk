@@ -4,13 +4,13 @@ var Kraken = (function () {
 		lgiServer = 'lgi.io';
 	function sendMessage(msg, callback) {
 		new Request({
-			url: 'http://session/client/send?protocolid=D4A',
+			url: 'http://session/client/send?protocolid=D4A&t=' + Date.now(),
 			data: msg,
 			method: 'POST',
 			proxy: false,
 			onSuccess: function (data) {
 				new Request({
-					url: 'http://session/client/poll?protocolid=D4A',
+					url: 'http://session/client/poll?protocolid=D4A&t=' + Date.now(),
 					proxy: false,
 					data: data,
 					onSuccess: function (response) {
@@ -104,8 +104,14 @@ this.ThinClient = (function () {
 
 	function getAgeRating(callback) {
 		Kraken.sendMessage(String.fromCharCode(6), function (data) {
-			ageRating = parseInt(data && data.substr(4) || -1, 10);
-			callback();
+			// todo check documentation orlin
+			var age = data && data.substr(4);
+			if (age !== undefined) {
+				ageRating = parseInt(age || 0, 10);
+				callback();
+			} else {
+				getAgeRating.delay(5000, null, [callback]);
+			}
 		});
 	}
 	function updateNowPlaying() {
@@ -118,14 +124,14 @@ this.ThinClient = (function () {
 			return;
 		}
 		Kraken.getCurrentChannel(function (data) {
-			if (ageRating === -1 || (data.ageRating - 3) <= ageRating) {
+			if (ageRating !== undefined && (ageRating === -1 || !data.ageRating || (data.ageRating - 3) <= ageRating)) {
 				if (!data.stream) {
 					switch (window.MAE.language) {
 						case 'hu':
-							currentProgram = { title: 'Önnek nincs hozzáférése ehhez a csatornához.' };
+							currentProgram = { title: 'Kódolt Csatorna' };
 							break;
 						default:
-							currentProgram = { title: 'You do not have access to this channel.' };
+							currentProgram = { title: 'Not entitled channel' };
 							break;
 					}
 				} else {
@@ -133,24 +139,24 @@ this.ThinClient = (function () {
 				}
 				if (data.stream !== video.src) {
 					log('UPDATE UDP');
-					video.src = data.stream;
+					video.src = data.stream || '';
 					video.load();
 					video.play();
 				}
-			} else {
+			} else if (data.ageRating || ageRating === undefined) {
 				switch (window.MAE.language) {
 					case 'hu':
-						currentProgram = { title: 'Felhívjuk figyelmét, hogy a most futó program korhatárhoz kötött.' };
+						currentProgram = { title: 'Szülői zár' };
 						break;
 					default:
-						currentProgram = { title: 'Attention! The "Now Playing" program is age restricted!' };
+						currentProgram = { title: 'Parental Lock' };
 						break;
 				}
 				video.src = '';
 				video.load();
 			}
 			var now = Date.now(),
-				expire = (+moment.utc(data.end || now) - now);
+				expire = data.end ? (+moment.utc(data.end || now) - now) : 3000;
 			if (expire < 1000) {
 				expire = 5000;
 			}
@@ -189,7 +195,7 @@ this.ThinClient = (function () {
 				break;
 			case 'webkitVisible':
 			case 'visible':
-				updateNowPlaying();
+				getAgeRating(updateNowPlaying);
 				if (video) {
 					video.muted = false;
 				}

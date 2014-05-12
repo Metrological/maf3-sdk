@@ -168,6 +168,16 @@ var NDSPlayer = function () {
 				position = 0;
 				stateChange(Player.state.STOP);
 				grabbed = false;
+				// Workaround Horizon 3 RC2
+				(function () {
+					var channel;
+					try {
+						channel = TVContext && TVContext.getCurrentChannel();
+					} catch(err) {}
+					if (channel && channel.number !== currentChannel.number) {
+						channelChange();
+					}
+				}).delay(1000);
 			}/*
 			switch (type) {
 				case TVContext.CONTENT_ACCESS_DENIED:
@@ -182,7 +192,6 @@ var NDSPlayer = function () {
 		};
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
-				//screen.log('CHANNEL CHANGE');
 				channelChange();
 				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
