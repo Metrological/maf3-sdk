@@ -191,6 +191,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"digit-8":			{label:"8",value:"8",unicode:"\u0038"},
 				"digit-9":			{label:"9",value:"9",unicode:"\u0039"},
 				"char-space":		{label:"space",value:" ",unicode:"\u0020"}, // TODO localize label for spacebar
+				"char-uspace":		{label:"_",value:" ",unicode:"\u0020"},
 				// numpad / tripletap keys have two labels
 				"numpad-0":		{label:"0",sublabel:"",value:"0"},
 				"numpad-1":		{label:"1",sublabel:"",value:"1"},
@@ -527,6 +528,11 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					shift:"char-space",
 					//extended:["char-space"], // *** TODO no popup on space/extended?
 					//shiftextended:["char-space"],
+					event:"space"        
+				},
+				"key-uspace":{
+					normal:"char-uspace", 
+					shift:"char-uspace",
 					event:"space"        
 				},
 				"action-shift":{
@@ -1338,7 +1344,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					"numpad-1":	{label:"1",sublabel:";@!?",value:"1"}
 				}
 			} : {};
+
 			['CharacterDefinitions', 'KeyDefinitions', 'KeyLayouts', 'KeyLayoutSets', 'ControlDimensions', 'KeyLabelPresentation', 'KeyImageSources'].forEach(function(table_name){
+
 				if (plugin_tables[table_name]) {
 					internals.Tables[table_name] = Object.merge(internals.Tables[table_name], plugin_tables[table_name]);
 				}
@@ -1443,11 +1451,53 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				var running_width = 0,
 					running_height = 0;
 
-				row.forEach(function (value, columnKey) {
+				if (typeOf(row) !== 'array') {
+					if (rowKey === 0) {
+						warn('The KeyLayout "' + (layout.id || 'unknown') + '" is not defined properly.');
+					}
+				} else {
+					row.forEach(function (value, columnKey) {
+						var keyframe = new Item({ focus: true }),
+							className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
+							styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
+							row_height = 0;
+						keyframe.addClass(className);
+						if (this.config.controlSize === 'small') {
+							keyframe.addClass('small');
+						}
+						keyframe.addEventListener('select', onBodySelectEvent, this);
+						keyframe.owner = this;
+						fragment.appendChild(keyframe);
+
+						keyframe.store('key', { row: rowKey, column: columnKey, key: key_idx++, keysonrow: row.length || 0 });
+						updateKeyframe.call(this, keyframe, value.keyid);
+
+						if (this.config.autoAdjust) {
+							running_width += externalWidth + styles.width || 0;
+							row_height += externalHeight + styles.height || 0;
+
+							running_height = Math.max(row_height, running_height);
+						}
+						keys++;
+					}, this);
+				}
+
+				row_max = Math.max(row_max, running_width);
+				column_max += running_height;
+			}, this);
+
+			// Most keys are in the keyrows, so only keyrows are used in calculation the width of the keyboard when autoAdjust is set.
+			var control_height = 0;
+			if (layout.controlrow && typeOf(layout.controlrow) === 'array') {
+				layout.controlrow.forEach(function (value, columnKey) {
 					var keyframe = new Item({ focus: true }),
 						className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
 						styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 						row_height = 0;
+
+					if (options.row === 'control' && columnKey === options.column) {
+						options.focusTarget = keys;
+					}
 					keyframe.addClass(className);
 					if (this.config.controlSize === 'small') {
 						keyframe.addClass('small');
@@ -1456,50 +1506,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					keyframe.owner = this;
 					fragment.appendChild(keyframe);
 
-					keyframe.store('key', { row: rowKey, column: columnKey, key: key_idx++, keysonrow: row.length || 0 });
+					keyframe.store('key', { row: 'control', column: columnKey, key: key_idx++ });
 					updateKeyframe.call(this, keyframe, value.keyid);
 
 					if (this.config.autoAdjust) {
-						running_width += externalWidth + styles.width || 0;
 						row_height += externalHeight + styles.height || 0;
-
-						running_height = Math.max(row_height, running_height);
+						control_height = Math.max(row_height, control_height);
 					}
 					keys++;
 				}, this);
-
-				row_max = Math.max(row_max, running_width);
-				column_max += running_height;
-			}, this);
-
-			// Most keys are in the keyrows, so only keyrows are used in calculation the width of the keyboard when autoAdjust is set.
-			var control_height = 0;
-			layout.controlrow.forEach(function (value, columnKey) {
-				var keyframe = new Item({ focus: true }),
-					className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
-					styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
-					row_height = 0;
-
-				if (options.row === 'control' && columnKey === options.column) {
-					options.focusTarget = keys;
-				}
-				keyframe.addClass(className);
-				if (this.config.controlSize === 'small') {
-					keyframe.addClass('small');
-				}
-				keyframe.addEventListener('select', onBodySelectEvent, this);
-				keyframe.owner = this;
-				fragment.appendChild(keyframe);
-
-				keyframe.store('key', { row: 'control', column: columnKey, key: key_idx++ });
-				updateKeyframe.call(this, keyframe, value.keyid);
-
-				if (this.config.autoAdjust) {
-					row_height += externalHeight + styles.height || 0;
-					control_height = Math.max(row_height, control_height);
-				}
-				keys++;
-			}, this);
+			}
 			column_max += control_height;
 
 			this.setStyles({
@@ -1515,6 +1531,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 			if (options && options.focusTarget) {
 				this.body.childNodes[(options.focusTarget < keys) ? options.focusTarget : 0].focus();
+			} else {
+				this.body.childNodes[0].focus();
 			}
 		},
 		getValue: function () {
