@@ -7,6 +7,7 @@ var AppsView = new MAF.Class({
 	firstCategory: 1,
 	disableResetFocus: true,
 	delayedInitialFocus: 600,
+	maxFavorites: 22,
 
 	initialize: function () {
 		this.parent();
@@ -376,7 +377,7 @@ var AppsView = new MAF.Class({
 								var i = view.getFavoriteIndex(id);
 								switch (view.state) {
 									case 'addfavo':
-										if (i === -1) {
+										if ((i === -1) && (view.getFavorites().length < view.maxFavorites)) {
 											view.addFavorite(id);
 											cell.overlay.setSource('Images/RemoveFavoIcon.png');
 										} else {

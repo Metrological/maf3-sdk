@@ -1038,12 +1038,14 @@ widget.handleChildEvent = function (event) {
 };
 
 widget.handleHostEvent = function (event) {
-	//log('handleHostEvent', event.subject/*, event.data*/);
+	//log('handleHostEvent', event.id, event.subject, event.data);
 	var data;
 	switch(event.subject) {
+		case 'onActivateColorButton':
 		case 'onActivateAppButton':
 			data = event.getData();
-			switch(data.type) {
+			switch(data.type || data.color) {
+				case 'red':
 				case 'close-all':
 					if (event.id !== widget.identifier) {
 						ApplicationManager.fire(event.id, 'onAppFin', {
@@ -1051,17 +1053,23 @@ widget.handleHostEvent = function (event) {
 						});
 					}
 					break;
+				case 'green':
+					this.MAF.application.loadSettingsView();
+					break;
+				case 'blue':
 				case 'viewport-toggle':
-					var mediaplayer = this.MAF.mediaplayer,
+					if (this.MAF.application.isSidebarView()) {
+						var mediaplayer = this.MAF.mediaplayer,
+							bounds = mediaplayer && mediaplayer.getViewportBounds();
+						if (bounds && bounds.height === 1080) {
+							mediaplayer.setViewportBounds(624, 176, 1280, 720);
+						} else if (bounds) {
+							mediaplayer.setViewportBounds(0, 0, 1920, 1080);
+						}
 						bounds = mediaplayer && mediaplayer.getViewportBounds();
-					if (bounds && bounds.height === 1080) {
-						mediaplayer.setViewportBounds(624, 176, 1280, 720);
-					} else if (bounds) {
-						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
-					}
-					bounds = mediaplayer && mediaplayer.getViewportBounds();
-					if (Horizon) {
-						Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
+						if (Horizon) {
+							Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
+						}
 					}
 					break;
 				case 'switch-profile':
