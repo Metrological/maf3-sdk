@@ -169,15 +169,15 @@ var NDSPlayer = function () {
 				stateChange(Player.state.STOP);
 				grabbed = false;
 				// Workaround Horizon 3 RC2
+				var channel;
+				try {
+					channel = TVContext && TVContext.getCurrentChannel();
+				} catch(err) {}
 				(function () {
-					var channel;
-					try {
-						channel = TVContext && TVContext.getCurrentChannel();
-					} catch(err) {}
 					if (channel && channel.number !== currentChannel.number) {
 						channelChange();
 					}
-				}).delay(1000);
+				}).delay(500);
 			}/*
 			switch (type) {
 				case TVContext.CONTENT_ACCESS_DENIED:
