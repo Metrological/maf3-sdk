@@ -28,6 +28,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-auml":		{label:"ä",value:"ä",unicode:"\u00E4"},
 				"char-aring":		{label:"å",value:"å",unicode:"\u00E5"},
 				"char-atilde":		{label:"ã",value:"ã",unicode:"\u00E3"},
+				"char-aogon":		{label:"ą",value:"ą",unicode:"\u0105"},
 				"char-Agrave":		{label:"À",value:"À",unicode:"\u00C0"},
 				"char-Aacute":		{label:"Á",value:"Á",unicode:"\u00C1"},
 				"char-Acirc":		{label:"Â",value:"Â",unicode:"\u00C2"},
@@ -36,12 +37,15 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-Atilde":		{label:"Ã",value:"Ã",unicode:"\u00C3"},
 				"char-aelig":		{label:"æ",value:"æ",unicode:"\u00E6"},
 				"char-AElig":		{label:"Æ",value:"Æ",unicode:"\u00C6"},
+				"char-Aogon":		{label:"Ą",value:"Ą",unicode:"\u0104"},
 				"char-b":			{label:"b",value:"b",unicode:"\u0062"},
 				"char-B":			{label:"B",value:"B",unicode:"\u0042"},
 				"char-c":			{label:"c",value:"c",unicode:"\u0063"},
 				"char-C":			{label:"C",value:"C",unicode:"\u0043"},
 				"char-ccedil":		{label:"ç",value:"ç",unicode:"\u00E7"},
+				"char-cacute":		{label:"ć",value:"ć",unicode:"\u0107"},
 				"char-Ccedil":		{label:"Ç",value:"Ç",unicode:"\u00C7"},
+				"char-Cacute":		{label:"Ć",value:"Ć",unicode:"\u0106"},
 				"char-d":			{label:"d",value:"d",unicode:"\u0064"},
 				"char-D":			{label:"D",value:"D",unicode:"\u0044"},
 				"char-e":			{label:"e",value:"e",unicode:"\u0065"},
@@ -50,10 +54,12 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-eacute":		{label:"é",value:"é",unicode:"\u00E9"},
 				"char-ecirc":		{label:"ê",value:"ê",unicode:"\u00EA"},
 				"char-euml":		{label:"ë",value:"ë",unicode:"\u00EB"},
+				"char-eogon":		{label:"ę",value:"ę",unicode:"\u0119"},
 				"char-Egrave":		{label:"È",value:"È",unicode:"\u00C8"},
 				"char-Eacute":		{label:"É",value:"É",unicode:"\u00C9"},
 				"char-Ecirc":		{label:"Ê",value:"Ê",unicode:"\u00CA"},
 				"char-Euml":		{label:"Ë",value:"Ë",unicode:"\u00CB"},
+				"char-Eogon":		{label:"Ę",value:"Ę",unicode:"\u0118"},
 				"char-f":			{label:"f",value:"f",unicode:"\u0066"},
 				"char-F":			{label:"F",value:"F",unicode:"\u0046"},
 				"char-g":			{label:"g",value:"g",unicode:"\u0067"},
@@ -75,13 +81,17 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-k":			{label:"k",value:"k",unicode:"\u006B"},
 				"char-K":			{label:"K",value:"K",unicode:"\u004B"},
 				"char-l":			{label:"l",value:"l",unicode:"\u006C"},
+				"char-lstrok":		{label:"ł",value:"ł",unicode:"\u0142"},
 				"char-L":			{label:"L",value:"L",unicode:"\u004C"},
+				"char-Lstrok":		{label:"Ł",value:"Ł",unicode:"\u0141"},
 				"char-m":			{label:"m",value:"m",unicode:"\u006D"},
 				"char-M":			{label:"M",value:"M",unicode:"\u004D"},
 				"char-n":			{label:"n",value:"n",unicode:"\u006E"},
 				"char-N":			{label:"N",value:"N",unicode:"\u004E"},
 				"char-ntilde":		{label:"ñ",value:"ñ",unicode:"\u00F1"},
+				"char-nacute":		{label:"ń",value:"ń",unicode:"\u0144"},
 				"char-Ntilde":		{label:"Ñ",value:"Ñ",unicode:"\u00D1"},
+				"char-Nacute":		{label:"Ń",value:"Ń",unicode:"\u0143"},
 				"char-o":			{label:"o",value:"o",unicode:"\u006F"},
 				"char-O":			{label:"O",value:"O",unicode:"\u004F"},
 				"char-ograve":		{label:"ò",value:"ò",unicode:"\u00F2"},
@@ -106,6 +116,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-R":			{label:"R",value:"R",unicode:"\u0052"},
 				"char-s":			{label:"s",value:"s",unicode:"\u0073"},
 				"char-S":			{label:"S",value:"S",unicode:"\u0053"},
+				"char-sacute":		{label:"ś",value:"ś",unicode:"\u015B"},
+				"char-Sacute":		{label:"Ś",value:"Ś",unicode:"\u015A"},
 				"char-t":			{label:"t",value:"t",unicode:"\u0074"},
 				"char-T":			{label:"T",value:"T",unicode:"\u0054"},
 				"char-u":			{label:"u",value:"u",unicode:"\u0075"},
@@ -131,6 +143,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-Yacute":		{label:"Ý",value:"Ý",unicode:"\u00DD"},
 				"char-z":			{label:"z",value:"z",unicode:"\u007A"},
 				"char-Z":			{label:"Z",value:"Z",unicode:"\u005A"},
+				"char-zacute":		{label:"ź",value:"ź",unicode:"\u017A"},
+				"char-zdot":		{label:"ż",value:"ż",unicode:"\u017C"},
+				"char-Zacute":		{label:"Ź",value:"Ź",unicode:"\u0179"},
+				"char-Zdot":		{label:"Ż",value:"Ż",unicode:"\u017B"},
 				"char-eth":			{label:"ð",value:"ð",unicode:"\u00F0"},
 				"char-thorn":		{label:"þ",value:"þ",unicode:"\u00FE"},
 				"char-ETH":			{label:"Ð",value:"Ð",unicode:"\u00D0"},
@@ -208,8 +224,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-a":{
 					normal:"char-a",
 					shift:"char-A",
-					extended:["char-a","char-agrave","char-aacute","char-acirc","char-auml","char-aring","char-aelig"],
-					shiftextended:["char-A","char-Agrave","char-Aacute","char-Acirc","char-Auml","char-Aring","char-AElig"]
+					extended:["char-a","char-agrave","char-aacute","char-acirc","char-auml","char-aring","char-aelig","char-aogon"],
+					shiftextended:["char-A","char-Agrave","char-Aacute","char-Acirc","char-Auml","char-Aring","char-AElig","char-Aogon"]
 				},
 				"key-b":{
 					normal:"char-b",
@@ -218,8 +234,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-c":{
 					normal:"char-c",
 					shift:"char-C",
-					extended:["char-c","char-ccedil"],
-					shiftextended:["char-C","char-Ccedil"]
+					extended:["char-c","char-ccedil","char-cacute"],
+					shiftextended:["char-C","char-Ccedil","char-Cacute"]
 				},
 				"key-d":{
 					normal:"char-d",
@@ -230,8 +246,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-e":{
 					normal:"char-e",
 					shift:"char-E",
-					extended:["char-e","char-egrave","char-eacute","char-ecirc","char-euml"],
-					shiftextended:["char-E","char-Egrave","char-Eacute","char-Ecirc","char-Euml"]
+					extended:["char-e","char-egrave","char-eacute","char-ecirc","char-euml","char-eogon"],
+					shiftextended:["char-E","char-Egrave","char-Eacute","char-Ecirc","char-Euml","char-Eogon"]
 				},
 				"key-f":{
 					normal:"char-f",
@@ -261,7 +277,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				},
 				"key-l":{
 					normal:"char-l",
-					shift:"char-L"
+					shift:"char-L",
+					extended:["char-l","char-lstrok"],
+					shiftextended:["char-L","char-Lstrok"]
 				},
 				"key-m":{
 					normal:"char-m",
@@ -270,8 +288,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-n":{
 					normal:"char-n",
 					shift:"char-N",
-					extended:["char-ntilde"],
-					shiftextended:["char-Ntilde"]
+					extended:["char-n","char-ntilde","char-nacute"],
+					shiftextended:["char-N","char-Ntilde","char-Nacute"]
 				},
 				"key-o":{
 					normal:"char-o",
@@ -294,8 +312,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-s":{
 					normal:"char-s",
 					shift:"char-S",
-					extended:["char-s","char-szlig"],
-					shiftextended:["char-S","char-szlig"]
+					extended:["char-s","char-szlig","char-sacute"],
+					shiftextended:["char-S","char-szlig","char-Sacute"]
 				},
 				"key-t":{
 					normal:"char-t",
@@ -329,7 +347,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				},
 				"key-z":{
 					normal:"char-z",
-					shift:"char-Z"
+					shift:"char-Z",
+					extended:["char-z","char-zacute","char-zdot"],
+					shiftextended:["char-Z","char-Zacute","char-Zdot"]
 				},
 				"key-currency":{
 					normal:"char-dollar",
@@ -564,7 +584,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			},
 			KeyLayouts: [{
 				id: "alphanumeric",
-				label: "abc",
+				label: FontAwesome.get(['keyboard-o', 'lg']),
 				glyph: "",
 				keyrows: [
 					[{keyid:"key-a"},
@@ -869,11 +889,15 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	};
 
 	var onBodyGainFocus = function (event) {
+		if (MAF.system && MAF.system.setMode)
+			MAF.system.setMode('keyboard');
 		var internal = internals[this._classID];
 		focusNewKey.call(this, internal.state.current_focused_key, internal.body.firstChild.firstChild);
 	};
 
 	var onBodyLoseFocus = function (event) {
+		if (MAF.system && MAF.system.setMode)
+			MAF.system.setMode();
 		if (internals[this._classID].state.current_focused_key)
 			internals[this._classID].state.current_focused_key.removeClass('focused');
 	};
@@ -1346,12 +1370,11 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			} : {};
 
 			['CharacterDefinitions', 'KeyDefinitions', 'KeyLayouts', 'KeyLayoutSets', 'ControlDimensions', 'KeyLabelPresentation', 'KeyImageSources'].forEach(function(table_name){
-
 				if (plugin_tables[table_name]) {
 					internals.Tables[table_name] = Object.merge(internals.Tables[table_name], plugin_tables[table_name]);
 				}
 				if (this.config[table_name]) {
-					internals.Tables[table_name] = this.config[table_name];
+					internals.Tables[table_name].merge(this.config[table_name]);
 				}
 			}, this);
 
@@ -1654,6 +1677,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			}
 		},
 		suicide: function () {
+			if (MAF.system && MAF.system.setMode)
+				MAF.system.setMode();
 			Object.forEach(EventMap, function (value, key) {
 				if (this[key]) {
 					delete this[key];

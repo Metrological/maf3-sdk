@@ -61,7 +61,7 @@ define('MAF.control.BackButton', function () {
 			this.content = [
 				new MAF.element.Text({
 					ClassName: 'ControlBackButtonIcon',
-					label: FontAwesome.get('undo')
+					label: FontAwesome.get((MAE.labels && MAE.labels.back) || 'undo')
 				}).appendTo(this),
 				new MAF.element.Text({
 					ClassName: 'ControlBackButtonText',
