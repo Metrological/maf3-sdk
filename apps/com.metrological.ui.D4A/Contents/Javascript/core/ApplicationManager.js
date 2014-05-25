@@ -113,7 +113,7 @@ var loadTemplate = (function () {
 							width: 588,
 							height: 1032,
 							top: 22,
-							left: 32
+							left: 56
 						},
 						events: {
 							select: function (event) {
@@ -1055,7 +1055,7 @@ widget.handleHostEvent = function (event) {
 					var mediaplayer = this.MAF.mediaplayer,
 						bounds = mediaplayer && mediaplayer.getViewportBounds();
 					if (bounds && bounds.width === 1920) {
-						mediaplayer.setViewportBounds(624, 168, 1272, 720);
+						mediaplayer.setViewportBounds(648, 168, 1272, 720);
 					} else if (bounds) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}
