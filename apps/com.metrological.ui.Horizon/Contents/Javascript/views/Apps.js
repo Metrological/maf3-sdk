@@ -232,7 +232,7 @@ var AppsView = new MAF.Class({
 												if (data.length > columns) {
 													currentFocusIndex += columns;
 												}
-												var page = Math.floor(data.length / (columns * rows));
+												var page = Math.ceil(data.length / (columns * rows)) - 1;
 												if (page > 0) {
 													apps.changePage.defer(0, apps, [page]);
 												}
