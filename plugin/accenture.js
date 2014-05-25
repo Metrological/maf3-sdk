@@ -182,7 +182,15 @@ var AccentureProfile = function (name) {
 		return md5(this.operator + (getProfileId().id || 0));
 	});
 	getter(this, 'operator', function () {
-		return 'kpn';
+		var fips = OTT && OTT.getFIPS && OTT.getFIPS();
+		switch(fips) {
+			case '000253':
+				return 'xs4all';
+			case '000254':
+				return 'telfort';
+			default:
+				return 'kpn';
+		}
 	});
 	getter(this, 'packages', function () {
 		return OTT && OTT.getPackages && OTT.getPackages() || [];
@@ -296,11 +304,21 @@ if (OTT && OTT.onHide) {
 	OTT.onHide(onHide);
 }
 
+if (OTT && OTT.onBack) {
+	OTT.onBack(function () {
+		var ev = document.createEvent('Events');
+		ev.initEvent('keydown', true, true);
+		ev.keyCode = ev.which = 8;
+		ev.key = 'back';
+		(document.activeElement || window).dispatchEvent(ev);
+	});
+}
+
 if (OTT && OTT.onContextApplicationQuery) {
 	OTT.onContextApplicationQuery(function (requestId, context) {
 		var result = [],
 			apps = [];
-		screen.log('onContextApplicationQuery: ' + requestId + ',' + JSON.stringify(context));
+		//screen.log('onContextApplicationQuery: ' + requestId + ',' + JSON.stringify(context));
 		if (context) {
 			if (context.type && content.type.toLowerCase() !== 'dtv'){
 				switch(context.type.toLowerCase()) {
@@ -362,6 +380,25 @@ if (OTT && OTT.onContextApplicationQuery) {
 		}
 	});
 }
+
+plugins.setMode = function (mode) {
+	if (OTT && OTT.viewMode) {
+		var player = plugins.player && plugins.player.length > 0 && plugins.player[0];
+		switch(mode) {
+			case 'keyboard':
+			case 'dialog':
+				OTT.viewMode('full');
+				break;
+			default:
+				if (player && player.src) {
+					OTT.viewMode('full');
+				} else {
+					OTT.viewMode('overlay');
+				}
+				break;
+		}
+	}
+};
 
 plugins.exit = function () {
 	var player = plugins.player[0];
