@@ -111,17 +111,19 @@ onFn('model.initialized', function () {
 
 	function getApplicationsByChannelId(channelId) {
 		var result = [],
-			channel = model.channels && model.channels.filter(function (c) {
-				return c.id === channelId;
+			channel = model.channels && Array.from(model.channels).filter(function (c) {
+				return c && c.id === channelId;
 			}) || [];
-		if (channel.length > 0) {
-			ApplicationManager.getApplicationsByChannelName(channel[0].name).forEach(function (id) {
-				result.push({
-					id: id,
-					name: ApplicationManager.getMetadataByKey(id, 'name'),
-					image: ApplicationManager.getIcon(id),
-					url: ApplicationManager.getLaunchURL(id)
-				});
+		if (channel.length > 0 && channel[0] && channel[0].name) {
+			(ApplicationManager.getApplicationsByChannelName(channel[0].name) || []).forEach(function (id) {
+				if (id) {
+					result.push({
+						id: id,
+						name: ApplicationManager.getMetadataByKey(id, 'name'),
+						image: ApplicationManager.getIcon(id),
+						url: ApplicationManager.getLaunchURL(id)
+					});
+				}
 			});
 		}
 		return [{
@@ -136,12 +138,16 @@ onFn('model.initialized', function () {
 		var msg = model.state.applications[i].appMsg,
 			uiId = model.state.applications[0].id,
 			message;
-		if (msg.sourceId !== uiId) {
+		if (!msg || msg.sourceId !== uiId) {
 			return;
 		}
 		switch (msg.method) {
 			case 'getApplications':
-				message = getApplicationsByChannelId(msg.message);
+				try {
+					message = getApplicationsByChannelId(msg.message);
+				} catch(err) {
+					message = [];
+				}
 				break;
 		}
 		if (message) {
@@ -167,9 +173,12 @@ var NAFPlayer = function () {
 		scale = 720 / 1080,
 		states = Player.state,
 		currentBounds = Player.prototype.bounds,
+		previousState,
+		playbackTimer,
 		currentSource,
 		appIdx,
-		readyForPlay = false,
+		playRate,
+//		readyForPlay = false,
 		initialized = false;
 
 	instance.subscribers = {};
@@ -182,6 +191,7 @@ var NAFPlayer = function () {
 		fire.call(instance, 'onStateChange', {
 			state: state
 		});
+		previousState = state;
 	}
 
 	function l(s) {
@@ -201,10 +211,12 @@ var NAFPlayer = function () {
 
 		// workaround because buffering ended is not available
 		onFn('model.state.applications.' + appIdx + '.media.assets.*', function () {
-			if (model.state.applications[appIdx].media.assets.length > 0 && !readyForPlay) {
-				readyForPlay = true;
-				l('MAF EVENT: INFOLOADED');
-				stateChange(states.INFOLOADED);
+			if (model.state.applications[appIdx].media.assets.length > 0/* && !readyForPlay*/) {
+//				readyForPlay = true;
+				l('MAF SET MEDIA ASSET TO PLAYER');
+				doFn('model.state.players.0', 'model.state.applications.' + appIdx + '.media.assets.0');
+				l('MAF EVENT: SEND BUFFERING');
+				stateChange(states.BUFFERING);
 			}
 		});
 
@@ -223,22 +235,46 @@ var NAFPlayer = function () {
 				return;
 			}
 			if (status) {
-				l('MAF RECEIVED: NAF STATUS CODE: ' + status.code);
-				switch (parseInt(status.code, 10)) {
+				var code = parseInt(status.code, 10);
+				l('MAF RECEIVED: NAF STATUS CODE: ' + code);
+				if (previousState === states.ERROR) return;
+				switch (code) {
 					case 200: 
 						//PRESENTATION_STARTED
-						l('MAF EVENT: SEND PLAY');
-						stateChange(states.PLAY);
+						// workaround for no status code
+						if (playbackTimer) {
+							clearTimeout(playbackTimer);
+							playbackTimer = undefined;
+						}
+						// workaround for no buffering end
+						if (previousState !== states.BUFFERING) {
+							l('MAF EVENT: SEND PLAY');
+							stateChange(states.PLAY);
+						} else {
+							l('MAF EVENT: SEND INFOLOADED');
+							stateChange(states.INFOLOADED);
+						}
 						break;
 					case 201:
 						//BEGINNING_OF_CONTENT
+						// workaround for no status code
+						if (playbackTimer) {
+							clearTimeout(playbackTimer);
+							playbackTimer = undefined;
+						}
 						l('MAF EVENT: SEND PLAY');
 						stateChange(states.PLAY);
 						break;
 					case 202:
 						//END_OF_CONTENT
-						l('MAF EVENT: SEND EOF');
-						stateChange(states.EOF);
+						var timeLeft = instance.duration - instance.currentTime;
+						if (!isNaN(timeLeft) && timeLeft < 10) {
+							l('MAF EVENT: SEND EOF (' + timeLeft + ')');
+							stateChange(states.EOF);
+						} else {
+							l('MAF EVENT: SEND ERROR (' + timeLeft + ')');
+							stateChange(states.ERROR);
+						}
 						break;
 					case 204:
 						l('MAF EVENT: SEND INFOLOADED');
@@ -255,17 +291,23 @@ var NAFPlayer = function () {
 						//OTT_PLAYBACK_ERROR
 					case 471:
 						//OTT_UNKNOWN_ERROR
-						l('MAF EVENT: SEND ERROR');
-						stateChange(states.ERROR);
-						break;
-//					case 203:
 					case 472:
 						//OTT_CANCELLED
-						l('MAF EVENT: SEND STOP');
-						stateChange(states.STOP);
+						// workaround for no status code
+						if (playbackTimer) {
+							clearTimeout(playbackTimer);
+							playbackTimer = undefined;
+						}
+						// workaround for 472 error and receiving a 2xx code within a few seconds
+						(function () {
+							if (code !== 472 || previousState === states.BUFFERING) {
+								l('MAF EVENT: SEND ERROR');
+								stateChange(states.ERROR);
+							}
+						}).delay(code === 472 ? 2000 : 50);
 						break;
 					default:
-						log('MAF EVENT: IGNORED STATUS CODE: ' + status.code);
+						log('MAF EVENT: IGNORED STATUS CODE: ' + code);
 						break;
 				}
 			}
@@ -310,6 +352,11 @@ var NAFPlayer = function () {
 	}
 	function r(c) {
 		return Math.floor(c * scale);
+	}
+
+	function playbackCheckTimer() {
+		l('MAF NO REPSONSE FROM PLAYER SEND ERROR');
+		stateChange(states.ERROR);
 	}
 
 	getter(instance, 'id', function () {
@@ -362,7 +409,8 @@ var NAFPlayer = function () {
 		return parseInt(internal.player.playRate || 0, 10);
 	});
 	setter(instance, 'rate', function (rate) {
-		if (this.src && parseInt(internal.player.playRate, 10) !== rate) {
+		if (this.src && !playbackTimer && playRate !== rate) {
+			playRate = rate;
 			l('MAF CHANGE PLAY RATE: ' + rate);
 			doFn('model.state.players.0?playRate=' + rate + 'x');
 			if (rate > 1) {
@@ -404,25 +452,34 @@ var NAFPlayer = function () {
 	setter(instance, 'src', function (src) {
 		if (!initialized) {
 			return;
-		} else if (src) {
+		}
+		if (playbackTimer) {
+			clearTimeout(playbackTimer);
+			playbackTimer = undefined;
+		}
+		previousState = undefined;
+		if (src) {
 			if (currentSource) {
 				//stateChange(states.STOP);
+				playRate = undefined;
 				currentSource = undefined;
-				readyForPlay = false;
+//				readyForPlay = false;
 				l('MAF CLEAR MEDIA ASSET');
 				doFn('model.state.applications.' + appIdx + '.media.assets', '');
 			}
 			var asset = new model.MediaAsset('media.asset.video.0', '', src, null, 'video', null, null, '', null, null, null, null, null);
 			currentSource = src;
-			l('MAF EVENT: SEND BUFFERING');
-			stateChange(states.BUFFERING);
+			l('MAF EVENT: SEND INIT');
+			stateChange(states.INIT);
 			(function () {
 				l('MAF SET MEDIA ASSET');
+				playbackTimer = playbackCheckTimer.delay(30000);
 				doFn('model.state.applications.' + appIdx + '.media', asset);
 			}).delay(500);
 		} else if (currentSource) {
+			playRate = undefined;
 			currentSource = undefined;
-			readyForPlay = false;
+//			readyForPlay = false;
 			l('MAF CLEAR MEDIA ASSET');
 			doFn('model.state.applications.' + appIdx + '.media.assets', '');
 			l('MAF RESTORE CHANNEL');
@@ -436,16 +493,13 @@ var NAFPlayer = function () {
 	});
 	setter(instance, 'paused', function (p) {
 		if (this.src) {
-			if (readyForPlay) {
-				readyForPlay = false;
-				l('MAF SET MEDIA ASSET TO PLAYER');
-				doFn('model.state.players.0', 'model.state.applications.' + appIdx + '.media.assets.0');
-				l('MAF EVENT: SEND PLAY');
-				stateChange(states.PLAY);
-			} else {
+			// workaround for autoplay
+//			if (readyForPlay) {
+//				readyForPlay = false;
+//			} else {
 				l('MAF PLAYER: ' + (p ? 'PAUSE' : 'PLAY'));
 				this.rate = (p ? 0 : 1);
-			}
+//			}
 		}
 	});
 	getter(instance, 'bounds', function () {
