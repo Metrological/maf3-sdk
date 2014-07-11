@@ -1,4 +1,4 @@
 var connect = require('connect');
-connect.createServer(
-	connect.static(__dirname)
-).listen(8080);
+var serveStatic = require('serve-static');
+var app = connect(); 
+app.use(serveStatic(__dirname),  {default: 'index.html'}); app.listen(8080); 
