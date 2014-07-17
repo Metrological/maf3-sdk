@@ -2,6 +2,6 @@
 	"name": "maf3-sdk",
 	"version": "0.0.1",
 	"dependencies": {
-		"connect": ">= 2.12.0"
+		"connect": "2.12.0"
 	}
 }
