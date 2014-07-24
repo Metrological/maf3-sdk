@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 define('MAF.keyboard.ReuseKeyboard', function (config) {
-	var USE_INPUT_METHOD = false;
+	var USE_INPUT_METHOD = false,
+		HAS_DELETE = MAE.hacks && MAE.hacks.hasdelete || false;
 	var internals = {
 		Tables: {
 			CharacterDefinitions: {
@@ -218,7 +219,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"numpad-6":		{label:"6",sublabel:"mno",value:"6"},
 				"numpad-7":		{label:"7",sublabel:"pqrs",value:"7"},
 				"numpad-8":		{label:"8",sublabel:"tuv",value:"8"},
-				"numpad-9":		{label:"9",sublabel:"wxyz",value:"9"}
+				"numpad-9":		{label:"9",sublabel:"wxyz",value:"9"},
+				"multi-0":		{label:"0",sublabel:"\u0020",value:"0"}
 			},
 			KeyDefinitions: {
 				"key-a":{
@@ -520,7 +522,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-9":{ normal:"digit-9", shift:"char-quest" },
 				// no shift state on numpad keys? 
 				// need to deal with this on the shift control as well, or just dupe up the shift value here too
-				"multi-0":{ normal:"numpad-0" },
+				"multi-0":{ normal:"multi-0" },
 				"multi-1":{ normal:"numpad-1" },
 				"multi-2":{ normal:"numpad-2" },
 				"multi-3":{ normal:"numpad-3" },
@@ -566,7 +568,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					event:"extendedselect"
 				},
 				"action-backspace":{
-					code: 'back',
+					code: HAS_DELETE ? 'delete' : 'back',
 					label:FontAwesome.get('arrow-left'),
 					glyph:"delete",
 					event:"backspace"
@@ -969,7 +971,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					sublabelEl.addClass('ReuseKeyboardSubLabel');
 					keyframe.store('label', sublabelEl);
 				}
-				sublabelEl.data = sublabel;
+				sublabelEl.data = (sublabel === '\u0020') ? widget.getLocalizedString('SPACE').toLowerCase() : sublabel;
 			}
 		}
 
@@ -1076,23 +1078,33 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 
 	var onBodyKeyDown = function (event) {
 		var target = event.target,
-			key = event.key;
-		//log('onBodyKeyDown', event, event.keyCode, key, event.isChar, event.isNumeric, event.isExtendedChar || event.isExtendedNumeric);
+			key = event.key,
+			internal = internals[target.owner._classID];
+		if (internal.state.showShift) {
+			key = key.toUpperCase();
+		}
+		//log('onBodyKeyDown', event, event.keyCode, key, internal.state.showShift, event.isChar, event.isNumeric, event.isExtendedChar || event.isExtendedNumeric);
 		//target.owner.fireEvent('keydown', event);
 		if (event.isChar || event.isNumeric || event.isExtendedChar || event.isExtendedNumeric) {
 			if (!checkForFocus.call(target.owner, key)) {
 				target.owner.appendToValue(key);
-				generateKeyDown.call(target.owner, 'char', key, event.shiftKey || false);
+				generateKeyDown.call(target.owner, 'char', key, event.shiftKey || internal.state.showShift || false);
 				return;
 			}
 		} else if (this.visible) {
 			switch (event.key) {
+				case 'capslock':
+					if (!internal.state.currentLayout.noShift) {
+						target.owner.setShiftState(!internal.state.showShift);
+					}
+					break;
 				case 'shift':
-					if (!internals[target.owner._classID].state.currentLayout.noShift && !internals[target.owner._classID].state.showShift) {
+					if (!internal.state.currentLayout.noShift && !internal.state.showShift) {
 						target.owner.setShiftState(true);
 					}
 					break;
 				case 'back':
+					if (HAS_DELETE) break;
 				case 'delete':
 					event.preventDefault();
 					if (!checkForFocus.call(target.owner, event.key))
@@ -1108,12 +1120,21 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	};
 
 	var onBodyKeyUp = function (event) {
-		var target = event.target;
-		if (event.key === 'shift') {
-			var internal = internals[target.owner._classID];
-			if (!internal.state.currentLayout.noShift) {
-				target.owner.setShiftState(false);
-			}
+		var target = event.target,
+			internal = internals[target.owner._classID];
+		switch (event.key) {
+			case 'capslock':
+				if (!internal.state.currentLayout.noShift) {
+					target.owner.setShiftState(!internal.state.showShift);
+				}
+				break;
+			case 'shift':
+				if (!internal.state.currentLayout.noShift) {
+					target.owner.setShiftState(false);
+				}
+				break;
+			default:
+				break;
 		}
 	};
 
@@ -1185,24 +1206,15 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var generateKeyDown = function (keytype, keyvalue, shift, keydef) {
 		var packet = {};
 		switch (keytype) {
-
 			case 'multi':
-				packet.key = keyvalue;
 				if (keydef && keydef.sublabel && keydef.sublabel.length > 0) {
+					packet.key = keydef.sublabel[0];
 					var subArr = keydef.sublabel.split('');
 					if ((new Date() - previousKey.when) < 1000) {
 						if (previousKey.key === keyvalue) {
 							if (typeOf(previousKey.value) === 'number') {
-								if (previousKey.value > 0) {
-									if (previousKey.value >= subArr.length) {
-										previousKey.value = 0;
-									} else {
-										previousKey.value = previousKey.value + 1;
-									}
-								} else {
-									previousKey.value = previousKey.value + 1;
-								}
-								packet.key = (previousKey.value > 0) ? subArr[previousKey.value-1] : keyvalue;
+								previousKey.value = (previousKey.value >= subArr.length) ? 0 : previousKey.value + 1;
+								packet.key = (previousKey.value > (subArr.length - 1)) ? keyvalue : subArr[previousKey.value];
 								packet.update = true;
 							}
 						}
@@ -1211,6 +1223,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 					}
 					previousKey.when = new Date();
 					previousKey.key = keyvalue;
+				} else {
+					packet.key = keyvalue;
 				}
 				packet.shiftKey = shift;
 				packet.isChar = true;
@@ -1812,7 +1826,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	ReuseKeyboardLabelOffset: {
 		styles: {
-			hOffset: 20
+			vOffset: -10,
+			hOffset: 0
 		}
 	},
 	ReuseKeyboardSubLabel: {
@@ -1820,9 +1835,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			width: 'inherit',
 			height: 'inherit',
 			hAlign: 'right',
-			hOffset: 20,
 			fontSize: 22,
-			anchorStyle: 'center'
+			anchorStyle: 'center',
+			vOffset: 20
 		}
 	},
 	extendedOverlay: {

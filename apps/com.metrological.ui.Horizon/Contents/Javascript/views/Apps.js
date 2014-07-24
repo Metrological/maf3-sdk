@@ -123,25 +123,140 @@ var AppsView = new MAF.Class({
 			if (!tos) {
 				categories.focus();
 			} else {
-				view.tos = new MAF.dialogs.Alert({
-					title: $_('TERMS'),
-					isModal: true,
-					message: tos,
-					buttons: [{
-						label: $_('AGREE'),
-						callback: function () {
-							delete view.tos;
-							currentAppConfig.set('tos', TOS);
-							categories.focus();
+				if (MAE.tosVersion && MAE.tosVersion === 1){
+					view.tos = new MAF.dialogs.Alert({
+						title: $_('TERMS'),
+						isModal: true,
+						message: tos,
+						buttons: [{
+							label: $_('AGREE'),
+							callback: function () {
+								delete view.tos;
+								currentAppConfig.set('tos', TOS);
+								categories.focus();
+							}
+						}, {
+							label: $_('CANCEL'),
+							callback: function () {
+								delete view.tos;
+								ApplicationManager.exit();
+							}
+						}]
+					}).show();
+				} else {
+					view.tos = new MAF.element.Container({
+						styles: {
+							width: view.width,
+							height: view.height,
+							backgroundColor: 'rgba(0,0,0,.6)'
 						}
-					}, {
-						label: $_('CANCEL'),
-						callback: function () {
-							delete view.tos;
-							ApplicationManager.exit();
+					}).appendTo(view);
+
+					var tosHeader = new MAF.element.Text({
+						label: $_('TOS_HEADER'),
+						styles: {
+							fontSize: 42,
+							fontFamily: 'UPCDigital-Bold',
+							paddingTop: 4,
+							borderTop: '2px solid rgba(255,255,255,.4)',
+							borderBottom: '2px solid rgba(255,255,255,.4)',
+							width: 1110,
+							height: 133,
+							hOffset: (view.width - 1110) / 2,
+							vOffset: 200
 						}
-					}]
-				}).show();
+					}).appendTo(view.tos);
+
+					var tosBody = new MAF.element.TextGrid({
+						label: tos,
+						styles: {
+							fontSize: 27,
+							fontFamily: 'UPCDigital-Regular',
+							wrap: true,
+							width: tosHeader.width,
+							hOffset: tosHeader.hOffset,
+							vOffset: tosHeader.outerHeight + 11
+						}
+					}).appendTo(view.tos);
+
+					var tosAccept = new MAF.control.TextButton({
+						label: $_('AGREE').toUpperCase(),
+						theme: false,
+						styles: {
+							fontFamily: 'InterstatePro-ExtraLight',
+							borderTop: '6px solid white',
+							fontSize: 60,
+							width: tosBody.width,
+							height: 75,
+							hOffset: tosBody.hOffset,
+							vOffset: (tosBody.textHeight > 252) ? tosBody.outerHeight + 20 : 590
+						},
+						textStyles: {
+							hOffset: -10
+						},
+						events: {
+							onSelect: function () {
+								view.tos.visible = false;
+								delete view.tos;
+								currentAppConfig.set('tos', TOS);
+								if (view.backParams.startFromChannelBar && view.backParams.startApp){
+									ApplicationManager.load(view.backParams.startApp);
+									ApplicationManager.open(view.backParams.startApp);
+								} else {
+									categories.focus();
+								}
+							},
+							onFocus: function () {
+								this.setStyle('fontFamily', 'InterstatePro-Bold');
+							},
+							onBlur: function () {
+								this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
+							},
+							onNavigate: function(event){
+								event.stop();
+								if (event.payload.direction === 'down'){
+									tosCancel.focus();
+								}
+							}
+						}
+					}).appendTo(view.tos);
+
+					var tosCancel = new MAF.control.TextButton({
+						label: $_('CANCEL').toUpperCase(),
+						theme: false,
+						styles: {
+							fontFamily: 'InterstatePro-ExtraLight',
+							fontSize: 60,
+							width: tosAccept.width,
+							height: 75,
+							hOffset: tosAccept.hOffset,
+							vOffset: tosAccept.outerHeight + 2
+						},
+						textStyles: {
+							hOffset: -10
+						},
+						events: {
+							onSelect: function () {
+								view.tos.visible = false;
+								delete view.tos;
+								ApplicationManager.exit();
+							},
+							onFocus: function () {
+								this.setStyle('fontFamily', 'InterstatePro-Bold');
+							},
+							onBlur: function () {
+								this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
+							},
+							onNavigate: function(event){
+								event.stop();
+								if (event.payload.direction === 'up'){
+									tosAccept.focus();
+								}
+							}
+						}
+					}).appendTo(view.tos);
+					tosAccept.focus();
+				}
 			}
 		} else {
 			view.tos.hide().show();
@@ -214,6 +329,15 @@ var AppsView = new MAF.Class({
 									//textDecoration: 'underline',
 									duration: 0.2
 								});
+								if (view.categoryCell && view.categoryCell !== this.category) {
+									view.categoryCell.animate({
+										color: baseFontColor,
+										fontFamily: 'InterstatePro-ExtraLight',
+										//textDecoration: (view.element.currentNavigation === 'right') ? 'underline' : null,
+										duration: 0.2
+									});
+								}
+								view.categoryCell = this.category;
 								if (view.category !== category) {
 									var first = view.category === undefined,
 										apps = view.controls.apps;
@@ -260,6 +384,14 @@ var AppsView = new MAF.Class({
 									origin: ['0%', '50%'],
 									duration: 0.2
 								});
+								if (view.categoryCell && view.categoryCell !== cell.category) {
+									view.categoryCell.animate({
+										color: baseFontColor,
+										fontFamily: 'InterstatePro-ExtraLight',
+										//textDecoration: (view.element.currentNavigation === 'right') ? 'underline' : null,
+										duration: 0.2
+									});
+								}
 								(function () {
 									if (this.getCellDataItem() !== view.category) {
 										//this.category.setStyle('textDecoration', null);
@@ -300,6 +432,13 @@ var AppsView = new MAF.Class({
 				vOffset: 300
 			},
 			events: {
+				onPageChanged: function() {
+					var view = this.getView();
+					if (view && view.controls.apps){
+						view.controls.apps.focus();
+						this.focus();
+					}
+				},
 				onNavigateOutOfBounds: function (event) {
 					var direction = event.payload.direction;
 					if (direction === 'right' || direction === 'left') {
@@ -645,6 +784,12 @@ var AppsView = new MAF.Class({
 						if (event.payload.direction === 'down') {
 							if (page !== lastpage) {
 								return;
+							} else if (idx === (max - 1)){
+								view.controls.apps.focusCell(0);
+								view.controls.categories.changePage(view.controls.categories.getCurrentPage() + 1);
+							} else if ((idx === max) && (page === lastpage)){
+								view.controls.apps.focusCell(0);
+								view.controls.categories.changePage(0);
 							}
 							if (idx === max) {
 								idx = 0;
@@ -654,8 +799,12 @@ var AppsView = new MAF.Class({
 						} else if (event.payload.direction === 'up'){
 							if (page !== 0) {
 								return;
+							} else if (max === idx){
+								view.controls.categories.changePage(0);
 							}
 							if (idx === 0) {
+								view.controls.categories.changePage(view.controls.categories.getPageCount() - 1);
+								view.controls.apps.changePage(view.controls.apps.getPageCount() - 1);
 								idx = max;
 							} else {
 								idx--;
@@ -732,6 +881,10 @@ var AppsView = new MAF.Class({
 				}
 			}).delay(800, this);
 		}
+		if (this.backParams.startFromChannelBar){
+			this.showTOSDialog();
+		}
+
 		if (this.ready) {
 			this.updateCategory();
 		}
@@ -744,6 +897,7 @@ var AppsView = new MAF.Class({
 		delete this.reorder;
 		delete this.cell;
 		delete this.icon;
+		delete this.categoryCell;
 		delete this.category;
 	}
 });

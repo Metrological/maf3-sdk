@@ -49,11 +49,29 @@ var TestView3 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		var hls = new MAF.control.TextButton({
+			label: 'HLS Stream',
+			styles: {
+				width: this.width / 3,
+				vOffset: nos.outerHeight + 1
+			},
+			events: {
+				onSelect: function () {
+					if (!MAF.mediaplayer.isPlaylistEntryActive) {
+						MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://southerncloud-suntv-live-geo.hls.adaptive.level3.net/live/suntv.stream/playlist.m3u8'));
+						MAF.mediaplayer.playlist.start();
+					} else {
+						MAF.mediaplayer.control.stop();
+					}
+				}
+			}
+		}).appendTo(this);
+
 		var youtube = new MAF.control.TextButton({
 			label: 'YouTube',
 			styles: {
 				width: (this.width / 3) - 2,
-				hOffset: nos.outerWidth + 1,
+				hOffset: hls.outerWidth + 1,
 				vOffset: button1.outerHeight + 1
 			},
 			textStyles: {
@@ -96,7 +114,7 @@ var TestView3 = new MAF.Class({
 			label: 'Launch App #1',
 			styles: {
 				width: this.width / 3,
-				vOffset: nos.outerHeight + 1
+				vOffset: hls.outerHeight + 1
 			},
 			events: {
 				onSelect: function () {/*
@@ -113,7 +131,7 @@ var TestView3 = new MAF.Class({
 			styles: {
 				width: (this.width / 3) - 2,
 				hOffset: this.controls.button4.outerWidth + 1,
-				vOffset: nos.outerHeight + 1
+				vOffset: hls.outerHeight + 1
 			},
 			textStyles: {
 				anchorStyle: 'center'
@@ -130,7 +148,7 @@ var TestView3 = new MAF.Class({
 			styles: {
 				width: this.width / 3,
 				hOffset: this.controls.button5.outerWidth + 1,
-				vOffset: nos.outerHeight + 1
+				vOffset: hls.outerHeight + 1
 			},
 			textStyles: {
 				anchorStyle: 'right'

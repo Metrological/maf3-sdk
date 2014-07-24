@@ -33,6 +33,8 @@ include('MAF/element/Grid.js');
 include('MAF/element/GridCell.js');
 include('MAF/element/Carousel.js');
 include('MAF/element/CarouselCell.js');
+include('MAF/element/SlideCarousel.js');
+include('MAF/element/SlideCarouselCell.js');
 
 include('MAF/keyboard/ReuseKeyboard.js');
 include('MAF/keyboard/KeyboardValueManager.js');

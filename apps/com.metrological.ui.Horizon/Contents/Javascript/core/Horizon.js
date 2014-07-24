@@ -33,7 +33,6 @@ var Horizon = (function (body) {
 			fontFamily: 'InterstatePro-Light',
 			fontSize: '1.15em',
 			textAlign: 'center',
-			zOrder: 1,
 			visible: false
 		}
 	}).inject(body);
@@ -55,8 +54,7 @@ var Horizon = (function (body) {
 			vOffset: 47,
 			color: fontColor,
 			fontFamily: 'InterstatePro-Light',
-			fontSize: fontSize,
-			zOrder: 1
+			fontSize: fontSize
 		}
 	}).inject(container);
 
@@ -66,8 +64,7 @@ var Horizon = (function (body) {
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,
 			fontFamily: 'InterstatePro-Light',
-			fontSize: fontSize,
-			zOrder: 1
+			fontSize: fontSize
 		}
 	}).inject(container);
 
@@ -80,8 +77,7 @@ var Horizon = (function (body) {
 			color: fontColor,
 			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
-			textAlign: 'right',
-			zOrder: 1
+			textAlign: 'right'
 		}
 	}).inject(container);
 
@@ -99,8 +95,7 @@ var Horizon = (function (body) {
 			fontSize: fontSize,
 			color: fontColor,
 			anchorStyle: 'center',
-			truncation: 'end',
-			zOrder: 1
+			truncation: 'end'
 		}
 	}).inject(container);
 
@@ -120,7 +115,7 @@ var Horizon = (function (body) {
 	}
 
 	function blocked() {
-		return !showing && MAF.mediaplayer.isTVActive && !MAF.mediaplayer.currentAsset.title;
+		return !showing && MAF.mediaplayer.isTVActive && MAE.blocked && !MAF.mediaplayer.currentAsset.title;
 	}
 
 	function updateHeader() {

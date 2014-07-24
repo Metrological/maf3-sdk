@@ -16,6 +16,7 @@
 "CLOSE" = "SCHLIEßEN";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APPSTORE";
+"TOS_HEADER" = "Appstore";
 "ALL_APPS" = "ALLE APPS";
 "NOW_PLAYING" = "JETZT L&Auml;UFT";
 "LIVE_TV" = "LINEAR TV";
@@ -24,7 +25,7 @@
 "PAGE" = "SEITE %s VON %s";
 "WIDGET_BY" = "Diese App wird pr&auml;sentiert von";
 "MORE_INFO" = "Mehr Informationen";
-"COPYRIGHT" = "Copyright & ©; %s";
+"COPYRIGHT" = "Copyright © %s";
 "RIGHTS_RESERVED" = "Alle Rechte vorbehalten";
 "SPACE" = "Leerzeichen";
 "DATE_FORMAT" = "dd MMM YYYY HH:mm";

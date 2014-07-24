@@ -25,13 +25,15 @@ define('MAF.keyboard.KeyboardValueManager', function (config) {
 			};
 
 			getter(this, 'value', function () {
-				return instances[this._classID].value || '';
+				return instances[this._classID] && instances[this._classID].value || '';
 			});
 			setter(this, 'value', function (value) {
 				if (value === null || value === undefined) {
 					value = '';
 				}
-				var valueString = instances[this._classID].value;
+				if (!instances[this._classID])
+					return;
+				var valueString = instances[this._classID].value || '';
 				if (value !== valueString) {
 					valueString = value;
 					if (this.config.maxLength && valueString.length > this.config.maxLength) {

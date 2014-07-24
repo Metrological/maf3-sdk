@@ -35,7 +35,9 @@ define('MAF.control.TextEntryOverlay', function () {
 		//if (cancelType === 'onHideView' && this.getView().config.viewId === event.payload.viewId) {
 		//	hideOverlay.call(this);
 		//}
-		event.preventDefault();
+		if (cancelType !== 'onHideView') {
+			event.preventDefault();
+		}
 		if (this.config.creator.fire('onCancel', { 
 			event: event, 
 			value: this.getValue(), 

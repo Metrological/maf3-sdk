@@ -16,6 +16,7 @@
 "CLOSE" = "FERMER";
 "IMPRESSUM" = "MENTIONS LEGALES";
 "APP_STORE" = "APP STORE";
+"TOS_HEADER" = "App Store";
 "ALL_APPS" = "TOUTES LES APPS";
 "NOW_PLAYING" = "EN COURS DE LECTURE";
 "LIVE_TV" = "LIVE TV";
@@ -24,7 +25,7 @@
 "PAGE" = "PAGE %s DE %s";
 "WIDGET_BY" = "App par ";
 "MORE_INFO" = "Plus d'informations";
-"COPYRIGHT" = "Copyright &copie; %s";
+"COPYRIGHT" = "Copyright © %s";
 "RIGHTS_RESERVED" = "Tous droits r&eacute;serv&eacute;s";
 "SPACE" = "ESPACE";
 "DATE_FORMAT" = "D MMM YYYY HH:mm";
@@ -70,6 +71,8 @@
 "CATEGORY_VIDEOCH" = "VIDEO & MUSIQUE";
 "CATEGORY_NEWSCH" = "NEWS";
 "CATEGORY_INFOCH" = "INFORMATION";
+"CATEGORY_FEATURED" = "POPULAIRES";
+"CATEGORY_RECENTLY" = "RÉCEMMENT UTILISÉ";
 "ADDFAVO" = "Ajouter/retirer les apps favorites";
 "ADDFAVO_DESC" = "Cliquez sur OK pour commencer &agrave; g&eacute;rer vos apps favorites";
 "ADDFAVO_SELECTED" = "Rendez-vous sur votre app favorite et cliquez sur OK pour l’ajouter aux FAVORIS. Cliquez sur RETOUR pour annuler";

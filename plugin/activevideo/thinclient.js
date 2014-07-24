@@ -1,7 +1,8 @@
 var Kraken = (function () {
 	var instance = {},
 		//lgiServer = 'appdev.io',
-		lgiServer = 'lgi.io';
+		lgiServer = 'lgi.io',
+		session;
 	function sendMessage(msg, callback) {
 		new Request({
 			url: 'http://session/client/send?protocolid=D4A&t=' + Date.now(),
@@ -72,17 +73,22 @@ var Kraken = (function () {
 		}
 	}
 	function getCurrentChannel(callback) {
-		new Request({
-			url: 'http://session/client/properties.json?t=' + Date.now(),
-			proxy: false,
-			onSuccess: function (json) {
-				getCurrentChannelByProperties(callback, json);
-			},
-			onFailure: function () {
-				log('NO CHANNEL DATA');
-				getCurrentChannelByProperties(callback);
-			}
-		}).send();
+		if (session) {
+			getCurrentChannelByProperties(callback, session);
+		} else {
+			new Request({
+				url: 'http://session/client/properties.json?t=' + Date.now(),
+				proxy: false,
+				onSuccess: function (json) {
+					session = json;
+					getCurrentChannelByProperties(callback, json);
+				},
+				onFailure: function () {
+					log('NO CHANNEL DATA');
+					getCurrentChannelByProperties(callback);
+				}
+			}).send();
+		}
 	}
 	getter(instance, 'sendMessage', function () {
 		return sendMessage;
@@ -174,6 +180,7 @@ this.ThinClient = (function () {
 			proxy: false,
 			onSuccess: function (json) {
 				window.MAE.language = json.lang || window.MAE.language;
+				window.MAE.household = json.smartcard_id || window.MAE.household;
 			},
 			onFailure: function () {
 				log('NO LANGUAGE');

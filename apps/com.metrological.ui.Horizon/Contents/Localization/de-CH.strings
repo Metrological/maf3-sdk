@@ -16,6 +16,7 @@
 "CLOSE" = "SCHLIESSEN";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
+"TOS_HEADER" = "App Store";
 "ALL_APPS" = "ALLE APPS";
 "NOW_PLAYING" = "AKTUELLE SENDUNG";
 "LIVE_TV" = "LIVE TV";
@@ -24,7 +25,7 @@
 "PAGE" = "SEITE %s VON %s";
 "WIDGET_BY" = "App von";
 "MORE_INFO" = "Mehr Informationen";
-"COPYRIGHT" = "Copyright &copy; %s";
+"COPYRIGHT" = "Copyright © %s";
 "RIGHTS_RESERVED" = "Alle Rechte vorbehalten";
 "SPACE" = "ABSTAND";
 "DATE_FORMAT" = "D MMM YYYY HH:mm";
@@ -67,8 +68,8 @@
 "CATEGORY_GAMESCH" = "GAMES";
 "CATEGORY_INFOCH" = "INFORMATION";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
-"CATEGORY_FEATURED" = "HIGHLIGHTS";
-"CATEGORY_RECENTLY" = "ZULETZT GENUTZT";
+"CATEGORY_FEATURED" = "BELIEBT";
+"CATEGORY_RECENTLY" = "ZULETZT VERWENDET";
 "ADDFAVO" = "Favoriten-Apps hinzuf&uuml;gen/entfernen";
 "ADDFAVO_DESC" = "OK dr&uuml;cken, um Ihre Favoriten-Apps zu verwalten";
 "ADDFAVO_SELECTED" = "Zur gew&uuml;nschten App navigieren und mit OK zu FAVORITEN hinzuf&uuml;gen. Zum Abbrechen BACK dr&uuml;cken";

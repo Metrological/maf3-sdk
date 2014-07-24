@@ -109,7 +109,7 @@ var AccenturePlayer = function () {
 		return currentSource;
 	});
 	setter(instance, 'src', function (src) {
-		var delayedPlay = 400;
+		var delayedPlay = 600;
 		if (OTT && src) {
 			if (OTT.viewMode) {
 				OTT.viewMode('full');
@@ -118,7 +118,7 @@ var AccenturePlayer = function () {
 				currentSource = null;
 				paused = false;
 				OTT.stop();
-				delayedPlay += 400;
+				delayedPlay += 600;
 			}
 			currentSource = src;
 			paused = false;
@@ -180,6 +180,9 @@ var AccentureProfile = function (name) {
 	});
 	getter(this, 'household', function () {
 		return md5(this.operator + (getProfileId().id || 0));
+	});
+	getter(this, 'uid', function () {
+		return getProfileId().id || 0;
 	});
 	getter(this, 'operator', function () {
 		var fips = OTT && OTT.getFIPS && OTT.getFIPS();
@@ -286,8 +289,10 @@ var onShow = function () {
 		var player = plugins.players[0],
 			UI = getUIWindow();
 		if (player) {
-			player.bounds = [0,0,1920,1080];
-			player.src = '';
+			(function () {
+				player.bounds = [0,0,1920,1080];
+				player.src = '';
+			}).delay(800);
 		}
 		if (UI) {
 			UI.visible = false;
@@ -309,7 +314,7 @@ if (OTT && OTT.onBack) {
 		var ev = document.createEvent('Events');
 		ev.initEvent('keydown', true, true);
 		ev.keyCode = ev.which = 8;
-		ev.key = 'back';
+		extendKeyboardEvent(ev);
 		(document.activeElement || window).dispatchEvent(ev);
 	});
 }
@@ -320,55 +325,76 @@ if (OTT && OTT.onContextApplicationQuery) {
 			apps = [];
 		//screen.log('onContextApplicationQuery: ' + requestId + ',' + JSON.stringify(context));
 		if (context) {
-			if (context.type && content.type.toLowerCase() !== 'dtv'){
+			if (context.type && context.type.toLowerCase() !== 'dtv'){
 				switch(context.type.toLowerCase()) {
 					case 'vod':
-						ApplicationManager.search(new RegExp('(' + context.title.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
-							result.push({
-								id: app.id,
-								title: ApplicationManager.getMetadataByKey(app.id, 'name'),
-								description: ApplicationManager.getMetadataByKey(app.id, 'description'),
-								iconURL: 'http:' + ApplicationManager.getIcon(app.id),
-								applicationURL: ApplicationManager.getLaunchURL(app.id)
+						if (context.title){
+							ApplicationManager.search(new RegExp('(' + context.title.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
+								result.push({
+									id: app.id,
+									title: ApplicationManager.getMetadataByKey(app.id, 'name'),
+									description: ApplicationManager.getMetadataByKey(app.id, 'description'),
+									iconURL: 'http:' + ApplicationManager.getIcon(app.id),
+									applicationURL: ApplicationManager.getLaunchURL(app.id)
+								});
 							});
-						});
-						ApplicationManager.getApplicationsByCategory(context.catName).forEach(function (id) {
-							result.push({
-								id: id,
-								title: ApplicationManager.getMetadataByKey(id, 'name'),
-								description: ApplicationManager.getMetadataByKey(id, 'description'),
-								iconURL: 'http:' + ApplicationManager.getIcon(id),
-								applicationURL: ApplicationManager.getLaunchURL(id)
+						}
+						if (context.catName){
+							ApplicationManager.getApplicationsByCategory(context.catName).forEach(function (id) {
+								result.push({
+									id: id,
+									title: ApplicationManager.getMetadataByKey(id, 'name'),
+									description: ApplicationManager.getMetadataByKey(id, 'description'),
+									iconURL: 'http:' + ApplicationManager.getIcon(id),
+									applicationURL: ApplicationManager.getLaunchURL(id)
+								});
 							});
-						});
-						break;
-					case 'pg':
-						//.subType = "PerOmroep;.type="PG"
+						}
 						break;
 					default:
 						break;
 				}
 			} else {
-				ApplicationManager.search(new RegExp('(' + context.programName.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
-					result.push({
-						id: app.id,
-						title: ApplicationManager.getMetadataByKey(app.id, 'name'),
-						description: ApplicationManager.getMetadataByKey(app.id, 'description'),
-						iconURL: 'http:' + ApplicationManager.getIcon(app.id),
-						applicationURL: ApplicationManager.getLaunchURL(app.id)
+				if (context.programName){
+					ApplicationManager.search(new RegExp('(' + context.programName.replace(/ /g, '|') + ')',"gi")).forEach(function(app){
+						result.push({
+							id: app.id,
+							title: ApplicationManager.getMetadataByKey(app.id, 'name'),
+							description: ApplicationManager.getMetadataByKey(app.id, 'description'),
+							iconURL: 'http:' + ApplicationManager.getIcon(app.id),
+							applicationURL: ApplicationManager.getLaunchURL(app.id)
+						});
 					});
-				});
-				ApplicationManager.getApplicationsByChannelName(context.channelName).forEach(function (id) {
-					result.push({
-						id: id,
-						title: ApplicationManager.getMetadataByKey(id, 'name'),
-						description: ApplicationManager.getMetadataByKey(id, 'description'),
-						iconURL: 'http:' + ApplicationManager.getIcon(id),
-						applicationURL: ApplicationManager.getLaunchURL(id)
+				};
+				if (context.channelName){
+					ApplicationManager.getApplicationsByChannelName(context.channelName).forEach(function (id) {
+						result.push({
+							id: id,
+							title: ApplicationManager.getMetadataByKey(id, 'name'),
+							description: ApplicationManager.getMetadataByKey(id, 'description'),
+							iconURL: 'http:' + ApplicationManager.getIcon(id),
+							applicationURL: ApplicationManager.getLaunchURL(id)
+						});
 					});
-				});
+				}
 			}
 		}
+		if (result.length === 0){
+			result.push({
+				id: 'com.metrological.widgets.tv.Youtube',
+				title: ApplicationManager.getMetadataByKey('com.metrological.widgets.tv.Youtube', 'name'),
+				description: ApplicationManager.getMetadataByKey('com.metrological.widgets.tv.Youtube', 'description'),
+				iconURL: 'http:' + ApplicationManager.getIcon('com.metrological.widgets.tv.Youtube'),
+				applicationURL: ApplicationManager.getLaunchURL('com.metrological.widgets.tv.Youtube')
+			});
+			result.push({
+				id: 'com.metrological.app.Wikipedia',
+				title: ApplicationManager.getMetadataByKey('com.metrological.app.Wikipedia', 'name'),
+				description: ApplicationManager.getMetadataByKey('com.metrological.app.Wikipedia', 'description'),
+				iconURL: 'http:' + ApplicationManager.getIcon('com.metrological.app.Wikipedia'),
+				applicationURL: ApplicationManager.getLaunchURL('com.metrological.app.Wikipedia')
+			});
+		};
 		result.forEach(function(app) {
 			if (apps.pluck('id').indexOf(app.id) === -1) {
 				apps.push(app);
@@ -400,12 +426,15 @@ plugins.setMode = function (mode) {
 	}
 };
 
+//plugins.storage = new CookieStorage();
+
 plugins.exit = function () {
-	var player = plugins.player[0];
+	//screen.log('EXIT');
+	/*var player = plugins.player[0];
 	if (player) {
 		player.bounds = [0,0,1920,1080];
 		player.src = '';
-	}
+	}*/
 	if (OTT && OTT.exit) {
 		OTT.exit();
 	}
@@ -423,3 +452,6 @@ window.addEventListener('keydown', function (event) {
 	screen.log('KEYDOWN: ' + event.keyCode);
 });
 */
+
+//screen.log('COOKIE'  + (document && document.cookie || ''));
+plugins.storage = new CookieStorage();

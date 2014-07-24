@@ -16,6 +16,7 @@
 "CLOSE" = "CLOSE";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
+"TOS_HEADER" = "App Store";
 "ALL_APPS" = "ALL APPS";
 "NOW_PLAYING" = "NOW PLAYING";
 "LIVE_TV" = "LIVE TV";
@@ -24,7 +25,7 @@
 "PAGE" = "PAGE %s OF %s";
 "WIDGET_BY" = "App by";
 "MORE_INFO" = "More information";
-"COPYRIGHT" = "Copyright &copy; %s";
+"COPYRIGHT" = "Copyright © %s";
 "RIGHTS_RESERVED" = "All rights reserved";
 "SPACE" = "SPACE";
 "DATE_FORMAT" = "D MMM YYYY HH:mm";

@@ -1,3 +1,8 @@
+var showEutos = (function (id, app, start) {
+	this.document.getElementById('viewport').visible = true;
+	this.document.getElementById(id).visible = true;
+	app.MAF.application.loadDefaultView({ startFromChannelBar: true, startApp: start });
+});
 var loadTemplate = (function () {
 	var current = {};
 	var maxProfiles = 5;
@@ -742,7 +747,12 @@ var loadTemplate = (function () {
 									case 'profile-pin':
 										for (i=0; i<4; i++) {
 											if (payload.value.length > i) {
-												pinDots.childNodes[i].data = FontAwesome.get('circle');
+												pinDots.childNodes[i].data = (payload.value.length===i+1) ? payload.value.substring(i, i+1) : FontAwesome.get('circle');
+												(function (nr) {
+													if (this.value && this.value.length && this.value.length === nr+1) {
+														pinDots.childNodes[nr].data = FontAwesome.get('circle');
+													}
+												}).delay(2000, this, [i]);
 											} else {
 												pinDots.childNodes[i].data = '';
 											}
@@ -1206,8 +1216,14 @@ widget.handleHostEvent = function (event) {
 			break;
 		case 'onApplicationStartupRequest':
 			data = event.data;
-			ApplicationManager.load(data);
-			ApplicationManager.open(data);
+			if (MAE.tos !== false && currentAppConfig.get('tos') !== TOS) {
+				var app = this,
+					identifier = app.widget && app.widget.identifier;
+				showEutos(identifier, app, data);
+			} else {
+				ApplicationManager.load(data);
+				ApplicationManager.open(data);
+			}
 			break;
 		default:
 			break;

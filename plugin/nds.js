@@ -7,7 +7,10 @@ var NDS = createPluginObject('my_user_api', 'my_user_api', 'application/x-jsuser
 	UserData    = TVContext && TVContext.getUserData(),
 	Planner     = NDS.Planner_getInstance && NDS.Planner_getInstance(),
 	isEnabled   = false,
+	enableDebug = MAE.screenDebug || false,
 	currentChannel, currentProgram, timerProgramData;
+
+plugins.storage = new CookieStorage();
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
 	403: 'red', 404: 'green',
@@ -17,10 +20,19 @@ KeyMap.defineKeys(KeyMap.NORMAL, {
 	462: 'menu', 461: 'back'
 }, true);
 
+var l = function (s) {
+	if (enableDebug) {
+		screen.log(s);
+	}
+};
+
 var syncProgramData = function () {
 	var player = MAE.blocked && plugins.players[0],
 		previousChannel = currentChannel && currentChannel.number,
 		showEnded = Math.floor(Date.now() / 1000) - (currentProgram ? (currentProgram.startTime + currentProgram.duration) : 0);
+	if (player && player.src) {
+		return;
+	}
 	try {
 		currentChannel = TVContext && TVContext.getCurrentChannel();
 	} catch(err) {
@@ -110,6 +122,7 @@ var NDSPlayer = function () {
 		fire.call(instance, 'onTimeChange');
 	}
 	function channelChange() {
+		l('CHANNEL CHANGE');
 		syncProgramData();
 		fire.call(instance, 'onChannelChange');
 	}
@@ -118,7 +131,7 @@ var NDSPlayer = function () {
 		VideoPlayer.onPlaybackStarted = function () {
 			if (grabbed && currentSource && VideoPlayer) {
 				canPlay = true;
-				//screen.log('INFOLOADED');
+				l('INFOLOADED');
 				if (MAE.blocked && !currentProgram) {
 					instance.show();
 					instance.muted = false;
@@ -128,15 +141,15 @@ var NDSPlayer = function () {
 		};
 		VideoPlayer.onPlaybackEnd = function () {
 			if (grabbed && currentSource) {
-				//screen.log('EOF');
+				l('EOF');
 				stateChange(Player.state.EOF);
 			}
 		};
 		VideoPlayer.onPlaybackUnexpectedStop = function () {
 			if (grabbed && currentSource && canPlay) {
-				//screen.log('STOPPED UNEXPECTED');
+				l('STOPPED UNEXPECTED');
 				stateChange(Player.state.STOP);
-				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				l('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
 					instance.bounds = currentBounds;
 				}
@@ -144,7 +157,7 @@ var NDSPlayer = function () {
 		};
 		VideoPlayer.onPlaybackError = function () {
 			if (grabbed && currentSource) {
-				//screen.log('ERROR');
+				l('ERROR');
 				stateChange(Player.state.ERROR);
 			}
 		};
@@ -156,7 +169,7 @@ var NDSPlayer = function () {
 		};
 		TVContext.onPresentationChanged = function (type) {
 			if (grabbed && currentSource && canPlay) {
-				//screen.log('STOPPED PRESENTATION CHANGED');
+				l('STOPPED PRESENTATION CHANGED');
 				canPlay = false;
 				currentSource = null;
 				previousState = null;
@@ -169,15 +182,7 @@ var NDSPlayer = function () {
 				stateChange(Player.state.STOP);
 				grabbed = false;
 				// Workaround Horizon 3 RC2
-				var channel;
-				try {
-					channel = TVContext && TVContext.getCurrentChannel();
-				} catch(err) {}
-				(function () {
-					if (channel && channel.number !== currentChannel.number) {
-						channelChange();
-					}
-				}).delay(500);
+				channelChange();
 			}/*
 			switch (type) {
 				case TVContext.CONTENT_ACCESS_DENIED:
@@ -193,7 +198,7 @@ var NDSPlayer = function () {
 		TVContext.onContentSelectionSucceeded = function () {
 			if (!grabbed) {
 				channelChange();
-				//screen.log('BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
+				l('CONTENT SELECTION SUCCEEDED BOUNDS:' + JSON.stringify(instance.bounds) + ', ' + JSON.stringify(currentBounds));
 				if (currentBounds[3] !== instance.bounds[3]) {
 					instance.bounds = currentBounds;
 				}
@@ -214,6 +219,7 @@ var NDSPlayer = function () {
 		return false;*/
 	}
 
+	var httpRegExp = new RegExp('^(https?:)?//');
 	function notify(icon, message, type, identifier) {
 		type = type || 'alert';
 		identifier = identifier || active;
@@ -223,6 +229,8 @@ var NDSPlayer = function () {
 				return;
 			}
 			if (icon && notification.setIconURL) {
+				if (!httpRegExp.test(icon))
+					icon = ApplicationManager.getRootPath(identifier) + icon;
 				notification.setIconURL(icon);
 			}
 			switch(typeOf(message)) {
@@ -382,24 +390,24 @@ var NDSPlayer = function () {
 				try {
 					VideoPlayer.stop();
 				} catch(err) {}
-				//screen.log('STOP');
+				l('STOP');
 				stateChange(Player.state.STOP);
 				startTimeout = 1200;
 			}
-			//screen.log('BUFFERING');
+			l('BUFFERING');
 			stateChange(Player.state.BUFFERING);
 			try {
 				position = 0;
 				currentRate = 1;
 				currentDuration = 0;
-				//screen.log('LOAD');
+				l('LOAD');
 				VideoPlayer.setURI(src);
 				currentSource = src;
 				(function () {
 					VideoPlayer.start();
 				}).delay(startTimeout);
 			} catch(err) {
-				//screen.log('LOAD ERROR');
+				l('LOAD ERROR');
 			}
 		} else if (currentSource && VideoPlayer) {
 			canPlay = false;
@@ -416,7 +424,7 @@ var NDSPlayer = function () {
 					VideoPlayer.stop();
 				} catch(err) {}
 			}
-			//screen.log('STOP');
+			l('STOP');
 			stateChange(Player.state.STOP);
 			(function () {
 				if (grabbed && !currentSource) {
@@ -456,7 +464,7 @@ var NDSPlayer = function () {
 		if (!paused) {
 			timeTimer = setInterval(timeChange, 2000);
 		}
-		//screen.log(paused ? 'PAUSED' : 'RESUME');
+		l(paused ? 'PAUSED' : 'RESUME');
 		stateChange(paused ? Player.state.PAUSE : Player.state.PLAY);
 	});
 	getter(instance, 'bounds', function () {
@@ -519,8 +527,6 @@ var NDSCOUNTRIES = {
 	'gle': 'en'
 };
 
-plugins.storage = new CookieStorage();
-
 var NDSProfile = function (name) {
 	var LOCKED = false,
 		ATTEMPTS = 0;
@@ -536,17 +542,20 @@ var NDSProfile = function (name) {
 	getter(this, 'id', function () {
 		return md5(this.household + '|' + (name || ''));
 	});
-	var profileName = getUserData(UserData.KEY_PROFILE_USER_NAME) || '';
+	var profileName = UserData && getUserData(UserData.KEY_PROFILE_USER_NAME);
 	getter(this, 'name', function () {
-		return profileName;
+		return profileName || 'Home';
 	});
-	var ageRating = getUserData(UserData.KEY_PROFILE_PARENTAL_AGE);
+	var ageRating = UserData && getUserData(UserData.KEY_PROFILE_PARENTAL_AGE);
 	getter(this, 'ageRating', function () {
 		return ageRating || 0;
 	});
-	var uid = getUserData(UserData.KEY_PROFILE_USER_ID);
+	var uid = UserData && getUserData(UserData.KEY_PROFILE_USER_ID) || 'XXXXXXXX_NL';
 	getter(this, 'household', function () {
 		return md5(this.operator + (uid || 0));
+	});
+	getter(this, 'uid', function () {
+		return uid;
 	});
 	getter(this, 'operator', function () {
 		return MAE.operator || 'horizon';
@@ -557,15 +566,15 @@ var NDSProfile = function (name) {
 	getter(this, 'country', function () {
 		return GEO && GEO.geo && GEO.geo.countryName;
 	});
-	var countryCode = getUserData(UserData.KEY_PROFILE_COUNTRY);
+	var countryCode = UserData && getUserData(UserData.KEY_PROFILE_COUNTRY);
 	getter(this, 'countryCode', function () {
-		var c = (countryCode || (GEO && GEO.geo && GEO.geo.country || 'eu')).toLowerCase();
+		var c = (countryCode || (GEO && GEO.geo && GEO.geo.country || MAE.country || 'eu')).toLowerCase();
 		return NDSCOUNTRIES[c] || c;
 	});
 	getter(this, 'language', function () {
 		return LANGUAGES[this.languageCode];
 	});
-	var languageCode = getUserData(UserData.KEY_PROFILE_UI_LANG);
+	var languageCode = UserData && getUserData(UserData.KEY_PROFILE_UI_LANG);
 	getter(this, 'languageCode', function () {
 		var l = (languageCode || (MAE.language || html.lang || 'en')).toLowerCase();
 		return NDSLANGUAGES[l] || l;
@@ -694,7 +703,7 @@ if (Application) {
 		(function () {
 			var UI = getUIWindow();
 			if (UI) {
-				//screen.log('ONSHOW');
+				l('ONSHOW');
 				UI.visible = true;
 				ApplicationManager.fire(active, 'onSelect', {
 					id: apps[active].currentViewId
@@ -705,7 +714,7 @@ if (Application) {
 	Application.onHide = function () {
 		var UI = getUIWindow();
 		if (UI) {
-			//screen.log('ONHIDE');
+			l('ONHIDE');
 			UI.visible = false;
 		}
 		isEnabled = false;
@@ -729,7 +738,7 @@ plugins.exit = function () {
 	}
 	var UI = getUIWindow();
 	if (UI) {
-		//screen.log('HIDE');
+		l('HIDE');
 		UI.visible = false;
 	}
 	isEnabled = false;

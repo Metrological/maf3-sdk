@@ -23,7 +23,7 @@
  * * The grid is a container recieving info from its cells to have a single entry point to listen on.
  * * All cells are based on descendants of MAF.element.GridCell
  * * cellCreator() is a required method that returns a cell with no data.
- * * cellUpdator() is a required method that will update a cell with data.
+ * * cellUpdater() is a required method that will update a cell with data.
  * @example new MAF.element.Grid({
  *    rows: 2,
  *    columns: 2,
@@ -43,7 +43,7 @@
  *       }).appendTo(cell);
  *       return cell;
  *    },
- *    cellUpdator: function (cell, data) {
+ *    cellUpdater: function (cell, data) {
  *       cell.text.setText(data.label);
  *    }
  * }).appendTo(this);

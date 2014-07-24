@@ -46,7 +46,17 @@
  * @memberof MAF.element.Image
  */
 /**
- * @cfg {Number} aspect This will put a aspect on the image based on the size of this component.
+ * @cfg {String} aspect This will put a aspect on the image based on the size of this component.
+ * </br> Aspect options:
+ * 
+ * | Name          | Alternative name | Description   |
+ * | -------------:|:----------------:| ------------- |
+ * | fit           | parent, exact    | This will stretch the image inside its parent, without looking at ratio.  |
+ * | height        | portrait         | Resize image based on height  |
+ * | width         | landscape        | Resize image based on width |
+ * | auto          | parent/exact     | Automatically resize for best fit inside parent. |
+ * | crop          | parent/exact     | Crop the image so it will fit inside its parent. |
+ * | source        |                  | When you don't want to change the aspect but want to have the image cached |
  * @memberof MAF.element.Image
  */
 /**

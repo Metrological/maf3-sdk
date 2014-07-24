@@ -16,6 +16,7 @@
 "CLOSE" = "Sluiten";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
+"TOS_HEADER" = "App Store";
 "ALL_APPS" = "ALLE APPS";
 "NOW_PLAYING" = "NU TE ZIEN";
 "LIVE_TV" = "LIVE TV";
@@ -24,7 +25,7 @@
 "PAGE" = "PAGINA %s VAN %s";
 "WIDGET_BY" = "App van";
 "MORE_INFO" = "Meer informatie";
-"COPYRIGHT" = "Copyright & copy; %s";
+"COPYRIGHT" = "Copyright © %s";
 "RIGHTS_RESERVED" = "Alle rechten voorbehouden";
 "SPACE" = "Spatie";
 "DATE_FORMAT" = "D MMM YYYY HH:mm";
@@ -60,14 +61,18 @@
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Ga naar facebook.com/device en gebruik code: %s";
 "CATEGORY_FAVORITES" = "FAVORIETEN";
+"CATEGORY_VIDEONL" = "TV EN VIDEO";
 "CATEGORY_VIDEO" = "TV EN VIDEO";
+"CATEGORY_MUSICNL" = "MUZIEK";
 "CATEGORY_NEWS" = "NIEUWS";
+"CATEGORY_NEWSNL" = "NIEUWS";
 "CATEGORY_SOCIAL" = "SOCIAL TV";
 "CATEGORY_GAMES" = "GAMES";
 "CATEGORY_SPORT" = "SPORT";
 "CATEGORY_LIFESTYLE" = "LIFESTYLE";
-"CATEGORY_FEATURED" = "UITGELICHT";
-"CATEGORY_RECENTLY" = "ONLANGS GEBRUIKT";
+"CATEGORY_LIFESTYLENL" = "LIFESTYLE";
+"CATEGORY_FEATURED" = "AANBEVOLEN";
+"CATEGORY_RECENTLY" = "PAS GEBRUIKT";
 "ADDFAVO" = "Toevoegen/verwijderen favorieten";
 "ADDFAVO_DESC" = "Druk op OK om uw favoriete apps in te stellen";
 "ADDFAVO_SELECTED" = "Kies uw favoriete app en druk op OK om deze aan uw favorieten toe te voegen. Druk op BACK om uw keuze te annuleren.";

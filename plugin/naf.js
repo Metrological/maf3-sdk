@@ -1,17 +1,30 @@
 //var version = '1.0.8s4c2r99';
 var version = MAE.naf || '1.0.9s4c2r148',
-	enableDebug = MAE.screenDebug || false;
+	enableDebug = MAE.screenDebug || false,
+	delayedShow = MAE.delayedShow !== undefined ? delayedShow || 0 : 500;
 
 NAF = {};
 WebApp = {};
 
 KeyMap.defineKeys(KeyMap.NORMAL, {
-	19: 'pause', 413: 'stop', 415: 'playpause',
-	417: 'forward', 412: 'rewind',
-	3: 'back'
+	19: 'pause', 413: 'stop', 415: 'playpause', 417: 'forward', 412: 'rewind',
+	3: 'back', 127: 'delete', 567: 'enter',
+	403: 'red', 404: 'green', 405: 'yellow', 406: 'blue',
+	109: '-', 107: '+', 106: '*', 512: '$', 513: '%', 510: '@',
+	44: ',', 518: '"', 517: ':', 47: '/', 92: '\\', 515: '&', 516: '_', 511: '#', 531: '€',
+	503: '[', 504: ']', 505: '{', 506: '}', 514: '^', 522: '?', 529: 'ß', 192: '`', 46: '.',
+	91: '(', 93: ')', 519: '~', 520: '<', 521: '>', 535: '£', 509: '!', 534: '§', 61: '=',
+	538: 'ę', 540: 'ą', 539: 'ó', 541: 'ś', 542: 'ł', 543: 'ż', 544: 'ź', 545: 'ć', 546: 'ń'
 }, true);
 
 include('naf-webapp/' + version + '/naf-webapp.min.js');
+
+var l = function (s) {
+	log(s);
+	if (enableDebug) {
+		screen.log(s);
+	}
+};
 
 var model = new WebApp.Model(),
 	controller = new WebApp.Controller(model);
@@ -30,9 +43,10 @@ var getApplicationIndex = (function () {
 }());
 
 onFn('model.initialized', function () {
-	var i = getApplicationIndex();
+	var i = getApplicationIndex(),
+		capsLock = false;
 
-	log('naf: base init');
+	l('MAF <-> NAF INIT');
 
 	document.body.visible = false;
 
@@ -49,8 +63,10 @@ onFn('model.initialized', function () {
 		if (currentState === state) {
 			return;
 		}
+		l('APPS STATE: ' + (state || '').toUpperCase());
 		switch (state) {
 			case 'paused':
+				capsLock = false;
 				document.body.visible = false;
 				plugins.players[0].src = null;
 				if (active && active !== ui) {
@@ -65,7 +81,7 @@ onFn('model.initialized', function () {
 							id: apps[active].currentViewId
 						});
 					}
-				}).delay(500);
+				}).delay(delayedShow);
 				break;
 		}
 		currentState = state;
@@ -75,14 +91,28 @@ onFn('model.initialized', function () {
 		var ev = model.state.key,
 			keyCode = parseInt(ev.keyCode, 10),
 			keyState = ev.keyState.toLowerCase(),
-			keyEvent = document.createEvent('Events'),
 			el = document.activeElement || window;
+		if (keyCode === 20) {
+			if (keyState === 'down') {
+				if (capsLock) {
+					keyState = 'up';
+				}
+				capsLock = !capsLock;
+			} else {
+				return;
+			}
+		}
 		if (keyState === 'repeat') {
 			keyState = 'down';
 		}
+		var keyEvent = document.createEvent('Events');
 		keyEvent.initEvent('key' + keyState, true, true);
-		keyEvent.keyCode = keyEvent.which = keyCode;
-		keyEvent.key = KeyMap.lookupKey(KeyMap.NORMAL, keyCode);
+		keyEvent.keyCode = keyCode;
+		keyEvent.which = keyCode;
+		extendKeyboardEvent(keyEvent);
+		l('NAF KEY' + keyState.toUpperCase() + ': ' + (keyCode || 0) + ', KEY: ' + (keyEvent.key || ''));
+		//if (keyEvent.key === 'blue')
+		//	location.reload();
 		el.dispatchEvent(keyEvent);
 	});
 
@@ -178,7 +208,7 @@ var NAFPlayer = function () {
 		currentSource,
 		appIdx,
 		playRate,
-//		readyForPlay = false,
+		readyForPlay = false,
 		initialized = false;
 
 	instance.subscribers = {};
@@ -194,13 +224,6 @@ var NAFPlayer = function () {
 		previousState = state;
 	}
 
-	function l(s) {
-		log(s);
-		if (enableDebug) {
-			screen.log(s);
-		}
-	}
-
 	onFn('model.initialized', function () {
 		if (!appIdx)
 			appIdx = getApplicationIndex();
@@ -211,8 +234,8 @@ var NAFPlayer = function () {
 
 		// workaround because buffering ended is not available
 		onFn('model.state.applications.' + appIdx + '.media.assets.*', function () {
-			if (model.state.applications[appIdx].media.assets.length > 0/* && !readyForPlay*/) {
-//				readyForPlay = true;
+			if (model.state.applications[appIdx].media.assets.length > 0 && !readyForPlay) {
+				readyForPlay = true;
 				l('MAF SET MEDIA ASSET TO PLAYER');
 				doFn('model.state.players.0', 'model.state.applications.' + appIdx + '.media.assets.0');
 				l('MAF EVENT: SEND BUFFERING');
@@ -220,9 +243,16 @@ var NAFPlayer = function () {
 			}
 		});
 
-		onFn('model.state.players.0.currentProgram', function () {
+		onFn('model.state.players.0.currentChannel', function () {
+			l('MAF EVENT: CHANNELCHANGE');
 			if (model.state.applications[appIdx].media.assets.length === 0 && !instance.src) {
-				l('MAF EVENT: CHANNELCHANGE');
+				fire.call(instance, 'onChannelChange');
+			}
+		});
+
+		onFn('model.state.players.0.currentProgram', function () {
+			l('MAF EVENT: CHANNELCHANGE');
+			if (model.state.applications[appIdx].media.assets.length === 0 && !instance.src) {
 				fire.call(instance, 'onChannelChange');
 			}
 		});
@@ -293,6 +323,8 @@ var NAFPlayer = function () {
 						//OTT_UNKNOWN_ERROR
 					case 472:
 						//OTT_CANCELLED
+					case 473:
+						//OTT_FORBIDDEN
 						// workaround for no status code
 						if (playbackTimer) {
 							clearTimeout(playbackTimer);
@@ -317,6 +349,8 @@ var NAFPlayer = function () {
 	function supports(mime) {
 		return mime.indexOf('video/mp4') !== -1;
 	}
+
+	var httpRegExp = new RegExp('^(https?:)?//');
 	function notify(icon, message, type, identifier) {
 		var t;
 		switch(type) {
@@ -332,8 +366,13 @@ var NAFPlayer = function () {
 			default:
 				return;
 		}
+		message = [].concat(message).join(' ');
+		if (icon && !httpRegExp.test(icon))
+			icon = ApplicationManager.getRootPath(identifier) + icon;
+
 		var image = identifier && ApplicationManager.getIcon(identifier),
 			url = identifier && ApplicationManager.getLaunchURL(identifier);
+
 		doFn('model.state.applications.0.appMsg', {
 			method: 'announceNotifications',
 			message: [{
@@ -345,11 +384,12 @@ var NAFPlayer = function () {
 					time: Date.now(),
 					timeout: 30,
 					message: message || '',
-					image: image
+					image: icon || image
 				}
 			}]
 		});
 	}
+
 	function r(c) {
 		return Math.floor(c * scale);
 	}
@@ -463,7 +503,7 @@ var NAFPlayer = function () {
 				//stateChange(states.STOP);
 				playRate = undefined;
 				currentSource = undefined;
-//				readyForPlay = false;
+				readyForPlay = false;
 				l('MAF CLEAR MEDIA ASSET');
 				doFn('model.state.applications.' + appIdx + '.media.assets', '');
 			}
@@ -479,7 +519,7 @@ var NAFPlayer = function () {
 		} else if (currentSource) {
 			playRate = undefined;
 			currentSource = undefined;
-//			readyForPlay = false;
+			readyForPlay = false;
 			l('MAF CLEAR MEDIA ASSET');
 			doFn('model.state.applications.' + appIdx + '.media.assets', '');
 			l('MAF RESTORE CHANNEL');
@@ -494,12 +534,12 @@ var NAFPlayer = function () {
 	setter(instance, 'paused', function (p) {
 		if (this.src) {
 			// workaround for autoplay
-//			if (readyForPlay) {
-//				readyForPlay = false;
-//			} else {
+			if (readyForPlay) {
+				readyForPlay = false;
+			} else {
 				l('MAF PLAYER: ' + (p ? 'PAUSE' : 'PLAY'));
 				this.rate = (p ? 0 : 1);
-//			}
+			}
 		}
 	});
 	getter(instance, 'bounds', function () {
@@ -507,6 +547,7 @@ var NAFPlayer = function () {
 	});
 	setter(instance, 'bounds', function (b) {
 		if (b && b.length === 4) {
+			l('NAF PLAYER WINDOW: ' + r(b[0]) + ',' + r(b[1]) + ',' + r(b[2]) + ',' + r(b[3]));
 			doFn('model.state.players.0?window=' + r(b[0]) + ',' + r(b[1]) + ',' + r(b[2]) + ',' + r(b[3]));
 			currentBounds = b;
 		}
@@ -514,6 +555,8 @@ var NAFPlayer = function () {
 	getter(instance, 'notify', function () {
 		return notify;
 	});
+
+	fire.call(instance, 'onChannelChange');
 };
 NAFPlayer.prototype = new Player();
 NAFPlayer.prototype.constructor = NAFPlayer;
