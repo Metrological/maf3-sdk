@@ -15,44 +15,51 @@
 
 /**
  * Indicates if the current playlist entry is in a active state. This can can be any of these states: PLAY, PAUSE, FORWARD, REWIND, BUFFERING, INFOLOADED
- * @name {Boolean|MAF.media.Playlist} isPlaylistEntryActive
+ * @name isPlaylistEntryActive
+ * @type {Boolean|MAF.media.PlaylistEntry}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Indicates if there currently is any kind of app view visible.
- * @name {Boolean} isSidebarHidden
+ * @name isSidebarHidden
+ * @type {Boolean}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Indicates if the TV is active as media playback. This also means there is no playlist entry.
- * @name {Boolean} isTVActive
+ * @name isTVActive
+ * @type {Boolean}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 
 /**
  * Duration of the currently active media on the player.
- * @name {Float} player.currentMediaDuration
+ * @name player.currentMediaDuration
+ * @type {Float}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * State of the player it is currently in.
- * @name {Number} player.currentPlayerState
+ * @name player.currentPlayerState
+ * @type {Number}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Playback speed of the currently active media on the player.
- * @name {Number} player.currentSpeed
+ * @name player.currentSpeed
+ * @type {Number}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Time index of the currently active media on the player.
- * @name {Float} player.currentTimeIndex
+ * @name player.currentTimeIndex
+ * @type {Float}
  * @memberof MAF.mediaplayer
  * @readonly
  */
@@ -74,8 +81,10 @@
  * | REWIND | The media file is rewinding. |
  * | STOP | The media file is stopped. |
  * | UNKNOWN | The player triggered a state unknown to the MAF.mediaplayer |
- * @name {Object} constants.states
+ * @name constants.states
+ * @type {Object}
  * @memberof MAF.mediaplayer
+ * @readonly
  */
 
 /**

@@ -18,6 +18,96 @@
 /** 
  * @class MAF.control.MediaTransportOverlay
  * @extends MAF.element.Container
+ * @example
+ * var player = new MAF.control.MediaTransportOverlay({
+	theme: false,
+	forwardseekButton: true,
+	backwardseekButton: true,
+	fadeTimeout: 5,
+	events: {
+		onTransportButtonPress: function (event) {
+			var timeIndex;
+			switch(event.payload.button) {
+				case 'forward':
+					event.stop();
+					MAF.mediaplayer.control.seek(60);
+					break;
+				case 'rewind':
+					event.stop();
+					timeindex = MAF.mediaplayer.player && MAF.mediaplayer.player.currentTimeIndex || null;
+					if (timeindex && (timeindex - (60*1000)) < 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
+						MAF.mediaplayer.playlist.previousEntry();
+					} else if (view.visible && MAF.mediaplayer.player.currentPlayerState === MAF.mediaplayer.constants.states.PLAY) {
+						MAF.mediaplayer.control.seek(-60);
+					}
+					break;
+				case 'forwardseek':
+					event.stop();
+					MAF.mediaplayer.control.forward();
+					break;
+				case 'backwardseek':
+					event.stop();
+					timeindex = MAF.mediaplayer.player && MAF.mediaplayer.player.currentTimeIndex || null;
+					if (timeindex && (timeindex - (600*1000)) < 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
+						MAF.mediaplayer.playlist.previousEntry();
+					} else {
+						MAF.mediaplayer.control.rewind();
+					}
+					break;
+				case 'stop':
+					if (!view.frozen) {
+						MAF.application.previousView();
+					}
+					break;
+			}
+		}
+	}
+}).appendTo(this);
+ */
+/**
+ * @cfg {Array} buttonOrder Order of the buttons to be shown in this component. 
+ * @example
+ * var player = new MAF.control.MediaTransportOverlay({
+ *    buttonOrder: ['backwardseekButton', 'rewindButton', 'playButton', 'forwardButton', 'forwardseekButton', 'stopButton', 'infoButton', 'resizeButton']
+ * }).appendTo(this);
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} playButton True if the play button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} stopButton True if the stop button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} rewindButton True if the rewind button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} forwardButton True if the forward button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} forwardseekButton True if the forwardseek button should be visible. Default is false.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} backwardseekButton True if the backwardseek button should be visible. Default is false.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} infoButton True if the info button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+/**
+ * @cfg {Boolean} resizeButton True if the resize button should be visible. Default is true.
+ * @memberof MAF.control.MediaTransportOverlay
+ */
+
+/**
+ * Fired when a 
+ * @event MAF.control.MediaTransportOverlay#onTransportButtonPress
  */
 define('MAF.control.MediaTransportOverlay', function () {
 	var overlayTimer = emptyFn;
@@ -129,7 +219,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 
 			onKeyPressHandler: function (event) {
 				if (!this.visible) {
-					if (MAF.mediaplayer.player.currentPlayerState === MAF.mediaplayer.constants.states.PLAY && event.payload.key !== 'back') {
+					if (MAF.mediaplayer.player.currentPlayerState === MAF.mediaplayer.constants.states.PLAY && (event.payload.key !== 'back' && event.payload.key !== 'playpause' && event.payload.key !== 'stop' && event.payload.key !== 'forward' && event.payload.key !== 'rewind')) {
 						event.stop();
 					}
 					if (this.fire("onTransportOverlayShow")) {

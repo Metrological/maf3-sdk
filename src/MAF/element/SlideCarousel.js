@@ -1,7 +1,7 @@
 define('MAF.element.SlideCarousel', function() {
 	var onNavigate = function(event){
 		var direction = event.payload.direction;
-		if((this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) || 
+		if(this.config.blockFocus || (this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) || 
 			(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))){
 			event.preventDefault();
 		}
@@ -9,7 +9,7 @@ define('MAF.element.SlideCarousel', function() {
 			if(this.config.orientation === 'horizontal'){
 				switch(direction){
 					case 'right':
-						if(this.currentDataset.length - 2 === 1){
+						if(this.cells.length === 1){
 							event.stop();
 							break;
 						}
@@ -23,7 +23,7 @@ define('MAF.element.SlideCarousel', function() {
 						animateCells(this.cells, direction, this);
 						break;
 					case 'left':
-						if(this.currentDataset.length - 2 === 1){
+						if(this.cells.length === 1){
 							event.stop();
 							break;
 						}
@@ -41,7 +41,7 @@ define('MAF.element.SlideCarousel', function() {
 			else{
 				switch(direction){
 					case 'down':
-						if(this.currentDataset.length - 2 === 1){
+						if(this.cells.length === 1){
 							event.stop();
 							break;
 						}
@@ -55,7 +55,7 @@ define('MAF.element.SlideCarousel', function() {
 						animateCells(this.cells, direction, this);
 						break;
 					case 'up':
-						if(this.currentDataset.length - 2 === 1){
+						if(this.cells.length === 1){
 							event.stop();
 							break;
 						}
@@ -77,34 +77,36 @@ define('MAF.element.SlideCarousel', function() {
 			cells.forEach(function(cell, i){
 				var small = (parent.currentDataset.length - 2) < parent.config.visibleCells,
 				smallAmount = i === cells.length-1;
-				cell.animate({
-					opacity: ((dir === 'right' || dir === 'down') && smallAmount) ? 0 : ((dir === 'left' || dir === 'up') && i === 0) ? 0 : ((dir === 'left' || dir === 'up') && small && smallAmount) ? 0 :  parent.opacityOffsets[i],
-					duration: 0.1,
-					events:{
-						onAnimationEnded: function(){
-							if(cell){
-								cell.animate({
-									hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
-									vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
-									duration: parent.config.slideDuration,
-									events:{
-										onAnimationEnded: function(){
-											parent.animating = false;
-											cell.element.allowNavigation = false;
-											cell.opacity = (small && smallAmount) ? 0 : parent.opacityOffsets[i];
-											if(i === parent.config.focusIndex){
-												cell.element.allowNavigation = true;
-												if(!parent.config.blockFocus){
-													cell.focus();
+				if(cell){
+					cell.animate({
+						opacity: ((dir === 'right' || dir === 'down') && smallAmount) ? 0 : ((dir === 'left' || dir === 'up') && i === 0) ? 0 : ((dir === 'left' || dir === 'up') && small && smallAmount) ? 0 :  parent.opacityOffsets[i],
+						duration: 0.1,
+						events:{
+							onAnimationEnded: function(){
+								if(cell){
+									cell.animate({
+										hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
+										vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
+										duration: parent.config.slideDuration,
+										events:{
+											onAnimationEnded: function(){
+												parent.animating = false;
+												cell.element.allowNavigation = false;
+												cell.opacity = (small && smallAmount) ? 0 : parent.opacityOffsets[i];
+												if(i === parent.config.focusIndex){
+													cell.element.allowNavigation = (parent.config.blockFocus) ? false : true;
+													if(!parent.config.blockFocus){
+														cell.focus();
+													}
 												}
 											}
 										}
-									}
-								});
+									});
+								}
 							}
 						}
-					}
-				});
+					});
+				}
 			}, this);
 		}
 	};
@@ -135,59 +137,97 @@ define('MAF.element.SlideCarousel', function() {
 				}
 			},
 			generateCells: function (data){
-				if(data.length > 0){
+				if(this.currentDataset.length > 0){
 					var cell,
 						o = this.config.orientation,
-						cd = this.getCellDimensions();
+						cd = this.getCellDimensions(),
+						dims;
 					this.offsets = [];
 					this.opacityOffsets = [];
-					for(var i = 0; i < ((data.length < this.config.visibleCells) ? data.length + 2 : this.config.visibleCells + 2); i++){
-						var dims = {
+					if(this.currentDataset.length === 1){
+						dims = {
 							width: (o === 'horizontal') ? ((1 / this.config.visibleCells) * 100) + '%' : '100%',
 							height: (o === 'vertical') ? ((1 / this.config.visibleCells) * 100) + '%' :'100%',
-							hOffset: (o === 'horizontal') ? (cd.width * -1) + (i * cd.width) : 0,
-							vOffset: (o === 'vertical') ? (cd.height * -1) + (i * cd.height) : 0
+							hOffset: (o === 'horizontal') ? (cd.width * -1) + (cd.width) : 0,
+							vOffset: (o === 'vertical') ? (cd.height * -1) + (cd.height) : 0
 						};
 						cell = this.config.cellCreator.call(this).setStyles(dims);
 						cell.setStyle('transform', 'translateZ(0)');
 						cell.grid = this;
 						cell.appendTo(this);
-						cell.setStyle('opacity', (data.length < this.config.visibleCells && i === data.length+1) ? 0 : 1);
-						if(Math.abs(this.config.focusIndex - i) > 0 && this.config.opacityOffset > 0){
-							this.opacityOffsets.push(1 - Math.abs(this.config.focusIndex - i) * this.config.opacityOffset);
-							cell.setStyle('opacity', this.opacityOffsets[this.opacityOffsets.length-1]);
-						}
-						cell.element.allowNavigation = (i === this.config.focusIndex) ? true : false;
+						cell.setStyle('opacity', 1);
+						cell.element.allowNavigation = (this.config.blockFocus) ? false : true;
 						this.cells.push(cell);
-						this.offsets.push((o === 'horizontal') ? dims.hOffset : dims.vOffset);
+					}
+					else{
+						for(var i = 0; i < this.currentDataset.length; i++){
+							dims = {
+								width: (o === 'horizontal') ? ((1 / this.config.visibleCells) * 100) + '%' : '100%',
+								height: (o === 'vertical') ? ((1 / this.config.visibleCells) * 100) + '%' :'100%',
+								hOffset: (o === 'horizontal') ? (cd.width * -1) + (i * cd.width) : 0,
+								vOffset: (o === 'vertical') ? (cd.height * -1) + (i * cd.height) : 0
+							};
+							cell = this.config.cellCreator.call(this).setStyles(dims);
+							cell.setStyle('transform', 'translateZ(0)');
+							cell.grid = this;
+							cell.appendTo(this);
+							cell.setStyle('opacity', (i === this.currentDataset.length-1) ? 0 : 1);
+							if(Math.abs(this.config.focusIndex - i) > 0 && this.config.opacityOffset > 0){
+								this.opacityOffsets.push(1 - Math.abs(this.config.focusIndex - i) * this.config.opacityOffset);
+								cell.setStyle('opacity', this.opacityOffsets[this.opacityOffsets.length-1]);
+							}
+							cell.element.allowNavigation = (this.config.blockFocus) ? false : (i === this.config.focusIndex) ? true : false;
+							this.cells.push(cell);
+							this.offsets.push((o === 'horizontal') ? dims.hOffset : dims.vOffset);
+						}
 					}
 				}
 				return this.cells.length;
 			},
+			reOrder: function(data){
+				if(this.config.focusIndex > 1){
+					for(var i = 0; i < this.config.focusIndex - 1; i++){
+						data.unshift(data.pop());
+					}
+				}
+			},
 			updateCells: function(data){
 				var cellUpdater = this.config.cellUpdater;
+				this.animating = false;
 				this.buffDataset = [];
 				this.currentDataset = [];
+				var i = 0;
 				if(data.length === undefined){
 					data = [data];
 				}
-
-				if(data.length <= this.config.visibleCells){
-					this.currentDataset = [].concat(data);
-					this.currentDataset.unshift(data[data.length-1]);
-					this.currentDataset.push(data[0]);
-				}
-				else{
-					if(this.config.focusIndex > 1){
-						for(var i = 0; i < (this.config.focusIndex - 1); i++){
-							data.unshift(data.pop());
+				if(data.length > 0){
+					var tmp = [].concat(data);
+					if(data.length === 1){
+						this.currentDataset = [data[0]];
+					}
+					else if(data.length === this.config.visibleCells){
+						this.reOrder(tmp);
+						this.currentDataset.push(tmp.pop());
+						for(i = 0; i < this.config.visibleCells; i++){
+							this.currentDataset.push(data.shift());
 						}
+						this.currentDataset.push(tmp.shift());
 					}
-					this.currentDataset.push(data.pop());
-					for(var i = 0; i < this.config.visibleCells + 1; i++){
-						this.currentDataset.push(data.shift());
+					else if(data.length < this.config.visibleCells){
+						this.currentDataset.push(tmp.pop());
+						for(i = 0; i < data.length; i++){
+							this.currentDataset.push(data[i]);
+						}
+						this.currentDataset.push(tmp.shift());
 					}
-					this.buffDataset = [].concat(data);
+					else{
+						this.reOrder(tmp);
+						this.currentDataset.push(tmp.pop());
+						for(i = 0; i < this.config.visibleCells + 1; i++){
+							this.currentDataset.push(tmp.shift());
+						}
+						this.buffDataset = [].concat(tmp);
+					}
 				}
 				if(this.cells.length && this.cells.length === this.currentDataset.length){
 					this.cells.forEach(function(cell, u){
@@ -198,7 +238,7 @@ define('MAF.element.SlideCarousel', function() {
 					while(this.cells.length){
 						this.cells.pop().suicide();
 					}
-					if(this.generateCells(data) > 0){
+					if(this.generateCells() > 0){
 						this.cells.forEach(function(cell, u){
 							cellUpdater.call(this, cell, this.currentDataset[u]);
 						}, this);
@@ -212,7 +252,6 @@ define('MAF.element.SlideCarousel', function() {
 			opacityOffset: 0,
 			orientation: 'horizontal',
 			blockFocus: false,
-			focus: true,
 			render: true
 		},
 		initialize: function(){
@@ -246,10 +285,10 @@ define('MAF.element.SlideCarousel', function() {
 		},
 
 		getFocusIndex: function(){
-			return this.config.focusIndex;
+			return (this.cells.length > 1) ? this.config.focusIndex : 0;
 		},
 
-		changeDataset: function(data, carousel){
+		changeDataset: function(data){
 			this.updateCells(data);
 			this.fire("onDatasetChanged");
 		},
@@ -262,17 +301,17 @@ define('MAF.element.SlideCarousel', function() {
 			}
 		},
 
-		callForSlide: function(event){
-			if(event.payload.direction && !this.animating){
+		callForSlide: function(direction){
+			if(direction && !this.animating){
 				this.animating = true;
-				if(this.currentDataset.length - 2 === 1){
+				if(this.cells.length === 1){
 					return;
 				}
-				switch(event.payload.direction){
+				switch(direction){
 					case 'up':
 					case 'left':
-						this.cells.unshift(this.cells.pop());
-						if(this.buffDataset.length){
+						if(this.cells.length > 1){
+							this.cells.unshift(this.cells.pop());
 							this.buffDataset.unshift(this.currentDataset.pop());
 							this.currentDataset.unshift(this.buffDataset.pop());
 							this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
@@ -280,15 +319,15 @@ define('MAF.element.SlideCarousel', function() {
 						break;
 					case 'down':
 					case 'right':
-						this.cells.push(this.cells.shift());
-						if(this.buffDataset.length){
+						if(this.cells.length > 1){
+							this.cells.push(this.cells.shift());
 							this.buffDataset.push(this.currentDataset.shift());
 							this.currentDataset.push(this.buffDataset.shift());
 							this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
 						}
 						break;
 				}
-				animateCells(this.cells, event.payload.direction, this);
+				animateCells(this.cells, direction, this);
 			}
 		},
 
@@ -297,6 +336,10 @@ define('MAF.element.SlideCarousel', function() {
 				width: (this.config.orientation === 'horizontal') ? Math.floor(this.width / this.config.visibleCells) : this.width,
 				height: (this.config.orientation === 'vertical') ? Math.floor(this.height / this.config.visibleCells) : this.height
 			}
+		},
+
+		getCurrentCell : function(){
+			return this.cells[(this.cells.length === 1 ) ? 0 : this.config.focusIndex];
 		},
 
 		suicide: function () {
