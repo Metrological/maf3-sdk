@@ -179,7 +179,7 @@ var AppsView = new MAF.Class({
 						}
 					}).appendTo(view.tos);
 
-					var tosAccept = new MAF.control.TextButton({
+					var tosAccept = view.elements.tosAccept = new MAF.control.TextButton({
 						label: $_('AGREE').toUpperCase(),
 						theme: false,
 						styles: {
@@ -199,9 +199,12 @@ var AppsView = new MAF.Class({
 								view.tos.visible = false;
 								delete view.tos;
 								currentAppConfig.set('tos', TOS);
-								if (view.backParams.startFromChannelBar && view.backParams.startApp){
-									ApplicationManager.load(view.backParams.startApp);
-									ApplicationManager.open(view.backParams.startApp);
+								if (view.data.startApp) {
+									var id = view.data.startApp.id,
+										params = view.data.startApp.params;
+									ApplicationManager.load(id);
+									ApplicationManager.open(id, params);
+									delete view.data.startApp;
 								} else {
 									categories.focus();
 								}
@@ -875,19 +878,18 @@ var AppsView = new MAF.Class({
 		} else if (MAE.tos !== false && currentAppConfig.get('tos') !== TOS) {
 			this.showTOSDialog();
 		} else if (this.ready) {
+			this.updateCategory();
 			(function () {
 				if (!document.activeElement) {
 					this.controls.categories.focus();
 				}
 			}).delay(800, this);
 		}
-		if (this.backParams.startFromChannelBar){
-			this.showTOSDialog();
-		}
+	},
 
-		if (this.ready) {
-			this.updateCategory();
-		}
+	focusView: function() {
+		if (this.elements.tosAccept && this.elements.tosAccept.visible)
+			this.elements.tosAccept.focus();
 	},
 
 	destroyView: function () {

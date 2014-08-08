@@ -25,7 +25,7 @@ var getRestaurants = function () {
 		onError: function (response) {
 			log('eror', response);
 		}
-	}).get();
+	}).send();
 };
 /*
 log(Date.format(new Date()));
@@ -104,7 +104,7 @@ var getPicasaPhotos = function (fetchParams, albumType, albumID, userID) {
 			log('error', error);
 //			MAF.utility.WaitIndicator.down();
 		}
-	}).get();
+	}).send();
 };
 
 var getSuggestions = function(a_callback, userText) {

@@ -111,6 +111,7 @@ var TestView7 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		 // Not implemented yet, will be in later SDK release
 		this.elements.notification = new MAF.control.TextButton({
 			label: 'Notification in 60 seconds',
 			styles: {
@@ -130,6 +131,7 @@ var TestView7 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		 // Not implemented yet, will be in later SDK release
 		this.elements.startYouTube = new MAF.control.TextButton({
 			label: 'Call 2 Action in 60 seconds',
 			styles: {
@@ -140,7 +142,7 @@ var TestView7 = new MAF.Class({
 					var button = this;
 					button.setStyle('backgroundColor', 'red');
 					(function () {
-						MAF.system.notify('http://www.icon2s.com/img64/64-6904.png', 'Launch YouTube', MAF.Notification.CALL2ACTION, 'com.metrological.widgets.tv.Youtube');
+						MAF.system.notify('http://www.icon2s.com/img64/64-6904.png', 'Launch YouTube', MAF.Notification.CALL2ACTION);
 						if (button) {
 							button.setStyle('backgroundColor', null);
 						}
@@ -149,6 +151,7 @@ var TestView7 = new MAF.Class({
 			}
 		}).appendTo(this);
 
+		 // Not implemented yet, will be in later SDK release
 		this.elements.stats = new MAF.control.TextButton({
 			label: 'Stats API',
 			styles: {

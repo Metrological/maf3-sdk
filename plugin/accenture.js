@@ -19,11 +19,16 @@ var AccenturePlayer = function () {
 	instance.subscribers = {};
 
 	function stateChange(state) {
+		if (MAE.screenDebug){
+			screen.log('stateChange: ' + state);
+		}
 		if (previousState !== state) {
-			fire.call(instance, 'onStateChange', {
-				state: state
-			});
-			previousState = state;
+			(function () {
+				fire.call(instance, 'onStateChange', {
+					state: state
+				});
+				previousState = state;
+			}).delay(500);
 			if (state === Player.state.ERROR) {
 				instance.src = null;
 			}

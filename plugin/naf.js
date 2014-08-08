@@ -3,6 +3,8 @@ var version = MAE.naf || '1.0.9s4c2r148',
 	enableDebug = MAE.screenDebug || false,
 	delayedShow = MAE.delayedShow !== undefined ? delayedShow || 0 : 500;
 
+plugins.delayStart = true;
+
 NAF = {};
 WebApp = {};
 
@@ -46,7 +48,30 @@ onFn('model.initialized', function () {
 	var i = getApplicationIndex(),
 		capsLock = false;
 
+	plugins.delayStart = false;
+
 	l('MAF <-> NAF INIT');
+
+	try {
+		l('SET MAF LANGUAGE FROM NAF: ' + JSON.stringify(model.state.settings.current.profile.view.lang));
+		switch(model.state.settings.current.profile.view.lang.code) {
+			case 'cze':
+				MAE.language = 'cz';
+				break
+			case 'pol':
+				MAE.language = 'pl';
+				break
+			case 'eng':
+				MAE.language = 'en';
+				break
+			default:
+				break;
+		}
+	} catch(err) {
+		l('ERROR GETTING NAF LANGUAGE FROM NAF');
+	}
+
+	if (plugins.startup) plugins.startup();
 
 	document.body.visible = false;
 
@@ -158,7 +183,7 @@ onFn('model.initialized', function () {
 		}
 		return [{
 			id: ui,
-			name: 'Apps',
+			name: MAE.language === 'pl' ? 'APLIKACJE' : 'APPS',
 			image: ApplicationManager.getIcon(ui),
 			url: ApplicationManager.getMainURL('channel')
 		}].concat(result);
@@ -330,13 +355,13 @@ var NAFPlayer = function () {
 							clearTimeout(playbackTimer);
 							playbackTimer = undefined;
 						}
-						// workaround for 472 error and receiving a 2xx code within a few seconds
+						// workaround for 472 and 470 error and receiving a 2xx code within a few seconds
 						(function () {
-							if (code !== 472 || previousState === states.BUFFERING) {
+							if ((code !== 472 && code !== 470) || previousState === states.BUFFERING) {
 								l('MAF EVENT: SEND ERROR');
 								stateChange(states.ERROR);
 							}
-						}).delay(code === 472 ? 2000 : 50);
+						}).delay(code === 472 || code === 470 ? 2000 : 50);
 						break;
 					default:
 						log('MAF EVENT: IGNORED STATUS CODE: ' + code);

@@ -1,3 +1,89 @@
+/**
+ * Metrological Application Framework 3.0 - SDK
+ * Copyright (c) 2014  Metrological
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+ /** 
+ * @class MAF.control.SlideCarousel
+ * @classdesc .
+ * @extends MAF.control.Container
+ * * All cells are based on descendants of MAF.element.SlideCarouselCell
+ * * cellCreator() is a required method that returns a cell with no data.
+ * * cellUpdater() is a required method that will update a cell with data.
+ * @example new MAF.element.Grid({
+ *    visibleCells: 5,
+ *    focusIndex: 3,
+ *    orientation: 'horizontal',
+ *    blockFocus: 'false',
+ *    slideDuration: 0.3,
+ *    opacityOffset: 0,
+ *    cellCreator: function () {
+ *       var cell = new MAF.element.GridCell({
+ *          events: {
+ *             onSelect: function(event) {
+ *                log('Selected', this.getDataItem());
+ *             } 
+ *          }
+ *       });
+ *
+ *       cell.text = new MAF.element.Text({
+ *          styles: {
+ *             color: 'white'
+ *          }
+ *       }).appendTo(cell);
+ *       return cell;
+ *    },
+ *    cellUpdater: function (cell, data) {
+ *       cell.text.setText(data.label);
+ *    }
+ * }).appendTo(this);
+ * @config {string} [title] The new job title.
+ */
+ /**
+ * @cfg {Number} rows Number of cells visible for the viewer.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {Number} indicates which position is always focused.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {String} orientation Horizontal or verticale orientation of the SlideCarousel.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {Boolean} this determines whether the grid can be focus at all, this is handy when you decided to control your SlideCarousel with a different component.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {Number} this determines how fast the cells will be moving to a new position.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {Number} this determines the opacity difference from the focusIndex.
+ * @memberof MAF.element.SlideCarousel
+ */
+
+/**
+ * Fired when the data set of the grid has changed.
+ * @event MAF.element.SlideCarousel#onDatasetChanged
+ */
+/**
+ * Fired when state of the grid is updated/changed.
+ * @event MAF.element.SlideCarousel#onStateUpdated
+ */
 define('MAF.element.SlideCarousel', function() {
 	var onNavigate = function(event){
 		var direction = event.payload.direction;
@@ -5,72 +91,7 @@ define('MAF.element.SlideCarousel', function() {
 			(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))){
 			event.preventDefault();
 		}
-		if(!this.animating && this.currentDataset && this.buffDataset){
-			if(this.config.orientation === 'horizontal'){
-				switch(direction){
-					case 'right':
-						if(this.cells.length === 1){
-							event.stop();
-							break;
-						}
-						this.animating = true;
-						this.cells.push(this.cells.shift());
-						if(this.buffDataset.length){
-							this.buffDataset.push(this.currentDataset.shift());
-							this.currentDataset.push(this.buffDataset.shift());
-							this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
-						}
-						animateCells(this.cells, direction, this);
-						break;
-					case 'left':
-						if(this.cells.length === 1){
-							event.stop();
-							break;
-						}
-						this.animating = true;
-						this.cells.unshift(this.cells.pop());
-						if(this.buffDataset.length){
-							this.buffDataset.unshift(this.currentDataset.pop());
-							this.currentDataset.unshift(this.buffDataset.pop());
-							this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
-						}
-						animateCells(this.cells, direction, this);
-						break;
-				}
-			}
-			else{
-				switch(direction){
-					case 'down':
-						if(this.cells.length === 1){
-							event.stop();
-							break;
-						}
-						this.animating = true;
-						this.cells.push(this.cells.shift());
-						if(this.buffDataset.length){
-							this.buffDataset.push(this.currentDataset.shift());
-							this.currentDataset.push(this.buffDataset.shift());
-							this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
-						}
-						animateCells(this.cells, direction, this);
-						break;
-					case 'up':
-						if(this.cells.length === 1){
-							event.stop();
-							break;
-						}
-						this.animating = true;
-						this.cells.unshift(this.cells.pop());
-						if(this.buffDataset.length){
-							this.buffDataset.unshift(this.currentDataset.pop());
-							this.currentDataset.unshift(this.buffDataset.pop());
-							this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
-						}
-						animateCells(this.cells, direction, this);
-						break;
-				}
-			}
-		}
+		this.shift(direction);
 	};
 	var animateCells = function(cells, dir, parent){
 		if(cells){
@@ -207,9 +228,10 @@ define('MAF.element.SlideCarousel', function() {
 					}
 					else if(data.length === this.config.visibleCells){
 						this.reOrder(tmp);
+						var main = [].concat(tmp);
 						this.currentDataset.push(tmp.pop());
 						for(i = 0; i < this.config.visibleCells; i++){
-							this.currentDataset.push(data.shift());
+							this.currentDataset.push(main.shift());
 						}
 						this.currentDataset.push(tmp.shift());
 					}
@@ -244,6 +266,7 @@ define('MAF.element.SlideCarousel', function() {
 						}, this);
 					}
 				}
+				this.fire('onStateUpdated');
 			}
 		},
 		config: {
@@ -261,6 +284,7 @@ define('MAF.element.SlideCarousel', function() {
 			this.config.opacityOffset = this.config.opacityOffset || 0;
 			this.config.blockFocus = this.config.blockFocus || false;
 			this.config.slideDuration = this.config.slideDuration || 0.1;
+			this.mainCollection = [];
 			this.parent();
 			this.cells = [];
 			this.buffDataset = null;
@@ -289,6 +313,7 @@ define('MAF.element.SlideCarousel', function() {
 		},
 
 		changeDataset: function(data){
+			this.mainCollection = [].concat(data);
 			this.updateCells(data);
 			this.fire("onDatasetChanged");
 		},
@@ -301,7 +326,83 @@ define('MAF.element.SlideCarousel', function() {
 			}
 		},
 
-		callForSlide: function(direction){
+		/**
+		 * @method MAF.element.SlideCarousel#getCurrentPage
+		 * @return The zero-based index of the current page of data.
+		 */
+		getCurrentPage: function(){
+			for(var i = 0; i < this.mainCollection.length; i++){
+				if(this.getCurrentCell().getCellDataItem() === this.mainCollection[i]){
+					return i;
+				}
+			}
+		},
+
+		/**
+		 * @method MAF.element.SlideCarousel#getPageCount
+		 * @return this.mainCollection.length. The number of items in the dataset.
+		 */
+		getPageCount: function(){
+			return this.mainCollection.length;
+		},
+
+		/**
+		 * Method for focussing a specific cell or dataitem in your grid.
+		 * @method MAF.element.SlideCarousel#focucCell
+		 * @param {integer} or {Object} which as to be focused and aligned with the proper focusIndex cell.
+		 */
+		focusCell: function(target){
+			var data = [].concat(this.mainCollection),
+				index = 0;
+			if(isNaN(target)){
+				for(var i = 0; i < data.length; i++){
+					if(target === data[i]){
+						index = i;
+						break;
+					}
+				}
+			}
+			var tmp = data.splice(0, i);
+			data = data.concat(tmp);
+			this.updateCells(data);
+		},
+
+		/**
+		 * Attach a accessory component to this component so it can update on grid events.
+		 * @method MAF.element.SlideCarousel#attachAccessory
+		 * @param {Class} accessory The accessory component.
+		 * @return This component.
+		 */
+		attachAccessory: function (accessory) {
+			if (accessory && accessory.attachToSource) {
+				accessory.attachToSource(this);
+			}
+			return this;
+		},
+
+		/**
+		 * Attach multiple accessory components to this component.
+		 * @method MAF.element.SlideCarousel#attachAccessories
+		 * @param {Array} arguments Contains muliple accessory components.
+		 * @return This component.
+		 */
+		attachAccessories: function () {
+			Array.slice(arguments).forEach(this.attachAccessory, this);
+			return this;
+		},
+
+		/**
+		 * Method for animating your SlideCarousel with a different component.
+		 * @method MAF.element.SlideCarousel#shift
+		 * @param {String} the direction the carousel has to slide.
+		 */
+		shift: function(direction){
+			if(this.config.orientation === 'vertical' && (direction === 'right' || direction === 'left')){
+				return;
+			}
+			if(this.config.orientation === 'horizontal' && (direction === 'up' || direction === 'down')){
+				return;
+			}
 			if(direction && !this.animating){
 				this.animating = true;
 				if(this.cells.length === 1){
@@ -328,9 +429,14 @@ define('MAF.element.SlideCarousel', function() {
 						break;
 				}
 				animateCells(this.cells, direction, this);
+				this.fire('onStateUpdated');
 			}
 		},
 
+		/**
+		 * @method MAF.element.SlideCarousel#getCellDimensions
+		 * @return {Object} With the width and height of the cells for the grid.
+		 */
 		getCellDimensions: function () {
 			return {
 				width: (this.config.orientation === 'horizontal') ? Math.floor(this.width / this.config.visibleCells) : this.width,
@@ -347,10 +453,12 @@ define('MAF.element.SlideCarousel', function() {
 			this.buffDataset = null;
 			this.offsets = null;
 			this.opacityOffsets = null;
+			this.mainCollection = null;
 			delete this.currentDataset;
 			delete this.buffDataset;
 			delete this.offsets;
 			delete this.opacityOffsets;
+			delete this.mainCollection;
 			if (this.cells) {
 				while(this.cells.length) {
 					this.cells.pop().suicide();

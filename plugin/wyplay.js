@@ -14,3 +14,9 @@ var releasePlayer = function () {
 window.addEventListener('unload', function () {
 	releasePlayer();
 });
+
+plugins.exit = function () {
+	if (parent && parent.ScreenManager && parent.ScreenManager.handleBack) {
+		parent.ScreenManager.handleBack();
+	}
+};

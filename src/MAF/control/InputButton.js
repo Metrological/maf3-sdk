@@ -69,9 +69,8 @@ define('MAF.control.InputButton', function () {
 		}
 	};
 	var onValueCallback = function (value) {
-		var event = arguments.callee.caller.__event__ || null;
 		this.setValue(value);
-		this.fire('onSelect', null, event);
+		this.fire('onSelect');
 	};
 	var createValueDisplay = function () {
 		var dispayValue = this.getDisplayValue();
@@ -115,12 +114,12 @@ define('MAF.control.InputButton', function () {
 				}
 			},
 			dispatchEvents: function (event, payload) {
+				this.parent(event, payload);
 				if (event.type === 'select') {
 					event.stopPropagation();
 					event.preventDefault();
 					return onValueNeeded.call(this);
 				}
-				this.parent(event, payload);
 			}
 		},
 
