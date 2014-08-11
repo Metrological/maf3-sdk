@@ -37,9 +37,6 @@
 define('MAF.control.SelectButton', function () {
 	var buildOptionView = function (value) {
 		var viewClass = this.config.optionViewClass;
-		if (DEBUG && (!viewClass || !viewClass.inheritsFrom || !viewClass.inheritsFrom(MAF.system.SidebarView))) {
-			warn(this.ClassName, 'buildOptionView', 'no usable view class in config.optionViewClass');
-		}
 		var viewConfig = {
 			id: this.config.optionListViewId || this._classID + '.' + viewClass.prototype.ClassName,
 			data: {

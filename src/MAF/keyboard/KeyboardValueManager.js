@@ -77,11 +77,6 @@ define('MAF.keyboard.KeyboardValueManager', function (config) {
 			return this.value;
 		},
 		handleExternalKeyInput: function (event) {
-			if (DEBUG) {
-				if (!event) {
-					log('handleExternalKeyInput ... no event to process');
-				}
-			}
 			var layout = event.payload && event.payload.layout || null;
 
 			if (event.Event) {

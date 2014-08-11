@@ -107,9 +107,6 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 		 * @method MAF.dialogs.BaseDialogImplementation#getDialogConfig
 		 */
 		getDialogConfig: function() {
-			if (DEBUG) {
-				throw new Error("All subclasses must provide this method!");
-			}
 		},
 
 		/**
@@ -117,9 +114,6 @@ define('MAF.dialogs.BaseDialogImplementation', function () {
 		 * @method MAF.dialogs.BaseDialogImplementation#handleCallback
 		 */
 		handleCallback: function(response) {
-			if (DEBUG) {
-				throw new Error("All subclasses must provide this method!");
-			}
 		}
 	});
 });
