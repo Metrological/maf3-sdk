@@ -242,6 +242,15 @@ define('MAF.element.SlideCarousel', function() {
 						}
 						this.currentDataset.push(tmp.shift());
 					}
+					else if(data.length - this.config.visibleCells === 1){
+						this.reOrder(tmp);
+						this.currentDataset.push(tmp[tmp.length-1]);
+						for(i = 0; i < this.config.visibleCells + 1; i++){
+							this.currentDataset.push(tmp[i]);
+						}
+						tmp.pop();
+						this.buffDataset = [].concat(tmp);
+					}
 					else{
 						this.reOrder(tmp);
 						this.currentDataset.push(tmp.pop());
