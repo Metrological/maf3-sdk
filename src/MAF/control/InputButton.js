@@ -261,7 +261,7 @@ define('MAF.control.InputButton', function () {
 		},
 
 		/**
-		 * @method MAF.control.InputButton#getOptionValues
+		 * @method MAF.control.InputButton#getOptions
 		 * @return {Array} Stored options in this component as objects with value and label keys
 		 */
 		getOptions: function () {

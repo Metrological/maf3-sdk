@@ -47,7 +47,7 @@ define('MAF.views.AboutBox', function () {
 
 			var list = [];
 
-			if (profile.countryCode === 'de') { 
+			/*if (profile.countryCode === 'de') { 
 				if (!this.config.pages) {
 					this.config.pages = [];
 				}
@@ -61,7 +61,7 @@ define('MAF.views.AboutBox', function () {
 						srcString: filesystem.readFile('About/' + profile.locale + '/impressum.txt', true)
 					});
 				}
-			}
+			}*/
 
 			if (typeOf(this.config.pages) === 'array') {
 				this.config.pages.forEach(function (page) {

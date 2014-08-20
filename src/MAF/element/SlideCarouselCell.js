@@ -70,6 +70,10 @@ define('MAF.element.SlideCarouselCell', function(){
 			return this.grid && this.grid.getCellDataItem(this);
 		},
 
+		getCellDataIndex: function(){
+			return this.grid && this.grid.getCellDataIndex(this);
+		},
+
 		suicide: function () {
 			delete this.grid;
 			Object.forEach(this, function (key, obj) {

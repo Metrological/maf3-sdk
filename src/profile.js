@@ -6,96 +6,112 @@
 
 /**
  * Indicates what ageRating the profile has.
- * @name {Number} ageRating
+ * @name ageRating
+ * @type {Number}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the full length city name where the application is running.
  * @name {String} city
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the full length country name in english. For example 'Netherlands'
- * @name {String} country
+ * @name country
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains a lowercase iso code of the country. For example (nl, en, uk, fr, us)
- * @name {String} countryCode
+ * @name countryCode
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Unique household operator id.
- * @name {String} household
+ * @name household
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Unique profile id.
- * @name {String} id
+ * @name id
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * IP address of the device the framework is running on.
- * @name {String} ip
+ * @name ip
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the full length language name. For example 'English'.
- * @name {String} language
+ * @name language
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the ISO 639-1 language code. For example 'en'.
- * @name {String} languageCode
+ * @name languageCode
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the latitude and longitude coordinates of the device location.
- * @name {Array} latlon
+ * @name latlon
+ * @type {Array}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the combination of language and country iso codes. For example 'en-NL'
- * @name {String} locale
+ * @name locale
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Indicates if the profile is locked after for example to many incorrect pin entries.
- * @name {Boolean} locked
+ * @name locked
+ * @type {Boolean}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the mac address of the device.
- * @name {String} mac
+ * @name mac
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the name of the profile.
- * @name {String} name
+ * @name name
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
  * Contains the operator name.
- * @name {String} operator
+ * @name operator
+ * @type {String}
  * @memberof profile
  * @readonly
  */
 /**
- * @name {Array} packages
+ * @name packages
+ * @type {Array}
  * @memberof profile
  * @readonly
  */

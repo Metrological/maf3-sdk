@@ -151,9 +151,8 @@ define('MAF.element.SlideCarousel', function() {
 				var payload = event.payload;
 				switch (event.type) {
 					case 'onFocus':
-						if(this.cells[this.config.focusIndex]){
-							this.cells[this.config.focusIndex].focus();
-						}
+						var currentCell = this.getCurrentCell();
+						if (currentCell) currentCell.focus();
 						break;
 				}
 			},
@@ -284,7 +283,8 @@ define('MAF.element.SlideCarousel', function() {
 			opacityOffset: 0,
 			orientation: 'horizontal',
 			blockFocus: false,
-			render: true
+			render: true,
+			focus: true
 		},
 		initialize: function(){
 			this.config.visibleCells = this.config.visibleCells || 1;
@@ -450,6 +450,23 @@ define('MAF.element.SlideCarousel', function() {
 			return {
 				width: (this.config.orientation === 'horizontal') ? Math.floor(this.width / this.config.visibleCells) : this.width,
 				height: (this.config.orientation === 'vertical') ? Math.floor(this.height / this.config.visibleCells) : this.height
+			}
+		},
+
+		/**
+		 * @method MAF.element.SlideCarousel#getCellDataIndex
+		 * @return {Object} returns the dataIndex
+		 */
+		getCellDataIndex: function(cell){
+			if(cell === this.getCurrentCell()){
+				return this.getCurrentPage();
+			}
+			else{
+				for(var i = 0; i < this.mainCollection.length; i++){
+					if(cell.getCellDataItem() === this.mainCollection[i]){
+						return i;
+					}
+				}
 			}
 		},
 
