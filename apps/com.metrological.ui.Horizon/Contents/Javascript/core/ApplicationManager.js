@@ -96,12 +96,6 @@ var loadTemplate = (function () {
 							sidebarButtons.push({ value: '@AppButtonSidebarProfiles', label: 'user', action: 'switch-profile' });
 							sidebarButtons.push(last);
 						}
-
-						if (Muzzley.enabled && app.widget.muzzley !== false) {
-							last = sidebarButtons.pop();
-							sidebarButtons.push({ value: '@AppButtonSidebarMuzzley', label: 'qrcode', action: 'app-muzzley' });
-							sidebarButtons.push(last);
-						}
 					}
 
 					if (Browser.activevideo) {
@@ -340,9 +334,6 @@ var loadTemplate = (function () {
 						case 'profile-pin':
 						case 'pin':
 							//buttons.push({ value: '$forgot', label: 'FORGOT_PIN' });
-							buttons.push({ value: '$cancel', label: 'CANCEL' });
-							break;
-						case 'muzzley':
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'facebook-login':
@@ -659,57 +650,6 @@ var loadTemplate = (function () {
 
 					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 50;
 
-					if (id === 'muzzley') {
-						var muzzleyImage = new Image({
-							src: Muzzley.qrCode,
-							styles: {
-								width: 370,
-								height: 370,
-								vAlign: 'bottom',
-								vOffset: (dialogConfig.buttons.length * 56) + 10 + 10,
-								hAlign: 'center'
-							}
-						}).appendTo(contentFrame);
-
-						(function (event) {
-							Muzzley.changeDevice('swipeNavigator', false, event.payload);
-							var dialogKey = template.retrieve('key');
-							template.destroy();
-							if (focusAfterDialog) {
-								focusAfterDialog.focus();
-								focusAfterDialog = null;
-							}
-							ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
-							if (KeyboardValueManager) {
-								KeyboardValueManager.suicide();
-								KeyboardValueManager = null;
-							}
-						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
-
-						totalHeight += 370;
-					} else if (id === 'facebook-login' && Muzzley.enabled) {
-						Muzzley.changeDevice('webview');
-						(function (event) {
-							Muzzley.changeDevice('webview');
-						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
-						(function (event) {
-							var payload = event.payload;
-							if (payload.action === 'WebViewReady') {
-								payload.callback(true, null, { url: 'http://m.facebook.com/device' });
-							}
-						}).subscribeOnce(Muzzley, 'onDeviceMessage', this);
-					} else if (id === 'twitter-login' && Muzzley.enabled) {
-						Muzzley.changeDevice('webview');
-						(function (event) {
-							Muzzley.changeDevice('webview');
-						}).subscribeOnce(Muzzley, 'onParticipantJoin', this);
-						(function (event) {
-							var payload = event.payload;
-							if (payload.action === 'WebViewReady') {
-								payload.callback(true, null, { url: dialogConfig.key });
-							}
-						}).subscribeOnce(Muzzley, 'onDeviceMessage', this);
-					}
 					var dialogFocus = 'button0';
 					if (isKeyboard) {
 						var keyboard;
@@ -1096,9 +1036,6 @@ widget.handleHostEvent = function (event) {
 				case 'switch-profile':
 					loadTemplate.call(this, { type: 'dialog', id: 'profile', conf: { title: 'PROFILE_TITLE', message: 'PROFILE_MESSAGE' }});
 					break;
-				case 'app-muzzley':
-					loadTemplate.call(this, { type: 'dialog', id: 'muzzley', conf: { title: 'MUZZLEY_TITLE', message: 'MUZZLEY_MESSAGE' }});
-					break;
 			}
 			break;
 		case 'onDialogPrevious':
@@ -1209,9 +1146,6 @@ widget.handleHostEvent = function (event) {
 				if (dlg) {
 					dlg.destroy();
 				}
-			}
-			if (Muzzley.enabled) {
-				Muzzley.resetDevice();
 			}
 			break;
 		case 'onApplicationAvailable':
