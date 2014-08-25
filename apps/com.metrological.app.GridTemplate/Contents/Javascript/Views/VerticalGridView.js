@@ -102,7 +102,7 @@ var VerticalGridView = new MAF.Class({
 	},
 
 	// When closing the application make sure you unreference 
-	// you're objects and arrays from the view
+	// your objects and arrays from the view
 	destroyView: function () {
 		var view = this;
 		delete view.items;

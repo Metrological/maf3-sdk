@@ -1,4 +1,4 @@
-// Include you're views
+// Include your views
 include('Javascript/Views/ExampleView1.js');
 include('Javascript/Views/ExampleView2.js');
 

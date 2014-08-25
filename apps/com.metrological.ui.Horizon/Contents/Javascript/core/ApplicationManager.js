@@ -1019,9 +1019,9 @@ widget.handleHostEvent = function (event) {
 					break;
 				case 'blue':
 				case 'viewport-toggle':
+					var mediaplayer = this.MAF.mediaplayer,
+						bounds = mediaplayer && mediaplayer.getViewportBounds();
 					if (this.MAF.application.isSidebarView()) {
-						var mediaplayer = this.MAF.mediaplayer,
-							bounds = mediaplayer && mediaplayer.getViewportBounds();
 						if (bounds && bounds.height === 1080) {
 							mediaplayer.setViewportBounds(624, 176, 1280, 720);
 						} else if (bounds) {
@@ -1031,6 +1031,8 @@ widget.handleHostEvent = function (event) {
 						if (Horizon) {
 							Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
 						}
+					} else if (mediaplayer && bounds && bounds.height !== 1080) {
+						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}
 					break;
 				case 'switch-profile':

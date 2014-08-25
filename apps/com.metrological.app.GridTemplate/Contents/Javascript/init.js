@@ -1,4 +1,4 @@
-// Include you're views
+// Include your views
 include('Javascript/Views/MainView.js');
 include('Javascript/Views/ControlGridView.js');
 include('Javascript/Views/ElementGridView.js');

@@ -1,5 +1,5 @@
 var getData = function () {
-	// Trigger load inidicator
+	// Trigger load indicator
 	MAF.utility.WaitIndicator.up();
 	new Request({
 		url: APIUrl,
@@ -10,7 +10,7 @@ var getData = function () {
 			var data = json && json.rss && json.rss.channel || {};
 			// Store data via message to signal the views that have a registerMessageCenterListenerCallback on the view
 			MAF.messages.store('MyFeedData', data.item || []);
-			// Unset load inidicator
+			// Unset load indicator
 			MAF.utility.WaitIndicator.down();
 		}
 	}).send();

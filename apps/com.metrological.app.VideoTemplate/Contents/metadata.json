@@ -1,0 +1,20 @@
+{
+	"identifier": "com.metrological.app.VideoTemplate",
+	"name": "VideoTemplate",
+	"version": "0.0.1",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get video playblack in an app",
+	"keywords": "video",
+	"categories": [
+		"video",
+	],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"about": "Images/Icon.png",
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}

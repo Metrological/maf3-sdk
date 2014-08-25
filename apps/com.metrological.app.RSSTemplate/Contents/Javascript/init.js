@@ -1,4 +1,4 @@
-// Include you're views
+// Include your views
 include("Javascript/core/API.js");
 include("Javascript/views/ListView.js");
 include("Javascript/views/ItemView.js");

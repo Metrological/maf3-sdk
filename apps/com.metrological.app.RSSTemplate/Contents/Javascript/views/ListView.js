@@ -99,7 +99,7 @@ var ListView = new MAF.Class({
 			getData();
 	},
 
-	// When closing the application make sure you unreference you're objects and arrays
+	// When closing the application make sure you unreference your objects and arrays
 	// and clean the messages that the app has stored
 	destroyView: function () {
 		MAF.messages.reset();
