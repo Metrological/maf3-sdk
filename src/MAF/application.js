@@ -7,9 +7,9 @@
  * Initialized the application with the supplied config.
  * @method MAF.application#init
  * @param {Object} config Application configuration object
- * @param {String} defaultViewId Defines which view to load when the application starts or when MAF.application.loadDefaultView() is called.
- * @param {String} [settingsViewId] Defines a view which will be loaded when the onActivateSettingsButton event trigger (Button on Sidebar). Also loads this view when MAF.application.loadSettingsView() is called.
- * @param {Array} views Containing view configuration objects. Each object is defined by a view id, a view class and a optional data parameter.
+ * @param {String} config.defaultViewId Defines which view to load when the application starts or when MAF.application.loadDefaultView() is called.
+ * @param {String} [config.settingsViewId] Defines a view which will be loaded when the onActivateSettingsButton event trigger (Button on Sidebar). Also loads this view when MAF.application.loadSettingsView() is called.
+ * @param {Array} config.views Containing view configuration objects. Each object is defined by a view id, a view class and a optional data parameter.
  */
 /**
  * Remove the view ids defined in the array or string from the application.

@@ -24,6 +24,6 @@ MAF.application.init({
 		{ id: 'view-ExampleView2', viewClass: ExampleView2 },
 		{ id: 'view-About', viewClass: MAF.views.AboutBox } // Use standard About view
 	],
-	defaultViewId: 'view-ExampleView1',
-	settingsViewId: 'view-About'
+	defaultViewId: 'view-ExampleView1', // Declare what view to be loaded when opening the app
+	settingsViewId: 'view-About' // Declare what view is opened when a used loads the settings
 });
