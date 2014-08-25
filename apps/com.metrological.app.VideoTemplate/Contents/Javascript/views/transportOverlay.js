@@ -41,8 +41,9 @@ var transportOverlay = new MAF.Class({
 	updateView: function () {
 		// Reference to the current view
 		var view = this;
-		view.channelChanged = view.onChannelChanged.subscribeTo(MAF.mediaplayer, 'onChannelChange', view);
-		view.subcribedFunctionStop = view.gotKeyPress.subscribeTo(MAF.application, 'onWidgetKeyPress');
+
+		view.onChannelChanged.subscribeTo(MAF.mediaplayer, 'onChannelChange');
+		view.gotKeyPress.subscribeTo(MAF.application, 'onWidgetKeyPress');
 
 		// Add a new playlist with the video to the player
 		var entry = new MAF.media.PlaylistEntry({
@@ -58,9 +59,7 @@ var transportOverlay = new MAF.Class({
 	hideView: function () {
 		// Reference to the current view
 		var view = this;
-		view.channelChanged.unsubscribeFrom(MAF.mediaplayer, 'onChannelChange');
-		delete view.channelChanged;
-		view.subcribedFunctionStop.unsubscribeFrom(MAF.application, 'onWidgetKeyPress');
-		delete view.subcribedFunctionStop;
+		view.onChannelChanged.unsubscribeFrom(MAF.mediaplayer, 'onChannelChange');
+		view.gotKeyPress.unsubscribeFrom(MAF.application, 'onWidgetKeyPress');
 	}
 });
