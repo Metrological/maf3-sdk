@@ -84,13 +84,14 @@ var SlideCarouselView = new MAF.Class({
 
 	// After the update view the focus view is called
 	focusView: function () {
-		this.elements.slider.changeDataset([
-			{title: "Cell 1"},
-			{title: "Cell 2"},
-			{title: "Cell 3"},
-			{title: "Cell 4"},
-			{title: "Cell 5"},
-			{title: "Cell 6"}
-		]);
+		var view = this;
+		view.elements.slider.changeDataset([
+			{ title: $_('Cell1') },
+			{ title: $_('Cell2') },
+			{ title: $_('Cell3') },
+			{ title: $_('Cell4') },
+			{ title: $_('Cell5') },
+			{ title: $_('Cell6') }
+		], true);
 	}
 });

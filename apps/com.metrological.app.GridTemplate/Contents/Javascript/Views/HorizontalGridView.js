@@ -12,7 +12,6 @@ var HorizontalGridView = new MAF.Class({
 
 		// Create a PageIndicator
 		var pageindicator = new MAF.control.PageIndicator({
-			threshold: 5,
 			styles: {
 				height: 50,
 				width: view.width,
@@ -75,13 +74,14 @@ var HorizontalGridView = new MAF.Class({
 	},
 
 	updateView: function () {
-		this.elements.horizontalGrid.changeDataset([
-			{title: "Cell 1"},
-			{title: "Cell 2"},
-			{title: "Cell 3"},
-			{title: "Cell 4"},
-			{title: "Cell 5"},
-			{title: "Cell 6"}
-		]);
+		var view = this;
+		view.elements.horizontalGrid.changeDataset([
+			{ title: $_('Cell1') },
+			{ title: $_('Cell2') },
+			{ title: $_('Cell3') },
+			{ title: $_('Cell4') },
+			{ title: $_('Cell5') },
+			{ title: $_('Cell6') }
+		], true);
 	}
 });

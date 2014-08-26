@@ -196,7 +196,7 @@ var ExampleView1 = new MAF.Class({
 		// will be remembered by the view
 		var nextView = view.controls.nextView = new MAF.control.TextButton({
 			guid: 'loadExampleView2',
-			label: $_('ExampleView 2'),
+			label: $_('ExampleView2'),
 			styles: {
 				width: textButtonLabel.width,
 				height: textButton.height,

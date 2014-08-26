@@ -6,11 +6,11 @@ var MainView = new MAF.Class({
 	createView: function () {
 		var view = this,
 			buttons = [
-				{label: $_('Control Grid'), view: 'view-ControlGridView'},
-				{label: $_('Element Grid'), view: 'view-ElementGridView'},
-				{label: $_('Horizontal Grid'), view: 'view-HorizontalGridView'},
-				{label: $_('Vertical Grid'), view: 'view-VerticalGridView'},
-				{label: $_('Slide Carousel'), view: 'view-SlideCarouselView'}
+				{ label: $_('Control Grid'), view: 'view-ControlGridView' },
+				{ label: $_('Element Grid'), view: 'view-ElementGridView' },
+				{ label: $_('Horizontal Grid'), view: 'view-HorizontalGridView' },
+				{ label: $_('Vertical Grid'), view: 'view-VerticalGridView' },
+				{ label: $_('Slide Carousel'), view: 'view-SlideCarouselView' }
 			];
 
 		// Create a list of buttons based on an array and

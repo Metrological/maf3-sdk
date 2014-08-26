@@ -55,10 +55,10 @@ var ExampleView2 = new MAF.Class({
 			//valueOnSubline: true, // Position of the valueDisplay (selectbutton) can be changed with the following option
 			optionGridRows: 5,
 			options: [
-				{value: '1', label: $_('Option 1')},
-				{value: '2', label: $_('Option 2')},
-				{value: '3', label: $_('Option 3')},
-				{value: '4', label: $_('Option 4')}
+				{ value: '1', label: $_('Option1') },
+				{ value: '2', label: $_('Option2') },
+				{ value: '3', label: $_('Option3') },
+				{ value: '4', label: $_('Option4') }
 			],
 			styles: {
 				width: 400,
@@ -112,11 +112,11 @@ var ExampleView2 = new MAF.Class({
 
 		// Create a PromptButton
 		var promptButton = new MAF.control.PromptButton({
-			label: 'PromptButton',
+			label: $_('PromptButton'),
 			value: '1',
 			options: [
-				{value: '1', label: 'Option1'},
-				{value: '2', label: 'Option2'}
+				{ value: '1', label: 'Option1' },
+				{ value: '2', label: 'Option2' }
 			],
 			styles: {
 				width: 400,

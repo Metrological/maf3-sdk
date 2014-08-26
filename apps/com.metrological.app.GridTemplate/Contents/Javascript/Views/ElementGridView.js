@@ -90,11 +90,12 @@ var ElementGridView = new MAF.Class({
 	},
 
 	updateView: function () {
-		this.elements.elementGrid.changeDataset([
-			{title: "Cell 1"},
-			{title: "Cell 2"},
-			{title: "Cell 3"},
-			{title: "Cell 4"}
-		]);
+		var view = this;
+		view.elements.elementGrid.changeDataset([
+			{ title: $_('Cell1') },
+			{ title: $_('Cell2') },
+			{ title: $_('Cell3') },
+			{ title: $_('Cell4') }
+		], true);
 	}
 });

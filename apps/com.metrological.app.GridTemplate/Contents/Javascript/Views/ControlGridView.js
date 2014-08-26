@@ -18,7 +18,6 @@ var ControlGridView = new MAF.Class({
 			guid: 'myControlGrid',
 			rows: 2,
 			columns: 2,
-			carousel: true,
 			styles: {
 				width: view.width,
 				height: view.height - backButton.outerHeight,
@@ -62,17 +61,18 @@ var ControlGridView = new MAF.Class({
 			view.firstTime = true;
 			// Update grid with an example dataset
 			view.controls.controlGrid.changeDataset([
-				{title: "Cell 1"},
-				{title: "Cell 2"},
-				{title: "Cell 3"},
-				{title: "Cell 4"}
-			]);
+				{ title: $_('Cell1') },
+				{ title: $_('Cell2') },
+				{ title: $_('Cell3') },
+				{ title: $_('Cell4') }
+			], true);
 		}
 	},
 
 	// The destroy view is called when the application is closed
 	destroyView: function () {
+		var view = this;
 		// As an example unreference firstTime attribute from the view
-		delete this.firstTime;
+		delete view.firstTime;
 	}
 });

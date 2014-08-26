@@ -1,2 +1,12 @@
-"Close" = "Close";
+"FixedTab" = "Fixed Tab";
+"SingleTab" = "Single Tab";
+"TabPipe" = "Tab Pipe";
+"TabStrip" = "Tab Strip";
+"CustomTabPipe" = "Custom Tab Pipe";
+"Tab1" = "Tab 1";
+"Tab2" = "Tab 2";
+"Tab3" = "Tab 3";
+"Tab4" = "Tab 4";
+"Tab5" = "Tab 5";
+"Tab6" = "Tab 6";
 "An easy template to get a grid in an app" = "An easy template to get a grid in an app";

@@ -17,7 +17,7 @@ var mainView = new MAF.Class({
 		var view = this;
 
 		var directPlayButton = view.controls.directPlayButton = new MAF.control.TextButton({
-			label: 'Direct Play',
+			label: $_('DirectPlay'),
 			guid: 'directPlayButton',
 			styles: {
 				height: 80,
@@ -36,18 +36,18 @@ var mainView = new MAF.Class({
 						MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://video.metrological.com/aquarium.mp4'));
 						// Start the video playback
 						MAF.mediaplayer.playlist.start();
-						this.setText('Direct Stop');
+						this.setText($_('DirectStop'));
 					} else {
 						// If the player is playing, stop the video and change text on the button
 						MAF.mediaplayer.control.stop();
-						this.setText('Direct Play');
+						this.setText($_('DirectPlay'));
 					}
 				}
 			}
 		}).appendTo(view);
 
 		var mediaTransportOverlayButton = view.controls.mediaTransportOverlayButton = new MAF.control.TextButton({
-			label: 'Media Transport Overlay',
+			label: $_('MediaTransportOverlay'),
 			guid: 'mediaTransportOverlayButton',
 			styles: {
 				height: 80,

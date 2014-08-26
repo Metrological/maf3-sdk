@@ -8,12 +8,12 @@ var VerticalGridView = new MAF.Class({
 		var view = this;
 		view.parent();
 		view.items = [
-			{title: "Cell 1"},
-			{title: "Cell 2"},
-			{title: "Cell 3"},
-			{title: "Cell 4"},
-			{title: "Cell 5"},
-			{title: "Cell 6"}
+			{ title: $_('Cell1') },
+			{ title: $_('Cell2') },
+			{ title: $_('Cell3') },
+			{ title: $_('Cell4') },
+			{ title: $_('Cell5') },
+			{ title: $_('Cell6') }
 		];
 	},
 
@@ -98,7 +98,7 @@ var VerticalGridView = new MAF.Class({
 
 	updateView: function () {
 		var view = this;
-		view.elements.verticalGrid.changeDataset(view.items);
+		view.elements.verticalGrid.changeDataset(view.items, true);
 	},
 
 	// When closing the application make sure you unreference 

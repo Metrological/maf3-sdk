@@ -10,14 +10,14 @@ var MainView = new MAF.Class({
 		view.parent(); // Call super class constructor
 		// Add tabs array to view
 		view.tabs = [
-			{label: 'Tab 1', value: '1', src: 'Images/tv.png'},
-			{label: 'Tab 2', value: '2'},
-			{label: 'Tab 3', value: '3'},
-			{label: 'Tab 4', value: '4'},
-			{label: 'Tab 5', value: '5', src: 'Images/tv.png'},
-			{label: 'Tab 6', value: '6'},
-			{label: 'Tab 7', value: '7'},
-			{label: 'Tab 8', value: '8', src: 'Images/tv.png'}
+			{ label: $_('Tab1'), value: '1', src: 'Images/tv.png' },
+			{ label: $_('Tab2'), value: '2' },
+			{ label: $_('Tab3'), value: '3' },
+			{ label: $_('Tab4'), value: '4' },
+			{ label: $_('Tab5'), value: '5', src: 'Images/tv.png' },
+			{ label: $_('Tab6'), value: '6' },
+			{ label: $_('Tab7'), value: '7' },
+			{ label: $_('Tab8'), value: '8', src: 'Images/tv.png' }
 		];
 	},
 
@@ -26,7 +26,7 @@ var MainView = new MAF.Class({
 		var view = this;
 
 		var fixedTabLabel = new MAF.element.Text({
-			label: 'Fixed Tab',
+			label: $_('FixedTab'),
 			styles: {
 				height: 50,
 				width: view.width,
@@ -53,7 +53,7 @@ var MainView = new MAF.Class({
 		}).appendTo(view);
 
 		var singleTabLabel = new MAF.element.Text({
-			label: 'Single Tab',
+			label: $_('SingleTab'),
 			styles: {
 				height: 50,
 				width: view.width,
@@ -81,7 +81,7 @@ var MainView = new MAF.Class({
 		}).appendTo(view);
 
 		var tabPipeLabel = new MAF.element.Text({
-			label: 'TabPipe',
+			label: $_('TabPipe'),
 			styles: {
 				height: 50,
 				width: view.width,
@@ -108,7 +108,7 @@ var MainView = new MAF.Class({
 		}).appendTo(view);
 
 		var tabStripLabel = new MAF.element.Text({
-			label: 'TabStrip',
+			label: $_('TabStrip'),
 			styles: {
 				height: 50,
 				width: view.width,
@@ -135,7 +135,7 @@ var MainView = new MAF.Class({
 		}).appendTo(view);
 
 		var customTabPipeLabel = new MAF.element.Text({
-			label: 'Custom TabPipe',
+			label: $_('CustomTabPipe'),
 			styles: {
 				height: 50,
 				width: view.width,
@@ -174,20 +174,20 @@ var MainView = new MAF.Class({
 		elements.tabStrip.initTabs(view.tabs);
 		// Init tabs with data for both tab pipe and a custom tab pipe
 		elements.tabPipe.initTabs([
-			{label: 'Tab 1', src: 'Images/tv.png', value: '1'},
-			{label: 'Tab 2', value: '2'},
-			{label: 'Tab 3', src: 'Images/tv.png', value: '3'},
-			{label: 'Tab 4', src: 'Images/tv.png', value: '4'},
-			{label: 'Tab 5', src: 'Images/tv.png', value: '5'},
-			{label: 'Tab 6', src: 'Images/tv.png', value: '6'}
+			{ label: $_('Tab1'), src: 'Images/tv.png', value: '1' },
+			{ label: $_('Tab2'), value: '2' },
+			{ label: $_('Tab3'), src: 'Images/tv.png', value: '3' },
+			{ label: $_('Tab4'), src: 'Images/tv.png', value: '4' },
+			{ label: $_('Tab5'), src: 'Images/tv.png', value: '5' },
+			{ label: $_('Tab6'), src: 'Images/tv.png', value: '6' }
 		]);
 		elements.cutomTabPipe.initTabs([
-			{label: 'Tab 1', value: '1'},
-			{label: 'Tab 2', value: '2'},
-			{label: 'Tab 3', value: '3'},
-			{label: 'Tab 4', value: '4'},
-			{label: 'Tab 5', value: '5'},
-			{label: 'Tab 6', value: '6'}
+			{ label: $_('Tab1'), value: '1' },
+			{ label: $_('Tab2'), value: '2' },
+			{ label: $_('Tab3'), value: '3' },
+			{ label: $_('Tab4'), value: '4' },
+			{ label: $_('Tab5'), value: '5' },
+			{ label: $_('Tab6'), value: '6' }
 		]);
 	},
 
