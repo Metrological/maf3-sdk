@@ -8,7 +8,7 @@
 	"description": "An easy template to get video playblack in an app",
 	"keywords": "video",
 	"categories": [
-		"video",
+		"video"
 	],
 	"scripts": "Javascript/init.js",
 	"images": {
