@@ -13,7 +13,7 @@ var MyView = new MAF.Class({
 	// After create view and when returning to the view
 	// the update view is called
 	updateView: function () {
-		// Data from previous view 
+		// Reference to the current view
 		var view = this;
 	}
 });
