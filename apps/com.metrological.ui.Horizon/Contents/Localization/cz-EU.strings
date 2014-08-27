@@ -54,6 +54,7 @@
 "TWITTER_CODE" = "Příhlásit se k Twitteru a vložit zaslaný 7místný kód";
 "TWITTER_INVALIDCODE" = "Nesprávný kód. Zadejte prosím znovu Vaši emailovou adresu pro zaslání nového kódu";
 "TWITTER_METHOD" = "Připojení k Twitteru";
+"TWITTER_QRCODE" = "Please scan QRCode below. When authentication has been completed, a 7 digit code will be generated.";
 "TWITTER_EMAIL" = "Níže zadejte prosím Vaši emailovou adresu. Na uvedenou emailovou adresu Vám bude zaslán link s kódem pro dokončení nastavení";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Aktivační kód pro Vaši aplikaci Twitter";

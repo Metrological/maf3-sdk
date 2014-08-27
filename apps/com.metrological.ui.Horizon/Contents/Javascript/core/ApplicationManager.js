@@ -340,6 +340,13 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
+						case 'twitter-qrcode':
+							buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
+							if (!ProfileManager.isFamily) {
+								buttons.push({ value: '$ok', label: 'OK' });
+							}
+							buttons.push({ value: '$cancel', label: 'CANCEL' });
+							break;
 						case 'twitter-login':
 							if (data.conf && data.conf.type === 'email') {
 								buttons.push({ value: '$profile-switch', label: ProfileManager.isFamily ? 'SELECT_PROFILE' : 'SWITCH_PROFILE' });
@@ -490,7 +497,7 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(contentFrame);
 
-					if (!ProfileManager.isFamily && (id === 'facebook-login' || id === 'twitter-login' || id === 'profile')) {
+					if (!ProfileManager.isFamily && (id === 'facebook-login' || id === 'twitter-login' || id === 'twitter-qrcode' || id === 'profile')) {
 						new Text({
 							id: '@' + type + '-profile',
 							label: FontAwesome.get('user') + ' ' + profile.name,
@@ -513,6 +520,7 @@ var loadTemplate = (function () {
 								messageLabel = widget.getLocalizedString('PROFILE_REQUIRED');
 							}
 							break;
+						case 'twitter-qrcode':
 						case 'twitter-login':
 							if (!ProfileManager.isFamily) {
 								messageLabel = widget.getLocalizedString(dialogConfig.message || '', [dialogConfig.code]);
@@ -902,6 +910,28 @@ var loadTemplate = (function () {
 								KeyboardValueManager.handleExternalKeyInput(packet);
 							};
 						}
+					} else {
+						switch (id) {
+							case 'twitter-qrcode':
+							case 'qrcode':
+								if (id === 'twitter-qrcode' && ProfileManager.isFamily) {
+									break;
+								}
+								new Image({
+									src: QRCode.get(dialogConfig.url, 15),
+									styles: {
+										width: 555,
+										height: 555,
+										vAlign: 'bottom',
+										hAlign: 'center',
+										vOffset: (dialogConfig.buttons.length * 56) + 25
+									}
+								}).appendTo(contentFrame);
+								totalHeight += 555 + 15;
+								break;
+							default:
+								break;
+						}
 					}
 					body.appendChild(fragment);
 					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 0.5) * dialogMessage.lineHeight);
@@ -1101,6 +1131,7 @@ widget.handleHostEvent = function (event) {
 							return;
 						}
 						break;
+					case 'twitter-qrcode':
 					case 'twitter-login':
 						if (Twitter.userId) {
 							return;

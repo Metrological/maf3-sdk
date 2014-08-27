@@ -54,6 +54,7 @@
 "TWITTER_CODE" = "Gebruik de inlogcode die u heeft ontvangen om naar Twitter te gaan";
 "TWITTER_INVALIDCODE" = "Onjuiste inlogcode. Voer hier uw e-mailadres in om een nieuwe inlogcode te ontvangen.";
 "TWITTER_METHOD" = "Verbinden via Twitter";
+"TWITTER_QRCODE" = "Please scan QRCode below. When authentication has been completed, a 7 digit code will be generated.";
 "TWITTER_EMAIL" = "Voer uw e-mailadres hier in. U ontvangt een bevestigings-e-mail met een link naar de inlogcode.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Inlogcode voor Twitter-app";

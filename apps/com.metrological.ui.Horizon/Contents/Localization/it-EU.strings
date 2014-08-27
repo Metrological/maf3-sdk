@@ -54,6 +54,7 @@
 "TWITTER_CODE" = "Accedi a Twitter e immetti sotto il codice a 7 cifre che ricevi.";
 "TWITTER_INVALIDCODE" = "Codice errato. Reimmetti il tuo indirizzo email, riceverai un nuovo codice.";
 "TWITTER_METHOD" = "Metodo di connessione a twitter:";
+"TWITTER_QRCODE" = "Please scan QRCode below. When authentication has been completed, a 7 digit code will be generated.";
 "TWITTER_EMAIL" = "Immetti sotto il tuo indirizzo e-mail. Riceverai una e-mail col link al codice necessario per finire l'impostazione.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Codice di attivazione per app di Twitter";
