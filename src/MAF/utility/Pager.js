@@ -17,6 +17,12 @@
  **/
 /**
  * @class MAF.utility.Pager
+ * @classdesc > The pager is a storage class for data. Grids can communicate with them by default.
+ * @param {Number} pagesize Size of the page, default is 1.
+ * @param {Number} fetchsize Fetch size, the number of items in the data set fetched at one time. The default fetch size is 48. You can fetch several pages at ones from the server.
+ * @param {Number} [fetchcallback] A fetch method callback you provide for the next data set of items. This is the event delegate that knows how to fetch data in your server’s unique way.
+ * @param {Number} [fetchscope] Scope object in which to run the fetchCallback method in.
+ * @param {Number} [buffersize] Size of the page
  */
 define('MAF.utility.Pager', function () {
 	var classIndex = {};
@@ -82,6 +88,12 @@ define('MAF.utility.Pager', function () {
 			}
 		},
 
+		/**
+		 * Initialize pager with data, you can call this multiple times. This will reset the pager.
+		 * @method MAF.utility.Pager#initItems
+		 * @param {Array} data Data that needs to be stored for paging.
+		 * @param {Number} total Total data size.
+		 */
 		initItems: function (data, total) {
 			if (!data) {
 				return false;
@@ -105,6 +117,19 @@ define('MAF.utility.Pager', function () {
 			this.filterItems(this.config.filter);
 		},
 
+		/**
+		 * @method MAF.utility.Pager#setFilter
+		 * @param {Function} fn Callback method in which you can define which values to filter.
+		 * @example
+		 *  var pager = new MAF.utility.Pager(2, 6);
+		 *  pager.initItems([1,2,3,4,5,6], 6);
+		 *  pager.setFilter(function (value, key) {
+		 *     if (value > 2)
+		 *        return value;
+		 *     }
+		 *  });
+		 *  pager.getItems(); // Returns [3,4,5,6]
+		 */
 		setFilter: function (fn) {
 			var internal = classIndex[this._classID];
 			if (typeOf(fn) === 'function' && internal.allowFiltering) {
@@ -115,16 +140,31 @@ define('MAF.utility.Pager', function () {
 			}
 		},
 
+		/**
+		 * @method MAF.utility.Pager#getItem
+		 * @param {Number} index retrieves item at this index.
+		 * @returns {Mixed} Item at the specified index.
+		 */
 		getItem: function (index) {
 			var internal = classIndex[this._classID],
 				filterindex = internal.storage.get('filter')[index];
 			return internal.storage.get(filterindex);
 		},
 
+		/**
+		 * Retrieve all data that is stored.
+		 * @method MAF.utility.Pager#getItems
+		 * @returns {Array} An Array containing the data thats stored, if a filter is set the data returned will be filtered.
+		 */
 		getItems: function () {
 			return this.getData();
 		},
 
+		/**
+		 * Takes a Array of items and adds them to the dataset.
+		 * @method MAF.utility.Pager#addItems
+		 * @param {Array} items These will be added to the dataset.
+		 */
 		addItems: function (items) {
 			if (items && typeOf(items) === 'array') {
 				var data = this.getItems().concat(items);
@@ -132,37 +172,79 @@ define('MAF.utility.Pager', function () {
 			}
 		},
 
+		/**
+		 * Remove data from the dataset.
+		 * @method MAF.utility.Pager#removeItems
+		 * @param {Number} start At which index to start removing the data.
+		 * @param {Number} count How many items to remove.
+		 */
 		removeItems: function (start, count) {
 			var data = this.getItems();
 			data.splice(start, count);
 			this.initItems(data, data.length);
 		},
 
+		/**
+		 * @method MAF.utility.Pager#getPageSize
+		 * @return {Number} The size of the page that the pager is configured to.
+		 */
 		getPageSize: function () {
 			return classIndex[this._classID].pageSize || 0;
 		},
 
+		/**
+		 * @method MAF.utility.Pager#setPageSize
+		 * @param {Number} size The size that the page needs to be changed to.
+		 */
 		setPageSize: function (size) {
 			classIndex[this._classID].pageSize = size || 0;
 		},
 
+		/**
+		 * Retrieves the value indicating how large a fetch for more data will be.
+		 * @method MAF.utility.Pager#getFetchSize
+		 * @returns {Number} The size of a fetch in a slice. Default is 48.
+		 */
 		getFetchSize: function () {
 			return classIndex[this._classID].fetchSize || 0;
 		},
 
+//
+		/**
+		 * @method MAF.utility.Pager#getItemsSize
+		 * @returns {Number} The size of the dataset. This will reflect its size filtered.
+		 */
 		getItemsSize: function () {
 			return this.getItems().length;
 		},
 
+		/**
+		 * Retrieves the total size of the dataset.
+		 * @method MAF.utility.Pager#getDataSize
+		 * @returns {Number} Total size of the dataset.
+		 */
 		getDataSize: function () {
 			return classIndex[this._classID].dataSize || 0;
 		},
 
+		/**
+		 * @method MAF.utility.Pager#getNumPages
+		 * @returns {Number} The number of pages in the dataset.
+		 */
 		getNumPages: function () {
 			var internal = classIndex[this._classID];
 			return internal.dataSize > 0 ? Math.ceil(internal.dataSize/internal.pageSize) : 0;
 		},
 
+		/**
+		 * Retrieves a page size nr of items.
+		 * @method MAF.utility.Pager#getPage
+		 * @param {Number} index Page index to fetch and return.
+		 * @param {Boolean} [wrap] The data size is wrapped across multiple pages.
+		 * @param {Number} [pagesize] The size the page needs to be.
+		 * @param {Boolean} [quiet] Notify subscribers or not. Default it notifies.
+		 * @returns {MAF.utility.PagerStorageClass} A page of items as a storageClass.
+		 */
 		getPage: function (index, wrap, pagesize, quiet) {
 			var internal = classIndex[this._classID];
 			index = index || 0;

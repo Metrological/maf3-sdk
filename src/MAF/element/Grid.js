@@ -18,8 +18,8 @@
 /** 
  * @class MAF.element.Grid
  * @extends MAF.element.Container
- * @classdesc
- * * Each cell is fixed in size.
+ * @classdesc > The Grid object extends the Container object.
+ * > * Each cell is fixed in size.
  * * The grid is a container recieving info from its cells to have a single entry point to listen on.
  * * All cells are based on descendants of MAF.element.GridCell
  * * cellCreator() is a required method that returns a cell with no data.
@@ -48,6 +48,37 @@
  *    }
  * }).appendTo(this);
  * @config {string} [title] The new job title.
+ */
+/**
+ * @cfg {Function} cellCreator Is a required method in which you create and prepare your cell's content.
+ * @example
+ *    cellCreator: function () {
+ *       var cell = new MAF.element.GridCell({
+ *          events: {
+ *             onSelect: function(event) {
+ *                log('Selected', this.getDataItem());
+ *             } 
+ *          }
+ *       });
+ *
+ *       cell.text = new MAF.element.Text({
+ *          styles: {
+ *             color: 'white'
+ *          }
+ *       }).appendTo(cell);
+ *       return cell;
+ *    }
+ * @memberof MAF.element.Grid
+ */
+/**
+ * @cfg {Function} cellUpdater Is a required method in which you update your cell's content with an item from the dataset. When this method is called the cell is not visible yet.
+ * @property {MAF.element.GridCell|MAF.control.GridCell} cell The cell as configured in cellCreator.
+ * @property {Mixed} dataItem The dataset for the current page of the grid.
+ * @example
+ *  cellUpdater: function (cell, dataItem) {
+ *     cell.text.setText(dataItem.label);
+ *  }
+ * @memberof MAF.element.Grid
  */
 /**
  * @cfg {Number} rows Number of rows in the grid.

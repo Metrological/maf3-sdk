@@ -20,6 +20,7 @@
  * @class MAF.element.Container
  * @extends MAF.element.Core
  * @param {object} config
+ * @mixes Library.Themes
  */
 
 /**

@@ -25,6 +25,9 @@
  * @property {String} vAlign
  * @property {Number} hOffset
  * @property {Number} vOffset
+ * @mixes Library.Storage
+ * @mixes Library.DOM
+ * @mixes Library.Styles
  */
 /**
  * @cfg {Object} events A object containing one or more event handlers to be added to this object during initialization. 

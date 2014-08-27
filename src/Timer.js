@@ -1,5 +1,5 @@
 /**
- * @classdesc Timer objects allow you to perform a task at a periodic interval or can be used to simply fire once at a later time.</br>
+ * @classdesc > Timer objects allow you to perform a task at a periodic interval or can be used to simply fire once at a later time.</br>
  * They allow you to create multiple timers all running on different frequencies.
  * <p>They can also be started and stopped without having to delete them.</p>
  * @class Timer

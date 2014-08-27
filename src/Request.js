@@ -107,8 +107,8 @@
  */
 
 /**
- * @method Request#abort
  * This will abort the request if it is pending.
+ * @method Request#abort
  */
 
 /**
