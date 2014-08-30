@@ -1,18 +1,23 @@
-Metrological App SDK
-====================
+MAF SDK
+=======
 
-The Metrological Application Framework is developed to build Apps for TV devices with a webbrowser enabled on the device.
+The Metrological Application Framework SDK enables you to develop TV Apps
+
+Getting Started
+---------------
+
+The getting started, design guidelines and API docs can be found at [here](http://sdk.metrological.com)
 
 Create an App
 -------------
 
 Create a folder in the "apps" folder using an unique identifier
 
-	mkdir -p apps/com.CompanyName.app.AppName
+	mkdir -p apps/com.company.app.AppName
 
 Create the initial structure
 
-	cd apps/com.CompanyName.app.AppName
+	cd apps/com.company.app.AppName
 	mkdir -p Contents/Images
 	mkdir -p Contents/Javascript
 	mkdir -p Contents/Localization
@@ -23,7 +28,7 @@ Create the initial structure
 Example Contents/metadata.json
 
 	{
-		"identifier": "com.CompanyName.app.AppName",
+		"identifier": "com.company.app.AppName",
 		"name": "My App",
 		"version": "1.0.0",
 		"author": "My Name",
@@ -44,8 +49,7 @@ Example Contents/metadata.json
 			},
 			"about": "Images/about.png",
 			"icon": {
-				"192x192": "Images/icon.png",
-				"280x166": "Images/snippet.png"
+				"192x192": "Images/icon.png"
 			}
 		}
 	}
@@ -55,29 +59,36 @@ Example Contents/Javascript/init.js which is the first script loaded from the me
 
 	include("Javascript/Views/MainView.js");
 	include("Javascript/Views/AboutView.js");
-	include("Javascript/Views/IconView.js");
-	include("Javascript/Views/SnippetView.js");
-
+	
 	MAF.application.init({
 		views: [
 			{ id: 'view-MainView', viewClass: MainView },
-			{ id: 'view-AboutView', viewClass: AboutView },
-			{ id: 'view-IconView', viewClass: IconView },
-			{ id: 'view-SnippetView', viewClass: SnippetView }
+			{ id: 'view-AboutView', viewClass: AboutView }
 		],
 		defaultViewId: 'view-MainView',
 		settingsViewId: 'view-AboutView'
 	});
 
+An empty template has been added into the SDK [here](apps/com.metrological.app.EmptyTemplate/Contents)
+
 Adding the App
 --------------
 
-In the "index.html" add your App identifier to the "apps" array of the profile in the MAE object
+In the "index.html" add your App identifier to the "apps" array in the MAE object
 
 	apps: [
-		"com.CompanyName.app.AppName",
-		"com.metrological.widget.Example"
+		"com.company.app.AppName"
 	]
+
+Starting the server
+-------------------
+
+The SDK contains already a HTTP server using [Node.js](http://nodejs.org), please run the following commands from the command line:
+
+	npm install
+	NODE_PORT=8080 node sdk.js
+
+The SDK can then be launched in Safari, Chrome or Firefox pointing it to http://localhost:8080
 
 License
 -------
