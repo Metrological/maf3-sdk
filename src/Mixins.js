@@ -141,7 +141,7 @@
  *  });
  */
 /**
- * If a renderskin is method is defined in the Theme of the class, you can execute it with this method.
+ * If a renderskin method is defined in the Theme of the class, that methods result gets injected onto the component.
  * @method Library.Themes#renderSkin
  * @param {String} name Skin name to render
  * @param {String} [state] State of the skin.
