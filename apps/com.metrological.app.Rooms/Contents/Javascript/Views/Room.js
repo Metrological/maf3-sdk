@@ -147,10 +147,10 @@ var Room = new MAF.Class({
 					if (payload.user !== room.user)
 						log('user joined', payload.user);
 					return;
-				case 'onLeaved':
+				case 'onHasLeft':
 					// If user is not the app then log the user
 					if (payload.user !== room.user)
-						log('user leaved', payload.user);
+						log('user has left', payload.user);
 					return;
 				case 'onData':
 					var data = payload.data;
@@ -163,7 +163,7 @@ var Room = new MAF.Class({
 					log(event.type, payload);
 					break;
 			}
-		}).subscribeTo(room, ['onConnected', 'onDisconnected', 'onCreated', 'onDestroyed', 'onJoined', 'onLeaved', 'onData', 'onError']);
+		}).subscribeTo(room, ['onConnected', 'onDisconnected', 'onCreated', 'onDestroyed', 'onJoined', 'onHasLeft', 'onData', 'onError']);
 
 		// If Room socket is connected create and join room
 		if (room.connected) room.join();
