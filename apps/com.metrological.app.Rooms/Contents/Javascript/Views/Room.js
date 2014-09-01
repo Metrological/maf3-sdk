@@ -134,7 +134,7 @@ var Room = new MAF.Class({
 					return;
 				case 'onCreated':
 					// Create an url to the client application and pass the hash as querystring
-					var url = widget.getUrl('Client/?hash=' + payload.hash);
+					var url = widget.getUrl('Client/draw.html?hash=' + payload.hash);
 					qrcode.setSource(QRCode.get(url));
 					log('room created', payload.hash, url);
 					return;
