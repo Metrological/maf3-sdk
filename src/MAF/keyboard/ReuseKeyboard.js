@@ -17,7 +17,8 @@
  **/
 define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var USE_INPUT_METHOD = false,
-		HAS_DELETE = MAE.hacks && MAE.hacks.hasdelete || false;
+		HACKS = getSetting('hacks') || {},
+		HAS_DELETE = HACKS.hasdelete || false;
 	var internals = {
 		Tables: {
 			CharacterDefinitions: {
@@ -1373,7 +1374,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			this.config.element = internals[this._classID].body;
 			this.parent();
 
-			var plugin_tables = (MAE.keyboard === 'multitab') ? {
+			var plugin_tables = (getSetting('keyboard') === 'multitab') ? {
 				KeyLayoutSets: {
 					'normal': ['multitab', 'alphanumeric', 'symbols']
 				},
