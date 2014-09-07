@@ -16,15 +16,17 @@ var AppsView = new MAF.Class({
 	},
 
 	dataHasChanged: function (event) {
-		if (event.payload.value && event.payload.key === 'myApps' && !this.ready) {
-			this.appsReady();
+		if (event.payload.value && event.payload.key === 'myApps') {
+			if (!this.ready) return this.appsReady();
+			this.controls.categories.changeDataset(ApplicationManager.getCategories(), true);
+			if (this.category !== 'favorites')
+				this.controls.apps.changeDataset(ApplicationManager.getApplicationsByCategory(this.category), true);
 		}
 	},
 
 	handleFavoriteBack: function (event) {
 		if (this.state !== null) {
-			var categories = ApplicationManager.getCategories(),
-				data;
+			var data;
 			this.state = null;
 			if (this.category === 'favorites') {
 				delete this.reodered;
@@ -123,7 +125,8 @@ var AppsView = new MAF.Class({
 			if (!tos) {
 				categories.focus();
 			} else {
-				if (MAE.tosVersion && MAE.tosVersion === 1){
+				var tosVersion = widget.getSetting('tosVersion');
+				if (tosVersion === 1) {
 					view.tos = new MAF.dialogs.Alert({
 						title: $_('TERMS'),
 						isModal: true,
@@ -274,9 +277,9 @@ var AppsView = new MAF.Class({
 				apps = view.controls.apps;
 			categories.setDisabled(false);
 			apps.setDisabled(false);
-			if (MAE.tos === false || currentAppConfig.get('tos') === TOS) {
+			if (widget.getSetting('tos') === false || currentAppConfig.get('tos') === TOS) {
 				categories.focus();
-			} else if (MAE.tos !== false) {
+			} else if (widget.getSetting('tos') !== false) {
 				view.showTOSDialog();
 			}
 		}
@@ -875,7 +878,7 @@ var AppsView = new MAF.Class({
 	selectView: function () {
 		if (MAF.messages.exists('myApps') && !this.ready) {
 			return this.appsReady();
-		} else if (MAE.tos !== false && currentAppConfig.get('tos') !== TOS) {
+		} else if (widget.getSetting('tos') !== false && currentAppConfig.get('tos') !== TOS) {
 			this.showTOSDialog();
 		} else if (this.ready) {
 			this.updateCategory();

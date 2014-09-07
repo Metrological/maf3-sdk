@@ -1194,7 +1194,7 @@ widget.handleHostEvent = function (event) {
 			break;
 		case 'onApplicationStartupRequest':
 			data = event.getData();
-			if (MAE.tos !== false && currentAppConfig.get('tos') !== TOS) {
+			if (widget.getSetting('tos') !== false && currentAppConfig.get('tos') !== TOS) {
 				showEutos(data.id, data.params);
 			} else {
 				ApplicationManager.load(data.id);

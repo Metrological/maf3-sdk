@@ -115,7 +115,7 @@ var Horizon = (function (body) {
 	}
 
 	function blocked() {
-		return !showing && MAF.mediaplayer.isTVActive && MAE.blocked && !MAF.mediaplayer.currentAsset.title;
+		return !showing && MAF.mediaplayer.isTVActive && widget.getSetting('blocked') && !MAF.mediaplayer.currentAsset.title;
 	}
 
 	function updateHeader() {
