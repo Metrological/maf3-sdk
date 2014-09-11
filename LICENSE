@@ -6,7 +6,7 @@ AND CONDITIONS SET FORTH IN ITS ANNEX(ES) CONCLUDED BETWEEN YOU AND
 METROLOGICAL.
 
 IF YOU DO NOT AGREE WITH THE TERMS AND CONDITIONS IN THIS AGREEMENT AND
-IN ITS ANNEX(ES), DO NOT CHECK THE ACCEPTANCE BOX AND/OR DO NOT USE THE
+IN ITS ANNEX(ES), DO NOT CHECK THE ACCEPTANCE BOX AND DO NOT USE THE
 SDK.
 
 IF YOU WANT TO ACCEPT THE TERMS AND CONDITIONS IN THIS AGREEMENT AND IN
@@ -130,8 +130,12 @@ including its Annex(es).
 	terms and conditions in Annex A. In the event Developer develops and/or 
 	tests the App for a third-party and as such has no intention to dis-
 	tribute the App through the App Catalogue, the terms and conditions set 
-	forth in Annex A will not apply and  the Developer shall provide the 
-	third party with the terms and conditions set forth in Annex A. 
+	forth in Annex A will not apply and the Developer shall provide the 
+	third party with the terms and conditions set forth in Annex A and such 
+	party shall be required to enter into a separate app catalogue agreement 
+	with Metrological if it desires to distribute the App(s) through the App 
+	Catalogue; such app catalogue agreement shall be based on the terms and
+	conditions set forth in Annex A. 
 
 4.3.	Developer may not use the SDK to develop and/or test anything else than 
 	App(s).
