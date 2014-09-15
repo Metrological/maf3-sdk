@@ -912,6 +912,11 @@ var loadTemplate = (function () {
 						}
 					} else {
 						switch (id) {
+							case 'facebook-login':
+								if (!ProfileManager.isFamily)
+									dialogConfig.url = 'http://facebook.com/device';
+								else
+									break;
 							case 'twitter-qrcode':
 							case 'qrcode':
 								if (id === 'twitter-qrcode' && ProfileManager.isFamily) {

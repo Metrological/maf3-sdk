@@ -48,8 +48,6 @@
 "STORE_PROFILE" = "STORE PROFILE";
 "SWITCH_PROFILE" = "SWITCH PROFILE";
 "SELECT_PROFILE" = "SELECT PROFILE";
-"MUZZLEY_TITLE" = "Connect with Muzzley";
-"MUZZLEY_MESSAGE" = "Use muzzley on your mobile to scan the qr-code below.";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Login to Twitter and enter below the 7 digit code you receive.";
 "TWITTER_INVALIDCODE" = "Incorrect code. Please re-enter your email address to receive a new code.";

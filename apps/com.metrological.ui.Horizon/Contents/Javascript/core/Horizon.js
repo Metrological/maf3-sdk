@@ -59,7 +59,7 @@ var Horizon = (function (body) {
 	}).inject(container);
 
 	var subtitle = new Text({
-		label: $_('ALL APPS'),
+		label: $_('ALL_APPS'),
 		styles: {
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,

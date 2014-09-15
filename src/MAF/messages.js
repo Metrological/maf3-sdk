@@ -15,7 +15,7 @@
  */
 
 /**
- * Retrieves the value associated with the given key from the hash table. Returns null if not found.
+ * Retrieves the value associated with the given key from the hash table. Returns undefined if not found.
  * @method  MAF.messages#fetch
  * @param {String} key Key to look for in the Hash table.
  * @return {Mixed} The value associated with the given key.

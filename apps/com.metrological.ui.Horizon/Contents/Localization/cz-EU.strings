@@ -48,8 +48,6 @@
 "STORE_PROFILE" = "STORE PROFIL";
 "SWITCH_PROFILE" = "ZMĚNIT PROFIL";
 "SELECT_PROFILE" = "ZVOLIT PROFIL";
-"MUZZLEY_TITLE" = "Připojit pomocí Muzzley";
-"MUZZLEY_MESSAGE" = "Použít mobilní verzi Muzzley pro scanování QR kódu uvedeného níže";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Příhlásit se k Twitteru a vložit zaslaný 7místný kód";
 "TWITTER_INVALIDCODE" = "Nesprávný kód. Zadejte prosím znovu Vaši emailovou adresu pro zaslání nového kódu";

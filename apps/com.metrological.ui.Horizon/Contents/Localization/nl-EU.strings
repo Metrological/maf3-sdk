@@ -48,8 +48,6 @@
 "STORE_PROFILE" = "Profiel opslaan";
 "SWITCH_PROFILE" = "Van profiel veranderen";
 "SELECT_PROFILE" = "Kies een profiel";
-"MUZZLEY_TITLE" = "Maak verbinding met Muzzley";
-"MUZZLEY_MESSAGE" = "Gebruik Muzzley op uw mobiel om de SQ-code te scannen";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Gebruik de inlogcode die u heeft ontvangen om naar Twitter te gaan";
 "TWITTER_INVALIDCODE" = "Onjuiste inlogcode. Voer hier uw e-mailadres in om een nieuwe inlogcode te ontvangen.";

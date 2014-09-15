@@ -48,8 +48,6 @@
 "STORE_PROFILE" = "PROFIL SPEICHERN";
 "SWITCH_PROFILE" = "PROFIL WECHSELN";
 "SELECT_PROFILE" = "PROFIL AUSW&Auml;HLEN";
-"MUZZLEY_TITLE" = "Mit Muzzley verbinden";
-"MUZZLEY_MESSAGE" = "Verwenden Sie auf Ihrem Smartphone Muzzley, um den nachfolgenden QR-Code zu scannen.";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Loggen Sie sich ein bei Twitter und geben Sie den 7-stelligen Code ein, den Sie per E-Mail erhalten haben.";
 "TWITTER_INVALIDCODE" = "Falscher Code. Bitte geben Sie Ihre E-Mail-Adresse ein, um einen neuen Code zu erhalten.";

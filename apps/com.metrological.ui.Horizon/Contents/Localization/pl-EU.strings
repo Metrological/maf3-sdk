@@ -16,7 +16,7 @@
 "CLOSE" = "ZAMKNIJ";
 "IMPRESSUM" = "O NAS";
 "APP_STORE" = "APLIKACJE";
-"TOS_HEADER" = "Sklep";
+"TOS_HEADER" = "Warunki korzystania";
 "ALL_APPS" = "WSZYSTKIE APLIKACJE";
 "NOW_PLAYING" = "TERAZ ODTWARZANE";
 "APPS" = "APLIKACJE";
@@ -49,8 +49,6 @@
 "STORE_PROFILE" = "ZACHOWAJ PROFIL";
 "SWITCH_PROFILE" = "PRZEŁĄCZ PROFIL";
 "SELECT_PROFILE" = "WYBIERZ PROFIL";
-"MUZZLEY_TITLE" = "Połącz z Muzzley";
-"MUZZLEY_MESSAGE" = "Zeskanuj kod QR poniżej przy użyciu aplikacji Muzzley na telefonie komórkowym.";
 "TWITTER_CONNECT" = "Twitter";
 "TWITTER_CODE" = "Zaloguj się w serwisie Twitter i wprowadź poniżej 7-cyfrowy kod, który otrzymasz.";
 "TWITTER_INVALIDCODE" = "Nieprawidłowy kod. Wprowadź ponownie swój adres e-mail, aby otrzymać nowy kod.";

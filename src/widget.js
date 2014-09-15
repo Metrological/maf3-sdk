@@ -161,3 +161,8 @@
  * @method widget#getPath
  * @returns {String} Path of your application.
  */
+
+/**
+ * @method widget#getURL
+ * @returns {String} External path of an asset in your application.
+ */
