@@ -283,12 +283,14 @@ var loadTemplate = (function () {
 					break;
 				case 'dialog':
 					var dialogElement = getElementById('@' + current[identifier]), 
-						currentStyle = dialogElement.style || {},
+						currentStyle = dialogElement && dialogElement.style || {},
 						focusAfterDialog = app.document.activeElement,
 						totalHeight = 0,
 						buttons = [],
 						isKeyboard = keyboardDialogs.indexOf(id) !== -1,
 						KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
+
+					if (!dialogElement) return;
 
 					// Default buttons
 					switch (id) {
