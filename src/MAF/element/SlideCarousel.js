@@ -22,7 +22,7 @@
  * * All cells are based on descendants of MAF.element.SlideCarouselCell
  * * cellCreator() is a required method that returns a cell with no data.
  * * cellUpdater() is a required method that will update a cell with data.
- * @example new MAF.element.Grid({
+ * @example new MAF.control.SlideCarousel({
  *    visibleCells: 5,
  *    focusIndex: 3,
  *    orientation: 'horizontal',
@@ -30,7 +30,7 @@
  *    slideDuration: 0.3,
  *    opacityOffset: 0,
  *    cellCreator: function () {
- *       var cell = new MAF.element.GridCell({
+ *       var cell = new MAF.element.SlideCarouselCell({
  *          events: {
  *             onSelect: function(event) {
  *                log('Selected', this.getDataItem());
@@ -85,14 +85,6 @@
  * @event MAF.element.SlideCarousel#onStateUpdated
  */
 define('MAF.element.SlideCarousel', function() {
-	var onNavigate = function(event){
-		var direction = event.payload.direction;
-		if(this.config.blockFocus || (this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) || 
-			(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))){
-			event.preventDefault();
-		}
-		this.shift(direction);
-	};
 	var animateCells = function(cells, dir, parent){
 		if(cells){
 			cells.forEach(function(cell, i){
@@ -152,6 +144,22 @@ define('MAF.element.SlideCarousel', function() {
 		ClassName: 'SlideCarousel',
 		Extends: MAF.element.Container,
 		Protected: {
+			dispatchEvents: function (event, payload) {
+				this.parent(event, payload);
+				if (event.type === 'navigate') {
+					var direction = event.detail.direction;
+					if (this.config.blockFocus) {
+						event.preventDefault();
+					}
+					if ((this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) || 
+						(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))) {
+						event.preventDefault();
+					} else {
+						this.fire('onNavigateOutOfBounds', event.detail);
+					}
+					this.shift(direction);
+				}
+			},
 			handleFocusEvent: function (event) {
 				var payload = event.payload;
 				switch (event.type) {
@@ -345,8 +353,6 @@ define('MAF.element.SlideCarousel', function() {
 			this.animating = false;
 			this.store('slider', {status: 'empty'});
 			this.collectedPage.subscribeTo(this.pager, 'pageDone', this);
-
-			onNavigate.subscribeTo(this, 'onNavigate', this);
 			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
 			this.setStyle('transform', 'translateZ(0)');
 		},
@@ -464,6 +470,7 @@ define('MAF.element.SlideCarousel', function() {
 						case 'up':
 						case 'left':
 							if(isEmpty(this.currentDataset[this.config.focusIndex-1])){
+								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}
@@ -483,6 +490,7 @@ define('MAF.element.SlideCarousel', function() {
 						case 'down':
 						case 'right':
 							if(isEmpty(this.currentDataset[this.config.focusIndex+1])){
+								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}

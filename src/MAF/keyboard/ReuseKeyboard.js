@@ -1500,6 +1500,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 							styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 							row_height = 0;
 						keyframe.addClass(className);
+						if (columnKey === 0)
+							keyframe.addClass("firstKeyOnRow");
 						if (this.config.controlSize === 'small') {
 							keyframe.addClass('small');
 						}
@@ -1745,6 +1747,11 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			styles: {
 				opacity: 0.3
 			}
+		}
+	},
+	'ReuseKeyboard .item.firstKeyOnRow': {
+		styles: {
+			'clear': 'both'
 		}
 	},
 	ReuseKeyboardkey: {
