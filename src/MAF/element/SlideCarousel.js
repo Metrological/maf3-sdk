@@ -72,6 +72,10 @@
  * @memberof MAF.element.SlideCarousel
  */
 /**
+ * @cfg {String} slideEase this determines with which easing cells will be moving to a new position.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
  * @cfg {Number} this determines the opacity difference from the focusIndex.
  * @memberof MAF.element.SlideCarousel
  */
@@ -84,6 +88,10 @@
  * Fired when state of the grid is updated/changed.
  * @event MAF.element.SlideCarousel#onStateUpdated
  */
+ /**
+  * Fired when the slide navigation is complete.
+  * @event MAF.element.SlideCarousel#onSlideDone
+  */
 define('MAF.element.SlideCarousel', function() {
 	var animateCells = function(cells, dir, parent){
 		if(cells){
@@ -102,20 +110,26 @@ define('MAF.element.SlideCarousel', function() {
 						opacity: opacity,
 						duration: 0.1,
 						events:{
-							onAnimationEnded: function(){
+							onAnimationEnded: function(fadeAnimator){
+								fadeAnimator.reset();
 								if(cell){
 									cell.animate({
 										hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
 										vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
 										duration: parent.config.slideDuration,
+										timingFunction:  parent.config.slideEase,
 										events:{
-											onAnimationEnded: function(){
-												parent.animating = false;
+											onAnimationEnded: function(slideAnimator){
+												slideAnimator.reset();
+												if(i === cd -1){
+													parent.fire('onSlideDone');
+													parent.animating = false;
+												}
 												cell.element.allowNavigation = false;
 												cell.opacity = (cellEmpty) ? 0 : cd === i ? 0 : parent.opacityOffsets[i];
 												if(i === parent.config.focusIndex){
 													cell.element.allowNavigation = (parent.config.blockFocus) ? false : true;
-													if(!parent.config.blockFocus){
+													if(!parent.config.blockFocus && hasFocus(cells)){
 														cell.focus();
 													}
 												}
@@ -129,6 +143,15 @@ define('MAF.element.SlideCarousel', function() {
 				}
 			}, this);
 		}
+	};
+
+	var hasFocus = function(cells){
+		for(var i = 0; i < cells.length; i++){
+			if(cells[i].element.hasFocus){
+				return true;
+			}
+		}
+		return false;
 	};
 
 	var isEmpty = function(obj){
@@ -147,6 +170,9 @@ define('MAF.element.SlideCarousel', function() {
 			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
 				if (event.type === 'navigate') {
+					if (event.defaultPrevented) {
+						return;
+					}
 					var direction = event.detail.direction;
 					if (this.config.blockFocus) {
 						event.preventDefault();
@@ -321,6 +347,7 @@ define('MAF.element.SlideCarousel', function() {
 			visibleCells: 1,
 			focusIndex: 1,
 			opacityOffset: 0,
+			slideEase: 'ease',
 			carousel: true,
 			orientation: 'horizontal',
 			blockFocus: false,
@@ -332,6 +359,7 @@ define('MAF.element.SlideCarousel', function() {
 			this.config.focusIndex = this.config.focusIndex || 1;
 			this.config.orientation = this.config.orientation || 'horizontal';
 			this.config.opacityOffset = this.config.opacityOffset || 0;
+			this.config.slideEase = this.config.slideEase || 'ease';
 			this.config.blockFocus = this.config.blockFocus || false;
 			this.config.slideDuration = this.config.slideDuration || 0.1;
 			this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;

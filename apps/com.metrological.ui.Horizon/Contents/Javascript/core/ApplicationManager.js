@@ -125,7 +125,6 @@ var loadTemplate = (function () {
 									var btnId = Array.pluck(sidebarButtons, 'value').indexOf(target.getAttribute('id'));
 									if (isNumber(btnId) && btnId !== -1) {
 										ApplicationManager.fire(identifier, 'onActivateAppButton', {
-											id: this.retrieve('current'),
 											type: sidebarButtons[btnId].action
 										});
 									}
@@ -921,7 +920,7 @@ var loadTemplate = (function () {
 									break;
 							case 'twitter-qrcode':
 							case 'qrcode':
-								if (id === 'twitter-qrcode' && ProfileManager.isFamily) {
+								if (widget.getSetting('facebook') === 'url' || (id === 'twitter-qrcode' && ProfileManager.isFamily)) {
 									break;
 								}
 								new Image({
@@ -1027,6 +1026,11 @@ widget.handleChildEvent = function (event) {
 			loadTemplate.call(this, {
 				id: event.data,
 				type: 'waitIndicator'
+			});
+			break;
+		case 'changeProfile':
+			ApplicationManager.fire(event.id, 'onActivateAppButton', {
+				type: 'switch-profile'
 			});
 			break;
 		default:

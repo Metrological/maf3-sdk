@@ -1069,7 +1069,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		if (isNumber(index)) {
 			var child = internal.body.firstChild.childNodes[index];
 			if (!child.disabled) {
-				child.focus();
+				if (this.config && this.config.autoFocus)
+					child.focus();
 				child.select();
 				return true;
 			}
@@ -1351,6 +1352,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		config: {
 			controlSize: 'standard',
 			autoAdjust: true,
+			autoFocus: true,
 			allowSpace: true,
 			maxLength: 99,
 			keyPadding: false,

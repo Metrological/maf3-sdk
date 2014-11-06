@@ -19,6 +19,18 @@
  * @class MAF.control.Keyboard
  * @extends MAF.element.Container
  */
+/**
+ * Fired before leaving the keyboard when navigating.
+ * @event MAF.control.Keyboard#onNavigateOutOfBounds
+ */
+/**
+ * Fired when the keyboard value has reached the maximum configured length.
+ * @event MAF.control.Keyboard#onMaxLengthExceeded
+ */
+/**
+ * Fired when the keyboard value has changed.
+ * @event MAF.control.Keyboard#onValueChanged
+ */
 define('MAF.control.Keyboard', function () {
 	var keyboards = {},
 		repeaters = {};
@@ -78,10 +90,19 @@ define('MAF.control.Keyboard', function () {
 		},
 
 		Protected: {
+			registerEvents: function (types){
+				this.parent(['navigateoutofbounds'].concat(types || []));
+			},
 			dispatchEvents: function (event, payload) {
 				switch (event.type) {
 					case 'focus':
 						this.focus();
+						break;
+					case 'navigateoutofbounds':
+						this.fire('onNavigateOutOfBounds', event.detail, event);
+						break;
+					default:
+						this.parent(event, payload);
 						break;
 				}
 			}

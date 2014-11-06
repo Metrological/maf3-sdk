@@ -4,7 +4,7 @@
 "REMOVE" = "USUŃ";
 "CANCEL" = "ANULUJ";
 "SELECT" = "WYBIERZ PROFIL";
-"SEARCH" = "POSZUKIWANIE";
+"SEARCH" = "WYSZUKIWANIE";
 "NO_RESULTS" = "Brak wyników";
 "LOGOUT" = "WYLOGUJ SIĘ";
 "ERROR" = "BŁĄD";
@@ -66,9 +66,9 @@
 "CATEGORY_SOCIAL" = "SPOŁECZNOŚCI";
 "CATEGORY_GAMES" = "GRY";
 "CATEGORY_SPORT" = "SPORT";
-"CATEGORY_LIFESTYLE" = "STYL ŻYCIA";
+"CATEGORY_LIFESTYLE" = "LIFESTYLE";
 "CATEGORY_FEATURED" = "POLECANE";
-"CATEGORY_RECENTLY" = "OSTATNIO UŻYWANE";
+"CATEGORY_RECENTLY" = "UŻYWANE";
 "ADDFAVO" = "Dodaj/usuń ulubione aplikacje";
 "ADDFAVO_DESC" = "Naciśnij przycisk OK, aby dodać aplikacje do kategorii ULUBIONE";
 "ADDFAVO_SELECTED" = "Wybierz ulubioną aplikację i naciśnij przycisk OK, aby dodać aplikację do kategorii ULUBIONE. Aby anulować, naciśnij w dowolnym momencie przycisk WSTECZ";

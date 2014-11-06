@@ -97,7 +97,7 @@ define('MAF.control.TabStrip', function () {
 					button.fire('onBlur');
 				}
 			},
-			activateButton: function (index) {
+			activateButton: function (index, compare) {
 				var activeButton = this.buttons[this.activeIndex] || false,
 					active = this.buttons[index] || false;
 
@@ -109,7 +109,7 @@ define('MAF.control.TabStrip', function () {
 					active.fire('onActive');
 					this.fire('onTabSelect', conf);
 				}
-				if (activeButton && activeButton.fire) {
+				if (activeButton && activeButton.fire && (!compare || compare && activeButton !== active)) {
 					activeButton.fire('onInactive');
 				}
 			},
@@ -201,6 +201,15 @@ define('MAF.control.TabStrip', function () {
 					this.focusButton(fidx);
 				}
 			}
+		},
+
+		/**
+		 * Activate a Tab. This will trigger a onTabSelect but not a onFocus event on the Tab.
+		 * @method MAF.control.TabStrip#selectTab
+		 * @param {Number} index Indicates which tab to give focus, starting at 0.
+		 */
+		selectTab: function (index) {
+			this.activateButton(index, true);
 		},
 
 		getActiveIndex: function () {

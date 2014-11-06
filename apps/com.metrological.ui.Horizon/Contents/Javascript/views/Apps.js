@@ -627,7 +627,7 @@ var AppsView = new MAF.Class({
 								} else {
 									view.elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
 									var desc = ApplicationManager.getMetadataByKey(id, 'description') || '';
-									view.elements.appDescription.setText(desc + (desc.length === 0 || (desc[desc.length - 1] === '.' || desc[desc.length - 1] === '!') ? '' : '.'));
+									view.elements.appDescription.setText(desc + (desc.length === 0 || (desc[desc.length - 1] === '.' || desc[desc.length - 1] === '!' || desc[desc.length - 1] === '?') ? '' : '.'));
 								}
 							}
 							if (view.reorder && view.cell && this.retrieve('favbutton') !== true) {
