@@ -284,7 +284,7 @@ define('MAF.element.SlideCarousel', function() {
 					}
 					else{
 						var cellsToFill = this.config.visibleCells + 2;
-						if(dataLength !== this.config.visibleCells && dataLength < cellsToFill && !this.customPager){
+						if(dataLength !== this.config.visibleCells && dataLength < cellsToFill){
 							cellsToFill = dataLength + 2;
 						}
 						for(var i = 0; i < cellsToFill; i++){
@@ -306,7 +306,6 @@ define('MAF.element.SlideCarousel', function() {
 								this.currentDataset.push(this.pager.getPage(index).items[0]);
 							}
 							else if(dif < 0){
-								
 								index = this.page + difABS;
 								if(index >= dataLength){
 									index = index - dataLength;
@@ -403,7 +402,7 @@ define('MAF.element.SlideCarousel', function() {
 
 		changeDataset: function(data, reset, dataLength){
 			data = data && data.length ? data : [];
-			dataLength = dataLength && (dataLength > data.length) ? dataLength : data.length;
+			dataLength = (dataLength && (dataLength > data.length)) ? dataLength : data.length;
 			this.pager.initItems(data, dataLength);
 			this.store('slider', {status: 'reset'});
 			this.collectPage(0);
