@@ -96,7 +96,7 @@ define('MAF.element.SlideCarousel', function() {
 	var animateCells = function(cells, dir, parent){
 		if(cells){
 			cells.forEach(function(cell, i){
-				var cd = parent.currentDataset.length-1;
+				var cd = (dir === 'left' || dir === 'up') ? parent.currentDataset.length : parent.currentDataset.length-1;
 				if(cell){
 					var cellEmpty = isEmpty(parent.currentDataset[i]),
 						opacity;
@@ -122,8 +122,8 @@ define('MAF.element.SlideCarousel', function() {
 											onAnimationEnded: function(slideAnimator){
 												slideAnimator.reset();
 												if(i === cd -1){
-													parent.fire('onSlideDone');
 													parent.animating = false;
+													parent.fire('onSlideDone');
 												}
 												cell.element.allowNavigation = false;
 												cell.opacity = (cellEmpty) ? 0 : cd === i ? 0 : parent.opacityOffsets[i];

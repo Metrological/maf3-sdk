@@ -110,7 +110,6 @@
  * @event MAF.control.MediaTransportOverlay#onTransportButtonPress
  */
 define('MAF.control.MediaTransportOverlay', function () {
-	var overlayTimer = emptyFn;
 	var steps = 120;
 	var boundMediaUpdated = false;
 	var boundKeypressHandler = false;
@@ -142,13 +141,15 @@ define('MAF.control.MediaTransportOverlay', function () {
 				boundMediaUpdated = this.onMediaUpdated.subscribeTo(MAF.mediaplayer, ['onTimeIndexChanged', 'onStateChange', 'onPlayPlaylistEntry'], this);
 			},
 			createTimer: function () {
-				overlayTimer = new Timer();
-				overlayTimer.ticking = false;
-				overlayTimer.interval = this.config.fadeTimeout;
-				overlayTimer.onTimerFired = this.overlayFade.bindTo(this);
+				this.overlayTimer = new Timer();
+				this.overlayTimer.ticking = false;
+				this.overlayTimer.interval = this.config.fadeTimeout;
+				this.overlayTimer.onTimerFired = this.overlayFade.bindTo(this);
 			},
 			overlayFade: function () {
-				overlayTimer.ticking = false;
+				if (this.overlayTimer) {
+					this.overlayTimer.ticking = false;
+				}
 				if (this.fire('onTransportOverlayHide')) {
 					this.hide();
 				}
@@ -157,17 +158,18 @@ define('MAF.control.MediaTransportOverlay', function () {
 			resetOverlayTimer: function (state) {
 				var states = MAF.mediaplayer.constants.states;
 				if ([states.PAUSE, states.STOP, states.REWIND].contains(state)) {
-					overlayTimer.ticking = false;
+					if (this.overlayTimer) {
+						this.overlayTimer.ticking = false;
+					}
 					if (this.fire("onTransportOverlayShow"))
 						this.show();
 					return;
 				}
-				if (overlayTimer.ticking) {
-					overlayTimer.ticking = false;
-					overlayTimer.ticking = true;
-				} else {
-					overlayTimer.ticking = true;
+				if (!this.overlayTimer) return;
+				if (this.overlayTimer.ticking) {
+					this.overlayTimer.ticking = false;
 				}
+				this.overlayTimer.ticking = true;
 			},
 
 			viewEventHandler: function (event) {
@@ -281,34 +283,34 @@ define('MAF.control.MediaTransportOverlay', function () {
 											case 'play':
 												switch(MAF.mediaplayer.player.currentPlayerState) {
 													case MAF.mediaplayer.constants.states.PLAY:
-														if(this.fire("onTransportButtonPress", { button: btnName, action: "pause" })) {
+														if (this.fire("onTransportButtonPress", { button: btnName, action: "pause" })) {
 															MAF.mediaplayer.control.pause();
 														}
 														break;
 													default:
-														if(this.fire("onTransportButtonPress", { button: btnName, action: "play" })) {
+														if (this.fire("onTransportButtonPress", { button: btnName, action: "play" })) {
 															MAF.mediaplayer.control.play();
 														}
 														break;
 												}
 												break;
 											case 'stop':
-												if(this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
+												if (this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
 													MAF.mediaplayer.control.stop();
 												}
 												break;
 											case 'rewind':
-												if(this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
+												if (this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
 													MAF.mediaplayer.control.rewind();
 												}
 												break;
 											case 'forward':
-												if(this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
+												if (this.fire("onTransportButtonPress", { button: btnName, action: btnName })) {
 													MAF.mediaplayer.control.forward();
 												}
 												break;
 											default:
-												if(this.fire("onTransportButtonPress", { button: btnName, action: null })) {
+												if (this.fire("onTransportButtonPress", { button: btnName, action: null })) {
 													log('no default handler for ' + btnName);
 												}
 												break;
@@ -346,11 +348,11 @@ define('MAF.control.MediaTransportOverlay', function () {
 						} else {
 							this.controls.playButton.content.setSource(overlayStyles.sources.playButton);
 						}
-						overlayTimer.ticking = false;
-						if (!this.visible) {
-							if(this.fire("onTransportOverlayShow")) {
-								this.show();
-							}
+						if (this.overlayTimer) {
+							this.overlayTimer.ticking = false;
+						}
+						if (!this.visible && this.fire("onTransportOverlayShow")) {
+							this.show();
 						}
 						break;
 					case states.PLAY:
@@ -453,11 +455,10 @@ define('MAF.control.MediaTransportOverlay', function () {
 				this.body.suicide();
 				delete this.body;
 			}
-			if (overlayTimer !== undefined) {
-				overlayTimer.ticking = false;
-				overlayTimer.onTimerFired = null;
-				overlayTimer = null;
-				delete overlayTimer;
+			if (this.overlayTimer) {
+				this.overlayTimer.ticking = false;
+				this.overlayTimer.onTimerFired = null;
+				delete this.overlayTimer;
 			}
 			this.parent();
 		}
