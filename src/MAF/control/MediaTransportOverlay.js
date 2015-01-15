@@ -110,9 +110,7 @@
  * @event MAF.control.MediaTransportOverlay#onTransportButtonPress
  */
 define('MAF.control.MediaTransportOverlay', function () {
-	var steps = 120;
-	var boundMediaUpdated = false;
-	var boundKeypressHandler = false;
+	var settings = {};
 
 	return new MAF.Class({
 		Extends: MAF.element.Container,
@@ -138,7 +136,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 			onAppended: function (event) {
 				this.createContent();
 				this.viewEventHandler.subscribeTo(this.getView(), ['onUpdateView', 'onHideView', 'onDestroyView'], this);
-				boundMediaUpdated = this.onMediaUpdated.subscribeTo(MAF.mediaplayer, ['onTimeIndexChanged', 'onStateChange', 'onPlayPlaylistEntry'], this);
+				settings[this._classID].boundMediaUpdated = this.onMediaUpdated.subscribeTo(MAF.mediaplayer, ['onTimeIndexChanged', 'onStateChange', 'onPlayPlaylistEntry'], this);
 			},
 			createTimer: function () {
 				this.overlayTimer = new Timer();
@@ -182,21 +180,21 @@ define('MAF.control.MediaTransportOverlay', function () {
 						break;
 					case 'onDestroyView':
 						this.unregisterKeyHandlers();
-						boundMediaUpdated.unsubscribeFrom(MAF.mediaplayer, ['onTimeIndexChanged', 'onStateChange', 'onPlayPlaylistEntry']);
-						boundMediaUpdated = false;
+						settings[this._classID].boundMediaUpdated.unsubscribeFrom(MAF.mediaplayer, ['onTimeIndexChanged', 'onStateChange', 'onPlayPlaylistEntry']);
+						settings[this._classID].boundMediaUpdated = false;
 						break;
 				}
 			},
 
 			registerKeyHandlers: function () {
-				if (!boundKeypressHandler)
-					boundKeypressHandler = this.onKeyPressHandler.subscribeTo(MAF.application, ['onWidgetKeyPress'], this);
+				if (!settings[this._classID].boundKeypressHandler)
+					settings[this._classID].boundKeypressHandler = this.onKeyPressHandler.subscribeTo(MAF.application, ['onWidgetKeyPress'], this);
 			},
 
 			unregisterKeyHandlers: function () {
-				if (boundKeypressHandler) {
-					boundKeypressHandler.unsubscribeFrom(MAF.application, ['onWidgetKeyPress']);
-					boundKeypressHandler = false;
+				if (settings[this._classID].boundKeypressHandler) {
+					settings[this._classID].boundKeypressHandler.unsubscribeFrom(MAF.application, ['onWidgetKeyPress']);
+					settings[this._classID].boundKeypressHandler = false;
 				}
 			},
 
@@ -206,7 +204,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 						var states = MAF.mediaplayer.constants.states;
 						if ([states.PLAY, states.FORWARD, states.REWIND].contains(MAF.mediaplayer.player.currentPlayerState)) {
 							this.updateTimeIndexDisplay();
-							this.moveProgressBar(Math.round((Math.ceil(event.payload.timeIndex) / Math.ceil(event.payload.duration)) * steps));
+							this.moveProgressBar(Math.round((Math.ceil(event.payload.timeIndex) / Math.ceil(event.payload.duration)) * settings[this._classID].steps));
 						}
 						break;
 					case 'onStateChange':
@@ -385,7 +383,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 			},
 
 			moveProgressBar: function (step) {
-				var increment = this.progressBar.width / steps;
+				var increment = this.progressBar.width / settings[this._classID].steps;
 				this.controls.troth.setStyles({
 					width: Math.round(step * increment),
 					hOffset: 0
@@ -395,7 +393,8 @@ define('MAF.control.MediaTransportOverlay', function () {
 
 		initialize: function () {
 			this.parent();
-			steps = 180;
+			settings[this._classID] = {};
+			settings[this._classID].steps = 180;
 			this.createTimer();
 			this.onAppended.subscribeOnce( this, ['onAppend'], this );
 		},
@@ -460,6 +459,8 @@ define('MAF.control.MediaTransportOverlay', function () {
 				this.overlayTimer.onTimerFired = null;
 				delete this.overlayTimer;
 			}
+			settings[this._classID] = null;
+			delete settings[this._classID];
 			this.parent();
 		}
 	});
