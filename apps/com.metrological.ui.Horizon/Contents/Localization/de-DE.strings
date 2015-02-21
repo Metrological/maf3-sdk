@@ -83,3 +83,7 @@
 "START_REORDERFAVO" = "Dr&uuml;cken Sie OK, um die App innerhalb Ihrer FAVORITEN zu bewegen. Dr&uuml;cken Sie BACK zum Beenden.";
 "STOP_REORDERFAVO" = "Dr&uuml;cken Sie HOCH, LINKS, RECHTS und RUNTER um die App zu bewegen und dr&uuml;cken Sie OK, um die neue Position zu best&auml;tigen. Drücken Sie BACK zum Beenden.";
 "BLOCKEDTEXT" = "Wenn Sie zum TV Sender zurückkehren möchten, drücken Sie BACK";
+"PaymentCode409" = "Sie haben diese App bereits erworben.”;
+"PaymentCode400" = "Etwas ist schief gelaufen, bitte versuchen Sie es erneut oder wenden Sie sich.”;
+"PaymentCode420" = "Sie haben Ihr tägliches Kreditlimit erreicht.”;
+"PaymentCode500" = "Etwas ist schief gelaufen, bitte versuchen Sie es erneut oder wenden Sie sich an Ihren Anbieter.”;

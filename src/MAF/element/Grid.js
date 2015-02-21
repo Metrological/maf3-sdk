@@ -447,6 +447,7 @@ define('MAF.element.Grid', function () {
 			this.body = new MAF.element.Core({
 				element: List,
 				styles: {
+//					transform: 'translateZ(0)',
 					width: 'inherit',
 					height: 'inherit',
 					overflow: 'inherit'
@@ -753,7 +754,7 @@ define('MAF.element.Grid', function () {
 				return;
 			}
 			newindex = Math.min(rendered-1, newindex);
-			if (focused != newindex) {
+			if (focused > -1) {
 				this.blurCell(focused);
 			}
 			if (newindex > -1 && this.cells && this.cells[newindex]) {

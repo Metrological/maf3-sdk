@@ -83,3 +83,7 @@
 "START_REORDERFAVO" = "Naciśnij przycisk OK, aby przesunąć aplikację. Aby anulować, naciśnij w dowolnym momencie przycisk WSTECZ ";
 "STOP_REORDERFAVO" = "Do zmiany pozycji aplikacji możesz używać przycisków W GÓRĘ, W LEWO, W PRAWO i W DÓŁ. Aby potwierdzić nową pozycję, naciśnij przycisk OK. Aby anulować, naciśnij w dowolnym momencie przycisk WSTECZ";
 "BLOCKEDTEXT" = "Naciśnij przycisk WSTECZ, aby powrócić do telewizji na żywo";
+"PaymentCode409" = ”Wykupiłeś już dostęp do tej aplikacji.”;
+"PaymentCode400" = ”Coś poszło nie tak. Spróbuj ponownie lub skontaktuj się z UPC Polska.”;
+"PaymentCode420" = ”Przekroczyłeś dopuszczalną, dzienną liczbę kredytów.”;
+"PaymentCode500" = ”Coś poszło nie tak. Spróbuj ponownie lub skontaktuj się z UPC Polska.”;

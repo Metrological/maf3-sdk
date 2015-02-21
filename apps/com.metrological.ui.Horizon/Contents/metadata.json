@@ -1,11 +1,17 @@
 {
 	"identifier": "com.metrological.ui.Horizon",
 	"name": "Horizon UI",
-	"version": "2.0.1",
+	"version": "2.0.31",
 	"author": "Liberty Global",
 	"company": "Liberty Global",
 	"copyright": "Liberty Global",
+	"ui": true,
 	"description": "Horizon UI",
+	"whitelist": {
+		"operators": {
+			"liberty": []
+		}
+	},
 	"scripts": "Javascript/init.js",
 	"images": {
 		"icon": {

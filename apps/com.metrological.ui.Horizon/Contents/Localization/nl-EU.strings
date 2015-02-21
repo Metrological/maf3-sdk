@@ -84,5 +84,9 @@
 "REORDERFAVO_SELECTED" = "Selecteer de app die u wilt verplaatsen. Gebruik de pijltjes om de app te verplaatsen. Druk op OK om te annuleren.";
 "REORDERFAVO_APP" = "Verplaatsen %s";
 "START_REORDERFAVO" = "Druk op OK om deze app toe te voegen aan uw favorieten. Druk op BACK om uw keuze te annuleren.";
-"STOP_REORDERFAVO"" = ""Gebruik de pijltjestoetsen om te app op de juiste plaats te zetten. Druk op BACK om uw keuze te annuleren.";
+"STOP_REORDERFAVO" = "Gebruik de pijltjestoetsen om te app op de juiste plaats te zetten. Druk op BACK om uw keuze te annuleren.";
 "BLOCKEDTEXT" = "Druk op TERUG om terug te keren naar live-TV";
+"PaymentCode409" = "U heeft deze app al.”;
+"PaymentCode400" = "Er ging iets mis. Probeer het nogmaals of neem contact op met uw provider.”;
+"PaymentCode420" = "U heeft uw dagelijkse kredietlimiet bereikt.”;
+"PaymentCode500" = "Er ging iets mis. Probeer het nogmaals of neem contact op met uw provider.”;

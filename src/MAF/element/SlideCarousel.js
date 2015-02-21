@@ -206,7 +206,7 @@ define('MAF.element.SlideCarousel', function() {
 				cell = this.config.cellCreator.call(this).setStyles(dims);
 				cell.setStyles({
 					'transform': 'translateZ(0)',
-					opacity: (pos === this.config.focusIndex) ? 1 : (pos === this.currentDataset.length-1) ? 0 : this.opacityOffsets[pos]
+					opacity: (pos === this.config.focusIndex) ? 1 : (!this.config.carousel && pos < this.config.focusIndex) ? 0 : (pos === this.currentDataset.length-1) ? 0 : this.opacityOffsets[pos]
 				});
 				cell.grid = this;
 				cell.appendTo(this);

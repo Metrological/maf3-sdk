@@ -62,9 +62,9 @@
 "CATEGORY_FAVORITES" = "OBLÍBENÉ";
 "CATEGORY_VIDEODE" = "TV & VIDEO";
 "CATEGORY_VIDEO" = "TV & VIDEO";
-"CATEGORY_NEWSDE" = "ZPRÁVY & INFORMACE";
+"CATEGORY_NEWSDE" = "ZPRÁVY & INFO";
 "CATEGORY_NEWSIE" = "ZPRÁVY & SPORT";
-"CATEGORY_NEWS" = "ZPRÁVY & INFORMACE";
+"CATEGORY_NEWS" = "ZPRÁVY & INFO";
 "CATEGORY_SOCIAL" = "SOCIAL TV";
 "CATEGORY_GAMES" = "HRY";
 "CATEGORY_GAMESIE" = "HRY";
@@ -92,4 +92,7 @@
 "START_REORDERFAVO" = "Zvolte OK pro zařazení aplikace mezi OBLÍBENÉ. Stiskněte ZPĚT pro zrušení";
 "STOP_REORDERFAVO" = "Zvolte NAHORU, DOLEVA, DOPRAVA nebo DOLŮ pro přesun aplikace a stiskněte OK pro potvrzení nové pozice. Stiskněte ZPĚT pro zrušení";
 "BLOCKEDTEXT" = "Stiskněte ZPĚT pro navrácení do sekce ŽIVÉ VYSÍLÁNÍ";
-
+"PaymentCode400" = "Vámi zvolená "služba" přestala fungovat, kontaktujte svého poskytovatele.”;
+"PaymentCode420" = "Dosáhli jste povoleného denního limitu (nedostatek prostředků)."
+"PaymentCode500" = "Vámi zvolená "služba" přestala fungovat, kontaktujte svého poskytovatele.”;
+"PaymentCode409" = "Tuto aplikaci již máte k dispozici.";

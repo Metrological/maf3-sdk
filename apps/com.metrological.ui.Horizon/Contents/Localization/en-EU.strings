@@ -99,3 +99,7 @@
 "START_REORDERFAVO" = "Press OK to move App in FAVOURITES. Press BACK at any time to cancel";
 "STOP_REORDERFAVO" = "Press UP, LEFT, RIGHT and DOWN to reposition the App and press OK to confirm the new position. Press BACK at any time to cancel";
 "BLOCKEDTEXT" = "Press BACK to return to Live TV";
+"PaymentCode400" = "Something went wrong, please try again or contact your provider.";
+"PaymentCode420" = "You have reached your creditlimit.";
+"PaymentCode500" = "Something went wrong, please try again or contact your provider.";
+"PaymentCode409" = "You already own this app.";

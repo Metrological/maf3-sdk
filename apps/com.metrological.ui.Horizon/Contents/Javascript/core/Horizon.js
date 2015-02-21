@@ -3,7 +3,8 @@ var Horizon = (function (body) {
 		fontColor = 'rgba(255,255,255,.4)',
 		showing = true,
 		visible = true,
-		sideBySide = false;
+		sideBySide = false/*,
+		gpu = widget.getSetting('gpu')*/;
 
 	Theme.Fonts.add('InterstatePro-Bold', 'Fonts/InterstatePro-Bold');
 	Theme.Fonts.add('InterstatePro-ExtraLight', 'Fonts/InterstatePro-ExtraLight');
@@ -18,7 +19,9 @@ var Horizon = (function (body) {
 	MAF.mediaplayer.init();
 
 	body.setStyles({
+		transform: /*gpu !== false ? 'scale3d(1,1,1)' : */'scale(1)',
 		transformOrigin: '50% 50%',
+		transition: widget.getSetting('animation') !== false ? 'all 0.4s ease' : null,
 		backgroundRepeat: 'no-repeat',
 		backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png')
 	});
@@ -61,6 +64,7 @@ var Horizon = (function (body) {
 	var subtitle = new Text({
 		label: $_('ALL_APPS'),
 		styles: {
+			transform: 'translateZ(0)',
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,
 			fontFamily: 'InterstatePro-Light',
@@ -71,6 +75,7 @@ var Horizon = (function (body) {
 	var clock = new Text({
 		label: Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase(),
 		styles: {
+			transform: 'translateZ(0)',
 			hAlign: 'right',
 			hOffset: 134,
 			vOffset: title.vOffset,
@@ -87,6 +92,7 @@ var Horizon = (function (body) {
 
 	var playing = new Text({
 		styles: {
+			transform: 'translateZ(0)',
 			width: 800,
 			height: 40,
 			hOffset: 560,
@@ -120,12 +126,10 @@ var Horizon = (function (body) {
 
 	function updateHeader() {
 		if (blocked()) {
-			body.setStyle('transition', null);
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
 			blockedText.visible = !showing;
 		} else if (sideBySide) {
 			blockedText.visible = false;
-			body.setStyle('transition', null);
 			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
 		} else if (!visible) {
 			blockedText.visible = false;
@@ -134,20 +138,20 @@ var Horizon = (function (body) {
 		container.setStyle('backgroundImage', widget.getPath(ApplicationManager.active === widget.identifier ? 'Images/Horizon/HeaderBig.png' : 'Images/Horizon/Header.png'));
 	}
 
+	var animationTimer;
+
 	function hideNowPlaying(callback) {
 		if (!visible && !sideBySide && !blocked() && !Browser.activevideo) {
 			updateHeader();
-			body.animate({
-				scale: 1.6,
-//				opacity: 0,
-				delay: 5,
-				duration: 0.6,
-				callback: callback && callback.call ? callback : function () {
-					body.setStyle('transition', null);
-				}
-			});
+			if (animationTimer) {
+				clearTimeout(animationTimer);
+				animationTimer = undefined;
+			}
+			animationTimer = (function () {
+				body.setStyle('transform', /*gpu !== false ? 'scale3d(1.6,1.6,1.6)' : */'scale(1.6)');
+				if (callback && callback.call) callback();
+			}).delay(5000);
 		} else if (callback && callback.call) {
-			body.setStyle('transition', null);
 			callback();
 		}
 	}
@@ -155,16 +159,15 @@ var Horizon = (function (body) {
 	function showNowPlaying(callback) {
 		if (!visible && !Browser.activevideo) {
 			updateHeader();
-			body.animate({
-				scale: 1,
-//				opacity: 1,
-				duration: 0.6,
-				callback: callback && callback.call ? callback : function () {
-					body.setStyle('transition', null);
-				}
-			});
+			if (animationTimer) {
+				clearTimeout(animationTimer);
+				animationTimer = undefined;
+			}
+			animationTimer = (function () {
+				body.setStyle('transform', /*gpu !== false ? 'scale3d(1,1,1)' : */'scale(1)');
+				if (callback && callback.call) callback();
+			}).delay(0);
 		} else if (callback && callback.call) {
-			body.setStyle('transition', null);
 			callback();
 		}
 	}

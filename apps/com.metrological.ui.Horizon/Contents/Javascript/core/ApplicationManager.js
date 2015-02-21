@@ -108,11 +108,11 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-							transform: 'translateZ(0)',
+//							transform: 'translateZ(0)',
 							overflow: 'visible',
 							backgroundColor: 'rgba(34,34,34,.93)',
 							borderRadius: '10px',
-							boxShadow: '0 0 3px 3px #262a35',
+//							boxShadow: '0 0 3px 3px #262a35',
 							width: 588,
 							height: 1032,
 							top: 22,
@@ -258,26 +258,26 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-							transform: 'translateZ(0)',
+//							transform: 'translateZ(0)',
 							width: 1920,
 							height: 1080
 						}
 					}).appendTo(fragment);
-
-					new Text({
-						id: '@' + type + '-loading',
-						label: FontAwesome.get('refresh'),
-						frozen: true,
-						styles: {
-							backgroundColor: 'black',
-							opacity: 0.7,
-							zIndex: Animator.ZORDER + 1,
-							width: 1920,
-							height: 1080,
-							anchorStyle: 'center',
-							fontSize: 40
-						}
-					}).appendTo(template);
+					if (identifier !== widget.identifier)
+						new Text({
+							id: '@' + type + '-loading',
+							label: FontAwesome.get('refresh'),
+							frozen: true,
+							styles: {
+								backgroundColor: 'black',
+								opacity: 0.7,
+								zIndex: Animator.ZORDER + 1,
+								width: 1920,
+								height: 1080,
+								anchorStyle: 'center',
+								fontSize: 40
+							}
+						}).appendTo(template);
 					body.appendChild(fragment);
 					break;
 				case 'dialog':
@@ -785,7 +785,8 @@ var loadTemplate = (function () {
 								keyboard = new MAF.keyboard.ReuseKeyboard({
 									maxLength: (data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99,
 									controlSize: 'small',
-									layout: (data && data.conf && data.conf.layout) ? data.conf.layout : 'alphanumeric'
+									layout: (data && data.conf && data.conf.layout) ? data.conf.layout : 'alphanumeric',
+									autoFocus: (widget.getSetting('focusKeyboard') === false) ? false : true
 								}).appendTo(keyboardContainer);
 								KeyboardValueManager.setMaxLength((data && data.conf && data.conf.maxLength) ? data.conf.maxLength : 99);
 								keyboardContainer.wantsFocus = true;
@@ -980,7 +981,7 @@ var loadTemplate = (function () {
 				id: id,
 				focus: true,
 				frozen: true,
-				styles: type === 'sidebar' ? { top: 64, transform: 'translateZ(0)' } : { transform: 'translateZ(0)' }
+				styles: type === 'sidebar' ? { top: 64/*, transform: 'translateZ(0)'*/ } : /*{ transform: 'translateZ(0)' }*/ null
 			}).appendTo(template);
 		}
 		current[identifier] = type;
