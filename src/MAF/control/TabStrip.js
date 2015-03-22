@@ -195,7 +195,7 @@ define('MAF.control.TabStrip', function () {
 					}
 					w += button.element.clientWidth + (buttonStyles.marginLeft * 2) + parseInt(buttonStyles.borderLeft, 10) + parseInt(buttonStyles.borderRight, 10);
 				}, this);
-				this.body.width = w < this.width ? 'auto' : w;
+				this.body.width = w;
 				if (this.element.hasFocus) {
 					var fidx = parseInt(this.focusIndex, 10) || 0;
 					this.focusButton(fidx);

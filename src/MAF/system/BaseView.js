@@ -27,43 +27,38 @@
  * @extends MAF.element.Core
  */
 define('MAF.system.BaseView', function () {
-	var messagecenterlisteners = {};
-	var generateTransition = function (view, type) {
+	var minimalRendering = getSetting('render') === 'minimal',
+		animationSupport = getSetting('animation') !== false,
+		messagecenterlisteners = {};
+
+	function generateTransition(view, type) {
 		var eventType = 'on' + type.capitalize();
-		if (type === 'updateView') {
-			view.thaw();
-		}
-		if (view.transition && view.transition[type]) {
+		if (type === 'updateView') view.thaw();
+		if (animationSupport && view.transition && view.transition[type]) {
 			var animation = Object.merge({}, view.transition[type], {
 				events: {
 					onAnimationEnded: function () {
 						if ((type === 'hideView' || type === 'unselectView') && document.activeElement && view.element === document.activeElement.window) {
 							return;
 						}
-						if (view.fire(eventType)) {
-							view[type].call(view);
-						}
-						if (type === 'hideView') {
-							view.freeze();
-						}
+						if (view.fire(eventType)) view[type].call(view);
+						if (type === 'hideView') view.freeze();
 					}
 				}
 			});
 			view.animate(animation);
 		} else {
-			if (view.fire(eventType)) {
-				view[type].call(view);
-			}
-			if (type === 'hideView') {
-				view.freeze();
-			}
+			if (view.fire(eventType)) view[type].call(view);
+			if (type === 'hideView') view.freeze();
 		}
-	};
+	}
 
 	return new MAF.Class({
 		ClassName: 'BaseView',
 
 		Extends: MAF.element.Core,
+
+		viewBackParams: null,
 
 		Protected: {
 			initElement: function () {
@@ -74,11 +69,10 @@ define('MAF.system.BaseView', function () {
 				}
 			},
 			onLoadView: function () {
-				if (this.fire('onCreateView')) {
-					if (MAF.Browser.webkit) {
-						this.thaw();
-					}
-					this.createView();
+				var view = this;
+				if (view.fire('onCreateView')) {
+					if (!minimalRendering) view.thaw();
+					view.createView();
 				}
 			},
 			onUnloadView: function () {
@@ -285,15 +279,18 @@ define('MAF.system.BaseView', function () {
 		 * @todo Not working correctly yet.
 		 */
 		registerMessageCenterListenerControl: function (control) {
-			if (control && control.fire) {
-				messagecenterlisteners[this._classID].push(control.fire.subscribeTo(MAF.messages, MAF.messages.eventType, control));
-			}
+//			if (control && control.fire)
+//				messagecenterlisteners[this._classID].push(control.fire.subscribeTo(MAF.messages, MAF.messages.eventType, control));
 		},
 
 		suicide: function () {
 			delete messagecenterlisteners[this._classID];
+			delete this.rendered;
+			delete this.selected;
 			delete this.persist;
 			delete this.cache;
+			delete this.historyDirection;
+			delete this.historyNoSave;
 			delete this.viewBackParams;
 			delete this.transition;
 			Object.forEach(this.elements, function (key, obj) {

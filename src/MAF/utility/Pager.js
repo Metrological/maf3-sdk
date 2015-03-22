@@ -24,6 +24,9 @@
  * @param {Number} [fetchscope] Scope object in which to run the fetchCallback method in.
  * @param {Number} [buffersize] Size of the page
  */
+/**
+ *
+ */
 define('MAF.utility.Pager', function () {
 	var classIndex = {};
 	return new MAF.Class({
@@ -318,6 +321,9 @@ define('MAF.utility.Pager', function () {
 		},
 
 		suicide: function () {
+			var internal = classIndex[this._classID];
+			if (internal)
+				delete internal.storage;
 			delete classIndex[this._classID];
 		}
 	});

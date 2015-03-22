@@ -33,7 +33,7 @@
  * @event MAF.element.Button#onSecureFailed
  */
 define('MAF.element.Button', function () {
-	var onSecureNeeded = function (event) {
+	function onSecureNeeded(event) {
 		var config = this.config,
 			method = 'verifySecure',
 			callback = onSecureCallback.bindTo(this);
@@ -43,13 +43,11 @@ define('MAF.element.Button', function () {
 		} else {
 			this[method](callback);
 		}
-	};
-
-	var onSecureCallback = function (result) {
+	}
+	function onSecureCallback(result) {
 		var event = arguments.callee.caller.__event__ || null;
 		this.fire((Boolean(result) ? 'onSelect' : 'onSecureFailed'), null, event);
-	};
-
+	}
 	return new MAF.Class({
 		ClassName: 'BaseButton',
 

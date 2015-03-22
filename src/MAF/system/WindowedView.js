@@ -20,7 +20,7 @@
  * @extends MAF.system.BaseView
  */
 define('MAF.system.WindowedView', function () {
-	var performControlInspection = function (statePacket, focusOnly) {
+	function performControlInspection(statePacket, focusOnly) {
 		statePacket = Object.merge(this.persist, statePacket, this.backParams);
 		if (statePacket) {
 			Object.forEach(this.controls, function (key, controls) {
@@ -33,24 +33,25 @@ define('MAF.system.WindowedView', function () {
 				}
 			}, this);
 		}
-	};
-
-	var tellControlToInspect = function (control, packet, focusOnly) {
+	}
+	function tellControlToInspect(control, packet, focusOnly) {
 		if (control.config && control.config.guid && control.inspectStatePacket && control.inspectStatePacket.call) {
 			control.inspectStatePacket.call(control, packet, focusOnly);
 		}
-	};
-
-	var tellControlToSave = function (control, savedData) {
+	}
+	function tellControlToSave(control, savedData) {
 		if (control.config && control.config.guid && control.generateStatePacket && control.generateStatePacket.call) {
 			savedData[control.config.guid] = control.generateStatePacket.call(control);
 		}
-	};
-
+	}
 	return new MAF.Class({
 		ClassName: 'WindowedView',
 
 		Extends: MAF.system.BaseView,
+
+		config: {
+			loadingOverlay: true
+		},
 
 		Protected: {
 			dispatchEvents: function (event) {
@@ -84,11 +85,11 @@ define('MAF.system.WindowedView', function () {
 				}
 			},
 			onLoadView: function (event) {
-				MAF.utility.LoadingOverlay.show();
+				if (this.config.loadingOverlay) MAF.utility.LoadingOverlay.show();
 				this.parent(event);
 			},
 			onShowView: function (event) {
-				MAF.utility.LoadingOverlay.show();
+				if (this.config.loadingOverlay) MAF.utility.LoadingOverlay.show();
 				this.parent(event);
 				
 			},
@@ -98,7 +99,7 @@ define('MAF.system.WindowedView', function () {
 					this.resetFocus();
 				}
 				performControlInspection.call(this, this.getControlData('statePacket'), false);
-				MAF.utility.LoadingOverlay.hide();
+				if (this.config.loadingOverlay) MAF.utility.LoadingOverlay.hide();
 			},
 			onUnselectView: function (event) {
 				this.parent(event);
@@ -138,6 +139,11 @@ define('MAF.system.WindowedView', function () {
 					this.element.focus();
 				}
 			}
+		},
+
+		suicide: function () {
+			delete this.backParams;
+			this.parent();
 		}
 	});
 });

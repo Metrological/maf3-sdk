@@ -33,7 +33,7 @@
  * @memberof MAF.control.Header
  */
 define('MAF.control.Header', function () {
-	var createContent = function () {
+	function createContent() {
 		var config = this.config,
 			className = config.ClassName || this.ClassName,
 			headerStyle = config.headerStyle && config.headerStyle.capitalize() || '';
@@ -43,8 +43,7 @@ define('MAF.control.Header', function () {
 			label: config.label,
 			styles: config.textStyles
 		}).appendTo(this);
-	};
-
+	}
 	return new MAF.Class({
 		ClassName: 'ControlHeader',
 

@@ -83,9 +83,10 @@ define('MAF.element.Container', function () {
 				});
 				setter(this, 'disabled', function (disabled) {
 					disabled = disabled || false;
-					if (this.disabled !== disabled && this.element) {
+					var el = this.element;
+					if (this.disabled !== disabled) {
 						this.fire(disabled ? 'onDisable' : 'onEnable');
-						this.element.disabled = disabled;
+						if (el) el.disabled = disabled;
 						this.fire('onChangeDisabled', {
 							disabled: disabled
 						});

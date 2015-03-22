@@ -3,9 +3,12 @@ var AppsView = new MAF.Class({
 
 	Extends: MAF.system.FullscreenView,
 
+	config: {
+		loadingOverlay: false
+	},
+
 	state: null,
 	firstCategory: 1,
-	disableResetFocus: true,
 	delayCatagoryLoading: 800,
 	delayedInitialFocus: 800,
 	maxFavorites: 22,
@@ -15,14 +18,17 @@ var AppsView = new MAF.Class({
 		view.parent();
 		view.registerMessageCenterListenerCallback(view.dataHasChanged);
 		view.onActivateBackButton = view.handleFavoriteBack.subscribeTo(MAF.application, 'onActivateBackButton', view);
+		view.skipTOS = widget.getSetting('tos') === false || currentAppConfig.get('tos') === TOS;
 	},
 
 	dataHasChanged: function (event) {
 		if (event.payload.value && event.payload.key === 'myApps') {
 			var view = this,
+				elements = view.elements,
 				controls = view.controls;
 			if (!view.ready) return view.appsReady();
-			controls.categories.changeDataset(ApplicationManager.getCategories(), true);
+			elements.categories.eliminate('active');
+			elements.categories.changeDataset(ApplicationManager.getCategories(), true);
 			if (view.category !== 'favorites') controls.apps.changeDataset(ApplicationManager.getApplicationsByCategory(view.category), true);
 		}
 	},
@@ -120,167 +126,152 @@ var AppsView = new MAF.Class({
 		return this.getFavorites().indexOf(id);
 	},
 
-	destroyTOSDialog: function () {
-		var view = this;
-		if (view.tos) {
-			delete view.elements.tosAccept;
-			view.tos.suicide();
-			delete view.tos;
-		}
-	},
-
-	showTOSDialog: function () {
-		var view = this;
-		if (!document.body.visible || !view.ready || view.frozen) return;
-		if (!view.tos) {
-			var categories = view.controls.categories,
-				tos = filesystem.readFile('About/' + profile.locale + '/tos.txt', true);
-			if (!tos) {
-				categories.focus();
-			} else {
-				view.tos = new MAF.element.Container({
-					styles: {
-						width: view.width,
-						height: view.height,
-						backgroundColor: 'rgba(0,0,0,.6)'
-					}
-				}).appendTo(view);
-
-				var tosHeader = new MAF.element.Text({
-					label: $_('TOS_HEADER'),
-					styles: {
-						fontSize: 42,
-						fontFamily: 'UPCDigital-Bold',
-						paddingTop: 4,
-						borderTop: '2px solid rgba(255,255,255,.4)',
-						borderBottom: '2px solid rgba(255,255,255,.4)',
-						width: 1110,
-						height: 133,
-						hOffset: (view.width - 1110) / 2,
-						vOffset: 200
-					}
-				}).appendTo(view.tos);
-
-				var tosBody = new MAF.element.TextGrid({
-					label: tos,
-					styles: {
-						fontSize: 27,
-						fontFamily: 'UPCDigital-Regular',
-						wrap: true,
-						width: tosHeader.width,
-						hOffset: tosHeader.hOffset,
-						vOffset: tosHeader.outerHeight + 11
-					}
-				}).appendTo(view.tos);
-
-				var tosAccept = view.elements.tosAccept = new MAF.control.TextButton({
-					label: $_('AGREE').toUpperCase(),
-					theme: false,
-					styles: {
-						fontFamily: 'InterstatePro-ExtraLight',
-						borderTop: '6px solid white',
-						fontSize: 60,
-						width: tosBody.width,
-						height: 90,
-						hOffset: tosBody.hOffset,
-						vOffset: (tosBody.textHeight > 252) ? tosBody.outerHeight + 25 : 590
-					},
-					textStyles: {
-						hOffset: -10
-					},
-					events: {
-						onSelect: function () {
-							view.tos.hide();
-							currentAppConfig.set('tos', TOS);
-							if (view.data.startApp) {
-								var id = view.data.startApp.id,
-									params = view.data.startApp.params;
-								ApplicationManager.load(id);
-								ApplicationManager.open(id, params);
-								delete view.data.startApp;
-							} else {
-								categories.focus();
-							}
-							view.destroyTOSDialog();
-						},
-						onFocus: function () {
-							this.setStyle('fontFamily', 'InterstatePro-Bold');
-						},
-						onBlur: function () {
-							this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
-						},
-						onNavigate: function (event) {
-							event.stop();
-							if (event.payload.direction === 'down') tosCancel.focus();
-						}
-					}
-				}).appendTo(view.tos);
-
-				var tosCancel = new MAF.control.TextButton({
-					label: $_('CANCEL').toUpperCase(),
-					theme: false,
-					styles: {
-						fontFamily: 'InterstatePro-ExtraLight',
-						fontSize: 60,
-						width: tosAccept.width,
-						height: 75,
-						hOffset: tosAccept.hOffset,
-						vOffset: tosAccept.outerHeight + 2
-					},
-					textStyles: {
-						hOffset: -10
-					},
-					events: {
-						onSelect: function () {
-							ApplicationManager.exit();
-							view.destroyTOSDialog();
-						},
-						onFocus: function () {
-							this.setStyle('fontFamily', 'InterstatePro-Bold');
-						},
-						onBlur: function () {
-							this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
-						},
-						onNavigate: function (event) {
-							event.stop();
-							if (event.payload.direction === 'up') tosAccept.focus();
-						}
-					}
-				}).appendTo(view.tos);
-
-				tosAccept.focus();
+	showTOS: function () {
+		var view = this,
+			apps = view.controls.apps,
+			categories = view.elements.categories,
+			tos = filesystem.readFile('About/' + profile.locale + '/tos.txt', true);
+		if (!tos) return categories.focus();
+		var tosContainer = new MAF.element.Container({
+			styles: {
+				width: view.width,
+				height: view.height,
+				backgroundColor: 'rgba(0,0,0,.6)'
 			}
-		}
+		}).appendTo(view);
+
+		var tosHeader = new MAF.element.Text({
+			label: $_('TOS_HEADER'),
+			styles: {
+				fontSize: 42,
+				fontFamily: 'UPCDigital-Bold',
+				paddingTop: 4,
+				borderTop: '2px solid rgba(255,255,255,.4)',
+				borderBottom: '2px solid rgba(255,255,255,.4)',
+				width: 1110,
+				height: 133,
+				hOffset: (view.width - 1110) / 2,
+				vOffset: 200
+			}
+		}).appendTo(tosContainer);
+
+		var tosBody = new MAF.element.TextGrid({
+			label: tos,
+			styles: {
+				fontSize: 27,
+				fontFamily: 'UPCDigital-Regular',
+				wrap: true,
+				width: tosHeader.width,
+				hOffset: tosHeader.hOffset,
+				vOffset: tosHeader.outerHeight + 11
+			}
+		}).appendTo(tosContainer);
+
+		var tosAccept = new MAF.control.TextButton({
+			id: 'tos',
+			label: $_('AGREE').toUpperCase(),
+			theme: false,
+			styles: {
+				fontFamily: 'InterstatePro-ExtraLight',
+				borderTop: '6px solid white',
+				fontSize: 60,
+				width: tosBody.width,
+				height: 90,
+				hOffset: tosBody.hOffset,
+				vOffset: (tosBody.textHeight > 252) ? tosBody.outerHeight + 25 : 590
+			},
+			textStyles: {
+				hOffset: -10
+			},
+			events: {
+				onSelect: function () {
+					tosContainer.suicide();
+					view.skipTOS = true;
+					currentAppConfig.set('tos', TOS);
+					categories.setDisabled(false);
+					apps.setDisabled(false);
+					if (view.data.startApp) {
+						var id = view.data.startApp.id,
+							params = view.data.startApp.params;
+						ApplicationManager.load(id);
+						ApplicationManager.open(id, params);
+						delete view.data.startApp;
+					} else {
+						categories.focus();
+					}
+				},
+				onFocus: function () {
+					this.setStyle('fontFamily', 'InterstatePro-Bold');
+				},
+				onBlur: function () {
+					this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
+				},
+				onNavigate: function (event) {
+					event.stop();
+					if (event.payload.direction === 'down') tosCancel.focus();
+				}
+			}
+		}).appendTo(tosContainer);
+
+		var tosCancel = new MAF.control.TextButton({
+			label: $_('CANCEL').toUpperCase(),
+			theme: false,
+			styles: {
+				fontFamily: 'InterstatePro-ExtraLight',
+				fontSize: 60,
+				width: tosAccept.width,
+				height: 75,
+				hOffset: tosAccept.hOffset,
+				vOffset: tosAccept.outerHeight + 2
+			},
+			textStyles: {
+				hOffset: -10
+			},
+			events: {
+				onSelect: function () {
+					ApplicationManager.exit();
+				},
+				onFocus: function () {
+					this.setStyle('fontFamily', 'InterstatePro-Bold');
+				},
+				onBlur: function () {
+					this.setStyle('fontFamily', 'InterstatePro-ExtraLight');
+				},
+				onNavigate: function (event) {
+					event.stop();
+					if (event.payload.direction === 'up') tosAccept.focus();
+				}
+			}
+		}).appendTo(tosContainer);
+
+		tosAccept.focus();
 	},
 
 	appsReady: function () {
-		var view = this;
+		var view = this,
+			elements = view.elements,
+			controls = view.controls;
 		if (view.ready !== true) {
 			view.ready = true;
-			var categories = view.controls.categories,
-				apps = view.controls.apps,
-				tos = widget.getSetting('tos');
-			categories.setDisabled(false);
-			apps.setDisabled(false);
-			if (tos === false || currentAppConfig.get('tos') === TOS)
-				categories.focus();
-			else if (tos !== false)
-				view.showTOSDialog();
+			if (view.skipTOS !== true) return;
+			controls.apps.setDisabled(false);
+			elements.categories.setDisabled(false).focus();
 		}
 	},
 
 	createView: function () {
 		var view = this,
+			elements = view.elements,
 			controls = view.controls,
-			elements = view.elements;
+			categories = ApplicationManager.getCategories();
 
-		controls.categories = new MAF.element.Grid({
-			guid: 'categories',
+		elements.categories = new MAF.element.Grid({
 			rows: 9,
 			columns: 1,
 			carousel: true,
 			orientation: 'vertical',
-			dataset: ApplicationManager.getCategories(),
+			manageWaitIndicator: false,
+			dataset: categories,
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
 					styles: Object.merge(this.getCellDimensions(), {
@@ -290,17 +281,18 @@ var AppsView = new MAF.Class({
 					}),
 					events: {
 						onFocus: function () {
-							var cell = this,
-								category = cell.getCellDataItem(),
+							var category = cell.getCellDataItem(),
 								grid = cell.grid,
 								apps = controls.apps,
-								direction = apps.retrieve('navigating');
+								direction = apps.retrieve('navigating'),
+								active = grid.retrieve('active');
 							if (cell.category.element.textWidth > cell.category.width)
 								cell.category.scrolling = true;
 							if (!direction) cell.setStyle('transform', 'scale(1.2)');
 							cell.category.setStyle('fontFamily', 'InterstatePro-Bold');
-							if (view.categoryCell && view.categoryCell !== cell.category) view.categoryCell.setStyle('fontFamily', 'InterstatePro-ExtraLight');
-							view.categoryCell = cell.category;
+							if (active && active !== cell.category)
+								active.setStyle('fontFamily', 'InterstatePro-ExtraLight');
+							grid.store('active', cell.category);
 							if (view.category !== category) {
 								var first = view.category === undefined,
 									forceFocus = false;
@@ -367,10 +359,9 @@ var AppsView = new MAF.Class({
 							}
 						},
 						onBlur: function () {
-							var cell = this;
 							cell.category.scrolling = false;
 							cell.setStyle('transform', 'scale(1)');
-							if (view.categoryCell !== cell.category)
+							if (cell.grid.retrieve('active') !== cell.category)
 								cell.category.setStyle('fontFamily', 'InterstatePro-ExtraLight');
 						}
 					}
@@ -390,6 +381,10 @@ var AppsView = new MAF.Class({
 			},
 			cellUpdater: function (cell, data) {
 				cell.category.setText($_('CATEGORY_' + data.toUpperCase()));
+				if (view.category === data) {
+					cell.category.setStyle('fontFamily', 'InterstatePro-Bold');
+					cell.grid.store('active', cell.category);
+				}
 			},
 			styles: {
 				width: 376,
@@ -409,9 +404,7 @@ var AppsView = new MAF.Class({
 					}
 				}
 			}
-		}).appendTo(view);
-
-		controls.categories.setDisabled(true);
+		}).appendTo(view).setDisabled(true);
 
 		var cellSize = 215,
 			cellRows = 2,
@@ -425,7 +418,7 @@ var AppsView = new MAF.Class({
 				hAlign: 'right',
 				vAlign: 'bottom',
 				hOffset: 134,
-				vOffset: controls.categories.vOffset + 10,
+				vOffset: elements.categories.vOffset + 10,
 				visible: false
 			}
 		}).appendTo(view);
@@ -435,6 +428,7 @@ var AppsView = new MAF.Class({
 			rows: cellRows,
 			columns: cellColumns,
 			//carousel: true,
+			manageWaitIndicator: false,
 			orientation: 'vertical',
 			cellCreator: function () {
 				var cell = new MAF.element.GridCell({
@@ -456,8 +450,8 @@ var AppsView = new MAF.Class({
 								} else if (view.state === null) {
 									view.state = id;
 									if (view.getFavorites().length === 0) {
-										controls.categories.focus();
-										controls.categories.focusCell(view.firstCategory);
+										elements.categories.focus();
+										elements.categories.focusCell(view.firstCategory);
 										grid.focus();
 									} else {
 										grid.changeDataset(view.getFavoritesCategory(), true);
@@ -495,16 +489,16 @@ var AppsView = new MAF.Class({
 											view.reorder = id;
 											view.cell = cell;
 											view.icon = cell.icon.source;
-											controls.categories.setDisabled(true);
+											elements.categories.setDisabled(true);
 											elements.appDescription.setText($_('STOP_REORDERFAVO'));
-											cell.container.setStyle('backgroundImage', 'Images/IconMove.png');
+											cell.setStyle('backgroundImage', 'Images/IconMove.png');
 										} else if (view.reodered !== undefined) {
 											view.reorderFavorite(view.reorder, view.reodered);
 											delete view.reodered;
 											delete view.reorder;
 											delete view.cell;
 											delete view.icon;
-											controls.categories.setDisabled(false);
+											elements.categories.setDisabled(false);
 											elements.appDescription.setText($_('START_REORDERFAVO'));
 											grid.changeDataset(view.getFavoritesCategory(), true);
 										}
@@ -527,7 +521,7 @@ var AppsView = new MAF.Class({
 						onFocus: function () {
 							var id = cell.getCellDataItem(),
 								isFavorite = view.getFavorites().indexOf(id) !== -1;
-							cell.focus.setStyle('backgroundImage', 'Images/IconFocus.png');
+							cell.focus.element.opacity = 1;
 							cell.setStyles({
 								transform: 'scale(1.25)',
 								zOrder: 2
@@ -552,7 +546,7 @@ var AppsView = new MAF.Class({
 							if (view.reorder && view.cell && cell.retrieve('favbutton') !== true) {
 								var currentIcon = cell.icon.source;
 								view.reodered = cell.getCellDataIndex();
-								cell.container.setStyle('backgroundImage', 'Images/IconMove.png');
+								cell.setStyle('backgroundImage', 'Images/IconMove.png');
 								if (view.cell === cell) {
 									cell.icon.setSource(view.icon);
 								} else if (view.cell) {
@@ -563,7 +557,7 @@ var AppsView = new MAF.Class({
 									cell.original = currentIcon;
 									cell.icon.setSource(view.icon);
 									if (view.cell.icon) {
-										view.cell.container.setStyle('backgroundImage', null);
+										view.cell.setStyle('backgroundImage', null);
 										view.cell.icon.setSource(currentIcon);
 									}
 								}
@@ -571,55 +565,51 @@ var AppsView = new MAF.Class({
 						},
 						onBlur: function () {
 							var id = cell.getCellDataItem();
-							cell.focus.setStyle('backgroundImage', null);
+							cell.focus.element.opacity = 0;
 							cell.setStyles({
 								transform: 'scale(1)',
 								zOrder: 1
 							});
 							elements.appTitle.setText('');
 							elements.appDescription.setText('');
-							if (view.reorder) cell.container.setStyle('backgroundImage', null);
+							if (view.reorder) cell.setStyle('backgroundImage', null);
 							if (view.reorder && view.cell && cell.original && cell.retrieve('favbutton') !== true)
 								view.cell = cell;
 						}
 					}
 				});
 
-				cell.container = new MAF.element.Container({
+				cell.focus = new MAF.element.Image({
+					src: 'Images/IconFocus.png',
 					styles: {
-						width: cell.width,
-						height: cell.height,
-						//transform: 'translateZ(0)',
-						//transformOrigin: '0 0',
-						//transition: 'all 0.2s ease',
-						backgroundRepeat: 'no-repeat'
-					}
-				}).appendTo(cell);
-
-				cell.focus = new MAF.element.Container({
-					styles: {
+						opacity: 0,
 						width: 192,
 						height: 192,
 						hOffset: (cell.width - 192) / 2,
 						vOffset: (cell.height - 192) / 2,
-						backgroundRepeat: 'no-repeat'
+						transform: 'translateZ(0)',
+						transition: widget.getSetting('animation') !== false ? 'opacity 0.2s ease' : null
 					}
-				}).appendTo(cell.container);
+				}).appendTo(cell);
 
 				cell.icon = new MAF.element.Image({
 					styles: {
 						width: 192,
-						height: 192
+						height: 192,
+						hOffset: (cell.width - 192) / 2,
+						vOffset: (cell.height - 192) / 2
 					}
-				}).appendTo(cell.focus);
+				}).appendTo(cell);
 
 				cell.overlay = new MAF.element.Image({
 					hideWhileLoading: true,
 					styles: {
 						width: 192,
-						height: 192
+						height: 192,
+						hOffset: (cell.width - 192) / 2,
+						vOffset: (cell.height - 192) / 2
 					}
-				}).appendTo(cell.focus);
+				}).appendTo(cell);
 
 				return cell;
 			},
@@ -674,12 +664,12 @@ var AppsView = new MAF.Class({
 				}
 			},
 			styles: {
-				transform: 'translateZ(0)',
+//				transform: 'translateZ(0)',
 				width: (cellSize - 7) * cellColumns,
 				height: cellSize * cellRows,
-				hOffset: controls.categories.outerWidth,
+				hOffset: elements.categories.outerWidth,
 				vAlign: 'bottom',
-				vOffset: controls.categories.vOffset - 10
+				vOffset: elements.categories.vOffset - 10
 			},
 			events: {
 				onBlur: function () {
@@ -696,7 +686,7 @@ var AppsView = new MAF.Class({
 					view.updateCategory();
 				},
 				onNavigateOutOfBounds: function (event) {
-					var cats = controls.categories,
+					var cats = elements.categories,
 						direction = event.payload.direction;
 					if (view.state !== 'reorderfavo' && (direction === 'right' || direction === 'left')) {
 						cats.setDisabled(false);
@@ -731,9 +721,7 @@ var AppsView = new MAF.Class({
 					}
 				}
 			}
-		}).appendTo(view);
-
-		controls.apps.setDisabled(true);
+		}).appendTo(view).setDisabled(true);
 
 		scroll.attachToSource(controls.apps);
 
@@ -741,7 +729,7 @@ var AppsView = new MAF.Class({
 			styles: {
 				transform: 'translateZ(0)',
 				hOffset: controls.apps.hOffset + 20,
-				vOffset: (view.height + 25) - controls.categories.vOffset,
+				vOffset: (view.height + 25) - elements.categories.vOffset,
 				fontFamily: 'UPCDigital-Bold',
 				fontSize: '2em'
 			}
@@ -760,6 +748,8 @@ var AppsView = new MAF.Class({
 				truncation: 'end'*/
 			}
 		}).appendTo(view);
+
+		if (view.skipTOS !== true) view.showTOS();
 	},
 
 	updateView: function () {
@@ -777,40 +767,31 @@ var AppsView = new MAF.Class({
 		}
 	},
 
-	hideView: function () {
-		var view = this;
-		view.destroyTOSDialog();
-	},
-
 	selectView: function () {
 		var view = this;
-		view.destroyTOSDialog();
-		if (MAF.messages.exists('myApps') && !view.ready) {
-			return view.appsReady();
-		} else if (widget.getSetting('tos') !== false && currentAppConfig.get('tos') !== TOS) {
-			view.showTOSDialog();
-		} else if (view.ready) {
+		view.hasbeenfocused = true;
+		if (view.skipTOS !== true) {
+			var tos = widget.getElementById('tos');
+			return tos && tos.focus();
+		} else if (MAF.messages.exists('myApps') && !view.ready) {
+			view.appsReady();
+		} else if (view.ready && !view.category) {
 			view.updateCategory();
 			(function () {
 				if (!document.activeElement) this.focus();
-			}).delay(view.delayedInitialFocus, view.controls.categories);
+			}).delay(view.delayedInitialFocus, view.elements.categories);
 		}
-	},
-
-	focusView: function() {
-		var el = this.elements;
-		if (el.tosAccept && el.tosAccept.visible) el.tosAccept.focus();
 	},
 
 	destroyView: function () {
 		var view = this;
 		view.onActivateBackButton.unsubscribeFrom(MAF.application, 'onActivateBackButton');
 		delete view.onActivateBackButton;
+		delete view.skipTOS;
 		delete view.reodered;
 		delete view.reorder;
 		delete view.cell;
 		delete view.icon;
-		delete view.categoryCell;
 		delete view.category;
 	}
 });

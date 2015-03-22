@@ -923,7 +923,8 @@ define('MAF.element.Grid', function () {
 		},
 
 		setDisabled: function (disabled) {
-			this.element.allowNavigation = !disabled;
+			if (this.element)
+				this.element.allowNavigation = !disabled;
 			return this;
 		},
 
@@ -946,7 +947,10 @@ define('MAF.element.Grid', function () {
 				this.body.suicide();
 				delete this.body;
 			}
-			delete this.pager;
+			if (this.pager) {
+				this.pager.suicide();
+				delete this.pager;
+			}
 			this.parent();
 		}
 	});

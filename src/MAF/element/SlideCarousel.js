@@ -32,7 +32,7 @@
  *    cellCreator: function () {
  *       var cell = new MAF.element.SlideCarouselCell({
  *          events: {
- *             onSelect: function(event) {
+ *             onSelect: function (event) {
  *                log('Selected', this.getDataItem());
  *             } 
  *          }
@@ -92,44 +92,43 @@
   * Fired when the slide navigation is complete.
   * @event MAF.element.SlideCarousel#onSlideDone
   */
-define('MAF.element.SlideCarousel', function() {
-	var animateCells = function(cells, dir, parent){
-		if(cells){
-			cells.forEach(function(cell, i){
+define('MAF.element.SlideCarousel', function () {
+	function animateCells(cells, dir, parent) {
+		if (cells) {
+			cells.forEach(function (cell, i) {
 				var cd = (dir === 'left' || dir === 'up') ? parent.currentDataset.length : parent.currentDataset.length-1;
-				if(cell){
+				if (cell) {
 					var cellEmpty = isEmpty(parent.currentDataset[i]),
 						opacity;
-					if(cellEmpty){
+					if (cellEmpty) {
 						opacity = 0;
-					}
-					else{
+					} else {
 						opacity = ((dir === 'right' || dir === 'down') && i === cd) ? 0 : ((dir === 'left' || dir === 'up') && i === 0) ? 0 : ((dir === 'left' || dir === 'up') && cd === i) ? 0 :  parent.opacityOffsets[i];
 					}
 					cell.animate({
 						opacity: opacity,
 						duration: 0.1,
 						events:{
-							onAnimationEnded: function(fadeAnimator){
+							onAnimationEnded: function (fadeAnimator) {
 								fadeAnimator.reset();
-								if(cell){
+								if (cell) {
 									cell.animate({
 										hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
 										vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
 										duration: parent.config.slideDuration,
 										timingFunction:  parent.config.slideEase,
 										events:{
-											onAnimationEnded: function(slideAnimator){
+											onAnimationEnded: function (slideAnimator) {
 												slideAnimator.reset();
-												if(i === cd -1){
+												if (i === cd -1) {
 													parent.animating = false;
 													parent.fire('onSlideDone');
 												}
 												cell.element.allowNavigation = false;
 												cell.opacity = (cellEmpty) ? 0 : cd === i ? 0 : parent.opacityOffsets[i];
-												if(i === parent.config.focusIndex){
+												if (i === parent.config.focusIndex) {
 													cell.element.allowNavigation = (parent.config.blockFocus) ? false : true;
-													if(!parent.config.blockFocus && hasFocus(cells)){
+													if (!parent.config.blockFocus && hasFocus(cells)) {
 														cell.focus();
 													}
 												}
@@ -143,26 +142,23 @@ define('MAF.element.SlideCarousel', function() {
 				}
 			}, this);
 		}
-	};
-
-	var hasFocus = function(cells){
-		for(var i = 0; i < cells.length; i++){
-			if(cells[i].element.hasFocus){
+	}
+	function hasFocus(cells) {
+		for(var i = 0; i < cells.length; i++) {
+			if (cells[i].element.hasFocus) {
 				return true;
 			}
 		}
 		return false;
-	};
-
-	var isEmpty = function(obj){
-		for(var prop in obj){
-			if(obj.hasOwnProperty(prop)){
+	}
+	function isEmpty(obj) {
+		for(var prop in obj) {
+			if (obj.hasOwnProperty(prop)) {
 				return false;
 			}
 		}
 		return true;
-	};
-
+	}
 	return new MAF.Class({
 		ClassName: 'SlideCarousel',
 		Extends: MAF.element.Container,
@@ -195,7 +191,7 @@ define('MAF.element.SlideCarousel', function() {
 						break;
 				}
 			},
-			setCellConfiguration: function(pos, cd){
+			setCellConfiguration: function (pos, cd) {
 				var cell,
 					dims = {
 					width: (this.config.orientation === 'horizontal') ? ((1 / this.config.visibleCells) * 100) + '%' : '100%',
@@ -213,32 +209,31 @@ define('MAF.element.SlideCarousel', function() {
 				cell.element.allowNavigation = (this.config.blockFocus) ? false : (pos === this.config.focusIndex) ? true : false;
 				this.cells.push(cell);
 			},
-			generateCells: function (data){
-				if(this.currentDataset.length > 0){
+			generateCells: function (data) {
+				if (this.currentDataset.length > 0) {
 					var cd = this.getCellDimensions();
 					this.offsets = [];
 					this.opacityOffsets = [];
-					if(this.currentDataset.length === 1){
+					if (this.currentDataset.length === 1) {
 						this.setCellConfiguration(this.config.focusIndex, cd);
-					}
-					else{
+					} else {
 						var i = 0;
-						for(i = 0; i < this.currentDataset.length; i++){
+						for(i = 0; i < this.currentDataset.length; i++) {
 							this.offsets.push((this.config.orientation === 'horizontal') ? (cd.width * -1) + (i * cd.width) : (cd.height * -1) + (i * cd.height));
-							if(this.config.opacityOffset > 0){
+							if (this.config.opacityOffset > 0) {
 								this.opacityOffsets.push(1 - Math.abs(this.config.focusIndex - i) * this.config.opacityOffset);
 							}
 						}
-						for(i = 0; i < this.currentDataset.length; i++){
+						for(i = 0; i < this.currentDataset.length; i++) {
 							this.setCellConfiguration(i, cd);
 						}
 					}
 				}
 				return this.cells.length;
 			},
-			collectedPage: function(event){
+			collectedPage: function (event) {
 				var slider = this.retrieve('slider');
-				switch(slider.status){
+				switch(slider.status) {
 					case 'reset':
 					case 'empty':
 						this.store('slider', {status: 'building'});
@@ -249,7 +244,7 @@ define('MAF.element.SlideCarousel', function() {
 						this.store('slider', {status: 'building'});
 						this.updateCells(index);
 					case 'navigating':
-						switch(slider.direction){
+						switch(slider.direction) {
 							case 'up':
 							case 'left':
 								this.currentDataset.unshift(this.currentDataset.pop());
@@ -271,48 +266,43 @@ define('MAF.element.SlideCarousel', function() {
 						break;
 				}
 			},
-			updateCells: function(page){
+			updateCells: function (page) {
 				var cellUpdater = this.config.cellUpdater,
 					dataLength = this.pager.getDataSize();
 				this.animating = false;
 				this.currentDataset = [];
 				this.collection = [];
 				this.page = page || 0;
-				if(dataLength > 0){
-					if(dataLength === 1){
+				if (dataLength > 0) {
+					if (dataLength === 1) {
 						this.currentDataset.push(this.pager.getPage(0).items[0]);
-					}
-					else{
+					} else {
 						var cellsToFill = this.config.visibleCells + 2;
-						if(dataLength !== this.config.visibleCells && dataLength < cellsToFill){
+						if (dataLength !== this.config.visibleCells && dataLength < cellsToFill) {
 							cellsToFill = dataLength + 2;
 						}
-						for(var i = 0; i < cellsToFill; i++){
+						for(var i = 0; i < cellsToFill; i++) {
 							var dif = this.config.focusIndex - i,
 								difABS = Math.abs(dif),
 								index = null;
-							if((difABS > dataLength-1 || dif > 0) && this.customPager){
+							if ((difABS > dataLength-1 || dif > 0) && this.customPager) {
 								this.currentDataset.push({});
-							}
-							else if(difABS > dataLength-1 && !this.customPager){
+							} else if (difABS > dataLength-1 && !this.customPager) {
 								index = 0;
 								this.currentDataset.push(this.pager.getPage(index).items[0]);
-							}
-							else if(dif > 0){
+							} else if (dif > 0) {
 								index = (this.page !== 0) ? this.page - difABS : dataLength - difABS;
-								if(index < 0){
+								if (index < 0) {
 									index = dataLength - Math.abs(index);
 								}
 								this.currentDataset.push(this.pager.getPage(index).items[0]);
-							}
-							else if(dif < 0){
+							} else if (dif < 0) {
 								index = this.page + difABS;
-								if(index >= dataLength){
+								if (index >= dataLength) {
 									index = index - dataLength;
 								}
 								this.currentDataset.push(this.pager.getPage(index).items[0]);
-							}
-							else{
+							} else {
 								index = (this.page === dataLength) ? 0 : this.page;
 								this.currentDataset.push(this.pager.getPage(index).items[0]);
 							}
@@ -320,20 +310,19 @@ define('MAF.element.SlideCarousel', function() {
 						}
 					}
 				}
-				if(this.cells.length && this.cells.length === this.currentDataset.length){
-					this.cells.forEach(function(cell, u){
-						if(!isEmpty(this.currentDataset[u])){
+				if (this.cells.length && this.cells.length === this.currentDataset.length) {
+					this.cells.forEach(function (cell, u) {
+						if (!isEmpty(this.currentDataset[u])) {
 							cellUpdater.call(this, cell, this.currentDataset[u]);
 						}
 					}, this);
-				}
-				else{
-					while(this.cells.length){
+				} else {
+					while (this.cells.length) {
 						this.cells.pop().suicide();
 					}
-					if(this.generateCells() > 0){
-						this.cells.forEach(function(cell, u){
-							if(!isEmpty(this.currentDataset[u])){
+					if (this.generateCells() > 0) {
+						this.cells.forEach(function (cell, u) {
+							if (!isEmpty(this.currentDataset[u])) {
 								cellUpdater.call(this, cell, this.currentDataset[u]);
 							}
 						}, this);
@@ -353,7 +342,7 @@ define('MAF.element.SlideCarousel', function() {
 			render: true,
 			focus: true
 		},
-		initialize: function(){
+		initialize: function () {
 			this.config.visibleCells = this.config.visibleCells || 1;
 			this.config.focusIndex = this.config.focusIndex || 1;
 			this.config.orientation = this.config.orientation || 'horizontal';
@@ -364,7 +353,7 @@ define('MAF.element.SlideCarousel', function() {
 			this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;
 			this.parent();
 			this.cells = [];
-			if(this.config.pager){
+			if (this.config.pager) {
 				this.customPager = true;
 				this.pager = this.config.pager;
 				delete this.config.pager;
@@ -372,7 +361,7 @@ define('MAF.element.SlideCarousel', function() {
 			else{
 				this.pager = new MAF.utility.Pager(1, this.config.visibleCells);
 			}
-			if(!this.config.carousel){
+			if (!this.config.carousel) {
 				this.customPager = true;
 			}
 			this.currentDataset = [];
@@ -384,23 +373,23 @@ define('MAF.element.SlideCarousel', function() {
 			this.setStyle('transform', 'translateZ(0)');
 		},
 
-		setVisibleCells: function(visibleCells){
+		setVisibleCells: function (visibleCells) {
 			this.config.visibleCells = visibleCells;
 		},
 
-		getVisibleCells: function(){
+		getVisibleCells: function () {
 			return this.config.visibleCells;
 		},
 
-		setFocusIndex: function(index){
+		setFocusIndex: function (index) {
 			this.config.focusIndex = index;
 		},
 
-		getFocusIndex: function(){
+		getFocusIndex: function () {
 			return (this.cells.length > 1) ? this.config.focusIndex : 0;
 		},
 
-		changeDataset: function(data, reset, dataLength){
+		changeDataset: function (data, reset, dataLength) {
 			data = data && data.length ? data : [];
 			dataLength = (dataLength && (dataLength > data.length)) ? dataLength : data.length;
 			this.pager.initItems(data, dataLength);
@@ -409,13 +398,13 @@ define('MAF.element.SlideCarousel', function() {
 			this.fire("onDatasetChanged");
 		},
 
-		collectPage: function(pagenum){
+		collectPage: function (pagenum) {
 			this.pager.getPage(pagenum);
 		},
 
-		getCellDataItem: function(c){
-			for(var i = 0; i < this.cells.length; i++){
-				if(c === this.cells[i]){
+		getCellDataItem: function (c) {
+			for(var i = 0; i < this.cells.length; i++) {
+				if (c === this.cells[i]) {
 					return this.currentDataset[i];
 				}
 			}
@@ -425,7 +414,7 @@ define('MAF.element.SlideCarousel', function() {
 		 * @method MAF.element.SlideCarousel#getCurrentPage
 		 * @return The zero-based index of the current page of data.
 		 */
-		getCurrentPage: function(){
+		getCurrentPage: function () {
 			return (this.collection && this.collection[this.config.focusIndex]) ? this.collection[this.config.focusIndex] : 0;
 		},
 
@@ -433,7 +422,7 @@ define('MAF.element.SlideCarousel', function() {
 		 * @method MAF.element.SlideCarousel#getPageCount
 		 * @return this.mainCollection.length. The number of items in the dataset.
 		 */
-		getPageCount: function(){
+		getPageCount: function () {
 			return this.pager.getNumPages();
 		},
 
@@ -442,8 +431,8 @@ define('MAF.element.SlideCarousel', function() {
 		 * @method MAF.element.SlideCarousel#focucCell
 		 * @param {integer} / index which as to be focused and aligned with the proper focusIndex cell.
 		 */
-		focusCell: function(target){
-			if(target >= this.getPageCount()){
+		focusCell: function (target) {
+			if (target >= this.getPageCount()) {
 				return;
 			}
 			this.store('slider', {status: 'focusCell', page: target});
@@ -479,31 +468,31 @@ define('MAF.element.SlideCarousel', function() {
 		 * @method MAF.element.SlideCarousel#shift
 		 * @param {String} the direction the carousel has to slide.
 		 */
-		shift: function(direction){
-			if(this.config.orientation === 'vertical' && (direction === 'right' || direction === 'left')){
+		shift: function (direction) {
+			if (this.config.orientation === 'vertical' && (direction === 'right' || direction === 'left')) {
 				return;
 			}
-			if(this.config.orientation === 'horizontal' && (direction === 'up' || direction === 'down')){
+			if (this.config.orientation === 'horizontal' && (direction === 'up' || direction === 'down')) {
 				return;
 			}
-			if(direction && !this.animating && this.retrieve('slider').status !== 'navigating'){
+			if (direction && !this.animating && this.retrieve('slider').status !== 'navigating') {
 				this.animating = true;
-				if(this.cells.length === 1){
+				if (this.cells.length === 1) {
 					return;
 				}
-				if(this.cells.length > 1){
+				if (this.cells.length > 1) {
 					var dataLength = this.pager.getNumPages();
-					switch(direction){
+					switch(direction) {
 						case 'up':
 						case 'left':
-							if(isEmpty(this.currentDataset[this.config.focusIndex-1])){
+							if (isEmpty(this.currentDataset[this.config.focusIndex-1])) {
 								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}
 							this.collection.unshift(this.collection.pop());
 							this.collection[0] = (this.collection[1] - 1 < 0 && !this.customPager) ? dataLength -1 : (this.collection[1] - 1 < 0) ? null : this.collection[1]-1;
-							if(this.collection[0] === null){
+							if (this.collection[0] === null) {
 								this.currentDataset.unshift(this.currentDataset.pop());
 								this.cells.unshift(this.cells.pop());
 								this.currentDataset[0] = {};
@@ -516,22 +505,22 @@ define('MAF.element.SlideCarousel', function() {
 							break;
 						case 'down':
 						case 'right':
-							if(isEmpty(this.currentDataset[this.config.focusIndex+1])){
+							if (isEmpty(this.currentDataset[this.config.focusIndex+1])) {
 								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}
 							this.collection.push(this.collection.shift());
-							if(this.collection[this.collection.length-2] === null){
+							if (this.collection[this.collection.length-2] === null) {
 								this.collection[this.collection.length-1] = null;
 							}
-							else if(this.collection[this.collection.length-2] + 1 >= dataLength){
+							else if (this.collection[this.collection.length-2] + 1 >= dataLength) {
 								this.collection[this.collection.length-1] = (this.collection[this.collection.length-2] + 1 >= dataLength && !this.customPager) ? 0 : null;
 							}
 							else{
 								this.collection[this.collection.length-1] = this.collection[this.collection.length-2] + 1;
 							}
-							if(this.collection[this.collection.length-1] === null){
+							if (this.collection[this.collection.length-1] === null) {
 								this.cells.push(this.cells.shift());
 								this.currentDataset.shift();
 								this.currentDataset.push({});
@@ -562,8 +551,8 @@ define('MAF.element.SlideCarousel', function() {
 		 * @method MAF.element.SlideCarousel#getCellDataIndex
 		 * @return {Object} returns the dataIndex
 		 */
-		getCellDataIndex: function(cell){
-			if(cell === this.getCurrentCell()){
+		getCellDataIndex: function (cell) {
+			if (cell === this.getCurrentCell()) {
 				return this.getCurrentPage();
 			}
 			else{
@@ -571,16 +560,12 @@ define('MAF.element.SlideCarousel', function() {
 			}
 		},
 
-		getCurrentCell : function(){
+		getCurrentCell : function () {
 			return this.cells[(this.cells.length === 1 ) ? 0 : this.config.focusIndex];
 		},
 
 		suicide: function () {
-			this.currentDataset = null;
-			this.offsets = null;
-			this.opacityOffsets = null;
-			this.pager = null;
-			this.collection = null;
+			if (this.pager) this.pager.suicide();
 			delete this.currentDataset;
 			delete this.offsets;
 			delete this.opacityOffsets;

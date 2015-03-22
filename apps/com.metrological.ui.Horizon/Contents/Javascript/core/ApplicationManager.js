@@ -10,6 +10,7 @@ var showEutos = function (id, params) {
 	});
 };
 var loadTemplate = (function () {
+	var forceTranslateZ = widget.getSetting('forceTranslateZ') || false;
 	var current = {};
 	var maxProfiles = 5;
 	var keyboardDialogs = [
@@ -43,43 +44,51 @@ var loadTemplate = (function () {
 			}
 			switch (type) {
 				case 'waitIndicator':
-					var smallSpinner = getElementById('@'+current[identifier]+'-home'),
-						largeSpinner = getElementById('@'+current[identifier]+'-loading');
-					if (!smallSpinner || !largeSpinner || identifier !== ApplicationManager.active) {
-						return;
-					}
+					var viewType = current[identifier];
+					if (viewType !== 'sidebar' || identifier !== ApplicationManager.active) return;
+					var smallSpinner = viewType && getElementById('@' + viewType + '-home')/*,
+						largeSpinner = viewType && getElementById('@' + viewType + '-loading')*/;
 					switch (data.id) {
 						case '0':
-							if (current[identifier] === 'sidebar') {
-								var isDefaultView = app.MAF.application.isDefaultView();
+							if (viewType === 'sidebar' && smallSpinner) {
+								var isDefaultView = app.MAF.application.isDefaultView(),
+									hacks = app.widget.hacks;
 								smallSpinner.text = FontAwesome.get('home');
-								if (app.widget.hacks && app.widget.hacks.home === false) {
+								if (hacks && hacks.home === false) {
 									smallSpinner.frozen = true;
 									smallSpinner.wantsFocus = false;
 								} else {
 									smallSpinner.frozen = isDefaultView;
 									smallSpinner.wantsFocus = !isDefaultView;
 								}
-							}
-							largeSpinner.text = FontAwesome.get('refresh');
-							largeSpinner.frozen = true;
+							}/*
+							if (largeSpinner) {
+								largeSpinner.text = FontAwesome.get('refresh');
+								largeSpinner.frozen = true;
+							}*/
 							break;
 						case '1':
-							if (current[identifier] === 'sidebar') {
+							if (viewType === 'sidebar' && smallSpinner) {
 								smallSpinner.text = FontAwesome.get(['refresh', 'spin']);
 								smallSpinner.frozen = false;
 								smallSpinner.wantsFocus = false;
-							}
-							largeSpinner.text = FontAwesome.get('refresh');
-							largeSpinner.frozen = true;
+							}/*
+							if (largeSpinner) {
+								largeSpinner.text = FontAwesome.get('refresh');
+								largeSpinner.frozen = true;
+							}*/
 							break;
-						case '2':
-							largeSpinner.text = FontAwesome.get(['refresh', 'spin']);
-							largeSpinner.frozen = false;
+						case '2':/*
+							if (largeSpinner) {
+								largeSpinner.text = FontAwesome.get(['refresh', 'spin']);
+								largeSpinner.frozen = false;
+							}*/
 							break;
-						case '3':
-							largeSpinner.text = FontAwesome.get('refresh');
-							largeSpinner.frozen = true;
+						case '3':/*
+							if (largeSpinner) {
+								largeSpinner.text = FontAwesome.get('refresh');
+								largeSpinner.frozen = true;
+							}*/
 							break;
 					}
 					return;
@@ -108,7 +117,7 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-//							transform: 'translateZ(0)',
+							transform: forceTranslateZ ? 'translateZ(0)' : null,
 							overflow: 'visible',
 							backgroundColor: 'rgba(34,34,34,.93)',
 							borderRadius: '10px',
@@ -192,7 +201,7 @@ var loadTemplate = (function () {
 							}
 						}
 					}).appendTo(template).store('id', id);
-
+/*
 					new Text({
 						id: '@' + type + '-loading',
 						label: FontAwesome.get('refresh'),
@@ -208,7 +217,7 @@ var loadTemplate = (function () {
 							fontSize: 40
 						}
 					}).appendTo(template);
-
+*/
 					sidebarButtons.forEach(function (btnConfig, key) {
 						var max = sidebarButtons.length - 1;
 						new Text({
@@ -258,11 +267,12 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-//							transform: 'translateZ(0)',
+							transform: forceTranslateZ ? 'translateZ(0)' : null,
 							width: 1920,
 							height: 1080
 						}
 					}).appendTo(fragment);
+/*
 					if (identifier !== widget.identifier)
 						new Text({
 							id: '@' + type + '-loading',
@@ -278,6 +288,7 @@ var loadTemplate = (function () {
 								fontSize: 40
 							}
 						}).appendTo(template);
+*/
 					body.appendChild(fragment);
 					break;
 				case 'dialog':
@@ -385,10 +396,9 @@ var loadTemplate = (function () {
 								if (target && target.id && target.id.indexOf('button') > 0) {
 									event.preventDefault();
 									var keyboard = getElementById('@' + type + '-keyboard'),
+										keyboardClass = keyboard && keyboard.firstChild && keyboard.firstChild.owner,
 										keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
-									if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
-										keyboard.firstChild.owner.suicide();
-									}
+									if (keyboardClass) keyboardClass.suicide();
 									this.destroy();
 									if (focusAfterDialog) {
 										focusAfterDialog.focus();
@@ -665,9 +675,7 @@ var loadTemplate = (function () {
 						var onPinDone = function (authorized) {
 							if (authorized) {
 								var dialogKey = template.retrieve('key');
-								if (keyboard && keyboard.firstChild && keyboard.firstChild.owner) {
-									keyboard.firstChild.owner.suicide();
-								}
+								if (keyboard) keyboard.suicide();
 								template.destroy();
 								if (focusAfterDialog) {
 									focusAfterDialog.focus();
@@ -798,10 +806,10 @@ var loadTemplate = (function () {
 									styles: {
 										vAlign: 'bottom',
 										vOffset: (dialogConfig.buttons.length * 56) + 10 + keyboard.height + 10,
-										width: 470,
+										width: 465,
 										display: 'block',
-										hOffset: 10,
-										minHeight: '40px',
+										hOffset: 15,
+										minHeight: '1.9em',
 										height: 'auto',
 										padding: '5px',
 										border: '2px solid white',
@@ -819,11 +827,11 @@ var loadTemplate = (function () {
 										border: '2px solid white',
 										borderRadius: '10px',
 										width: 60,
-										height: 44,
+										height: '1.9em',
 										hAlign: 'right',
 										vAlign: 'bottom',
 										hOffset: 12,
-										vOffset: input.vOffset - 2,
+										vOffset: input.vOffset,
 										color: app.Theme.getStyles('BaseGlow', 'color') || null,
 										backgroundColor: app.Theme.getStyles('BaseGlow', 'backgroundColor')
 									},
@@ -981,7 +989,7 @@ var loadTemplate = (function () {
 				id: id,
 				focus: true,
 				frozen: true,
-				styles: type === 'sidebar' ? { top: 64/*, transform: 'translateZ(0)'*/ } : /*{ transform: 'translateZ(0)' }*/ null
+				styles: type === 'sidebar' ? { top: 64, transform: forceTranslateZ ? 'translateZ(0)' : null } : { transform: forceTranslateZ ? 'translateZ(0)' : null }
 			}).appendTo(template);
 		}
 		current[identifier] = type;
@@ -1024,6 +1032,7 @@ widget.handleChildEvent = function (event) {
 			}
 			break;
 		case 'setWaitIndicator':
+			if (event.id === widget.identifier) return false;
 			loadTemplate.call(this, {
 				id: event.data,
 				type: 'waitIndicator'

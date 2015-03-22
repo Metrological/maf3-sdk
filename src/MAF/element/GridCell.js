@@ -84,33 +84,42 @@ define('MAF.element.GridCell', function () {
 
 				MAF.Class.Methods.proxyProperties(this, this.element, propnames);
 
-				var el = this.element;
 				getter(this, 'width', function () {
-					return this.getCellDimensions().width || el.width;
+					var el = this.element;
+					return this.getCellDimensions().width || (el && el.width);
 				});
 				getter(this, 'height', function () {
-					return this.getCellDimensions().height || el.height;
+					var el = this.element;
+					return this.getCellDimensions().height || (el && el.height);
 				});
 				getter(this, 'outerWidth', function () {
-					return this.width + (el.hOffset || 0);
+					var el = this.element,
+						width = el && el.width;
+					return width !== undefined && (width + (el.hOffset || 0));
 				});
 				getter(this, 'outerHeight', function () {
-					return this.height + (el.vOffset || 0);
+					var el = this.element,
+						height = el && el.height;
+					return height !== undefined && (height + (el.vOffset || 0));
 				});
 				getter(this, 'id', function () {
-					return el.getAttribute('id');
+					var el = this.element;
+					return el && el.getAttribute('id');
 				});
 				setter(this, 'id', function (id) {
-					return el.setAttribute('id', id);
+					var el = this.element;
+					return el && el.setAttribute('id', id);
 				});
 				getter(this, 'disabled', function () {
-					return this.element && this.element.disabled;
+					var el = this.element;
+					return el && el.disabled;
 				});
 				setter(this, 'disabled', function (disabled) {
 					disabled = disabled || false;
-					if (this.disabled !== disabled && this.element) {
+					var el = this.element;
+					if (this.disabled !== disabled) {
 						this.fire(disabled ? 'onDisable' : 'onEnable');
-						this.element.disabled = disabled;
+						if (el) el.disabled = disabled;
 						this.fire('onChangeDisabled', {
 							disabled: disabled
 						});
