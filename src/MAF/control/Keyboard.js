@@ -62,7 +62,8 @@ define('MAF.control.Keyboard', function () {
 			layout:           this.config.layout,
 			availableLayouts: this.config.availableLayouts,
 			wrapNavigation:   this.config.wrapNavigation,
-			KeyLayouts:       this.config.KeyLayouts
+			KeyLayouts:       this.config.KeyLayouts,
+			externalClassName: this.config.ClassName
 		});
 
 		keyboard.element.hAlign = 'center';

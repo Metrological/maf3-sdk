@@ -1204,7 +1204,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		overlay.hOffset = keyBounds.left - hoffsetC - (posClass.width - internal.body.width) + (spillover * keyWidth) || 0;
 		overlay.vOffset = keyBounds.top - voffsetC || 0;
 		overlay.width = list.width = keyWidth * character_ids.length;
-		list.height = Theme.getStyles('extendedOverlay', 'height');
+		list.height = (this.config.externalClassName)?Theme.getStyles(this.config.externalClassName+' .extendedOverlay', 'height'):Theme.getStyles('extendedOverlay', 'height');
+		
 		internal.body.appendChild(overlay);
 		internal.body.firstChild.allowNavigation = false;
 		overlay.visible = true;
@@ -1468,7 +1469,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		},
 		loadLayout: function (layout, options) {
 			var internal = internals[this._classID];
-
+			var keyboard = this;
 			layout = typeOf(layout) === 'string' ? getLayoutById(layout) : layout;
 			if (internal.state.currentLayout === layout) {
 				return;
@@ -1497,7 +1498,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				var externalStyles = window.Theme.getStyles('ReuseKeyboard .item'),
 					externalWidth = 0,
 					externalHeight = 0;
-
+				if(this.config.externalClassName)
+					externalStyles = Object.merge(externalStyles, window.Theme.getStyles(this.config.externalClassName+' .ReuseKeyboard .item'));
 				['border', 'borderLeftWidth', 'borderRightWidth', 'marginLeft', 'marginRight'].forEach(function (type) {
 					var value = (type === 'border') ? parseInt(externalStyles[type], 10) * 2 : externalStyles[type];
 					externalWidth += value || 0;
@@ -1521,6 +1523,9 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 							className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
 							styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 							row_height = 0;
+						if(keyboard.config.externalClassName)
+							styles = Object.merge(styles, (this.config.controlSize === 'small') ? window.Theme.getStyles(keyboard.config.externalClassName+' .'+className, 'small'):window.Theme.getStyles(keyboard.config.externalClassName+' .'+className));	
+						
 						keyframe.addClass(className);
 						if (columnKey === 0)
 							keyframe.addClass("firstKeyOnRow");
@@ -1556,7 +1561,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 						className = this.ClassName + getClassnameByKeyId.call(this, value.keyid),
 						styles = (this.config.controlSize === 'small') ? Theme.getStyles(className, 'small') || {} : Theme.getStyles(className),
 						row_height = 0;
-
+					
+					if(keyboard.config.externalClassName)
+						styles = Object.merge(styles, (this.config.controlSize === 'small') ? window.Theme.getStyles(keyboard.config.externalClassName+' .'+className, 'small'):window.Theme.getStyles(keyboard.config.externalClassName+' .'+className));
+					
 					if (options.row === 'control' && columnKey === options.column) {
 						options.focusTarget = keys;
 					}

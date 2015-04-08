@@ -893,8 +893,8 @@ define('MAF.element.Grid', function () {
 				return packet;
 			}
 			var data = packet && packet[this.config.guid],
-				type = typeOf(data);
-			if (type === 'null' || type === 'undefined') {
+				currentState = this.getState() || {};
+			if (data === null || data === undefined) {
 				return packet;
 			}
 			if (focusOnly) {
@@ -911,13 +911,11 @@ define('MAF.element.Grid', function () {
 						}
 					}
 				}
-			} else {
-				if (type == 'object' && data.state) {
-					this.changePage(data.state.currentPage || 0, {
-						transition: 'none',
-						focus: false
-					});
-				}
+			} else if (typeof data === 'object' && data.state && currentState.currentPage !== data.state.currentPage) {
+				this.changePage(data.state.currentPage || 0, {
+					transition: 'none',
+					focus: false
+				});
 			}
 			return data;
 		},

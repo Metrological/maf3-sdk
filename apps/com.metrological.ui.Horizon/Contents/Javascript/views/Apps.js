@@ -11,6 +11,8 @@ var AppsView = new MAF.Class({
 	firstCategory: 1,
 	delayCatagoryLoading: 800,
 	delayedInitialFocus: 800,
+	disableResetFocus: true,
+	maxRecently: 13,
 	maxFavorites: 22,
 
 	initialize: function () {
@@ -127,10 +129,14 @@ var AppsView = new MAF.Class({
 	},
 
 	showTOS: function () {
+		if (widget.getElementById('tos')) return;
 		var view = this,
 			apps = view.controls.apps,
 			categories = view.elements.categories,
+			tos;
+		try {
 			tos = filesystem.readFile('About/' + profile.locale + '/tos.txt', true);
+		} catch(err) {}
 		if (!tos) return categories.focus();
 		var tosContainer = new MAF.element.Container({
 			styles: {
@@ -244,7 +250,7 @@ var AppsView = new MAF.Class({
 			}
 		}).appendTo(tosContainer);
 
-		tosAccept.focus();
+		tosAccept.focus.delay(view.delayedInitialFocus, tosAccept);
 	},
 
 	appsReady: function () {
@@ -277,7 +283,7 @@ var AppsView = new MAF.Class({
 					styles: Object.merge(this.getCellDimensions(), {
 						transform: 'scale(1.0)',
 						transformOrigin: '0% 50%',
-						transition: widget.getSetting('animation') !== false ? 'all 0.2s ease' : null
+						transition: 'all 0.2s ease'
 					}),
 					events: {
 						onFocus: function () {
@@ -435,7 +441,7 @@ var AppsView = new MAF.Class({
 					styles: Object.merge(this.getCellDimensions(), {
 						transform: 'scale(1)',
 						transformOrigin: '0 0',
-						transition: widget.getSetting('animation') !== false ? 'all 0.2s ease' : null,
+						transition: 'all 0.2s ease',
 						backgroundRepeat: 'no-repeat',
 						zOrder: 1
 					}),
@@ -507,11 +513,9 @@ var AppsView = new MAF.Class({
 							} else {
 								var recently = currentAppConfig.get('recentlyApps') || [],
 									curId = recently.indexOf(id);
-								if (curId !== -1)
-									recently.splice(curId, 1);
+								if (curId !== -1) recently.splice(curId, 1);
 								recently.push(id);
-								if (recently.length === 13)
-									recently.shift();
+								if (recently.length === view.maxRecently) recently.shift();
 								currentAppConfig.set('recentlyApps', recently);
 								ApplicationManager.load(id);
 								ApplicationManager.open(id);
@@ -588,7 +592,7 @@ var AppsView = new MAF.Class({
 						hOffset: (cell.width - 192) / 2,
 						vOffset: (cell.height - 192) / 2,
 						transform: 'translateZ(0)',
-						transition: widget.getSetting('animation') !== false ? 'opacity 0.2s ease' : null
+						transition: 'opacity 0.2s ease'
 					}
 				}).appendTo(cell);
 
@@ -772,7 +776,7 @@ var AppsView = new MAF.Class({
 		view.hasbeenfocused = true;
 		if (view.skipTOS !== true) {
 			var tos = widget.getElementById('tos');
-			return tos && tos.focus();
+			if (tos) tos.focus();
 		} else if (MAF.messages.exists('myApps') && !view.ready) {
 			view.appsReady();
 		} else if (view.ready && !view.category) {

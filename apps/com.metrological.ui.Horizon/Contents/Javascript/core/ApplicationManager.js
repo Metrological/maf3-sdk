@@ -395,10 +395,11 @@ var loadTemplate = (function () {
 									dialogKey = this.retrieve('key');
 								if (target && target.id && target.id.indexOf('button') > 0) {
 									event.preventDefault();
-									var keyboard = getElementById('@' + type + '-keyboard'),
-										keyboardClass = keyboard && keyboard.firstChild && keyboard.firstChild.owner,
-										keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
-									if (keyboardClass) keyboardClass.suicide();
+									var keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
+									if (keyboard) {
+										keyboard.suicide();
+										keyboard = null;
+									}
 									this.destroy();
 									if (focusAfterDialog) {
 										focusAfterDialog.focus();
@@ -458,6 +459,10 @@ var loadTemplate = (function () {
 							},
 							back: function (event) {
 								if (!dialogConfig.ignoreBackKey) {
+									if (keyboard) {
+										keyboard.suicide();
+										keyboard = null;
+									}
 									var dialogKey = this.retrieve('key');
 									event.preventDefault();
 									event.stopPropagation();
@@ -675,7 +680,10 @@ var loadTemplate = (function () {
 						var onPinDone = function (authorized) {
 							if (authorized) {
 								var dialogKey = template.retrieve('key');
-								if (keyboard) keyboard.suicide();
+								if (keyboard) {
+									keyboard.suicide();
+									keyboard = null;
+								}
 								template.destroy();
 								if (focusAfterDialog) {
 									focusAfterDialog.focus();
@@ -692,7 +700,6 @@ var loadTemplate = (function () {
 								KeyboardValueManager.value = '';
 							}
 						};
-
 						(function (event) {
 							var payload = event.payload || {},
 								i;

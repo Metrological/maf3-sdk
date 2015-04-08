@@ -95,9 +95,6 @@ define('MAF.system.WindowedView', function () {
 			},
 			onSelectView: function(event) {
 				this.parent(event);
-				if (!this.element.focusedView) {
-					this.resetFocus();
-				}
 				performControlInspection.call(this, this.getControlData('statePacket'), false);
 				if (this.config.loadingOverlay) MAF.utility.LoadingOverlay.hide();
 			},
