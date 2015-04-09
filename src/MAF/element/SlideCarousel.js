@@ -88,6 +88,14 @@
   * @event MAF.element.SlideCarousel#onSlideDone
   */
 define('MAF.element.SlideCarousel', function () {
+	function hasFocus(cells) {
+		for(var i = 0; i < cells.length; i++) {
+			if (cells[i].element.hasFocus) {
+				return true;
+			}
+		}
+		return false;
+	}
 	function animateCells(cells, dir, parent) {
 		if (cells) {
 			cells.forEach(function (cell, i) {
@@ -119,14 +127,6 @@ define('MAF.element.SlideCarousel', function () {
 				}
 			}, this);
 		}
-	}
-	function hasFocus(cells) {
-		for(var i = 0; i < cells.length; i++) {
-			if (cells[i].element.hasFocus) {
-				return true;
-			}
-		}
-		return false;
 	}
 	function isEmpty(obj) {
 		for(var prop in obj) {
@@ -221,11 +221,11 @@ define('MAF.element.SlideCarousel', function () {
 						this.store('slider', {status: 'building'});
 						this.updateCells();
 						break;
-/*					case 'focusCell':
+					case 'focusCell':
 						var index = slider.page;
 						this.store('slider', {status: 'building'});
 						this.updateCells(index);
-						break;*/
+						break;
 					case 'navigating':
 						switch(slider.direction) {
 							case 'up':
@@ -235,7 +235,7 @@ define('MAF.element.SlideCarousel', function () {
 								this.cells.unshift(cell);
 								this.currentDataset.unshift(this.currentDataset.pop());
 								this.currentDataset[0] = event.payload.data.items[0];
-//								this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
+								this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
 								break;
 							case 'down':
 							case 'right':
@@ -244,7 +244,7 @@ define('MAF.element.SlideCarousel', function () {
 								this.cells.push(cell);
 								this.currentDataset.shift();
 								this.currentDataset.push(event.payload.data.items[0]);
-//								this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
+								this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
 								break;
 						}
 						this.store('slider', {status: 'idle'});
