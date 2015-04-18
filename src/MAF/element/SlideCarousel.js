@@ -101,6 +101,11 @@ define('MAF.element.SlideCarousel', function () {
 			cells.forEach(function (cell, i) {
 				var cd = (dir === 'left' || dir === 'up') ? parent.currentDataset.length : parent.currentDataset.length-1;
 				if (cell) {
+					if(!isEmpty(parent.currentDataset[i])&& cd !== i)
+						cell.visible = true;
+					else 
+						cell.visible = false;
+						
 					cell.animate({
 						hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
 						vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
@@ -115,6 +120,7 @@ define('MAF.element.SlideCarousel', function () {
 								}
 								cell.element.allowNavigation = false;
 								cell.thaw();
+
 								if (i === parent.config.focusIndex) {
 									cell.element.allowNavigation = (parent.config.blockFocus) ? false : true;
 									if (!parent.config.blockFocus && hasFocus(cells)) {
@@ -188,7 +194,8 @@ define('MAF.element.SlideCarousel', function () {
 					height: (this.config.orientation === 'vertical') ? ((1 / this.config.visibleCells) * 100) + '%' :'100%',
 					hOffset: (this.config.orientation === 'horizontal') ? (cd.width * -1) + (pos * cd.width) : 0,
 					vOffset: (this.config.orientation === 'vertical') ? (cd.height * -1) + (pos * cd.height) : 0,
-					transform: 'translateZ(0)'
+					transform: 'translateZ(0)',
+					visible: (!isEmpty(this.currentDataset[pos]))? true: false
 				};
 				cell = this.config.cellCreator.call(this).setStyles(dims);
 				cell.grid = this;
@@ -268,30 +275,34 @@ define('MAF.element.SlideCarousel', function () {
 						if (dataLength + 1 + this.config.focusIndex < cellsToFill) {
 							cellsToFill = dataLength + 1 + this.config.focusIndex;
 						}
+			
 						for(var i = 0; i < cellsToFill; i++) {
-							var dif = this.config.focusIndex - i,
+							var dif = (this.config.focusIndex > this.config.focusIndex) ? this.config.focusIndex - i :  this.config.focusIndex - i,
 								difABS = Math.abs(dif),
 								index = null;
 							if ((difABS > dataLength-1 || dif > 0) && this.customPager) {
-								this.currentDataset.push({});
+								var tmp = (this.page > 0) ? this.page - dif : null;
+								index = (tmp === null || tmp < 0) ? null : tmp;
 							} else if (difABS > dataLength-1 && !this.customPager) {
 								index = 0;
-								this.currentDataset.push(this.pager.getPage(index).items[0]);
 							} else if (dif > 0) {
 								index = (this.page !== 0) ? this.page - difABS : dataLength - difABS;
 								if (index < 0) {
 									index = dataLength - Math.abs(index);
 								}
-								this.currentDataset.push(this.pager.getPage(index).items[0]);
 							} else if (dif < 0) {
 								index = this.page + difABS;
 								if (index >= dataLength) {
 									index = index - dataLength;
 								}
-								this.currentDataset.push(this.pager.getPage(index).items[0]);
 							} else {
 								index = (this.page === dataLength) ? 0 : this.page;
-								this.currentDataset.push(this.pager.getPage(index).items[0]);
+							}
+							if(index === null){
+								this.currentDataset.push({});
+							}
+							else{
+								this.currentDataset.push((this.pager.getPage(index).items[0]));
 							}
 							this.collection.push(index);
 						}
@@ -301,6 +312,8 @@ define('MAF.element.SlideCarousel', function () {
 					this.cells.forEach(function (cell, u) {
 						if (!isEmpty(this.currentDataset[u])) {
 							cellUpdater.call(this, cell, this.currentDataset[u]);
+						} else{
+							cell.freeze();
 						}
 					}, this);
 				} else {
@@ -312,6 +325,9 @@ define('MAF.element.SlideCarousel', function () {
 						this.cells.forEach(function (cell, u) {
 							if (!isEmpty(this.currentDataset[u])) {
 								cellUpdater.call(this, cell, this.currentDataset[u]);
+							}
+							else{
+								cell.freeze();
 							}
 						}, this);
 					}
@@ -380,11 +396,6 @@ define('MAF.element.SlideCarousel', function () {
 		},
 
 		changeDataset: function (data, reset, dataLength) {
-			if(reset){
-				this.cells = [];
-				this.offsets = [];
-				this.currentDataset = [];
-			}
 			data = data && data.length ? data : [];
 			dataLength = (dataLength && (dataLength > data.length)) ? dataLength : data.length;
 			this.pager.initItems(data, dataLength);

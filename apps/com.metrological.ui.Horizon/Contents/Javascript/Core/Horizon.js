@@ -3,8 +3,7 @@ var Horizon = (function (body) {
 		fontColor = 'rgba(255,255,255,.4)',
 		showing = true,
 		visible = true,
-		sideBySide = false/*,
-		gpu = widget.getSetting('gpu')*/;
+		sideBySide = false;
 
 	Theme.Fonts.add('InterstatePro-Bold', 'Fonts/InterstatePro-Bold');
 	Theme.Fonts.add('InterstatePro-ExtraLight', 'Fonts/InterstatePro-ExtraLight');
@@ -19,9 +18,9 @@ var Horizon = (function (body) {
 	MAF.mediaplayer.init();
 
 	body.setStyles({
-		transform: /*gpu !== false ? 'scale3d(1,1,1)' : */'scale(1)',
+		transform: 'scale(1)',
 		transformOrigin: '50% 50%',
-		transition: widget.getSetting('animation') !== false ? 'all 0.4s ease' : null,
+		transition: 'all 0.4s ease',
 		backgroundRepeat: 'no-repeat',
 		backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png')
 	});
@@ -148,7 +147,7 @@ var Horizon = (function (body) {
 				animationTimer = undefined;
 			}
 			animationTimer = (function () {
-				body.setStyle('transform', /*gpu !== false ? 'scale3d(1.6,1.6,1.6)' : */'scale(1.6)');
+				body.setStyle('transform', 'scale(1.6)');
 				if (callback && callback.call) callback();
 			}).delay(5000);
 		} else if (callback && callback.call) {
@@ -164,7 +163,7 @@ var Horizon = (function (body) {
 				animationTimer = undefined;
 			}
 			animationTimer = (function () {
-				body.setStyle('transform', /*gpu !== false ? 'scale3d(1,1,1)' : */'scale(1)');
+				body.setStyle('transform', 'scale(1)');
 				if (callback && callback.call) callback();
 			}).delay(0);
 		} else if (callback && callback.call) {
@@ -196,6 +195,7 @@ var Horizon = (function (body) {
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
 
 	function hide() {
+		sideBySide = false;
 		showing = false;
 		visible = false;
 		if (!MAF.mediaplayer.currentAsset.title && MAF.mediaplayer.isTVActive && !visible) {
@@ -215,10 +215,6 @@ var Horizon = (function (body) {
 		visible = true;
 	}
 
-	function reset() {
-		sideBySide = false;
-	}
-
 	function setSidebarBackground(show) {
 		sideBySide = show;
 		if (show) {
@@ -228,12 +224,30 @@ var Horizon = (function (body) {
 		}
 	}
 
+	function resume() {
+		body.setStyles({
+			transform: 'scale(1)',
+			opacity: 1
+		}); 
+	}
+
+	function exit() {
+		body.setStyles({
+			transform: 'scale(1.6)',
+			opacity: 0
+		});
+		(function () {
+			body.setStyle('transform', 'scale(0.8)');
+		}).delay(400);
+	}
+
 	updateNowPlaying();
 
 	return {
 		hide: hide,
 		show: show,
-		reset: reset,
+		resume: resume,
+		exit: exit,
 		setSidebarBackground: setSidebarBackground,
 		setText: function (s) {
 			subtitle.data = s;

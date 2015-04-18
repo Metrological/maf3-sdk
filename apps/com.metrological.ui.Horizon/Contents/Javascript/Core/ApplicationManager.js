@@ -1171,21 +1171,12 @@ widget.handleHostEvent = function (event) {
 			}
 			break;
 		case 'onActivateSnippet':
-			if (Horizon) {
-				Horizon.reset();
-			}
-			if (event.id !== widget.identifier && Horizon) {
-				Horizon.hide();
-			}
 			loadTemplate.call(this, event.getResult());
 			break;
 		case 'onAppFin':
 			if (event.error) {
 				warn('Their are issues closing your App, please check your code');
 				return false;
-			}
-			if (event.id !== widget.identifier && Horizon) {
-				Horizon.show();
 			}
 			break;
 		case 'onAppFinComplete':

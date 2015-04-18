@@ -16,7 +16,7 @@
 "CLOSE" = "Sluiten";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
-"TOS_HEADER" = "App Store";
+"TOS_HEADER" = "TV App Store";
 "ALL_APPS" = "ALLE APPS";
 "NOW_PLAYING" = "NU TE ZIEN";
 "LIVE_TV" = "LIVE TV";
@@ -56,7 +56,7 @@
 "TWITTER_EMAIL" = "Voer uw e-mailadres hier in. U ontvangt een bevestigings-e-mail met een link naar de inlogcode.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Inlogcode voor Twitter-app";
-"TWITTER_EMAIL_BODY" = "U heeft aangegeven dat u de Twitter-app wilt gebruiken op uw mediabox. Als u op de link hieronder klikt, ontvangt u een 7-cijferige inlogcode om de Twitter-app te activeren. %s Veel plezier met de app. Vriendelijke groet, UPC.";
+"TWITTER_EMAIL_BODY" = "U heeft aangegeven dat u de Twitter-app wilt gebruiken op uw mediabox. Als u op de link hieronder klikt, ontvangt u een 7-cijferige inlogcode om de Twitter-app te activeren. %s Veel plezier met de app. Vriendelijke groet, Ziggo.";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Ga naar facebook.com/device en gebruik code: %s";
 "CATEGORY_FAVORITES" = "FAVORIETEN";

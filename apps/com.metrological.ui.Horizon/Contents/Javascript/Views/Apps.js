@@ -1,3 +1,6 @@
+var restoreFocus = function () {
+	if (!document.activeElement || document.activeElement === document.body) this.focus();
+};
 var AppsView = new MAF.Class({
 	ClassName: 'AppsView',
 
@@ -9,7 +12,6 @@ var AppsView = new MAF.Class({
 
 	state: null,
 	firstCategory: 1,
-	delayCatagoryLoading: 800,
 	delayedInitialFocus: 800,
 	disableResetFocus: true,
 	maxRecently: 13,
@@ -263,6 +265,7 @@ var AppsView = new MAF.Class({
 			controls.apps.setDisabled(false);
 			elements.categories.setDisabled(false).focus();
 		}
+		if (window.boot) ApplicationManager.exit(true);
 	},
 
 	createView: function () {
@@ -361,7 +364,7 @@ var AppsView = new MAF.Class({
 									} else if (forceFocus) {
 										apps.focus();
 									}
-								}).delay(direction ? 0 : view.delayCatagoryLoading);
+								}).delay(direction ? 0 : widget.getSetting('delayCategory') || 800);
 							}
 						},
 						onBlur: function () {
@@ -757,9 +760,11 @@ var AppsView = new MAF.Class({
 	},
 
 	updateView: function () {
-		var el = this.elements;
-		el.appTitle.setText('');
-		el.appDescription.setText('');
+		if (ApplicationManager.exited) {
+			Horizon.resume();
+		} else {
+			Horizon.show();
+		}
 	},
 
 	updateCategory: function () {
@@ -781,9 +786,20 @@ var AppsView = new MAF.Class({
 			view.appsReady();
 		} else if (view.ready && !view.category) {
 			view.updateCategory();
-			(function () {
-				if (!document.activeElement) this.focus();
-			}).delay(view.delayedInitialFocus, view.elements.categories);
+			restoreFocus.delay(view.delayedInitialFocus, view.elements.categories);
+		} else if (view.ready && view.category) {
+			restoreFocus.delay(view.delayedInitialFocus, view.controls.apps);
+		}
+	},
+
+	hideView: function () {
+		var el = this.elements;
+		el.appTitle.setText('');
+		el.appDescription.setText('');
+		if (ApplicationManager.exiting) {
+			Horizon.exit();
+		} else {
+			Horizon.hide();
 		}
 	},
 

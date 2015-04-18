@@ -122,11 +122,3 @@
  * @function
  * @param {String} name Font name.
  */
-
-/**
- * Set your application to use a certain font as default font.
- * @name Fonts.setDefault
- * @memberOf Theme
- * @function
- * @param {String} family The font family to use as default font.
- */
