@@ -195,7 +195,7 @@ define('MAF.element.SlideCarousel', function () {
 					hOffset: (this.config.orientation === 'horizontal') ? (cd.width * -1) + (pos * cd.width) : 0,
 					vOffset: (this.config.orientation === 'vertical') ? (cd.height * -1) + (pos * cd.height) : 0,
 					transform: 'translateZ(0)',
-					visible: (!isEmpty(this.currentDataset[pos]))? true: false
+					visible: (!isEmpty(this.currentDataset[pos])||this.currentDataset.length === 1)? true: false
 				};
 				cell = this.config.cellCreator.call(this).setStyles(dims);
 				cell.grid = this;

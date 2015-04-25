@@ -17,6 +17,11 @@ var Horizon = (function (body) {
 
 	MAF.mediaplayer.init();
 
+	if (widget.getSetting('backgrounds') === 'cache') {
+		(new Image()).src = widget.getPath('Images/Horizon/PortalBackground.png');
+		(new Image()).src = widget.getPath('Images/Horizon/SidebarBackground.png');
+	}
+
 	body.setStyles({
 		transform: 'scale(1)',
 		transformOrigin: '50% 50%',
