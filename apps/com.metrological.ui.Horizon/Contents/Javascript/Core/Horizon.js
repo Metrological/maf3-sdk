@@ -1,6 +1,8 @@
 var Horizon = (function (body) {
 	var fontSize = '1em',
 		fontColor = 'rgba(255,255,255,.4)',
+		portalFade = widget.getSetting('portal') === 'fade',
+		hidden = false,
 		showing = true,
 		visible = true,
 		sideBySide = false;
@@ -17,18 +19,22 @@ var Horizon = (function (body) {
 
 	MAF.mediaplayer.init();
 
-	if (widget.getSetting('backgrounds') === 'cache') {
-		(new Image()).src = widget.getPath('Images/Horizon/PortalBackground.png');
-		(new Image()).src = widget.getPath('Images/Horizon/SidebarBackground.png');
-	}
-
 	body.setStyles({
+		opacity: portalFade ? 1 : null,
 		transform: 'scale(1)',
 		transformOrigin: '50% 50%',
-		transition: 'all 0.4s ease',
-		backgroundRepeat: 'no-repeat',
-		backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png')
+		transition: 'all 0.4s ease'
 	});
+
+	var background = new Frame({
+		styles: {
+			transform: portalFade ? 'translate3d(0,0,0)' : null,
+			width: 1920,
+			height: 1080,
+			backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png'),
+			backgroundRepeat: 'no-repeat'
+		}
+	}).inject(body);
 
 	var blockedText = new Text({
 		label: $_('BLOCKEDTEXT'),
@@ -44,11 +50,10 @@ var Horizon = (function (body) {
 		}
 	}).inject(body);
 
-	var container = new Frame({
+	var header = new Frame({
 		styles: {
 			width: 'inherit',
 			height: 'inherit',
-			backgroundImage: widget.getPath('Images/Horizon/HeaderBig.png'),
 			backgroundRepeat: 'no-repeat',
 			backgroundPosition: '50% 0%'
 		}
@@ -63,7 +68,7 @@ var Horizon = (function (body) {
 			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize
 		}
-	}).inject(container);
+	}).inject(header);
 
 	var subtitle = new Text({
 		label: $_('ALL_APPS'),
@@ -74,7 +79,7 @@ var Horizon = (function (body) {
 			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize
 		}
-	}).inject(container);
+	}).inject(header);
 
 	var clock = new Text({
 		label: Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase(),
@@ -88,7 +93,7 @@ var Horizon = (function (body) {
 			fontSize: fontSize,
 			textAlign: 'right'
 		}
-	}).inject(container);
+	}).inject(header);
 
 	(function updateClock() {
 		clock.data = Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase();
@@ -107,7 +112,7 @@ var Horizon = (function (body) {
 			anchorStyle: 'center',
 			truncation: 'end'
 		}
-	}).inject(container);
+	}).inject(header);
 
 	function updateNowPlaying() {
 		var title = MAF.mediaplayer.currentAsset.title,
@@ -130,16 +135,15 @@ var Horizon = (function (body) {
 
 	function updateHeader() {
 		if (blocked()) {
-			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
+			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
 			blockedText.visible = !showing;
-		} else if (sideBySide) {
+		} else if (!showing && sideBySide) {
 			blockedText.visible = false;
-			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
-		} else if (!visible) {
+			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
+		} else if (!showing && !visible) {
 			blockedText.visible = false;
-			body.setStyle('backgroundImage', null);
+			background.setStyle('backgroundImage', null);
 		}
-		container.setStyle('backgroundImage', widget.getPath(ApplicationManager.active === widget.identifier ? 'Images/Horizon/HeaderBig.png' : 'Images/Horizon/Header.png'));
 	}
 
 	var animationTimer;
@@ -152,9 +156,14 @@ var Horizon = (function (body) {
 				animationTimer = undefined;
 			}
 			animationTimer = (function () {
-				body.setStyle('transform', 'scale(1.6)');
-				if (callback && callback.call) callback();
-			}).delay(5000);
+				animationTimer = undefined;
+				hidden = true;
+				body.setStyles({
+					transform: 'scale(1.6)',
+					opacity: portalFade ? 0 : null
+				});
+				if (callback && callback.call) requestAnimationFrame(callback);
+			}).delay(3000);
 		} else if (callback && callback.call) {
 			callback();
 		}
@@ -167,10 +176,14 @@ var Horizon = (function (body) {
 				clearTimeout(animationTimer);
 				animationTimer = undefined;
 			}
-			animationTimer = (function () {
-				body.setStyle('transform', 'scale(1)');
-				if (callback && callback.call) callback();
-			}).delay(0);
+			body.setStyles({
+				transform: 'scale(1)',
+				opacity: portalFade ? 1 : null
+			});
+			(function () {
+				hidden = false;
+				if (callback && callback.call) requestAnimationFrame(callback);
+			}).delay(600);
 		} else if (callback && callback.call) {
 			callback();
 		}
@@ -193,31 +206,33 @@ var Horizon = (function (body) {
 
 	(function channelEvents() {
 		updateNowPlaying();
-		if (ApplicationManager.active === widget.identifier || visible) {
-			return;
-		}
+		if (showing) return;
 		showNowPlaying(hideNowPlaying);
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
 
 	function hide() {
+		if (!showing) return;
 		sideBySide = false;
 		showing = false;
 		visible = false;
 		if (!MAF.mediaplayer.currentAsset.title && MAF.mediaplayer.isTVActive && !visible) {
-			body.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
+			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
 		} else {
-			body.setStyle('backgroundImage', null);
+			background.setStyle('backgroundImage', null);
 		}
-		hideNowPlaying();
-		container.setStyle('backgroundImage', widget.getPath('Images/Horizon/Header.png'));
+		header.setStyle('backgroundImage', widget.getPath('Images/Horizon/Header.png'));
+		requestAnimationFrame(hideNowPlaying);
 	}
 
 	function show() {
+		if (showing) return;
 		showing = true;
-		showNowPlaying();
-		body.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
-		container.setStyle('backgroundImage', widget.getPath('Images/Horizon/HeaderBig.png'));
-		visible = true;
+		header.setStyle('backgroundImage', null);
+		background.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
+		requestAnimationFrame(function () {
+			showNowPlaying();
+			visible = true;
+		});
 	}
 
 	function setSidebarBackground(show) {
@@ -230,20 +245,24 @@ var Horizon = (function (body) {
 	}
 
 	function resume() {
-		body.setStyles({
-			transform: 'scale(1)',
-			opacity: 1
-		}); 
+		if (portalFade) {
+			body.setStyles({
+				transform: 'scale(1)',
+				opacity: 1
+			});
+		}
 	}
 
 	function exit() {
-		body.setStyles({
-			transform: 'scale(1.6)',
-			opacity: 0
-		});
-		(function () {
-			body.setStyle('transform', 'scale(0.8)');
-		}).delay(400);
+		if (portalFade) {
+			body.setStyles({
+				transform: 'scale(1.6)',
+				opacity: 0
+			});
+			(function () {
+				body.setStyle('transform', 'scale(0.8)');
+			}).delay(400);
+		}
 	}
 
 	updateNowPlaying();
@@ -254,6 +273,9 @@ var Horizon = (function (body) {
 		resume: resume,
 		exit: exit,
 		setSidebarBackground: setSidebarBackground,
+		isHidden: function () {
+			return hidden;
+		},
 		setText: function (s) {
 			subtitle.data = s;
 		}

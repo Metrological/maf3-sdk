@@ -12,7 +12,7 @@ var AppsView = new MAF.Class({
 
 	state: null,
 	firstCategory: 1,
-	delayedInitialFocus: 800,
+	delayedInitialFocus: widget.getSetting('delayFocus') || 800,
 	disableResetFocus: true,
 	maxRecently: 13,
 	maxFavorites: 22,
@@ -54,7 +54,7 @@ var AppsView = new MAF.Class({
 			view.controls.apps.changeDataset(data, true);
 			event.stopPropagation();
 			event.preventDefault();
-		} else if (!view.frozen) {
+		} else if (!view.frozen && !Browser.metrological) {
 			ApplicationManager.exit();
 		}
 	},
@@ -788,7 +788,10 @@ var AppsView = new MAF.Class({
 			view.updateCategory();
 			restoreFocus.delay(view.delayedInitialFocus, view.elements.categories);
 		} else if (view.ready && view.category) {
-			restoreFocus.delay(view.delayedInitialFocus, view.controls.apps);
+			(function () {
+				view.updateCategory();
+				restoreFocus.call(view.controls.apps);
+			}).delay(Horizon.isHidden() || ApplicationManager.exited ? view.delayedInitialFocus : 150);
 		}
 	},
 

@@ -760,7 +760,7 @@ var loadTemplate = (function () {
 										break;
 									case 'profile-create':
 										if (input) {
-											input.data = payload.value;
+											input.data = (payload.value || '').htmlEscape();
 											var nextBtn = getElementById('@' + type + '-button0');
 											if (input.data && input.data.length > 0) {
 												if (ProfileManager.exists(input.data)) {
@@ -783,7 +783,7 @@ var loadTemplate = (function () {
 									case 'twitter-login':
 									case 'textentry':
 										if (input) {
-											input.data = payload.value;
+											input.data = (payload.value || '').htmlEscape();
 										}
 										break;
 								}

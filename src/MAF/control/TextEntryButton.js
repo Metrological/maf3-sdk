@@ -68,12 +68,12 @@ define('MAF.control.TextEntryButton', function () {
 			}
 
 			this.valueDisplay._updateContent = (function (event) {
-				var value = event.payload.value,
+				var value = this.getDisplayValue(event.payload.value || ''),
 					target = this.valueDisplay;
-				target.setText(this.getDisplayValue(value));
+				target.setText(value);
 			}).subscribeTo(this, ['onValueInitialized','onValueChanged','onValueEdited'], this);
 
-			this.valueDisplay._updateContent({payload:{value:this.getValue()}});
+			this.valueDisplay.setText(this.getDisplayValue(this.getValue()));
 		},
 
 		getDisplayValue: function (value, editing) {
@@ -104,7 +104,7 @@ define('MAF.control.TextEntryButton', function () {
 			} else {
 				output = editing ? cursor : '';
 			}
-			return output;
+			return output ? output.htmlEscape() : output;
 		},
 		destroyOverlay: function () {
 			if (this._TextEntryOverlay) {

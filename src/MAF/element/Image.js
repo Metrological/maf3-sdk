@@ -123,6 +123,7 @@ define('MAF.element.Image', function () {
 					'aspect',
 					'srcWidth',
 					'srcHeight',
+					'region',
 					'remoteAsync'
 				].concat(propnames || []));
 
@@ -151,6 +152,9 @@ define('MAF.element.Image', function () {
 			delete this.config.remoteAsync;
 			if (this.config.aspect) {
 				this.aspect = this.config.aspect;
+			}
+			if (this.config.region) {
+				this.region = this.config.region;
 			}
 			this.setSources(this.config);
 		},
