@@ -99,9 +99,9 @@ define('MAF.element.SlideCarousel', function () {
 	function animateCells(cells, dir, parent) {
 		if (cells) {
 			cells.forEach(function (cell, i) {
-				var cd = (dir === 'left' || dir === 'up') ? parent.currentDataset.length : parent.currentDataset.length-1;
+				var cd = parent.currentDataset.length;
 				if (cell) {
-					if(!isEmpty(parent.currentDataset[i])&& cd !== i)
+					if(!isEmpty(parent.currentDataset[i]) && parent.currentDataset.length !== i)
 						cell.visible = true;
 					else 
 						cell.visible = false;
@@ -273,11 +273,10 @@ define('MAF.element.SlideCarousel', function () {
 					} else {
 						var cellsToFill = this.config.visibleCells + 2;
 						if (dataLength + 1 + this.config.focusIndex < cellsToFill) {
-							cellsToFill = dataLength + 1 + this.config.focusIndex;
+							cellsToFill = dataLength + this.config.focusIndex;
 						}
-			
 						for(var i = 0; i < cellsToFill; i++) {
-							var dif = (this.config.focusIndex > this.config.focusIndex) ? this.config.focusIndex - i :  this.config.focusIndex - i,
+							var dif = this.config.focusIndex - i,
 								difABS = Math.abs(dif),
 								index = null;
 							if ((difABS > dataLength-1 || dif > 0) && this.customPager) {

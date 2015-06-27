@@ -1017,9 +1017,7 @@ widget.handleChildEvent = function (event) {
 				return false;
 			}
 			data = event.getData();
-			if (data.type === 'fullscreen' && Horizon) {
-				Horizon.setSidebarBackground(false);
-			}
+			if (data.type === 'fullscreen' && Horizon) Horizon.setSidebarBackground(false);
 			loadTemplate.call(this, data);
 			break;
 		case 'showDialog':
@@ -1080,15 +1078,13 @@ widget.handleHostEvent = function (event) {
 					var mediaplayer = this.MAF.mediaplayer,
 						bounds = mediaplayer && mediaplayer.getViewportBounds();
 					if (this.MAF.application.isSidebarView()) {
-						if (bounds && bounds.height === 1080) {
+						var isFullscreen = bounds && bounds.height === 1080;
+						if (isFullscreen) {
 							mediaplayer.setViewportBounds(624, 176, 1280, 720);
-						} else if (bounds) {
+						} else {
 							mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 						}
-						bounds = mediaplayer && mediaplayer.getViewportBounds();
-						if (Horizon) {
-							Horizon.setSidebarBackground(bounds && bounds.height !== 1080);
-						}
+						if (Horizon) Horizon.setSidebarBackground(isFullscreen);
 					} else if (mediaplayer && bounds && bounds.height !== 1080) {
 						mediaplayer.setViewportBounds(0, 0, 1920, 1080);
 					}

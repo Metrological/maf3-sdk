@@ -5,7 +5,9 @@ var Horizon = (function (body) {
 		hidden = false,
 		showing = true,
 		visible = true,
-		sideBySide = false;
+		sideBySide = false,
+		exited = false,
+		isBoot = window.boot;
 
 	Theme.Fonts.add('InterstatePro-Bold', 'Fonts/InterstatePro-Bold');
 	Theme.Fonts.add('InterstatePro-ExtraLight', 'Fonts/InterstatePro-ExtraLight');
@@ -20,10 +22,10 @@ var Horizon = (function (body) {
 	MAF.mediaplayer.init();
 
 	body.setStyles({
-		opacity: portalFade ? 1 : null,
-		transform: 'scale(1)',
+		opacity: portalFade ? (isBoot ? 0 : 1) : null,
+		transform: portalFade && isBoot ? 'scale(0.8)' : 'scale(1)',
 		transformOrigin: '50% 50%',
-		transition: 'all 0.4s ease'
+		transition: isBoot ? 'none' : 'all 0.4s ease'
 	});
 
 	var background = new Frame({
@@ -52,10 +54,10 @@ var Horizon = (function (body) {
 
 	var header = new Frame({
 		styles: {
-			width: 'inherit',
-			height: 'inherit',
-			backgroundRepeat: 'no-repeat',
-			backgroundPosition: '50% 0%'
+			width: 1920,
+			height: 284,
+			backgroundRepeat: 'no-repeat'/*,
+			backgroundPosition: '50% 0%'*/
 		}
 	}).inject(body);
 
@@ -149,13 +151,14 @@ var Horizon = (function (body) {
 	var animationTimer;
 
 	function hideNowPlaying(callback) {
-		if (!visible && !sideBySide && !blocked() && !Browser.activevideo) {
+		if (!sideBySide && !blocked() && !Browser.activevideo) {
 			updateHeader();
 			if (animationTimer) {
 				clearTimeout(animationTimer);
 				animationTimer = undefined;
 			}
 			animationTimer = (function () {
+				if (visible) return;
 				animationTimer = undefined;
 				hidden = true;
 				body.setStyles({
@@ -170,7 +173,7 @@ var Horizon = (function (body) {
 	}
 
 	function showNowPlaying(callback) {
-		if (!visible && !Browser.activevideo) {
+		if (!Browser.activevideo) {
 			updateHeader();
 			if (animationTimer) {
 				clearTimeout(animationTimer);
@@ -205,6 +208,11 @@ var Horizon = (function (body) {
 	}).subscribeTo(MAF.mediaplayer, 'onStateChange');
 
 	(function channelEvents() {
+		if (exited) return;
+		if (animationTimer) {
+			clearTimeout(animationTimer);
+			animationTimer = undefined;
+		}
 		updateNowPlaying();
 		if (showing) return;
 		showNowPlaying(hideNowPlaying);
@@ -227,16 +235,18 @@ var Horizon = (function (body) {
 	function show() {
 		if (showing) return;
 		showing = true;
+		visible = true;
 		header.setStyle('backgroundImage', null);
 		background.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
-		requestAnimationFrame(function () {
-			showNowPlaying();
-			visible = true;
-		});
+		requestAnimationFrame(showNowPlaying);
 	}
 
 	function setSidebarBackground(show) {
 		sideBySide = show;
+		if (animationTimer) {
+			clearTimeout(animationTimer);
+			animationTimer = undefined;
+		}
 		if (show) {
 			showNowPlaying();
 		} else {
@@ -245,24 +255,27 @@ var Horizon = (function (body) {
 	}
 
 	function resume() {
-		if (portalFade) {
-			body.setStyles({
-				transform: 'scale(1)',
-				opacity: 1
-			});
-		}
+		if (isBoot) isBoot = false;
+		if (!exited) return;
+		exited = false;
+		updateNowPlaying();
+		try {
+			MAF.system.setState('resume');
+		} catch(err) {}
+		if (!visible) show();
+		if (portalFade) body.setStyles({ transition: 'all 0.4s ease', transform: 'scale(1)', opacity: 1 });
 	}
 
 	function exit() {
-		if (portalFade) {
-			body.setStyles({
-				transform: 'scale(1.6)',
-				opacity: 0
-			});
-			(function () {
-				body.setStyle('transform', 'scale(0.8)');
-			}).delay(400);
+		if (exited) return;
+		exited = true;
+		if (portalFade && !isBoot) {
+			body.setStyles({ transform: 'scale(1.6)', opacity: 0 });
+			body.setStyles.delay(400, body, [{ transition: null, transform: 'scale(0.8)' }]);
 		}
+		try {
+			if (!isBoot) MAF.system.setState('paused');
+		} catch(err) {}
 	}
 
 	updateNowPlaying();

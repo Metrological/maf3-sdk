@@ -16,6 +16,7 @@ var AppsView = new MAF.Class({
 	disableResetFocus: true,
 	maxRecently: 13,
 	maxFavorites: 22,
+	isBoot: window.boot,
 
 	initialize: function () {
 		var view = this;
@@ -52,11 +53,11 @@ var AppsView = new MAF.Class({
 				data = ApplicationManager.getApplicationsByCategory(view.category);
 			}
 			view.controls.apps.changeDataset(data, true);
-			event.stopPropagation();
-			event.preventDefault();
 		} else if (!view.frozen && !Browser.metrological) {
 			ApplicationManager.exit();
 		}
+		event.stopPropagation();
+		event.preventDefault();
 	},
 
 	getFavorites: function () {
@@ -237,6 +238,7 @@ var AppsView = new MAF.Class({
 			},
 			events: {
 				onSelect: function () {
+					delete view.data;
 					ApplicationManager.exit();
 				},
 				onFocus: function () {
@@ -760,7 +762,11 @@ var AppsView = new MAF.Class({
 	},
 
 	updateView: function () {
-		if (ApplicationManager.exited) {
+		var view = this;
+		if (view.isBoot) {
+			Horizon.exit();
+			view.isBoot = false;
+		} else if (ApplicationManager.exited) {
 			Horizon.resume();
 		} else {
 			Horizon.show();
@@ -779,6 +785,7 @@ var AppsView = new MAF.Class({
 	selectView: function () {
 		var view = this;
 		view.hasbeenfocused = true;
+		if (ApplicationManager.exited && !ApplicationManager.resuming) return;
 		if (view.skipTOS !== true) {
 			var tos = widget.getElementById('tos');
 			if (tos) tos.focus();
@@ -796,7 +803,8 @@ var AppsView = new MAF.Class({
 	},
 
 	hideView: function () {
-		var el = this.elements;
+		var view = this,
+			el = view.elements;
 		el.appTitle.setText('');
 		el.appDescription.setText('');
 		if (ApplicationManager.exiting) {
@@ -804,6 +812,7 @@ var AppsView = new MAF.Class({
 		} else {
 			Horizon.hide();
 		}
+		delete view.data;
 	},
 
 	destroyView: function () {
