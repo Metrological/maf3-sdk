@@ -908,6 +908,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 		}
 
 		var next = current + 1 < layouts.length ? current + 1 : 0;
+
+		if(internal && internal.state && internal.state.current_focused_key)
+			delete internal.state.current_focused_key;
+
 		return layouts[next];
 	};
 

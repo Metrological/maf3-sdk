@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
  /** 
- * @class MAF.control.SlideCarousel
- * @classdesc .
- * @extends MAF.control.Container
+ * @class MAF.element.SlideCarousel
+ * @extends MAF.element.Container
  * * All cells are based on descendants of MAF.element.SlideCarouselCell
  * * cellCreator() is a required method that returns a cell with no data.
  * * cellUpdater() is a required method that will update a cell with data.
- * @example new MAF.control.SlideCarousel({
+ * @example new MAF.element.SlideCarousel({
  *    visibleCells: 5,
  *    focusIndex: 3,
  *    orientation: 'horizontal',
