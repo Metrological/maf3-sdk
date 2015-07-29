@@ -165,7 +165,7 @@ define('MAF.element.SlideCarousel', function () {
 					var back = (direction === 'left' || direction === 'up'),
 						next = (direction === 'right' || direction === 'down'),
 						backLimit = (this.config.focusIndex - 1 <= this.config.dynamicFocusStart),
-						nextLimit = (this.config.focusIndex + 1 >= this.cells.length - this.config.dynamicFocusEnd - 1);
+						nextLimit = (this.config.focusIndex + 1 >= this.cells.length - this.config.dynamicFocusEnd - ((this.cells.length - 2 < this.config.visibleCells) ? 0 : 1));
 					if (this.config.dynamicFocus && ((back && !backLimit) || (next && !nextLimit))) {
 						if (next)
 							this.config.focusIndex++;
