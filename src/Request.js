@@ -104,6 +104,11 @@
 /**
  * @cfg {Boolean|Object} proxy Default true, use false to not use the proxy. 
  * @memberOf Request
+ * @param {Boolean} [json] Indicates if the proxy should convert the incoming data into JSON.
+ * @param {Boolean} [nocache] Indicates if the proxy should cache the incoming data, enabling this could lead to slower data retrieval.
+ * @param {Boolean} [cookie] Adds X-Proxy-COOKIE as header to your request.
+ * @param {Boolean} [headers] Adds X-Proxy-HEADERS as header to your request.
+
  */
 
 /**

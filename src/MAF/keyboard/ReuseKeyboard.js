@@ -167,6 +167,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-Zacute":		{label:"Ź",value:"Ź",unicode:"\u0179"},
 				"char-Zdot":			{label:"Ż",value:"Ż",unicode:"\u017B"},
 				"char-Zcaron":		{label:"Ž",value:"Ž",unicode:"\u017D"},
+				"char-dcaron":				{label:"ď",value:"ď",unicode:"\u0010F"},
+				"char-Dcaron":				{label:"Ď",value:"Ď",unicode:"\u0010E"},
 				"char-eth":				{label:"ð",value:"ð",unicode:"\u00F0"},
 				"char-thorn":			{label:"þ",value:"þ",unicode:"\u00FE"},
 				"char-ETH":				{label:"Ð",value:"Ð",unicode:"\u00D0"},
@@ -259,8 +261,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-d":{
 					normal:"char-d",
 					shift:"char-D",
-					extended:["char-d","char-eth","char-thorn"],
-					shiftextended:["char-D","char-ETH","char-THORN"]
+					extended:["char-d","char-eth","char-thorn", "char-dcaron"],
+					shiftextended:["char-D","char-ETH","char-THORN", "char-Dcaron"]
 				},
 				"key-e":{
 					normal:"char-e",
@@ -1799,12 +1801,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardkey: {
 		normal: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 57,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 52,
 				height: 63
 			}
@@ -1813,12 +1817,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardaction: {
 		normal: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 87,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 82,
 				height: 63
 			}
@@ -1827,12 +1833,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardspace: {
 		normal: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 196,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 171,
 				height: 63
 			}
@@ -1841,12 +1849,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardnumkey: {
 		normal: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 116,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 116,
 				height: 63
 			}
@@ -1855,12 +1865,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardmultikey: {
 		normal: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 116,
 				height: 80
 			}
 		},
 		small: {
 			styles: {
+				transform: 'translateZ(0)',
 				width: 116,
 				height: 80
 			}
@@ -1868,6 +1880,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	ReuseKeyboardLabel: {
 		styles: {
+			transform: 'translateZ(0)',
 			width: 'inherit',
 			height: 'inherit',
 			fontSize: 32,
@@ -1892,6 +1905,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	extendedOverlay: {
 		styles: {
+			transform: 'translateZ(0)',
 			height: 67/*,
 			background: 'url(' + Image.WHITE + ')',
 			backgroundSize: '90% 50%',

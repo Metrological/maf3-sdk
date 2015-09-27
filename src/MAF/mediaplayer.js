@@ -37,28 +37,28 @@
 
 /**
  * Duration of the currently active media on the player.
- * @name player.currentMediaDuration
+ * @name 'player.currentMediaDuration'
  * @type {Float}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * State of the player it is currently in.
- * @name player.currentPlayerState
+ * @name 'player.currentPlayerState'
  * @type {Number}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Playback speed of the currently active media on the player.
- * @name player.currentSpeed
+ * @name 'player.currentSpeed'
  * @type {Number}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 /**
  * Time index of the currently active media on the player.
- * @name player.currentTimeIndex
+ * @name 'player.currentTimeIndex'
  * @type {Float}
  * @memberof MAF.mediaplayer
  * @readonly
@@ -81,85 +81,91 @@
  * | REWIND | The media file is rewinding. |
  * | STOP | The media file is stopped. |
  * | UNKNOWN | The player triggered a state unknown to the MAF.mediaplayer |
- * @name constants.states
+ * @name 'constants.states'
  * @type {Object}
  * @memberof MAF.mediaplayer
  * @readonly
  */
 
 /**
+ * Initializes the mediaplayer. This allows the use of playback and/or event listeners.
+ * @memberof MAF.mediaplayer
+ * @method 'init'
+ */
+
+/**
  * Continue the playback of the media that is paused. Only call this method when the media is paused.
  * @memberof MAF.mediaplayer
- * @method control.play
+ * @method 'control.play'
  */
 /**
  * Pause the playback of the currently playing media.
  * @memberof MAF.mediaplayer
- * @method control.pause
+ * @method 'control.pause'
  */
 /**
  * Stop the playback of the currently playing media.
  * @memberof MAF.mediaplayer
- * @method control.stop
+ * @method 'control.stop'
  */
 /**
  * This will rewind current media. If the OEM supports faster speeds calling this method multiple times will increment the rewind speed.
  * @memberof MAF.mediaplayer
- * @method control.rewind
+ * @method 'control.rewind'
  */
 /**
  * This will forward current media. If the OEM supports faster speeds calling this method multiple times will increment the forward speed.
  * @memberof MAF.mediaplayer
- * @method control.forward
+ * @method 'control.forward'
  */
 /**
  * Move the media position to the defined time.
  * @memberof MAF.mediaplayer
- * @method control.seek
+ * @method 'control.seek'
  * @param {Number} time Seek to the specified time in seconds.
  * @param {Boolean} [absolute] Default this method will use the time parameter to seek relative from the current position in the media. Use true to seek to a absolute position.
  */
 /**
  * The will mute the audio of the media.
  * @memberof MAF.mediaplayer
- * @method control.mute
+ * @method 'control.mute'
  * @param {Boolean} muted Define true to mute the media false to unmute.
  */
 /**
  * This will hide the media.
  * @memberof MAF.mediaplayer
- * @method control.hide
+ * @method 'control.hide'
  */
 /**
  * This will show the media.
  * @memberof MAF.mediaplayer
- * @method control.show
+ * @method 'control.show'
  */
 /**
  * @memberof MAF.mediaplayer
- * @method playlist.get
+ * @method 'playlist.get'
  * @returns {MAF.media.Playlist} Currently active playlist.
  */
 /**
  * Load the entry in the playlist defined bu the supplied idx parameter.
  * @memberof MAF.mediaplayer
- * @method playlist.loadEntry
+ * @method 'playlist.loadEntry'
  * @param {Number} idx Index defining the entry in the playlist to load.
  */
 /**
  * Go to the next entry in the playlist.
  * @memberof MAF.mediaplayer
- * @method playlist.nextEntry
+ * @method 'playlist.nextEntry'
  */
 /**
  * Go to the previous entry in the playlist.
  * @memberof MAF.mediaplayer
- * @method playlist.previousEntry
+ * @method 'playlist.previousEntry'
  */
 /**
  * Set a playlist on the mediaplayer.
  * @memberof MAF.mediaplayer
- * @method playlist.set
+ * @method 'playlist.set'
  * @param {MAF.media.Playlist} pls The playlist to set on the mediaplayer.
  * @example
  * MAF.mediaplayer.playlist.set((new MAF.media.Playlist()).addEntry(new MAF.media.PlaylistEntry(config)));
@@ -167,7 +173,7 @@
 /**
  * This will try to start the playback of the playlist on the mediaplayer. A playlist needs to be set on the mediaplayer before calling this with MAF.mediaplayer.playlist.set()
  * @memberof MAF.mediaplayer
- * @method playlist.start
+ * @method 'playlist.start'
  */
 /**
  * This will give information about a channel the tv currently is tuned to.

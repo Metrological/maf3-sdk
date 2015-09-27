@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
- /** 
+ /**
  * @class MAF.element.SlideCarousel
  * @extends MAF.element.Container
  * * All cells are based on descendants of MAF.element.SlideCarouselCell
@@ -32,7 +32,7 @@
  *          events: {
  *             onSelect: function (event) {
  *                log('Selected', this.getDataItem());
- *             } 
+ *             }
  *          }
  *       });
  *
@@ -62,15 +62,29 @@
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Boolean} this determines whether the grid can be focus at all, this is handy when you decided to control your SlideCarousel with a different component.
+ * @cfg {Boolean} blockFocus this determines whether the grid can be focus at all.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Number} this determines how fast the cells will be moving to a new position.
+ * @cfg {Number} slideDuration this determines how fast the cells will be moving to a new position.
  * @memberof MAF.element.SlideCarousel
  */
 /**
  * @cfg {String} slideEase this determines with which easing cells will be moving to a new position.
+ * @memberof MAF.element.SlideCarousel
+ */
+
+/**
+ * @cfg {Boolean} [dynamicFocus = false] this enables focusing the other cells without sliding.
+ * @memberof MAF.element.SlideCarousel
+ */
+
+/**
+ * @cfg {Integer} [dynamicFocusStart = 0] this determines the threshold from the left before sliding.
+ * @memberof MAF.element.SlideCarousel
+ */
+/**
+ * @cfg {Integer} [dynamicFocusEnd = 0] this determines the threshold from the right before sliding.
  * @memberof MAF.element.SlideCarousel
  */
 
@@ -102,12 +116,13 @@ define('MAF.element.SlideCarousel', function () {
 				if (cell) {
 					if(!isEmpty(parent.currentDataset[i]) && parent.currentDataset.length !== i)
 						cell.visible = true;
-					else 
+					else
 						cell.visible = false;
-						
+
+					var hOffset = (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
+						vOffset = (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0;
 					cell.animate({
-						hOffset: (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
-						vOffset: (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
+						transform: 'translate('+hOffset+'px,'+vOffset+'px)',
 						duration: parent.config.slideDuration,
 						timingFunction:  parent.config.slideEase,
 						events:{
@@ -155,7 +170,7 @@ define('MAF.element.SlideCarousel', function () {
 					if (this.config.blockFocus) {
 						event.preventDefault();
 					}
-					if ((this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) || 
+					if ((this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) ||
 						(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))) {
 						event.preventDefault();
 					} else {
@@ -187,13 +202,13 @@ define('MAF.element.SlideCarousel', function () {
 				}
 			},
 			setCellConfiguration: function (pos, cd) {
-				var cell,
-					dims = {
+			var cell,
+				vOffset = (this.config.orientation === 'vertical') ? (cd.height * -1) + (pos * cd.height) : 0,
+				hOffset = (this.config.orientation === 'horizontal') ? (cd.width * -1) + (pos * cd.width) : 0,
+				dims = {
 					width: (this.config.orientation === 'horizontal') ? ((1 / this.config.visibleCells) * 100) + '%' : '100%',
 					height: (this.config.orientation === 'vertical') ? ((1 / this.config.visibleCells) * 100) + '%' :'100%',
-					hOffset: (this.config.orientation === 'horizontal') ? (cd.width * -1) + (pos * cd.width) : 0,
-					vOffset: (this.config.orientation === 'vertical') ? (cd.height * -1) + (pos * cd.height) : 0,
-					transform: 'translateZ(0)',
+					transform: 'translate('+hOffset+'px,'+vOffset+'px)',
 					visible: (!isEmpty(this.currentDataset[pos])||this.currentDataset.length === 1)? true: false
 				};
 				cell = this.config.cellCreator.call(this).setStyles(dims);
@@ -306,7 +321,7 @@ define('MAF.element.SlideCarousel', function () {
 						}
 					}
 				}
-				if (this.cells.length && this.cells.length === this.currentDataset.length) {
+				if (this.config.carousel && this.cells.length && this.cells.length === this.currentDataset.length) {
 					this.cells.forEach(function (cell, u) {
 						if (!isEmpty(this.currentDataset[u])) {
 							cellUpdater.call(this, cell, this.currentDataset[u]);
@@ -432,8 +447,8 @@ define('MAF.element.SlideCarousel', function () {
 
 		/**
 		 * Method for focussing a specific cell or dataitem in your grid.
-		 * @method MAF.element.SlideCarousel#focucCell
-		 * @param {integer} / index which as to be focused and aligned with the proper focusIndex cell.
+		 * @method MAF.element.SlideCarousel#focusCell
+		 * @param {integer} target index which as to be focused and aligned with the proper focusIndex cell.
 		 */
 		focusCell: function (target) {
 			if (target >= this.getPageCount()) {

@@ -73,11 +73,11 @@
  */
 /**
  * Fired when the source image finished loading.
- * @event MAF.element.Text#onLoaded
+ * @event MAF.element.Image#onLoaded
  */
 /**
  * Fired when the source image had problems loading.
- * @event MAF.element.Text#onError
+ * @event MAF.element.Image#onError
  */
 define('MAF.element.Image', function () {
 	return new MAF.Class({

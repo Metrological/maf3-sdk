@@ -99,7 +99,7 @@
 
 /**
  * Add a font to the application.
- * @name Fonts.add
+ * @name 'Fonts.add'
  * @memberOf Theme
  * @function
  * @param {String} name Font name.
@@ -109,7 +109,7 @@
 
 /**
  * Remove a certain font from the application.
- * @name Fonts.remove
+ * @name 'Fonts.remove'
  * @memberOf Theme
  * @function
  * @param {String} name Font name which to remove.
@@ -117,7 +117,7 @@
 
 /**
  * Check if a certain font is available for the application
- * @name Fonts.has
+ * @name 'Fonts.has'
  * @memberOf Theme
  * @function
  * @param {String} name Font name.

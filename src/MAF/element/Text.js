@@ -34,7 +34,7 @@
  */
 /**
  * @cfg {Object} styles CSS styles for the component:
- * @param {String} truncation Indicate if the text will not fit inside the component box if it should truncate. Default it will not.
+ * @param {String} truncation Indicate if the should truncate when it does not fit the component. It will not truncate by default, use 'end' to turn it on. If truncation is allowed all HTML tags will be stripped from the text.
  * @param {Boolean} wrap Display text in a single line or wrap the text. When setting the wrap property the styles.width config is required. Default is false.
  * @memberof MAF.element.Text
  */
