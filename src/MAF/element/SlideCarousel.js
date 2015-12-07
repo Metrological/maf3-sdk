@@ -101,45 +101,155 @@
   * @event MAF.element.SlideCarousel#onSlideDone
   */
 define('MAF.element.SlideCarousel', function () {
-	function hasFocus(cells) {
-		for(var i = 0; i < cells.length; i++) {
-			if (cells[i].element.hasFocus) {
-				return true;
+	var ParentCell = MAF.Class({
+		ClassName: 'SlideCarouselParentCell',
+		Extends: MAF.element.Container,
+
+		Protected: {
+			registerEvents: function (types) {
+				this.parent(['navigateoutofbounds'].concat(types || []));
+			},
+
+			dispatchEvents: function (event) {
+				this.parent(event);
+				switch (event.type) {
+					case 'navigate':
+						var parent = this.grid;
+						if (parent.animating || parent.config.blockFocus) {
+							event.preventDefault();
+							return;
+						}
+						parent.animating = true;
+						parent.navigating = true;
+
+						var dir = event.detail.direction,
+							pos = parent.cells.indexOf(this),
+							dyn = parent.config.dynamicFocus,
+							fi = parent.config.focusIndex,
+							start = dyn && pos === parent.config.dynamicFocusStart + 1,
+							end = dyn && pos === parent.config.visibleCells - parent.config.dynamicFocusEnd,
+							ds = parent.currentDataset,
+							tCurrent = hasFocus(parent.cells),
+							ct = tCurrent[0],
+							rt = tCurrent[1];
+
+						var withFlow = 	(parent.config.orientation === 'vertical' && (dir === 'down' || dir === 'up')) ||
+										(parent.config.orientation === 'horizontal' && (dir === 'left' || dir === 'right'));
+						var againstFlow = 	(parent.config.orientation === 'vertical' && (dir === 'left' || dir === 'right')) ||
+											(parent.config.orientation === 'horizontal' && (dir === 'down' || dir === 'up'));
+						var plus = dir === 'right' || dir === 'down';
+
+						if (withFlow) {
+							ct += (plus ? 1 : -1);
+							if (ds[ct] !== null) {
+								event.preventDefault();
+								if (ds[ct].items[rt] === undefined) {
+									for (var i = rt; i >= 0; i--) {
+										if (ds[ct].items[i]) {
+											rt = i;
+											parent.cells[ct].subCells[rt].focus();
+											break;
+										}
+									}
+								} else {
+									parent.cells[ct].subCells[rt].focus();
+								}
+							}
+							if ((end && (dir === 'right' || dir === 'down')) ||
+								(start && (dir === 'left' || dir === 'up')) ||
+								(!dyn && pos === fi)) {
+								parent.shift(dir, pos);
+							} else {
+								parent.animating = false;
+							}
+						} else if (againstFlow) {
+							rt += (plus ? 1 : -1);
+							if ((ds[ct].items[rt] === undefined && !dyn) || parent.cells[ct].subCells[rt] === undefined) {
+								parent.animating = false;
+								parent.manageBounds(false);
+								parent.fire('onNavigateOutOfBounds', event.detail);
+								return;
+							} else {
+								event.preventDefault();
+								parent.animating = false;
+								parent.cells[ct].subCells[rt].focus();
+							}
+						} 
+						parent.navigating = false;
+						break;
+				}
 			}
+		},
+
+		config: {
+			styles: {
+				overflow: 'visible'
+			}
+		},
+
+		initialize: function () {
+			this.parent();
+		},
+		suicide: function () {
+			delete this.grid;
+			Object.forEach(this, function (key, obj) {
+				if (key !== 'owner' && typeOf(obj) === 'instance' && obj.suicide && obj !== this) {
+					delete this[key];
+					obj.suicide();
+				}
+			}, this);
+			this.parent();
 		}
-		return false;
+	});
+	function hasFocus(cells) {
+		for (var i = 0; i < cells.length; i++) {
+			if (cells[i].subCells && cells[i].subCells.length > 0) {
+				for (var j = 0; j < cells[i].subCells.length; j++) {
+					if (cells[i].subCells[j].element.hasFocus) {
+						return [i,j];
+					}
+				}
+			}
+			if (cells[i].element.hasFocus)
+				return i;
+		}
+		return null;
 	}
 	function animateCells(cells, dir, parent) {
 		if (cells) {
+			var foc = hasFocus(cells);
 			cells.forEach(function (cell, i) {
-				var cd = parent.currentDataset.length;
 				if (cell) {
-					if(!isEmpty(parent.currentDataset[i]) && parent.currentDataset.length !== i)
-						cell.visible = true;
-					else
-						cell.visible = false;
-
-					var hOffset = (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
-						vOffset = (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0;
+					var cd = parent.currentDataset.length,
+						hOffset = (parent.config.orientation === 'horizontal') ? parent.offsets[i] : 0,
+						vOffset = (parent.config.orientation === 'vertical') ? parent.offsets[i] : 0,
+						end = (i === cd-1 && (dir === 'right' || dir === 'down')),
+						start = (i === 0 && (dir === 'left' || dir === 'up'));
+					if (end || start) {
+						cell.freeze();
+					}
 					cell.animate({
-						transform: 'translate('+hOffset+'px,'+vOffset+'px)',
+						visible: cell.visible,
+						transform: getSetting('gpu') === false ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)',
 						duration: parent.config.slideDuration,
-						timingFunction:  parent.config.slideEase,
-						events:{
+						timingFunction: parent.config.slideEase,
+						events: {
 							onAnimationEnded: function (slideAnimator) {
 								slideAnimator.reset();
-								if (i === cd -1) {
+								if ((end || start) && !isEmpty(parent.currentDataset[i])) {
+									cell.thaw();
+								}
+
+								cell.element.allowNavigation = parent.ableToNavigate(i);
+								if (i === cd-1) {
+									var cf = hasFocus(cells);
+									if (parent.config.subCells > 1) {
+										parent.setCurrent(cf[0], cf[1]);
+									} else {
+										parent.setCurrent(cf);
+									}
 									parent.animating = false;
 									parent.fire('onSlideDone');
-								}
-								cell.element.allowNavigation = false;
-								cell.thaw();
-
-								if (i === parent.config.focusIndex) {
-									cell.element.allowNavigation = (parent.config.blockFocus) ? false : true;
-									if (!parent.config.blockFocus && hasFocus(cells)) {
-										cell.focus();
-									}
 								}
 							}
 						}
@@ -149,7 +259,9 @@ define('MAF.element.SlideCarousel', function () {
 		}
 	}
 	function isEmpty(obj) {
-		for(var prop in obj) {
+		if (obj === null)
+			return true;
+		for (var prop in obj) {
 			if (obj.hasOwnProperty(prop)) {
 				return false;
 			}
@@ -160,78 +272,62 @@ define('MAF.element.SlideCarousel', function () {
 		ClassName: 'SlideCarousel',
 		Extends: MAF.element.Container,
 		Protected: {
+			registerEvents: function (types) {
+				this.parent(['navigateoutofbounds', 'scroll'].concat(types || []));
+			},
 			dispatchEvents: function (event, payload) {
 				this.parent(event, payload);
-				if (event.type === 'navigate') {
+				if (event.type === 'scroll') {
+					this.element.scrollTop = 0;
+					this.element.scrollLeft = 0;
+					return;
+				}
+				if (this.animating || this.config.blockFocus) {
+					event.preventDefault();
+					return;
+				}
+				if (this.config.subCells === 1 && event.type === 'navigate') {
 					if (event.defaultPrevented) {
 						return;
 					}
-					var direction = event.detail.direction;
-					if (this.config.blockFocus) {
-						event.preventDefault();
-					}
-					if ((this.config.orientation === 'horizontal' && (direction === 'left' || direction === 'right')) ||
-						(this.config.orientation === 'vertical' && (direction === 'up' || direction === 'down'))) {
-						event.preventDefault();
-					} else {
+					this.navigating = true;
+					this.animating = true;
+					var dir = event.detail.direction,
+						pos = this.cells.indexOf(this.getCurrentCell()),
+						tar = pos,
+						dyn = this.config.dynamicFocus,
+						fi = this.config.focusIndex,
+						start = dyn && pos === this.config.dynamicFocusStart + 1,
+						end = dyn && pos === this.config.visibleCells - this.config.dynamicFocusEnd,
+						ds = this.currentDataset;
+
+					var withFlow = 	(this.config.orientation === 'vertical' && (dir === 'down' || dir === 'up')) ||
+									(this.config.orientation === 'horizontal' && (dir === 'left' || dir === 'right'));
+					var againstFlow = 	(this.config.orientation === 'vertical' && (dir === 'left' || dir === 'right')) ||
+										(this.config.orientation === 'horizontal' && (dir === 'down' || dir === 'up'));
+					var plus = dir === 'right' || dir === 'down';
+
+					if (withFlow) {
+						tar += (plus ? 1 : -1);
+						if (ds[tar] !== null) {
+							event.preventDefault();
+							this.cells[tar].focus();
+						}
+					} else if (againstFlow) {
+						this.animating = false;
+						this.manageBounds(false);
 						this.fire('onNavigateOutOfBounds', event.detail);
 						return;
 					}
-					var back = (direction === 'left' || direction === 'up'),
-						next = (direction === 'right' || direction === 'down'),
-						backLimit = (this.config.focusIndex - 1 <= this.config.dynamicFocusStart),
-						nextLimit = (this.config.focusIndex + 1 >= this.cells.length - this.config.dynamicFocusEnd - ((this.cells.length - 2 < this.config.visibleCells) ? 0 : 1));
-					if (this.config.dynamicFocus && ((back && !backLimit) || (next && !nextLimit))) {
-						if (next)
-							this.config.focusIndex++;
-						else if (back)
-							this.config.focusIndex--;
-						this.cells[this.config.focusIndex].focus();
+					this.navigating = false;
+					if ((end && (dir === 'right' || dir === 'down')) ||
+						(start && (dir === 'left' || dir === 'up')) ||
+						(!dyn && pos === fi)) {
+						this.shift(dir, pos);
 					} else {
-						this.shift(direction);
+						this.animating = false;
 					}
 				}
-			},
-			handleFocusEvent: function (event) {
-				var payload = event.payload;
-				switch (event.type) {
-					case 'onFocus':
-						var currentCell = this.getCurrentCell();
-						if (currentCell) currentCell.focus();
-						break;
-				}
-			},
-			setCellConfiguration: function (pos, cd) {
-			var cell,
-				vOffset = (this.config.orientation === 'vertical') ? (cd.height * -1) + (pos * cd.height) : 0,
-				hOffset = (this.config.orientation === 'horizontal') ? (cd.width * -1) + (pos * cd.width) : 0,
-				dims = {
-					width: (this.config.orientation === 'horizontal') ? ((1 / this.config.visibleCells) * 100) + '%' : '100%',
-					height: (this.config.orientation === 'vertical') ? ((1 / this.config.visibleCells) * 100) + '%' :'100%',
-					transform: 'translate('+hOffset+'px,'+vOffset+'px)',
-					visible: (!isEmpty(this.currentDataset[pos])||this.currentDataset.length === 1)? true: false
-				};
-				cell = this.config.cellCreator.call(this).setStyles(dims);
-				cell.grid = this;
-				cell.appendTo(this);
-				cell.element.allowNavigation = (this.config.blockFocus) ? false : (pos === this.config.focusIndex) ? true : false;
-				this.cells.push(cell);
-			},
-			generateCells: function (data) {
-				if (this.currentDataset.length > 0) {
-					var cd = this.getCellDimensions();
-					this.offsets = [];
-					if (this.currentDataset.length === 1) {
-						this.setCellConfiguration(this.config.focusIndex, cd);
-					} else {
-						var i = 0;
-						for(i = 0; i < this.currentDataset.length; i++) {
-							this.offsets.push((this.config.orientation === 'horizontal') ? (cd.width * -1) + (i * cd.width) : (cd.height * -1) + (i * cd.height));
-							this.setCellConfiguration(i, cd);
-						}
-					}
-				}
-				return this.cells.length;
 			},
 			collectedPage: function (event) {
 				var slider = this.retrieve('slider'),
@@ -244,7 +340,7 @@ define('MAF.element.SlideCarousel', function () {
 						break;
 					case 'focusCell':
 						var index = slider.page;
-						this.store('slider', {status: 'building'});
+						this.store('slider', {status: 'building', target: slider.page, sub: slider.sub});
 						this.updateCells(index);
 						break;
 					case 'navigating':
@@ -255,8 +351,8 @@ define('MAF.element.SlideCarousel', function () {
 								cell.freeze();
 								this.cells.unshift(cell);
 								this.currentDataset.unshift(this.currentDataset.pop());
-								this.currentDataset[0] = event.payload.data.items[0];
-								this.config.cellUpdater.call(this, this.cells[0], this.currentDataset[0]);
+								this.currentDataset[0] = event.payload.data;
+								this.updateCollection(this.cells[0], 0);
 								break;
 							case 'down':
 							case 'right':
@@ -264,8 +360,8 @@ define('MAF.element.SlideCarousel', function () {
 								cell.freeze();
 								this.cells.push(cell);
 								this.currentDataset.shift();
-								this.currentDataset.push(event.payload.data.items[0]);
-								this.config.cellUpdater.call(this, this.cells[this.cells.length-1], this.currentDataset[this.currentDataset.length-1]);
+								this.currentDataset.push(event.payload.data);
+								this.updateCollection(this.cells[this.cells.length-1], this.currentDataset.length-1);
 								break;
 						}
 						this.store('slider', {status: 'idle'});
@@ -276,21 +372,30 @@ define('MAF.element.SlideCarousel', function () {
 			},
 			updateCells: function (page) {
 				var cellUpdater = this.config.cellUpdater,
-					dataLength = this.pager.getDataSize();
+					dataLength = this.pager.getNumPages(),
+					buildFrom = this.config.focusIndex;
 				this.animating = false;
 				this.currentDataset = [];
 				this.collection = [];
 				this.page = page || 0;
+
+				var test = (this.config.visibleCells - this.config.dynamicFocusEnd) - (this.config.focusIndex + this.config.dynamicFocusStart);
+				if ((dataLength > this.config.visibleCells+2) && 
+					(this.page >= dataLength - test && this.page <= dataLength-1) && 
+					this.config.dynamicFocus) {
+					buildFrom = this.config.visibleCells - (dataLength - this.page);
+				}
 				if (dataLength > 0) {
 					if (dataLength === 1) {
-						this.currentDataset.push(this.pager.getPage(0).items[0]);
-					} else {
+						this.currentDataset.push(this.pager.getPage(0));
+					} 
+					else {
 						var cellsToFill = this.config.visibleCells + 2;
-						if (dataLength + 1 + this.config.focusIndex < cellsToFill) {
-							cellsToFill = dataLength + this.config.focusIndex;
+						if (dataLength + 1 + buildFrom < cellsToFill) {
+							cellsToFill = dataLength + buildFrom;
 						}
 						for(var i = 0; i < cellsToFill; i++) {
-							var dif = this.config.focusIndex - i,
+							var dif = buildFrom - i,
 								difABS = Math.abs(dif),
 								index = null;
 							if ((difABS > dataLength-1 || dif > 0) && this.customPager) {
@@ -306,90 +411,178 @@ define('MAF.element.SlideCarousel', function () {
 							} else if (dif < 0) {
 								index = this.page + difABS;
 								if (index >= dataLength) {
-									index = index - dataLength;
+									index = !this.customPager ? index - dataLength : null;
 								}
 							} else {
 								index = (this.page === dataLength) ? 0 : this.page;
 							}
-							if(index === null){
-								this.currentDataset.push({});
-							}
-							else{
-								this.currentDataset.push((this.pager.getPage(index).items[0]));
+							if (index === null) {
+								this.currentDataset.push(null);
+							} else {
+								this.currentDataset.push((this.pager.getPage(index*this.config.subCells)));
 							}
 							this.collection.push(index);
 						}
 					}
 				}
+				var self = this;
 				if (this.config.carousel && this.cells.length && this.cells.length === this.currentDataset.length) {
-					this.cells.forEach(function (cell, u) {
-						if (!isEmpty(this.currentDataset[u])) {
-							cellUpdater.call(this, cell, this.currentDataset[u]);
-						} else{
-							cell.freeze();
-						}
+					this.cells.forEach(function (cell, pos) {
+						self.updateCollection(cell, pos);
 					}, this);
-				} else {
+				}
+				else {
 					this.freeze();
 					while (this.cells.length) {
-						this.cells.pop().suicide();
+						var cell = this.cells.pop();
+						if (this.config.subCells > 1) {
+							while (cell.subCells.length) {
+								cell.subCells.pop().suicide();
+							}
+							delete cell.subCells;
+						}
+						cell.suicide();
 					}
 					if (this.generateCells() > 0) {
-						this.cells.forEach(function (cell, u) {
-							if (!isEmpty(this.currentDataset[u])) {
-								cellUpdater.call(this, cell, this.currentDataset[u]);
-							}
-							else{
-								cell.freeze();
-							}
+						this.cells.forEach(function (cell, pos) {
+							self.updateCollection(cell, pos);
 						}, this);
 					}
 					this.thaw();
 				}
+				var state = this.retrieve('slider');
+				if (state.target >= 0 && !this.config.blockFocus) {
+					if(this.currentDataset.length === 1){
+						buildfrom = 0;
+					}
+					if (state.sub !== null) {
+						this.cells[buildFrom].subCells[state.sub].focus();
+					} else {
+						this.cells[buildFrom].focus();
+					}
+				}
 				this.fire('onStateUpdated');
+			},
+			updateCollection: function (cell, pos) {
+				var self = this,
+					cellUpdater = self.config.cellUpdater;
+				if (!isEmpty(self.currentDataset[pos])) {
+					cell.thaw();
+					if (self.config.subCells > 1) {
+						cell.subCells.forEach(function (sc, j) {
+							if (!isEmpty(self.currentDataset[pos].items[j])) {
+								sc.thaw();
+								cellUpdater.call(self, sc, self.currentDataset[pos].items[j]);
+							} else {
+								sc.freeze();
+							}
+						}, self);
+					} else {
+						cellUpdater.call(self, cell, self.currentDataset[pos].items[0]);
+					}
+				} else {
+					cell.freeze();
+				}
+			},
+			setCellConfiguration: function (pos, cd, or, data) {
+				var cell;
+				var vOffset = (or === 'vertical') ? -cd.height + pos * cd.height : 0;
+				var hOffset = (or === 'horizontal') ? -cd.width + pos * cd.width : 0;
+				var dims = Object.merge(cd, {
+					transform: getSetting('gpu') === false ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)'
+				});
+				if (this.config.subCells > 1) {
+					cell = new ParentCell({
+						styles: dims
+					});
+					var scDims = this.getCellDimensions();
+					cell.subCells = [];
+					for (var i = 0; i < this.config.subCells; i++) {
+						var tmp = Object.merge(scDims, {
+							transform: getSetting('gpu') === false ? 'translate(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px)' : 'translate3d(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px, 0)'
+						});
+						var tmpCell = this.config.cellCreator.call(this).setStyles(tmp);
+						tmpCell.grid = this;
+						tmpCell.appendTo(cell);
+						cell.subCells.push(tmpCell);
+					}
+				} else {
+					cell = this.config.cellCreator.call(this).setStyles(dims);
+				}
+				cell.grid = this;
+				cell.appendTo(this);
+				cell.element.allowNavigation = this.ableToNavigate(pos);
+				this.cells.push(cell);
+			},
+			generateCells: function () {
+				var self = this,
+					ds = self.currentDataset,
+					or = self.config.orientation;
+				if (ds.length > 0) {
+					var cd = {
+						width: (or === 'horizontal') ? Math.floor(this.width / this.config.visibleCells) : this.width,
+						height: (or === 'vertical') ? Math.floor(this.height / this.config.visibleCells) : this.height
+					};
+					self.offsets = [];
+					if (ds.length === 1) {
+						self.setCellConfiguration(self.config.focusIndex, cd, or, self.currentDataset[0]);
+					} else {
+						ds.forEach(function (data, pos) {
+							self.offsets.push((or === 'horizontal') ? -cd.width + pos * cd.width : -cd.height + pos * cd.height);
+							self.setCellConfiguration(pos, cd, or, data);
+						}, self);
+					}
+				}
+				return this.cells.length;
 			}
 		},
 		config: {
 			visibleCells: 1,
+			subCells: 1,
 			focusIndex: 1,
 			slideEase: 'ease',
 			carousel: true,
 			orientation: 'horizontal',
 			blockFocus: false,
 			render: true,
-			focus: true,
 			dynamicFocus: false,
 			dynamicFocusStart: 0,
-			dynamicFocusEnd: 0
+			dynamicFocusEnd: 0,
+			styles:{
+				transform: 'translateZ(0)'
+			}
 		},
 		initialize: function () {
 			this.config.visibleCells = this.config.visibleCells || 1;
+			this.config.subCells = this.config.subCells || 1;
 			this.config.focusIndex = this.config.focusIndex || 1;
 			this.config.orientation = this.config.orientation || 'horizontal';
 			this.config.slideEase = this.config.slideEase || 'ease';
 			this.config.blockFocus = this.config.blockFocus || false;
 			this.config.slideDuration = this.config.slideDuration || 0.1;
 			this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;
+			this.inBounds = false;
+			this.current = null;
 			this.parent();
 			this.cells = [];
+
 			if (this.config.pager) {
 				this.customPager = true;
 				this.pager = this.config.pager;
 				delete this.config.pager;
+			} else {
+				this.pager = new MAF.utility.Pager(this.config.subCells, this.config.visibleCells*this.config.subCells);
 			}
-			else{
-				this.pager = new MAF.utility.Pager(1, this.config.visibleCells);
-			}
+
 			if (!this.config.carousel) {
 				this.customPager = true;
 			}
+
 			this.currentDataset = [];
 			this.offsets = [];
 			this.animating = false;
 			this.store('slider', {status: 'empty'});
 			this.collectedPage.subscribeTo(this.pager, 'pageDone', this);
-			this.handleFocusEvent.subscribeTo(this, ['onFocus', 'onBlur'], this);
-			this.setStyle('transform', 'translateZ(0)');
 		},
 
 		setVisibleCells: function (visibleCells) {
@@ -405,28 +598,73 @@ define('MAF.element.SlideCarousel', function () {
 		},
 
 		getFocusIndex: function () {
-			return (this.cells.length > 1) ? this.config.focusIndex : 0;
+			return this.config.focusIndex;
 		},
 
 		changeDataset: function (data, reset, dataLength) {
 			data = data && data.length ? data : [];
 			dataLength = (dataLength && (dataLength > data.length)) ? dataLength : data.length;
+			this.current = null;
 			this.pager.initItems(data, dataLength);
 			this.store('slider', {status: 'reset'});
 			this.collectPage(0);
 			this.fire("onDatasetChanged");
 		},
 
+		focus: function () {
+			this.manageBounds(true);
+			var currentCell = this.getCurrentCell();
+			if (currentCell)
+				currentCell.focus();
+		},
+
 		collectPage: function (pagenum) {
 			this.pager.getPage(pagenum);
 		},
 
+		ableToNavigate: function (pos) {
+			if (this.config.blockFocus || isEmpty(this.currentDataset[pos]))
+				return false;
+			var s = this.inBounds ? 1 : 0,
+				dyn = ((this.config.dynamicFocus && (pos >= (1 + this.config.dynamicFocusStart) - s && pos <= (this.config.visibleCells - this.config.dynamicFocusEnd) + s))),
+				foc = pos >= this.config.focusIndex-s && pos <= this.config.focusIndex+s;
+			return (dyn || foc);
+		},
+
+		manageBounds: function (bounds) {
+			if (bounds === this.inBounds)
+				return;
+			var self = this;
+			this.inBounds = bounds;
+			this.cells.forEach(function (cell, pos) {
+				cell.element.allowNavigation = self.ableToNavigate(pos);
+			}, this);
+		},
+
 		getCellDataItem: function (c) {
-			for(var i = 0; i < this.cells.length; i++) {
-				if (c === this.cells[i]) {
-					return this.currentDataset[i];
-				}
-			}
+			var cell = c || this.getCurrentCell();
+			if (this.config.subCells > 1)
+				return this.currentDataset[this.cells.indexOf(cell.owner)].items[cell.owner.subCells.indexOf(cell)];
+			else
+				return this.currentDataset[this.cells.indexOf(cell)].items[0];
+		},
+
+		getCellByDataIndex: function (index) {
+			var cellIndex = this.collection.indexOf(Math.floor(index/this.config.subCells)),
+				subCellIndex = index % this.config.subCells;
+			return (cellIndex !== -1)?this.cells[cellIndex].subCells[subCellIndex] : undefined;
+		},
+
+		/**
+		 * @method MAF.element.SlideCarousel#getCellDataIndex
+		 * @return {Object} returns the dataIndex
+		 */
+		getCellDataIndex: function (c) {
+			var cell = c || this.getCurrentCell();
+			if (this.config.subCells > 1)
+				return this.collection[this.cells.indexOf(cell.owner)]*this.config.subCells + cell.owner.subCells.indexOf(cell);
+			else
+				return this.collection[this.cells.indexOf(cell)];
 		},
 
 		/**
@@ -434,7 +672,44 @@ define('MAF.element.SlideCarousel', function () {
 		 * @return The zero-based index of the current page of data.
 		 */
 		getCurrentPage: function () {
-			return (this.collection && this.collection[this.config.focusIndex]) ? this.collection[this.config.focusIndex] : 0;
+			var cell = hasFocus(this.cells);
+			if (cell === null)
+				cell = this.getCurrent();
+			return (this.collection && this.collection[(this.config.subCells > 1 ? cell[0] : cell)]) || 0;
+		},
+
+		getCurrentCell: function () {
+			if (this.cells && this.cells.length) {
+				var cell = this.getCurrent();
+				if (this.config.subCells > 1) {
+					return this.cells[cell[0]].subCells[cell[1]];
+				} else {
+					return this.cells[cell];
+				}
+			}
+		},
+
+		getCurrent: function () {
+			var hf = hasFocus(this.cells);
+			this.current = (!this.config.dynamicFocus || hf !== null) ? hf : this.current;
+			if (this.current === null) {
+				if (this.currentDataset.length === 1) {
+					this.current = (this.config.subCells > 1) ? [0,0] : 0;
+				} else {
+					this.current = (this.config.subCells > 1) ? [this.config.focusIndex, 0] : this.config.focusIndex;
+				}
+			}
+			return this.current;
+		},
+
+		setCurrent: function (index, row) {
+			var sl = this;
+			if (sl.config.subCells > 1) {
+				sl.current = [index||0, row||0];
+			} else {
+				sl.current = index||0;
+			}
+			sl.manageBounds(true);
 		},
 
 		/**
@@ -451,10 +726,15 @@ define('MAF.element.SlideCarousel', function () {
 		 * @param {integer} target index which as to be focused and aligned with the proper focusIndex cell.
 		 */
 		focusCell: function (target) {
+			var sub = null;
+			if (this.config.subCells > 1) {
+				sub = target % this.config.subCells;
+				target = (target-sub)/this.config.subCells;
+			}
 			if (target >= this.getPageCount()) {
 				return;
 			}
-			this.store('slider', {status: 'focusCell', page: target});
+			this.store('slider', {status: 'focusCell', page: target, sub: sub});
 			this.pager.getPage(target);
 		},
 
@@ -487,14 +767,15 @@ define('MAF.element.SlideCarousel', function () {
 		 * @method MAF.element.SlideCarousel#shift
 		 * @param {String} the direction the carousel has to slide.
 		 */
-		shift: function (direction) {
+		shift: function (direction, origin) {
 			if (this.config.orientation === 'vertical' && (direction === 'right' || direction === 'left')) {
 				return;
 			}
 			if (this.config.orientation === 'horizontal' && (direction === 'up' || direction === 'down')) {
 				return;
 			}
-			if (direction && !this.animating && this.retrieve('slider').status !== 'navigating') {
+			if (direction && this.retrieve('slider').status !== 'navigating') {
+				var from = origin || this.config.focusIndex;
 				this.animating = true;
 				if (this.cells.length === 1) {
 					return;
@@ -505,50 +786,58 @@ define('MAF.element.SlideCarousel', function () {
 					switch(direction) {
 						case 'up':
 						case 'left':
-							if (isEmpty(this.currentDataset[this.config.focusIndex-1])) {
+							if (isEmpty(this.currentDataset[from-1])) {
 								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}
-							this.collection.unshift(this.collection.pop());
-							this.collection[0] = (this.collection[1] - 1 < 0 && !this.customPager) ? dataLength -1 : (this.collection[1] - 1 < 0) ? null : this.collection[1]-1;
-							if (this.collection[0] === null) {
-								cell = this.cells.pop();
-								cell.freeze();
-								this.cells.unshift(cell);
-								this.currentDataset.unshift(this.currentDataset.pop());
-								this.currentDataset[0] = {};
+							var oldStart = this.collection[0],
+								newStart = this.collection.pop();
+							if (oldStart === null) {
+								newStart = null;
+							} else if (oldStart - 1 < 0) {
+								newStart = !this.customPager ? dataLength-1 : null;
+							} else {
+								newStart = oldStart - 1;
+							}
+							this.collection.unshift(newStart);
+							if (newStart === null) {
+								this.cells.unshift(this.cells.pop());
+								this.currentDataset.pop();
+								this.currentDataset.unshift(null);
+								this.updateCollection(this.cells[0], 0);
 								animateCells(this.cells, direction, this);
 							} else {
 								this.store('slider', {status: 'navigating', direction: direction});
-								this.pager.getPage(this.collection[0]);
+								this.pager.getPage(newStart*this.config.subCells);
 							}
 							break;
 						case 'down':
 						case 'right':
-							if (isEmpty(this.currentDataset[this.config.focusIndex+1])) {
+							if (isEmpty(this.currentDataset[from+1])) {
 								this.fire('onNavigateOutOfBounds', {direction:direction});
 								this.animating = false;
 								return;
 							}
-							this.collection.push(this.collection.shift());
-							if (this.collection[this.collection.length-2] === null) {
-								this.collection[this.collection.length-1] = null;
-							} else if (this.collection[this.collection.length-2] + 1 >= dataLength) {
-								this.collection[this.collection.length-1] = (this.collection[this.collection.length-2] + 1 >= dataLength && !this.customPager) ? 0 : null;
+							var oldEnd = this.collection[this.collection.length-1],
+								newEnd = this.collection.shift();
+							if (oldEnd === null) {
+								newEnd = null;
+							} else if (oldEnd + 1 >= dataLength) {
+								newEnd = !this.customPager ? 0 : null;
 							} else {
-								this.collection[this.collection.length-1] = this.collection[this.collection.length-2] + 1;
+								newEnd = oldEnd + 1;
 							}
-							if (this.collection[this.collection.length-1] === null) {
-								cell = this.cells.shift();
-								cell.freeze();
-								this.cells.push(cell);
+							this.collection.push(newEnd);
+							if (newEnd === null) {
+								this.cells.push(this.cells.shift());
 								this.currentDataset.shift();
-								this.currentDataset.push({});
+								this.currentDataset.push(null);
+								this.updateCollection(this.cells[this.cells.length-1], this.currentDataset.length-1);
 								animateCells(this.cells, direction, this);
 							} else {
 								this.store('slider', {status: 'navigating', direction: direction});
-								this.pager.getPage(this.collection[this.collection.length-1]);
+								this.pager.getPage(newEnd*this.config.subCells);
 							}
 							break;
 					}
@@ -561,38 +850,39 @@ define('MAF.element.SlideCarousel', function () {
 		 * @return {Object} With the width and height of the cells for the grid.
 		 */
 		getCellDimensions: function () {
-			return {
-				width: (this.config.orientation === 'horizontal') ? Math.floor(this.width / this.config.visibleCells) : this.width,
-				height: (this.config.orientation === 'vertical') ? Math.floor(this.height / this.config.visibleCells) : this.height
+			var or = this.config.orientation,
+				vc = this.config.visibleCells,
+				sc = this.config.subCells;
+			var result = {
+				width: (or === 'horizontal') ? Math.floor(this.width / vc): this.width,
+				height: (or === 'vertical') ? Math.floor(this.height / vc) : this.height
 			};
-		},
-
-		/**
-		 * @method MAF.element.SlideCarousel#getCellDataIndex
-		 * @return {Object} returns the dataIndex
-		 */
-		getCellDataIndex: function (cell) {
-			if (cell === this.getCurrentCell()) {
-				return this.getCurrentPage();
+			if (this.config.subCells > 1) {
+				return {
+					width: (or === 'vertical') ? result.width / this.config.subCells : result.width,
+					height: (or === 'horizontal') ? result.height / this.config.subCells : result.height
+				};
 			}
-			else{
-				return this.collection[this.cells.indexOf(cell)];
-			}
-		},
-
-		getCurrentCell : function () {
-			return this.cells[(this.cells.length === 1 ) ? 0 : this.config.focusIndex];
+			return result;
 		},
 
 		suicide: function () {
 			if (this.pager) this.pager.suicide();
+			delete this.current;
 			delete this.currentDataset;
 			delete this.offsets;
 			delete this.pager;
 			delete this.collection;
 			if (this.cells) {
-				while(this.cells.length) {
-					this.cells.pop().suicide();
+				while (this.cells.length) {
+					var cell = this.cells.pop();
+					if (this.config.subCells > 1) {
+						while (cell.subCells.length) {
+							cell.subCells.pop().suicide();
+						}
+						delete cell.subCells;
+					}
+					cell.suicide();
 				}
 				delete this.cells;
 			}

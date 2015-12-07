@@ -26,6 +26,72 @@ define('MAF.element.SlideCarouselCell', function () {
 		Extends: MAF.element.Container,
 
 		Protected: {
+			dispatchEvents: function(event) {
+				var sl = this.grid;
+				if(event.type === 'blur' && sl){
+					this.parent(event);
+					var sameSlider = false;
+					if(event.relatedTarget && event.relatedTarget.owner && event.relatedTarget.owner.grid === this.grid){
+						sameSlider = true;
+					}
+					if(sl.hasFocus && !sameSlider){
+						sl.hasFocus = false;
+						sl.fire('onBlur')
+					}
+				} else if(event.type === 'focus' && sl){
+					var newFocusCell;
+					if(sl.config.subCells > 1){
+						sl.current = [sl.cells.indexOf(this.owner), this.owner.subCells.indexOf(this)];
+					}
+					else{
+						sl.current = sl.cells.indexOf(this);
+					}
+					if(sl.config.dynamicFocus === false){
+						if(typeof sl.current === 'number' && sl.current !== sl.config.focusIndex){
+							if(!sl.navigating)
+								newFocusCell = sl.cells[sl.config.focusIndex];
+						}
+						else if (typeof sl.current === 'object' && sl.current[0] !== sl.config.focusIndex){
+							if(!sl.navigating)
+								newFocusCell = sl.cells[sl.config.focusIndex].subCells[sl.current[1]];
+						}
+					}
+					else if(sl.config.dynamicFocus === true){
+						if(typeof sl.current === 'number'){
+							if(sl.current <= sl.config.dynamicFocusStart){
+								if(!sl.navigating)
+									newFocusCell = sl.cells[sl.config.dynamicFocusStart+1];
+							}
+							else if(sl.current > sl.config.visibleCells - sl.config.dynamicFocusEnd){
+								if(!sl.navigating)
+									newFocusCell = sl.cells[sl.config.visibleCells - sl.config.dynamicFocusEnd];
+							}
+						} else if(typeof sl.current === 'object'){
+							if(sl.current[0] <= sl.config.dynamicFocusStart){
+								if(!sl.navigating)
+									newFocusCell = sl.cells[sl.config.dynamicFocusStart+1].subCells[sl.current[1]];
+							}
+							else if(sl.current[0] > sl.config.visibleCells - sl.config.dynamicFocusEnd){
+								if(!sl.navigating)
+									newFocusCell = sl.cells[sl.config.visibleCells - sl.config.dynamicFocusEnd].subCells[sl.current[1]];
+							}
+						}
+					}
+					if(newFocusCell){
+						newFocusCell.focus();
+					} else {
+						this.parent(event);
+						sl.manageBounds(true);
+						sl.fire('onStateUpdated');
+						if(!sl.hasFocus){
+							sl.hasFocus = true;
+							sl.fire('onFocus')
+						}	
+					}
+				} else {
+					this.parent(event);
+				}
+			},
 			proxyProperties: function (propnames) {
 				propnames = [
 					'visible',
@@ -107,7 +173,13 @@ define('MAF.element.SlideCarouselCell', function () {
 		getCellDataIndex: function () {
 			return this.grid && this.grid.getCellDataIndex(this);
 		},
-
+		/**
+		 * Sets the cell to a new offset
+		 * @method MAF.element.SlideCarouselCell#setOffset
+		 */
+		setOffset: function(offsetX, offsetY, offsetZ){
+			this.setStyle('transform', getSetting('gpu') === false ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
+		},
 		suicide: function () {
 			delete this.grid;
 			Object.forEach(this, function (key, obj) {
