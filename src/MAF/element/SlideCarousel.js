@@ -141,7 +141,7 @@ define('MAF.element.SlideCarousel', function () {
 
 						if (withFlow) {
 							ct += (plus ? 1 : -1);
-							if (ds[ct] !== null) {
+							if (ds[ct] !== undefined && ds[ct] !== null) {
 								event.preventDefault();
 								if (ds[ct].items[rt] === undefined) {
 									for (var i = rt; i >= 0; i--) {
@@ -190,6 +190,11 @@ define('MAF.element.SlideCarousel', function () {
 		initialize: function () {
 			this.parent();
 		},
+
+		setOffset: function(offsetX, offsetY, offsetZ){
+			this.setStyle('transform', getSetting('gpu') === false ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
+		},
+
 		suicide: function () {
 			delete this.grid;
 			Object.forEach(this, function (key, obj) {
@@ -309,7 +314,7 @@ define('MAF.element.SlideCarousel', function () {
 
 					if (withFlow) {
 						tar += (plus ? 1 : -1);
-						if (ds[tar] !== null) {
+						if (ds[tar] !== null && this.cells[tar]) {
 							event.preventDefault();
 							this.cells[tar].focus();
 						}
@@ -386,10 +391,10 @@ define('MAF.element.SlideCarousel', function () {
 					buildFrom = this.config.visibleCells - (dataLength - this.page);
 				}
 				if (dataLength > 0) {
-					if (dataLength === 1) {
+					/*if (dataLength === 1) {
 						this.currentDataset.push(this.pager.getPage(0));
 					} 
-					else {
+					else {*/
 						var cellsToFill = this.config.visibleCells + 2;
 						if (dataLength + 1 + buildFrom < cellsToFill) {
 							cellsToFill = dataLength + buildFrom;
@@ -423,7 +428,7 @@ define('MAF.element.SlideCarousel', function () {
 							}
 							this.collection.push(index);
 						}
-					}
+						//}
 				}
 				var self = this;
 				if (this.config.carousel && this.cells.length && this.cells.length === this.currentDataset.length) {
@@ -559,7 +564,7 @@ define('MAF.element.SlideCarousel', function () {
 			this.config.orientation = this.config.orientation || 'horizontal';
 			this.config.slideEase = this.config.slideEase || 'ease';
 			this.config.blockFocus = this.config.blockFocus || false;
-			this.config.slideDuration = this.config.slideDuration || 0.1;
+			this.config.slideDuration = (typeof this.config.slideDuration === 'number')? this.config.slideDuration : 0.1;
 			this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;
 			this.inBounds = false;
 			this.current = null;
