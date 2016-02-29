@@ -21,13 +21,31 @@
  * @extends MAF.control.Button
  */
 define('MAF.control.SingleTab', function () {
+	var processText = function (value) {
+		var text = value;
+		if (this.config.updateText && this.config.updateText.call) {
+			text = this.config.updateText.call(this, value);
+		} else {
+			text = FontAwesome.get('caret-left') + ' ' + value.stripTags() + ' ' + FontAwesome.get('caret-right');
+		}
+		return text;
+	}
 	var truncation = function (value) {
-		var maxWidth = this.width - 160;
-		if (this.text.textWidth > maxWidth) {
-			var diff = maxWidth / this.text.textWidth,
+		var maxWidth = this.width - 100;
+		var text = processText.call(this, value);
+		
+		var tempText = new MAF.element.Text({
+			label: text,
+			styles:Object.merge(this.text.element.style, {visible:false})
+		}).appendTo(this);
+				
+		if (tempText.textWidth > maxWidth) {
+			var diff = maxWidth / tempText.textWidth,
 				end = Math.ceil(value.length * diff);
 			value = value.truncate(end);
 		}
+		
+		tempText.suicide();
 		return value;
 	};
 	return new MAF.Class({
@@ -188,14 +206,8 @@ define('MAF.control.SingleTab', function () {
 				var options = this.getOptions();
 				this.setValue(options[0].value);
 			}
-			var text = '',
-				value = truncation.call(this, this.getDisplayValue());
-			if (this.config.updateText && this.config.updateText.call) {
-				text = this.config.updateText.call(this, value);
-			} else {
-				text = FontAwesome.get('caret-left') + ' ' + value.stripTags() + ' ' + FontAwesome.get('caret-right');
-			}
-			this.text.setText(text);
+			var value = truncation.call(this, this.getDisplayValue());
+			this.text.setText(processText.call(this, value));
 		},
 
 		suicide: function () {
