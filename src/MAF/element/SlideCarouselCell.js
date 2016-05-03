@@ -36,7 +36,8 @@ define('MAF.element.SlideCarouselCell', function () {
 					}
 					if(sl.hasFocus && !sameSlider){
 						sl.manageBounds(false);
-						sl.fire('onBlur')
+						sl.hasFocus = false;
+						sl.fire('onBlur');
 					}
 				} else if(event.type === 'focus' && sl){
 					var newFocusCell;

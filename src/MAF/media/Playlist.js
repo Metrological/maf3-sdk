@@ -134,10 +134,11 @@ define('MAF.media.Playlist', function () {
 		 * playlist.addEntryByURL("http://my.media.nl/video1.mp4", 2192);
 		 * @todo Extend for new playlist entry -> Asset
 		 */
-		addEntryByURL: function(url, bitrate, startIndex) {
+		addEntryByURL: function(url, bitrate, startIndex, startTime) {
 			return this.addEntry(new MAF.media.PlaylistEntry({
 				url: url,
 				bitrate: bitrate,
+				startTime: startTime || 0,
 				startIndex: startIndex || 0
 			}));
 		}

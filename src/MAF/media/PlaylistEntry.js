@@ -58,7 +58,8 @@ define('MAF.media.PlaylistEntry', function () {
 			url: null,
 			bitrate: 0,
 			asset: null,
-			streams: null
+			streams: null,
+			startTime: 0
 		},
 
 		initialize: function () {
@@ -66,7 +67,8 @@ define('MAF.media.PlaylistEntry', function () {
 			if (this.config.url) {
 				streams.push({
 					url: this.config.url,
-					bitrate: this.config.bitrate
+					bitrate: this.config.bitrate,
+					startTime: this.config.startTime % 1 === 0 && this.config.startTime || 0
 				});
 			}
 
@@ -75,7 +77,8 @@ define('MAF.media.PlaylistEntry', function () {
 					if (stream.url) {
 						streams.push({
 							url: stream.url,
-							bitrate: stream.bitrate || this.config.bitrate
+							bitrate: stream.bitrate || this.config.bitrate,
+							startTime: stream.startTime % 1 === 0 && stream.startTime || 0
 						});
 					}
 				}, this);
@@ -115,10 +118,11 @@ define('MAF.media.PlaylistEntry', function () {
 		 * @param {Number} [bitrate] Bitrate of media.
 		 * @return {MAF.media.PlaylistEntry} This component.
 		 */
-		addURL: function (url, bitrate) {
+		addURL: function (url, bitrate, startTime) {
 			if (url) {
 				this.streams.push({
-					url: url, 
+					url: url,
+					startTime: startTime % 1 === 0 && startTime || 0,
 					bitrate: isNaN(bitrate) ? 0 : bitrate
 				});
 				sortOnBitrate(this.streams);
