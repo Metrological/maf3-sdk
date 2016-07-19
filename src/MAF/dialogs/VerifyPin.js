@@ -15,9 +15,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.dialogs.VerifyPin
  * @extends MAF.dialogs.BaseDialogImplementation
+ */
+ /**
+ * @cfg {String} title Title of the dialog.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {String} message Message to be displayed inside the dialog.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {String} errorMessage Message to be displayed when incorrect pin is entered.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {String} type String, one of adult (default), master, youth, purchase or passport.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {Number} profileId Profile ID of desired user.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+/**
+ * @cfg {Function} forgotPinCallback Function to call when user has forgotten his/her pincode.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {Function} callback Function to call once dialog completes.
+ * @memberof MAF.dialogs.VerifyPin
+ */
+ /**
+ * @cfg {Function} cancelCallback Function to call on cancelation of dialog.
+ * @memberof MAF.dialogs.VerifyPin
  */
 define('MAF.dialogs.VerifyPin', function () {
 	return new MAF.Class({

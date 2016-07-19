@@ -341,10 +341,12 @@ define('MAF.control.MediaTransportOverlay', function () {
 					overlayStyles = Theme.get('ControlMediaTransportOverlay');
 				switch(state) {
 					case states.PAUSE:
-						if (overlayStyles.icons && overlayStyles.icons.playButton) {
-							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
-						} else {
-							this.controls.playButton.content.setSource(overlayStyles.sources.playButton);
+						if(this.controls.playButton){
+							if (overlayStyles.icons && overlayStyles.icons.playButton) {
+								this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
+							} else {
+								this.controls.playButton.content.setSource(overlayStyles.sources.playButton);
+							}
 						}
 						if (this.overlayTimer) {
 							this.overlayTimer.ticking = false;
@@ -355,19 +357,23 @@ define('MAF.control.MediaTransportOverlay', function () {
 						break;
 					case states.PLAY:
 					case states.BUFFERING:
-						if (overlayStyles.icons && overlayStyles.icons.playButton) {
-							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.pauseButton));
-						} else {
-							this.controls.playButton.content.setSource(overlayStyles.sources.pauseButton);
+						if(this.controls.playButton){
+							if (overlayStyles.icons && overlayStyles.icons.playButton) {
+								this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.pauseButton));
+							} else {
+								this.controls.playButton.content.setSource(overlayStyles.sources.pauseButton);
+							}
 						}
 						break;
 					case states.STOP:
 						this.resetState();
 					default:
-						if (overlayStyles.icons && overlayStyles.icons.playButton) {
-							this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
-						} else {
-							this.controls.playButton.content.setSource(overlayStyles.sources.playButton);
+						if(this.controls.playButton){
+							if (overlayStyles.icons && overlayStyles.icons.playButton) {
+								this.controls.playButton.content.setText(FontAwesome.get(overlayStyles.icons.playButton));
+							} else {
+								this.controls.playButton.content.setSource(overlayStyles.sources.playButton);
+							}
 						}
 						break;
 				}

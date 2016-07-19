@@ -15,10 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.control.PageIndicator
  * @classdesc This is a component that can be attached to a grid to indicate how many data items are in the grid.
  * @extends MAF.control.Button
+ */
+ /**
+ * @cfg {Function} updateText Function to call for updating the indicator text.
+ * @memberof MAF.control.PageIndicator
  */
 define('MAF.control.PageIndicator', function () {
 	return new MAF.Class({
@@ -139,7 +143,7 @@ define('MAF.control.PageIndicator', function () {
 				this.content.setStyle('fontSize', '66%');
 			} else {
 				this.content.setStyle('fontSize', null);
-			} 
+			}
 
 			if (this.config.focus === false || pageCount === 0) {
 				this.element.wantsFocus = false;

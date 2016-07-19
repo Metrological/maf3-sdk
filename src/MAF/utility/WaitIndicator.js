@@ -89,11 +89,6 @@ define('MAF.utility.WaitIndicator', function () {
 			return !this.active || (this.active=false) || MAF.utility.BusyIndicators.check(tasks);
 		},
 
-		/**
-		 * Method that does a check if the waitindicator should turn off. No need to call this method yourself.
-		 * @method MAF.utility.WaitIndicator#police
-		 * @private
-		 */
 		police: function (force) {
 			if (force || last + (stale * 1000) < Date.now()) {
 				timer.stop();

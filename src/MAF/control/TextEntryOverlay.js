@@ -101,7 +101,7 @@ define('MAF.control.TextEntryOverlay', function () {
 			this.inputField.setText((displayValue || '').htmlEscape());
 		}
 		if (event.type === 'valuechanged') {
-			this.form.height = this.retrieve('formHeight') + el.getTextBounds().height - el.lineHeight;
+			this.form.height = this.retrieve('formHeight') + el.getTextBounds().height - 10;// - el.lineHeight;
 		}
 		if (nativeCursor && isNumber(el.cursor) && event.type === 'cursormoved') {
 			el.cursor = cursorPosition || 0;
@@ -188,7 +188,8 @@ define('MAF.control.TextEntryOverlay', function () {
 						vOffset: 0,
 						hOffset: (view.width - 588) / 2,
 						wrap: true,
-						truncation: null
+						truncation: null,
+						transform: 'translateZ(0)'
 					},
 					events: {
 						onCursor: function (event) {
@@ -339,6 +340,8 @@ define('MAF.control.TextEntryOverlay', function () {
 		show: function () {
 			this.registerHandler();
 			this.keyboard.focus();
+			if (getSetting('autoClearSearch'))
+				ValueManagers[this._classID].value = '';
 			return this;
 		},
 

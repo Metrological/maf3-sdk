@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.media.Playlist
  * @classdesc Provides media playlist for the media player.
  */
@@ -78,7 +78,7 @@ define('MAF.media.Playlist', function () {
 		 * @param {Number} index Media entry index.
 		 */
 		removeEntry: function (index) {
-			this.entries.slice(index);
+			this.entries.splice(index,1);
 		},
 
 		/**

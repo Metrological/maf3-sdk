@@ -15,14 +15,30 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.dialogs.Login
  * @extends MAF.dialogs.BaseDialogImplementation
+ */
+ /**
+ * @cfg {String} title Title of the dialog.
+ * @memberof MAF.dialogs.Login
+ */
+ /**
+ * @cfg {String} message Message to be displayed inside the dialog.
+ * @memberof MAF.dialogs.Login
+ */
+ /**
+ * @cfg {Function} callback Function to call when dialog completes.
+ * @memberof MAF.dialogs.Login
+ */
+ /**
+ * @cfg {Function} cancelCallback Function to call on cancelation of dialog.
+ * @memberof MAF.dialogs.Login
  */
 define('MAF.dialogs.Login', function () {
 	return new MAF.Class({
 		ClassName: 'LoginDialog',
-		
+
 		Extends: MAF.dialogs.BaseDialogImplementation,
 
 		config: {
@@ -31,11 +47,11 @@ define('MAF.dialogs.Login', function () {
 			callback: null,
 			cancelCallback: null
 		},
-		
+
 		initialize: function () {
 			this.parent();
 		},
-		
+
 		getDialogConfig: function() {
 			return { type: 'login', conf: { 'ignoreBackKey': this.config.isModal, key: this.retrieve('key'), title: this.config.title, message: this.config.message } };
 		},

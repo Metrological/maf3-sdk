@@ -15,10 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.control.SingleTab
  * @classdesc This will have a tab mechanism, but it will only show one tab at a time.
  * @extends MAF.control.Button
+ */
+ /**
+ * @cfg {Function} updateText Function to call for updating the indicator text.
+ * @memberof MAF.control.SingleTab
  */
 define('MAF.control.SingleTab', function () {
 	var processText = function (value) {
@@ -33,18 +37,18 @@ define('MAF.control.SingleTab', function () {
 	var truncation = function (value) {
 		var maxWidth = this.width - 100;
 		var text = processText.call(this, value);
-		
+
 		var tempText = new MAF.element.Text({
 			label: text,
 			styles:Object.merge(this.text.element.style, {visible:false})
 		}).appendTo(this);
-				
+
 		if (tempText.textWidth > maxWidth) {
 			var diff = maxWidth / tempText.textWidth,
 				end = Math.ceil(value.length * diff);
 			value = value.truncate(end);
 		}
-		
+
 		tempText.suicide();
 		return value;
 	};

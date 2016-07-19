@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.element.Grid
  * @extends MAF.element.Container
  * @classdesc > The Grid object extends the Container object.
@@ -32,7 +32,7 @@
  *          events: {
  *             onSelect: function(event) {
  *                log('Selected', this.getDataItem());
- *             } 
+ *             }
  *          }
  *       });
  *
@@ -57,7 +57,7 @@
  *          events: {
  *             onSelect: function(event) {
  *                log('Selected', this.getDataItem());
- *             } 
+ *             }
  *          }
  *       });
  *
@@ -498,9 +498,9 @@ define('MAF.element.Grid', function () {
 
 		/**
 		 * @method MAF.element.Grid#changeDataset
-		 * @param {Array} data Data objects that will change the content content of the grid.
+		 * @param {Array} data Data objects that will change the content of the grid.
 		 * @param {Boolean} [reset=false] This will reset the page the grid will display to 0 when true.
-		 * @param {Number} [dataLength] When the data set will be larger then the passed in array in data.
+		 * @param {Number} [dataLength] When the dataset will be larger then the passed in array in length.
 		 * @fires MAF.element.Grid#onDatasetChanged
 		 * @return {MAF.element.Grid}
 		 */
@@ -524,7 +524,7 @@ define('MAF.element.Grid', function () {
 		 * Get the data item with the specified index.
 		 * @method MAF.element.Grid#getDataItem
 		 * @param  {index} index The index of the data item to find.
-		 * @return {object} The data item with the passed index. 
+		 * @return {object} The data item with the passed index.
 		 */
 		getDataItem: function (index) {
 			return this.pager.getItem(index);
@@ -649,9 +649,9 @@ define('MAF.element.Grid', function () {
 				p = Math.ceil(d / c),
 				z = p * c,
 				w = this.config.carousel;
-			
+
 			i = isNaN(i) ? 0 : i;
-			
+
 			if (c >= d) return 0;
 			else if (i >= d) return w ? Math.floor( (i % z) / c) * c : p * c;
 			else if (i < 0)  return w ? Math.floor( (((i % z) + z) % z) / c) * c : 0;

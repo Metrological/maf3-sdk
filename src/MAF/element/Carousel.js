@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
- * @class MAF.element.Carousel
- * @extends MAF.element.Container
+/**
+ * @.class MAF.element.Carousel
+ * @.extends MAF.element.Container
+ * @.deprecated
  */
 define('MAF.element.Carousel', function () {
 	var handleNavEvent = function (event) {
@@ -84,10 +85,10 @@ define('MAF.element.Carousel', function () {
 						});
 						this.cells.push(cell);
 						cellUpdater.call(this, cell, data[i]);
-						
+
 					}
 					this.body.element.appendChild(fragment);
-					
+
 				}
 				return this.cells.length;
 			},

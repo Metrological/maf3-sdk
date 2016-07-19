@@ -15,9 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.dialogs.Alert
  * @extends MAF.dialogs.BaseDialogImplementation
+ */
+/**
+ * @cfg {String} title Title of the dialog.
+ * @memberof MAF.dialogs.Alert
+ */
+ /**
+ * @cfg {String} message Message to be displayed inside the dialog.
+ * @memberof MAF.dialogs.Alert
+ */
+ /**
+ * @cfg {Array} buttons Array of Objects with label and callback keys. Where label is a string and callback a function to execute.
+ * @memberof MAF.dialogs.Alert
+ */
+ /**
+ * @cfg {Function} cancelCallback Function to call on cancelation of dialog.
+ * @memberof MAF.dialogs.Alert
  */
 define('MAF.dialogs.Alert', function () {
 	return new MAF.Class({

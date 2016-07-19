@@ -15,13 +15,18 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.dialogs.BaseDialogImplementation
  * @classdesc > Base dialog class implementation for all dialog boxes.
  */
 /**
- * @cfg {Class} focusOnCompletion Component which will recieve focus after the dialog is dismissed.
+ * @cfg {Function} focusOnCompletion Component which will recieve focus after the dialog is dismissed.
  * @memberof MAF.dialogs.BaseDialogImplementation
+ */
+/**
+ * @cfg {Boolean} isModal
+ * @memberof MAF.dialogs.BaseDialogImplementation
+ * @deprecated
  */
 define('MAF.dialogs.BaseDialogImplementation', function () {
 	var boundDispatchers = {};

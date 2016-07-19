@@ -1,7 +1,6 @@
 /**
  * @class MAF.application
  * @singleton
- * @classdesc >
  */
 /**
  * Initialized the application with the supplied config.
@@ -180,7 +179,7 @@
  * Fired before a view looses focus.
  * @event MAF.application#onUnselectView
  */
-			
+
 /**
  * @event MAF.application#getSnippetConfs
  */
@@ -213,10 +212,14 @@
  * @event MAF.application#onWidgetKeyPress
  */
 /**
+ * Fired when a colored key is pressed while the application is active.
+ * @event MAF.application#onColorKeyPress
+ */
+/**
  * Fired when playback controls are pressed.
  * @event MAF.application#onPlayControlKeyPress
  */
 /**
  * Fired before a new view has loaded.
  * @event MAF.application#onViewChangeInitiated
- */		
+ */

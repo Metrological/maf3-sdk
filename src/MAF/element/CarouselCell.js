@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
- * @class MAF.element.CarouselCell
- * @extends MAF.element.Container
+/**
+ * @.class MAF.element.CarouselCell
+ * @.extends MAF.element.Container
+ * @.deprecated
  */
 define('MAF.element.CarouselCell', function () {
 	var proxyProperties = MAF.element.GridCell.prototype.proxyProperties;

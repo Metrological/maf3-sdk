@@ -48,9 +48,55 @@
  *  publisher.fire('noScope');
  *  fnSubscribed.unsubscribeFrom(publisher, ['withScope']);
  *  fnOriginal.unsubscribeFrom(publisher, ['noScope']);
- *  
+ *
  * @method Function#unsubscribeFrom
  * @param {Class} publisher Object or Class on which you want to unregister the method.
  * @param {String|Array} eventTypes String or array containing eventTypes from which to unsubscribe this method to.
  * @returns {Function} Method as unsubscribed.
  */
+
+/**
+ * Creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.
+ * @method Function#bind
+ * @param {Function} thisArg The value to be passed as the this parameter to the target function when the bound function is called.
+ * @returns {Function} The bound function.
+ */
+
+/**
+ * Alias for function.bind.
+ * @method Function#bindTo
+ * @returns {Function} The bound function.
+ */
+
+/**
+ * Creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.
+ * @method Function#pass
+ * @param {Array} [arg=[]] Arguments to prepend to the bound function.
+ * @param {Object} thisArg The value to be passed as the this parameter to the target function when the bound function is called.
+ * @returns {Function} The newly bound function.
+ */
+
+ /**
+ * Delays execution of the function by the given delay.
+ * @method Function#delay
+ * @param {Number} delay Time to delay in milliseconds.
+ * @param {Object} thisArg Object to use for this when calling the function.
+ * @param {Array} args Arguments to use when calling the function.
+ * @returns {Number} The numerical timeout ID of the delayed function.
+ */
+
+/**
+ * Alias for function.delay.
+ * @method Function#defer
+ * @returns {Number} The numerical ID of the timeout.
+ */
+
+/**
+ * Periodically call the function with the given scope and arguments.
+ * @method Function#periodical
+ * @param {Number} periodical Number of milliseconds to wait before each call to function.
+ * @param {Object} scope Scope to use when invoking function.
+ * @param {Array} args Arguments to use when calling the function.
+ * @returns {Number} The numerical ID of the interval.
+ */
+

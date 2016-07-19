@@ -18,7 +18,8 @@
 define('MAF.keyboard.ReuseKeyboard', function (config) {
 	var USE_INPUT_METHOD = false,
 		HACKS = getSetting('hacks') || {},
-		HAS_DELETE = HACKS.hasdelete || false;
+		HAS_DELETE = HACKS.hasdelete || false,
+		STORE_KEYBOARD = getSetting('storeKeyboard');
 	var internals = {
 		Tables: {
 			CharacterDefinitions: {
@@ -130,12 +131,16 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"char-S":			{label:"S",value:"S",unicode:"\u0053"},
 				"char-sacute":		{label:"ś",value:"ś",unicode:"\u015B"},
 				"char-scaron":		{label:"š",value:"š",unicode:"\u0161"},
+				"char-scedilla":	{label:"ş",value:"ş",unicode:"\u015F"},
 				"char-Sacute":		{label:"Ś",value:"Ś",unicode:"\u015A"},
 				"char-Scaron":		{label:"Š",value:"Š",unicode:"\u0160"},
+				"char-Scedilla":	{label:"Ş",value:"Ş",unicode:"\u015E"},
 				"char-t":			{label:"t",value:"t",unicode:"\u0074"},
 				"char-tcaron":		{label:"ť",value:"ť",unicode:"\u0165"},
+				"char-tcedilla":	{label:"ţ",value:"ţ",unicode:"\u0163"},
 				"char-T":			{label:"T",value:"T",unicode:"\u0054"},
 				"char-Tcaron":		{label:"Ť",value:"Ť",unicode:"\u0164"},
+				"char-Tcedilla":	{label:"Ţ",value:"Ţ",unicode:"\u0162"},
 				"char-u":			{label:"u",value:"u",unicode:"\u0075"},
 				"char-U":			{label:"U",value:"U",unicode:"\u0055"},
 				"char-ugrave":		{label:"ù",value:"ù",unicode:"\u00F9"},
@@ -335,14 +340,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				"key-s":{
 					normal:"char-s",
 					shift:"char-S",
-					extended:["char-s","char-szlig","char-sacute","char-scaron"],
-					shiftextended:["char-S","char-szlig","char-Sacute","char-Scaron"]
+					extended:["char-s","char-szlig","char-sacute","char-scaron", "char-scedilla"],
+					shiftextended:["char-S","char-szlig","char-Sacute","char-Scaron", "char-Scedilla"]
 				},
 				"key-t":{
 					normal:"char-t",
 					shift:"char-T",
-					extended:["char-tcaron"],
-					shiftextended:["char-Tcaron"]
+					extended:["char-tcaron", "char-tcedilla"],
+					shiftextended:["char-Tcaron", "char-Tcedilla"]
 				},
 				"key-u":{
 					normal:"char-u",
@@ -1458,8 +1463,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			}
 
 			this.setValue(this.config.value);
-
-			this.loadLayout(this.config.layout || internal.availableLayouts[0]);
+			var layout = ((this.config.layout === 'multitab' || this.config.layout === 'alphanumeric') ? (STORE_KEYBOARD && profile.passport.get('lastKeyboard') || this.config.layout) : this.config.layout);
+			this.loadLayout(layout || internal.availableLayouts[0]);
 
 			if (this.config.startFocused) {
 				this.focus();
@@ -1477,6 +1482,10 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 			var internal = internals[this._classID];
 			var keyboard = this;
 			layout = typeOf(layout) === 'string' ? getLayoutById(layout) : layout;
+
+			if (getSetting('storeKeyboard') && (layout.id === 'multitab' || layout.id === 'alphanumeric'))
+				profile.passport.set('lastKeyboard', layout.id);
+
 			if (internal.state.currentLayout === layout) {
 				return;
 			}
@@ -1779,7 +1788,8 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 				marginLeft: 2,
 				marginRight: 2,
 				marginBottom: 2,
-				'float': 'left'
+				'float': 'left',
+				opacity: Browser.accenture ? 0.99 : 1
 			}
 		},
 		focused: {
@@ -1801,14 +1811,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardkey: {
 		normal: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 57,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 52,
 				height: 63
 			}
@@ -1817,14 +1827,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardaction: {
 		normal: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 87,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 82,
 				height: 63
 			}
@@ -1833,14 +1843,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardspace: {
 		normal: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 196,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 171,
 				height: 63
 			}
@@ -1849,14 +1859,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardnumkey: {
 		normal: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 116,
 				height: 63
 			}
 		},
 		small: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 116,
 				height: 63
 			}
@@ -1865,14 +1875,14 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	ReuseKeyboardmultikey: {
 		normal: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 116,
 				height: 80
 			}
 		},
 		small: {
 			styles: {
-				transform: 'translateZ(0)',
+				transform: Browser.accenture ? null : 'translateZ(0)',
 				width: 116,
 				height: 80
 			}
@@ -1880,7 +1890,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	ReuseKeyboardLabel: {
 		styles: {
-			transform: 'translateZ(0)',
+			transform: Browser.accenture ? null : 'translateZ(0)',
 			width: 'inherit',
 			height: 'inherit',
 			fontSize: 32,
@@ -1905,7 +1915,7 @@ define('MAF.keyboard.ReuseKeyboard', function (config) {
 	},
 	extendedOverlay: {
 		styles: {
-			transform: 'translateZ(0)',
+			transform: Browser.accenture ? null : 'translateZ(0)',
 			height: 67/*,
 			background: 'url(' + Image.WHITE + ')',
 			backgroundSize: '90% 50%',

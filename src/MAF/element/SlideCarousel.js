@@ -47,47 +47,55 @@
  *       cell.text.setText(data.label);
  *    }
  * }).appendTo(this);
- * @config {string} [title] The new job title.
  */
  /**
- * @cfg {Number} rows Number of cells visible for the viewer.
+ * @cfg {Number} [visibleCells = 1] Number of cells visible for the viewer.
+ * @memberof MAF.element.SlideCarousel
+ */
+ /**
+ * @cfg {Number} [subCells = 1] Number of sub cells in each cell.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Number} indicates which position is always focused.
+ * @cfg {Number} [focusIndex = 1] indicates which position is always focused.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {String} orientation Horizontal or verticale orientation of the SlideCarousel.
+ * @cfg {String} [slideEase = 'ease'] Easing function to use when animating.
+ * @memberof MAF.element.SlideCarousel
+ */
+ /**
+ * @cfg {Boolean} [animate = true] Whether or not to animate when navigating.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Boolean} blockFocus this determines whether the grid can be focus at all.
+ * @cfg {Number} [slideDuration = 0.3] Duration of the sliding animation.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Number} slideDuration this determines how fast the cells will be moving to a new position.
+ * @cfg {Boolean} [carousel = true] Whether or not to behave as a carousel.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {String} slideEase this determines with which easing cells will be moving to a new position.
- * @memberof MAF.element.SlideCarousel
- */
-
-/**
- * @cfg {Boolean} [dynamicFocus = false] this enables focusing the other cells without sliding.
- * @memberof MAF.element.SlideCarousel
- */
-
-/**
- * @cfg {Integer} [dynamicFocusStart = 0] this determines the threshold from the left before sliding.
+ * @cfg {String} [orientation = horizontal] Or vertical.
  * @memberof MAF.element.SlideCarousel
  */
 /**
- * @cfg {Integer} [dynamicFocusEnd = 0] this determines the threshold from the right before sliding.
+ * @cfg {Boolean} [blockFocus = false] This determines whether the grid can have focus at all.
  * @memberof MAF.element.SlideCarousel
  */
-
+ /**
+ * @cfg {Boolean} [dynamicFocus = false] This enables focusing cells without sliding.
+ * @memberof MAF.element.SlideCarousel
+ */
+ /**
+ * @cfg {Number} [dynamicFocusStart = 0] The threshold from the left before sliding.
+ * @memberof MAF.element.SlideCarousel
+ */
+ /**
+ * @cfg {Number} [dynamicFocusEnd = 0] The threshold from the right before sliding.
+ * @memberof MAF.element.SlideCarousel
+ */
 /**
  * Fired when the data set of the grid has changed.
  * @event MAF.element.SlideCarousel#onDatasetChanged
@@ -112,6 +120,7 @@ define('MAF.element.SlideCarousel', function () {
 
 			dispatchEvents: function (event) {
 				this.parent(event);
+
 				switch (event.type) {
 					case 'navigate':
 						var parent = this.grid;
@@ -130,8 +139,8 @@ define('MAF.element.SlideCarousel', function () {
 							end = dyn && pos === parent.config.visibleCells - parent.config.dynamicFocusEnd,
 							ds = parent.currentDataset,
 							tCurrent = hasFocus(parent.cells),
-							ct = tCurrent[0],
-							rt = tCurrent[1];
+							ct = tCurrent && tCurrent[0],
+							rt = tCurrent && tCurrent[1];
 
 						var withFlow = 	(parent.config.orientation === 'vertical' && (dir === 'down' || dir === 'up')) ||
 										(parent.config.orientation === 'horizontal' && (dir === 'left' || dir === 'right'));
@@ -155,16 +164,20 @@ define('MAF.element.SlideCarousel', function () {
 									parent.cells[ct].subCells[rt].focus();
 								}
 							}
-							if ((end && (dir === 'right' || dir === 'down')) ||
+							if (parent.pager.getNumPages() > 1 && ((end && (dir === 'right' || dir === 'down')) ||
 								(start && (dir === 'left' || dir === 'up')) ||
-								(!dyn && pos === fi)) {
-								parent.shift(dir, pos);
+								(!dyn && pos === fi))) {
+								parent.shift(dir, pos, event);
 							} else {
 								parent.animating = false;
+								parent.manageBounds(false);
+								if(parent.pager.getNumPages() <= 1){
+									parent.fire('onNavigateOutOfBounds', event.detail, event);
+								}
 							}
 						} else if (againstFlow) {
 							rt += (plus ? 1 : -1);
-							if (ds[ct].items[rt] === undefined || parent.cells[ct].subCells[rt] === undefined) {
+							if (!(ct !== null && ct !== undefined) || !(rt !== null && rt !== undefined) || ds[ct].items[rt] === undefined || parent.cells[ct].subCells[rt] === undefined) {
 								parent.animating = false;
 								parent.manageBounds(false);
 								parent.fire('onNavigateOutOfBounds', event.detail, event);
@@ -174,7 +187,7 @@ define('MAF.element.SlideCarousel', function () {
 								parent.animating = false;
 								parent.cells[ct].subCells[rt].focus();
 							}
-						} 
+						}
 						parent.navigating = false;
 						break;
 				}
@@ -206,7 +219,7 @@ define('MAF.element.SlideCarousel', function () {
 			this.parent();
 		}
 	});
-	function hasFocus(cells) {
+  function hasFocus(cells) {
 		for (var i = 0; i < cells.length; i++) {
 			if (cells[i].subCells && cells[i].subCells.length > 0) {
 				for (var j = 0; j < cells[i].subCells.length; j++) {
@@ -241,13 +254,13 @@ define('MAF.element.SlideCarousel', function () {
 						if (i === cd-1) {
 							var cf = hasFocus(cells);
 							if(cf){
-								if (parent.config.subCells > 1 && cf.length && cf[0] && cf[1]) {
+								if (parent.config.subCells > 1 && cf.length && cf[0] > -1 && cf[1] > -1) {
 									parent.setCurrent(cf[0], cf[1]);
 								} else {
 									parent.setCurrent(cf);
 								}
 							}
-							
+
 							parent.animating = false;
 							parent.fire('onSlideDone');
 						}
@@ -326,12 +339,16 @@ define('MAF.element.SlideCarousel', function () {
 					var againstFlow = 	(this.config.orientation === 'vertical' && (dir === 'left' || dir === 'right')) ||
 										(this.config.orientation === 'horizontal' && (dir === 'down' || dir === 'up'));
 					var plus = dir === 'right' || dir === 'down';
-
 					if (withFlow) {
 						tar += (plus ? 1 : -1);
-						if (ds[tar] !== null && this.cells[tar]) {
+						if (ds[tar] !== null && ds[tar] !== undefined && this.cells[tar] && !this.cells[tar].frozen) {
 							event.preventDefault();
 							this.cells[tar].focus();
+						} else {
+							this.animating = false;
+							this.manageBounds(false);
+							this.fire('onNavigateOutOfBounds', event.detail, event);
+							return;
 						}
 					} else if (againstFlow) {
 						this.animating = false;
@@ -391,8 +408,7 @@ define('MAF.element.SlideCarousel', function () {
 				}
 			},
 			updateCells: function (page) {
-				var cellUpdater = this.config.cellUpdater,
-					dataLength = this.pager.getNumPages(),
+				var dataLength = this.pager.getNumPages(),
 					buildFrom = this.config.focusIndex;
 				this.animating = false;
 				this.currentDataset = [];
@@ -400,8 +416,8 @@ define('MAF.element.SlideCarousel', function () {
 				this.page = page || 0;
 
 				var test = (this.config.visibleCells - this.config.dynamicFocusEnd) - (this.config.focusIndex + this.config.dynamicFocusStart);
-				if ((dataLength > this.config.visibleCells+2) && 
-					(this.page >= dataLength - test && this.page <= dataLength-1) && 
+				if ((dataLength > this.config.visibleCells+2) &&
+					(this.page >= dataLength - test && this.page <= dataLength-1) &&
 					this.config.dynamicFocus) {
 					buildFrom = this.config.visibleCells - (dataLength - this.page);
 				}
@@ -414,10 +430,10 @@ define('MAF.element.SlideCarousel', function () {
 						var dif = buildFrom - i,
 							difABS = Math.abs(dif),
 							index = null;
-						if ((difABS > dataLength-1 || dif > 0) && this.customPager) {
+						if ((difABS > dataLength-1 || dif > 0) && !this.config.carousel) {
 							var tmp = (this.page > 0) ? this.page - dif : null;
 							index = (tmp === null || tmp < 0) ? null : tmp;
-						} else if (difABS > dataLength-1 && !this.customPager) {
+						} else if (difABS > dataLength-1 && this.config.carousel) {
 							index = 0;
 						} else if (dif > 0) {
 							index = (this.page !== 0) ? this.page - difABS : dataLength - difABS;
@@ -503,7 +519,7 @@ define('MAF.element.SlideCarousel', function () {
 					cell.freeze();
 				}
 			},
-			setCellConfiguration: function (pos, cd, or, data) {
+			setCellConfiguration: function (pos, cd, or) {
 				var cell;
 				var vOffset = (or === 'vertical') ? -cd.height + pos * cd.height : 0;
 				var hOffset = (or === 'horizontal') ? -cd.width + pos * cd.width : 0;
@@ -581,7 +597,8 @@ define('MAF.element.SlideCarousel', function () {
 			this.config.slideEase = this.config.slideEase || 'ease';
 			this.config.blockFocus = this.config.blockFocus || false;
 			this.config.slideDuration = (typeof this.config.slideDuration === 'number') ? this.config.slideDuration : 0.1;
-			this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;
+			//this.customPager = (this.config.carousel && this.config.carousel === true) ? false : true;
+			this.customPager = false;
 			this.inBounds = false;
 			this.current = null;
 			this.parent();
@@ -591,37 +608,58 @@ define('MAF.element.SlideCarousel', function () {
 				this.customPager = true;
 				this.pager = this.config.pager;
 				delete this.config.pager;
+				this.changeDataset();
 			} else {
 				this.pager = new MAF.utility.Pager(this.config.subCells, this.config.visibleCells*this.config.subCells);
-			}
-
-			if (!this.config.carousel) {
-				this.customPager = true;
+				this.pager.initItems([], 0);
 			}
 
 			this.currentDataset = [];
 			this.offsets = [];
 			this.animating = false;
 			this.store('slider', {status: 'empty'});
-			this.collectedPage.subscribeTo(this.pager, 'pageDone', this);
+			this.collectedPage.subscribeTo(this.pager, this.pager.eventType, this);
 		},
 
+    /**
+     * Sets the visibleCells property.
+     * @method MAF.element.SlideCarousel#setVisibleCells
+     */
 		setVisibleCells: function (visibleCells) {
 			this.config.visibleCells = visibleCells;
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#getVisibleCells
+     * @return {Object} returns the visibleCells
+     */
 		getVisibleCells: function () {
 			return this.config.visibleCells;
 		},
 
+    /**
+     * Sets the focusIndex property.
+     * @method MAF.element.SlideCarousel#setFocusIndex
+     */
 		setFocusIndex: function (index) {
 			this.config.focusIndex = index;
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#getFocusIndex
+     * @return {Object} returns the focusIndex
+     */
 		getFocusIndex: function () {
 			return this.config.focusIndex;
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#changeDataset
+     * @param {Array} data Data objects that will change the content of the carousel.
+     * @param {Boolean} [reset=false] This will reset the item the carousel will display to 0 when true.
+     * @param {Number} [dataLength] When the dataset will be larger then the passed in array in length.
+     * @fires MAF.element.SlideCarousel#onDatasetChanged
+     */
 		changeDataset: function (data, reset, dataLength) {
 			data = data && data.length ? data : [];
 			dataLength = (dataLength && (dataLength > data.length)) ? dataLength : data.length;
@@ -633,6 +671,10 @@ define('MAF.element.SlideCarousel', function () {
 			this.fire("onDatasetChanged");
 		},
 
+    /**
+     * Sets the focus to the carousel's current cell.
+     * @method MAF.element.SlideCarousel#focus
+     */
 		focus: function () {
 			this.manageBounds(true);
 			var currentCell = this.getCurrentCell();
@@ -640,10 +682,21 @@ define('MAF.element.SlideCarousel', function () {
 				currentCell.focus();
 		},
 
+    /**
+     * Sets the the page to pagenum.
+     * @method MAF.element.SlideCarousel#collectPage
+     * @param {Number} pagenum Pagenumber to set the internal pager to.
+     */
 		collectPage: function (pagenum) {
 			this.pager.getPage(pagenum);
 		},
 
+    /**
+     * Check if able to navigate to position.
+     * @method MAF.element.SlideCarousel#ableToNavigate
+     * @param {Number} pos Position to check to navigate to.
+     * @return {Boolean}
+     */
 		ableToNavigate: function (pos) {
 			if (this.config.blockFocus || isEmpty(this.currentDataset[pos]))
 				return false;
@@ -653,7 +706,7 @@ define('MAF.element.SlideCarousel', function () {
 			return (dyn || foc);
 		},
 
-		manageBounds: function (bounds) {
+    manageBounds: function (bounds) {
 			if (bounds === this.inBounds)
 				return;
 			var self = this;
@@ -663,6 +716,11 @@ define('MAF.element.SlideCarousel', function () {
 			}, this);
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#getCellDataItem
+     * @param {Object} c Cell to get the data item from.
+     * @return {Any} Returns the cell's data item.
+     */
 		getCellDataItem: function (c) {
 			var cell = c || this.getCurrentCell();
 			if (this.config.subCells > 1)
@@ -671,6 +729,11 @@ define('MAF.element.SlideCarousel', function () {
 				return this.currentDataset[this.cells.indexOf(cell)].items[0];
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#getCellByDataIndex
+     * @param {Number} index Cell-index to retrieve the cell for.
+     * @return {Object} Returns the cell's or undefined when not found.
+     */
 		getCellByDataIndex: function (index) {
 			var cellIndex = this.collection.indexOf(Math.floor(index/this.config.subCells)),
 				subCellIndex = index % this.config.subCells;
@@ -700,6 +763,10 @@ define('MAF.element.SlideCarousel', function () {
 			return (this.collection && this.collection[(this.config.subCells > 1 ? cell[0] : cell)]) || 0;
 		},
 
+    /**
+     * @method MAF.element.SlideCarousel#getCurrentCell
+     * @return {Object} Returns the current cell.
+     */
 		getCurrentCell: function () {
 			if (this.cells && this.cells.length) {
 				var cell = this.getCurrent();
@@ -789,7 +856,7 @@ define('MAF.element.SlideCarousel', function () {
 		 * @method MAF.element.SlideCarousel#shift
 		 * @param {String} the direction the carousel has to slide.
 		 */
-		shift: function (direction, origin) {
+		shift: function (direction, origin, event) {
 			if (this.config.orientation === 'vertical' && (direction === 'right' || direction === 'left')) {
 				return;
 			}
@@ -819,7 +886,7 @@ define('MAF.element.SlideCarousel', function () {
 							if (oldStart === null) {
 								newStart = null;
 							} else if (oldStart - 1 < 0) {
-								newStart = !this.customPager ? dataLength-1 : null;
+								newStart = this.config.carousel ? dataLength-1 : null;
 							} else {
 								newStart = oldStart - 1;
 							}
@@ -848,11 +915,18 @@ define('MAF.element.SlideCarousel', function () {
 								newEnd = this.collection.shift();
 							if (oldEnd === null) {
 								newEnd = null;
-							} else if (oldEnd + 1 >= dataLength) {
-								newEnd = !this.customPager ? 0 : null;
-							} else {
+							} else if (!this.customPager) {
+								if(this.config.carousel){
+									newEnd = (oldEnd+1 > dataLength-1)? 0 : oldEnd+1;
+								} else{
+									newEnd = (oldEnd+1 > dataLength-1)? null : oldEnd+1;
+								}
+							} else if(this.currentDataset[this.config.visibleCells+1] && this.currentDataset[this.config.visibleCells+1].items.length === this.config.subCells){
 								newEnd = oldEnd + 1;
+							} else {
+								newEnd = null;
 							}
+
 							this.collection.push(newEnd);
 							if (newEnd === null) {
 								this.cells.push(this.cells.shift());
