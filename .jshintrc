@@ -1,0 +1,25 @@
+{
+  "maxerr": 50,
+  "bitwise": true,
+  "curly": false,
+  "eqeqeq": true,
+  "forin": false,
+  "loopfunc": true,
+  "noarg": true,
+  "noempty": true,
+  "maxlen": false,
+  "plusplus": false,
+  "undef": false,
+  "unused": false,
+  "strict": false,
+  "eqnull": false,
+  "expr": true,
+  "onecase": true,
+  "sub": true,
+  "browser": true,
+  "devel": true,
+  "-W086": true,
+  "globals": {
+    "KONtx": true
+  }
+}
