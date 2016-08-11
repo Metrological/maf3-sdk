@@ -79,6 +79,14 @@ define('MAF.control.BackButton', function () {
 		 */
 		setText: function (text) {
 			this.content[1].setText(text);
+		},
+
+		/**
+		 * Get which text is displayed on this component.
+		 * @method MAF.control.BackButton#getText
+		 */
+		getText: function () {
+			return this.content[1].getText() || '';
 		}
 	});
 }, {

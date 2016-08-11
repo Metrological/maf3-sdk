@@ -42,8 +42,21 @@ define('MAF.control.TextButton', function () {
 			}).appendTo(this);
 		},
 
+		/**
+		 * Set which text to display on this component.
+		 * @param {String} text The text
+		 * @method MAF.control.TextButton#setText
+		 */
 		setText: function (text) {
 			this.content.setText(text);
+		},
+
+		/**
+		 * Get which text is displayed on this component.
+		 * @method MAF.control.TextButton#getText
+		 */
+		getText: function () {
+			return this.content.getText() || '';
 		}
 	});
 }, {

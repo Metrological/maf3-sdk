@@ -159,6 +159,14 @@ define('MAF.control.MetadataDisplay', function () {
 			this.content.setText(text || '');
 		},
 
+		/**
+		 * Get which text is displayed on this component.
+		 * @method MAF.control.MetadataDisplay#getText
+		 */
+		getText: function () {
+			return this.content.getText() || '';
+		},
+
 		suicide: function () {
 			delete this.source;
 			this.parent();

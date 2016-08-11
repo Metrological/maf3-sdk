@@ -133,6 +133,14 @@ define('MAF.element.Text', function () {
 		 */
 		setText: function (text) {
 			this.element.data = text;
+		},
+
+		/**
+		 * Get which text is displayed on this component.
+		 * @method MAF.element.Text#getText
+		 */
+		getText: function () {
+			return this.element.data || '';
 		}
 	});
 });

@@ -66,6 +66,14 @@ define('MAF.control.Header', function () {
 		 */
 		setText: function (text) {
 			this.content.setText(text);
+		},
+
+		/**
+		 * Get which text is displayed on this component.
+		 * @method MAF.control.Header#getText
+		 */
+		getText: function () {
+			return this.content.getText() || '';
 		}
 	});
 }, {
