@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Party Client</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/client.css" />
+
+</head>
+<body id="client">
+
+    <div id="interface">
+        <div id="status">
+
+            <div id="calibrateHolder">
+                <div class="l">
+
+                </div>
+                <div class="c" id="calibrateLocation">
+                    calibrate
+                </div>
+                <div class="r">
+
+                </div>
+            </div>
+
+            <div id="backHolder">
+                <div class="l">
+
+                </div>
+                <div class="c">
+                    back
+                </div>
+                <div class="r">
+
+                </div>
+            </div>
+
+            <div id="ammoHolder">
+                <div class="l">
+
+                </div>
+                <div class="c">
+
+                    <div id="ammo">
+                        <span>AMMO</span>
+                        <span id="ammoTotal"></span>
+                    </div>
+
+                    <div id="magazine">
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                        <div class="bulletSlot"></div>
+                    </div>
+
+                </div>
+                <div class="r">
+
+                </div>
+            </div>
+
+        </div>
+
+        <div id="touchpad">
+
+            <div id="calibrateView">
+
+                <p id="calibrateInfo">
+                    Point the top of your phone to the top left of your screen and press calibrate
+                </p>
+                <img src="images/pointtotv.gif"/>
+
+                <div id="calibrate">
+                    CALIBRATE
+                </div>
+
+            </div>
+
+            <div id="hitarea">
+
+                <div id="start">
+                    START
+                </div>
+
+                <div id="shootLabel">
+                    shoot
+                </div>
+
+            </div>
+
+            <div id="scanlines">
+
+            </div>
+
+            <div id="monitor">
+                <img src="images/general.png" id="general" class="blink">
+                <img src="images/scientist.png" id="scientist" class="blink">
+                <div id="message">
+
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- sounds -->
+
+    <audio id="gunSound" preload="true">
+        <source src="../Assets/shot.mp3" />
+    </audio>
+
+    <audio id="hitSound" preload="true">
+        <source src="../Assets/hit.WAV" />
+    </audio>
+
+    <audio id="loop" loop autoplay >
+        <source src="../Assets/loop.mp3" preload="true"/>
+    </audio>
+
+    <audio id="reload" preload="true">
+        <source src="../Assets/reload.mp3" />
+    </audio>
+
+    <audio id="phone" preload="true">
+        <source src="../Assets/ringring.mp3" />
+    </audio>
+
+    <audio id="notify" preload="true">
+        <source src="../Assets/notify.mp3" />
+    </audio>
+
+    <audio id="typewriter" preload="true">
+        <source src="../Assets/typewriter.mp3" />
+    </audio>
+
+    <!-- e: main-holder -->
+
+    <script type="text/javascript" src="js/maf-room.min.js#identifier=com.metrological.app.PartyManager"></script>
+    <script type="text/javascript" src="js/domtastic.min.js"></script>
+    <script src="js/ClientManager.js"></script>
+
+
+
+
+</body>
+</html>

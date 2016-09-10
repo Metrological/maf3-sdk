@@ -1,0 +1,22 @@
+{
+	"identifier": "com.metrological.app.Ufo",
+	"name": "UFO Shooter",
+	"version": "0.0.1",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "Multiplayer UFO Shooter",
+	"keywords": "Pointer demo",
+	"categories": [
+		"entertainment",
+		"games"
+	],
+	"channels": "all",
+	"menu": true,
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Assets/ufo-icon.png"
+		}
+	}
+}
