@@ -219,7 +219,7 @@ var PointerManager = function(){
 
                 case 'onCreated':
                     // generate url for QR code scanner
-                    var url = 'http://10.1.77.119:8080/'+widget.getUrl('Client/index.html?hash='+payload.hash);
+                    var url = widget.getUrl('Client/index.html?hash='+payload.hash);
                     //var url = widget.getUrl('Client/index.html?hash='+payload.hash);
                     self.elements.qr.setSource( QRCode.get( url ) );
                     break;
