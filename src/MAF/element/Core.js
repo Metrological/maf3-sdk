@@ -104,6 +104,12 @@ define('MAF.element.Core', function () {
 				if (this.config.frozen === true) {
 					this.freeze();
 				}
+				if (Browser.wpeCisco && this.element.nodeName == 'CANVAS') {
+					var ctx = this.element.getContext('2d');
+					setTimeout(function(){
+						ctx.fillRect( -1, -1, 1, 1);
+					}, 500);
+				}
 			},
 			proxyProperties: function (propnames) {
 				propnames = [

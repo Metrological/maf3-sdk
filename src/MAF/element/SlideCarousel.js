@@ -443,7 +443,7 @@ define('MAF.element.SlideCarousel', function () {
 						} else if (dif < 0) {
 							index = this.page + difABS;
 							if (index >= dataLength) {
-								index = !this.customPager ? index - dataLength : null;
+								index = (!this.customPager && this.config.carousel) ? index - dataLength : null;
 							}
 						} else {
 							index = (this.page === dataLength) ? 0 : this.page;
