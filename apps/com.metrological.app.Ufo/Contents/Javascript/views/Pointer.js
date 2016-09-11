@@ -73,7 +73,6 @@ var Pointer = new MAF.Class({
         }).appendTo( this );
 
         this.elements.introText = new MAF.element.Text({
-            label: 'TEST ewernwer wer we r wer we r we r w rwerwerwer',
             wrap: 'true',
             styles:{
                 fontFamily: 'Munro',
