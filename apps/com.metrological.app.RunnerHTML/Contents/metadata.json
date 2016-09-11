@@ -1,0 +1,19 @@
+{
+	"identifier": "com.metrological.app.RunnerHTML",
+	"name": "Appathon Runner",
+	"version": "0.0.1",
+	"author": "Metrological",
+	"organization": "Metrological",
+	"copyright": "Metrological",
+	"description": "Appathon Runner",
+	"keywords": "games",
+	"categories": [
+		"games"
+	],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Image/Icon.png"
+		}
+	}
+}
