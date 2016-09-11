@@ -220,7 +220,6 @@ var PointerManager = function(){
                 case 'onCreated':
                     // generate url for QR code scanner
                     var url = widget.getUrl('Client/index.html?hash='+payload.hash);
-                    //var url = widget.getUrl('Client/index.html?hash='+payload.hash);
                     self.elements.qr.setSource( QRCode.get( url ) );
                     break;
 
@@ -311,7 +310,6 @@ var PointerManager = function(){
                 // when a client send 'start'
                 // show intro or start the game
                 case 'start':
-                    console.log('start clicked: ', self.lockStart)
                     if(!self.lockStart){
                         self.elements.qr.fire('onHide');
                         self.lockStart = true;
@@ -382,6 +380,10 @@ var PointerManager = function(){
             canvas.style.webkitTransform = transform;
             canvas.style.transform = transform;
             canvas.style.imageRendering = 'pixelated';
+        };
+
+        this.destroy = function(){
+            cancelAnimationFrame(this.game.rafId);
         };
 
     };

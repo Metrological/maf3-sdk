@@ -79,7 +79,6 @@ var Pointer = new MAF.Class({
                 fontSize: 60,
                 vOffset: 450,
                 hOffset: 650,
-                bordeR:'1px solid #fff',
                 width: 600,
                 height: 400,
                 color: '#fff',
@@ -118,6 +117,8 @@ var Pointer = new MAF.Class({
             this.manager.room.leave();
             this.manager.room.destroy();
         }
+
+        this.manager.destroy();
 
         delete this.manager;
         delete this.iId;

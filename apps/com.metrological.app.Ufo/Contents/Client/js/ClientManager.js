@@ -320,7 +320,7 @@
                 manager.locked = false;
                 Interface.hide('hitarea');
                 Interface.hide('shootLabel');
-                Interface.showGeneral('Good job soldier! Earth is save again');
+                Interface.showGeneral('Good job soldier! Earth is safe again');
                 setTimeout(function(){
                     Interface.hideGeneral();
                     Interface.show('hitarea');
