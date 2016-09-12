@@ -14,7 +14,7 @@ var RunManager = (function(doc){
          * test on STB
          * @type {boolean}
          */
-        this.STB = false;
+        this.STB = true;
 
         /**
          * Game settings
@@ -71,13 +71,13 @@ var RunManager = (function(doc){
                     spriteChangeSpeed: 4
                 },
                 stb:{
-                    gameSpeed: 9,
+                    gameSpeed: 11,
                     jumpSpeed: 12.5,
                     gravity: 1.4,
                     slideGravity: 7,
                     slideDistance: 25,
                     playerYPosition: 101,
-                    spriteChangeSpeed: 8
+                    spriteChangeSpeed: 2
                 }
             };
 
@@ -124,12 +124,15 @@ var RunManager = (function(doc){
                     }
                     break;
                 case 8: // backspace
+                case 27: // escape
                     if(this.state !== Manager.STATE.INIT){
                         this.state = Manager.STATE.INIT;
                         this.setCoins(this.game.coins);
                         this.stop();
                         this.intro.start();
                         return false;
+                    }else{
+                        window.close();
                     }
 
 
@@ -491,16 +494,16 @@ var RunManager = (function(doc){
 
     var animations = {
         runner:[
-            {x:0,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:100,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:200,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:300,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:400,y:0,w:100,h:107,px:100,ch:-35,cy:0,cx:0},
-            {x:500,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:600,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:700,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:800,y:0,w:100,h:107,px:100,ch:-15,cy:15,cx:0},
-            {x:900,y:0,w:100,h:107,px:100,ch:-35,cy:0,cx:0}
+            {x:0,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:100,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:200,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:300,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:400,y:0,w:100,h:100,px:100,ch:-35,cy:0,cx:0},
+            {x:500,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:600,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:700,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:800,y:0,w:100,h:100,px:100,ch:-15,cy:15,cx:0},
+            {x:900,y:0,w:100,h:100,px:100,ch:-35,cy:0,cx:0}
         ],
         coin:[
             {x:0,y:0,w:22,h:22,px:22,ch:0,cy:0,cx:0},

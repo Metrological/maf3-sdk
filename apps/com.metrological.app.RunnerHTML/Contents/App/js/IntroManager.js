@@ -192,7 +192,7 @@ var IntroManager = (function(){
                         {
                             id: 'OH1',
                             sprite: 'img/enemy-high.png',
-                            x: -50, width: 62, height: 86, vx: 1, y: 140
+                            x: -50, width: 24, height: 60, vx: 1, y: 140
                         }
                     ]
                 },
