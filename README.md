@@ -99,3 +99,16 @@ Contribute
 ----------
 
 **Would you like to join our team?** Drop your details at recruitment@metrological.com 
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+[![Analytics](https://ga-beacon.appspot.com/UA-97701940-1/maf3-sdk/readme?pixel)](https://git.io/maf3-sdk)
