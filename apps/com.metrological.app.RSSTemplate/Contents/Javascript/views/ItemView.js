@@ -1,40 +1,40 @@
-// Create a class and extended it from the MAF.system.SidebarView
-var ItemView = new MAF.Class({
+// Create a new View class and extended it from the MAF.system.SidebarView
+var ItemView = new MAF.Class( {
 	Extends: MAF.system.SidebarView,
 
 	ClassName: 'ItemView',
 
 	// Add back params when going to the previous view
-	viewBackParams: {
-		reset: false
-	},
+	viewBackParams: { reset: false },
 
 	// Create your view template
-	createView: function () {
-		// Reference to the current view
-		var view = this;
+	createView: function() {
+		var backButton = new MAF.control.BackButton( {
+			label: $_( 'BACK' ),
+			backParams: this.viewBackParams // Add backParms on select of BackButton
+		} ).appendTo( this );
 
-		var backButton = view.elements.backButton = new MAF.control.BackButton({
-			label: $_('BACK'),
-			backParams: view.viewBackParams // Add backParms on select of BackButton
-		}).appendTo(view);
-
-		view.elements.myTextGrid = new MAF.element.TextGrid({
+		this.elements.myTextGrid = new MAF.element.TextGrid( {
 			styles: {
-				width: view.width,
-				height: (view.height - backButton.height - 20),
+				width: this.width,
+				height: ( this.height - backButton.height - 20 ),
 				vOffset: backButton.outerHeight,
 				fontSize: 24,
 				wrap: true
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 	},
 
 	// When view is created or returning to view the view is updated
-	updateView: function () {
-		var view = this,
-			item = view.persist.item;
-		if (typeOf(item) === 'object')
-			view.elements.myTextGrid.setText(item.title + '<br />' + Date.format(Date.parse(item.pubDate, DateFormat.RSS)) + '<br /><br />' + item.description);
+	updateView: function() {
+		var item = this.persist.item;
+
+		if ( item.title && item.pubDate && item.description )
+			this.elements.myTextGrid.setText(
+				item.title + '<br />' +
+				moment( item.pubDate).format( 'DD MMM YYYY HH:MM' ) +
+				'<br /><br />' +
+				item.description
+			);
 	}
-});
+} );

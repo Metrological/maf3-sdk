@@ -1,14 +1,13 @@
 {
 	"identifier": "com.metrological.app.RSSTemplate",
 	"name": "RSS Template",
-	"version": "1.0.0",
-	"author": "Metrological Widgets",
-	"company": "Metrological Widgets",
-	"copyright": "Metrological Widgets 2014",
-	"description": "An easy template to get a feed in an app",
-	"categories": [
-		"video"
-	],
+	"version": "1.0.1",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get a feed into an App.",
+	"keywords": "template",
+	"categories": [ "video" ],
 	"scripts": "Javascript/init.js",
 	"images": {
 		"about": "Images/Icon.png",
