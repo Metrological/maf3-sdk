@@ -1,0 +1,6 @@
+"Close" 									=	"Close";
+"BACK"										=	"Back";
+"ExampleObject"								=	"var data = { </br> &nbsp&nbsp&nbsp Title: My Title, </br> &nbsp&nbsp&nbsp Src: Images/tv.png, </br> &nbsp&nbsp&nbsp Description: My Description</br>};";
+"Description"								=	"We'll send the following data to the next view.";
+"PersistData"								=	"this.persist.data";
+"DeveloperTool" 							=	"Use the Developer tool to view the console log.";

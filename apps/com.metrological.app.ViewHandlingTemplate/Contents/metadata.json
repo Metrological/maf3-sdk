@@ -1,0 +1,17 @@
+{
+	"identifier": "com.metrological.app.ViewHandlingTemplate",
+	"name": "View Handling Template",
+	"version": "0.0.2",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get learn about View handling.",
+	"categories": [ "video" ],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"about": "Images/Icon.png",
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
