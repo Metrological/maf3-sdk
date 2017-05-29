@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var os = require('os'),
   fs = require('fs'),
   http = require('http'),
