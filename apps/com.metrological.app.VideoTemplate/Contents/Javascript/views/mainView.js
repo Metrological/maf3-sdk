@@ -1,74 +1,70 @@
-// Create a class and extended it from the MAF.system.SidebarView
-var mainView = new MAF.Class({
+// Create a new View class and extended it from the MAF.system.SidebarView
+var MainView = new MAF.Class( {
 	Extends: MAF.system.SidebarView,
 
-	ClassName: 'mainView',
+	ClassName: 'MainView',
 
-	initialize: function () {
-		// Reference to the current view
-		var view = this;
-		view.parent(); // Call super class constructor
+	initView: function() {
 		MAF.mediaplayer.init(); // Initialize mediaplayer
 	},
 
 	// Create your view template
 	createView: function () {
-		// Reference to the current view
-		var view = this;
-
-		var directPlayButton = view.controls.directPlayButton = new MAF.control.TextButton({
-			label: $_('DirectPlay'),
+		var directPlayButton = this.controls.directPlayButton = new MAF.control.TextButton( {
+			label: $_( 'DirectPlay' ),
 			guid: 'directPlayButton',
 			styles: {
 				height: 80,
 				width: 400,
-				hOffset: (view.width - 400) / 2,
+				hOffset: ( this.width - 400 ) / 2,
 				vOffset: 150
 			},
-			textStyles: {
-				anchorStyle: 'center'
-			},
+			textStyles: { anchorStyle: 'center' },
 			events: {
-				onSelect: function () {
-					// If the player is not playing, start the video and change the text on the button
-					if (MAF.mediaplayer.player.currentPlayerState !== MAF.mediaplayer.constants.states.PLAY){
+				onSelect: function() {
+					// If the player is playing, stop the video and change text on the button
+					if ( MAF.mediaplayer.player.currentPlayerState === MAF.mediaplayer.constants.states.PLAY ) {
+
+						MAF.mediaplayer.control.stop();
+						this.setText( $_( 'DirectPlay' ) );
+					} else {
+						// If the player is not playing, start the video and change the text on the button
 						// Add a new playlist with the video to the player
-						MAF.mediaplayer.playlist.set(new MAF.media.Playlist().addEntryByURL('http://video.metrological.com/aquarium.mp4'));
+						MAF.mediaplayer.playlist.set(
+							new MAF.media.Playlist().addEntryByURL( 'http://video.metrological.com/aquarium.mp4' )
+						);
+
 						// Start the video playback
 						MAF.mediaplayer.playlist.start();
-						this.setText($_('DirectStop'));
-					} else {
-						// If the player is playing, stop the video and change text on the button
-						MAF.mediaplayer.control.stop();
-						this.setText($_('DirectPlay'));
+
+						this.setText( $_( 'DirectStop' ) );
 					}
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var mediaTransportOverlayButton = view.controls.mediaTransportOverlayButton = new MAF.control.TextButton({
-			label: $_('MediaTransportOverlay'),
+		this.controls.mediaTransportOverlayButton = new MAF.control.TextButton( {
+			label: $_( 'MediaTransportOverlay' ),
 			guid: 'mediaTransportOverlayButton',
 			styles: {
 				height: 80,
 				width: 400,
-				hOffset: (view.width - 400) / 2,
+				hOffset: ( this.width - 400 ) / 2,
 				vOffset: directPlayButton.outerHeight + 50
 			},
-			textStyles: {
-				anchorStyle: 'center'
-			},
+			textStyles: { anchorStyle: 'center' },
 			events: {
-				onSelect: function () {
+				onSelect: function() {
 					// Load the overlay view and start the playlist
-					MAF.application.loadView('view-transportOverlay');
+					MAF.application.loadView( 'TransportOverlay' );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 	},
 
 	// When closing the application make sure you unreference your objects and arrays
-	destroyView: function () {
+	destroyView: function() {
+		// If you do not stop, your video will keep playing when your App is closed
 		MAF.mediaplayer.control.stop();
 	}
-});
+} );
