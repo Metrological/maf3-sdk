@@ -1,14 +1,12 @@
 {
 	"identifier": "com.metrological.app.ButtonsTemplate",
 	"name": "Buttons Template",
-	"version": "0.0.1",
-	"author": "Metrological Widgets",
-	"company": "Metrological Widgets",
-	"copyright": "Metrological Widgets 2014",
-	"description": "An easy template to get a button in an app",
-	"categories": [
-		"video"
-	],
+	"version": "0.0.3",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get any button into your App.",
+	"categories": [ "video" ],
 	"scripts": "Javascript/init.js",
 	"images": {
 		"about": "Images/Icon.png",

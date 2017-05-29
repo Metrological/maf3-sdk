@@ -1,27 +1,25 @@
-// Create a class and extended it from the MAF.system.SidebarView
-var ExampleView1 = new MAF.Class({
-	ClassName: 'ExampleView1',
+// Create a new View class and extend it from the MAF.system.SidebarView
+var ExampleView1 = new MAF.Class( {
+	ClassName: 'ExampleView1', // CSS classname that is applied in the HTML
 
 	Extends: MAF.system.SidebarView,
 
 	// Create your view template
-	createView: function () {
-		// Reference to the current view
-		var view = this;
+	createView: function() {
 
 		// Create a Text element with translated label
-		var textButtonLabel = new MAF.element.Text({
-			label: $_('MAF.control.TextButton'),
+		var textButtonLabel = new MAF.element.Text( {
+			label: $_( 'MAF.control.TextButton' ),
 			styles: {
 				height: 40,
 				width: 400,
-				hOffset: (view.width - 400) / 2
+				hOffset: ( this.width - 400 ) / 2
 			}
-		}).appendTo(view);
+		} ).appendTo( this ); // 'this' in the current scope is the current View
 
-		// Create a Text button with a select event
-		var textButton = new MAF.control.TextButton({
-			label: $_('TextButton'),
+		// Create a Text button with a onSelect event
+		var textButton = new MAF.control.TextButton( {
+			label: $_( 'TextButton' ),
 			styles: {
 				width: textButtonLabel.width,
 				height: 60,
@@ -32,105 +30,103 @@ var ExampleView1 = new MAF.Class({
 				anchorStyle: 'center'
 			},
 			events: {
-				onSelect: function () {
-					log('onSelect function TextButton');
+				onSelect: function() {
+					log( 'onSelect function TextButton' ); // This will log to your browser console
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var buttonLabel = new MAF.element.Text({
-			label: $_('MAF.element.Button'),
+		var buttonLabel = new MAF.element.Text( {
+			label: $_( 'MAF.element.Button' ),
 			styles: {
 				height: textButtonLabel.height,
 				width: textButtonLabel.width,
 				hOffset: textButton.hOffset,
 				vOffset: textButton.outerHeight + 40
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Create a Button element and get styling from the Theme
-		var elementButton = new MAF.element.Button({
+		var elementButton = new MAF.element.Button( {
 			styles: {
 				width: textButtonLabel.width,
 				height: textButton.height,
 				hOffset: textButtonLabel.hOffset,
 				vOffset: buttonLabel.outerHeight,
-				backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+				backgroundColor: Theme.getStyles( 'BaseGlow', 'backgroundColor' )
 			},
-			events:{
-				onFocus: function () {
-					// Use animate to change background color and scale
-					this.animate({
+			events: {
+				onFocus: function() {
+					// Use animate to change scale
+					this.animate( {
 						duration: 0.2,
-						backgroundColor: 'orange',
 						scale: 1.2
-					});
+					} );
 				},
-				onBlur: function () {
-					this.animate({
+				onBlur: function() {
+					this.animate( {
 						duration: 0.2,
-						backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor'),
 						scale: 1
-					});
+					} );
 				},
-				onSelect: function () {
-					log('onSelect function Button');
+				onSelect: function() {
+					log( 'onSelect function Button' );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var controlButtonLabel = new MAF.element.Text({
-			label: $_('MAF.control.Button'),
+		var controlButtonLabel = new MAF.element.Text( {
+			label: $_( 'MAF.control.Button' ),
 			styles: {
 				height: textButtonLabel.height,
 				width: textButtonLabel.width,
 				hOffset: textButton.hOffset,
 				vOffset: elementButton.outerHeight + 40
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Create a Button element with default styling from framework
-		// Difference between a MAF.element.Button and MAF.control.Button 
+		// Difference between a MAF.element.Button and MAF.control.Button
 		// is basic styling and guid support
-		var controlButton = new MAF.control.Button({
+		var controlButton = new MAF.control.Button( {
 			styles: {
 				width: textButtonLabel.width,
 				height: textButton.height,
 				hOffset: textButtonLabel.hOffset,
 				vOffset: controlButtonLabel.outerHeight
 			},
-			events:{
-				onSelect: function () {
-					log('onSelect function Button');
+			events: {
+				onSelect: function() {
+					log( 'onSelect function Button' );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var imageToggleButtonLabel = new MAF.element.Text({
-			label: $_('MAF.control.ImageToggleButton'),
+		var imageToggleButtonLabel = new MAF.element.Text( {
+			label: $_( 'MAF.control.ImageToggleButton' ),
 			styles: {
 				height: textButtonLabel.height,
 				width: textButtonLabel.width,
 				hOffset: textButtonLabel.hOffset,
 				vOffset: controlButton.outerHeight + 40
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Create an ImageToggleButton
-		var imageToggleButton = new MAF.control.ImageToggleButton({
-			label: $_('ImageToggleButton'),
-			value: "0",
+		var imageToggleButton = new MAF.control.ImageToggleButton( {
+			label: $_( 'ImageToggleButton' ),
+			value: '0', // This needs to be a string.
 			theme: false, // Disable standard Theme
 			options: [
-				{ value: "0", src: "Images/ButnOff.png" },
-				{ value: "1", src: "Images/ButnOn.png"  }
+				{ value: '0', src: 'Images/ButnOff.png' },
+				{ value: '1', src: 'Images/ButnOn.png' }
 			],
 			styles: {
 				height: textButton.height,
 				width: textButtonLabel.width,
 				hOffset: textButtonLabel.hOffset,
 				vOffset: imageToggleButtonLabel.outerHeight,
-				backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor')
+				backgroundColor: Theme.getStyles( 'BaseGlow', 'backgroundColor' )
 			},
 			textStyles: {
 				fontSize: 22,
@@ -138,40 +134,46 @@ var ExampleView1 = new MAF.Class({
 				hOffset: 10
 			},
 			events: {
-				onFocus: function (event){
-					if (parseInt(this.getValue(), 10) === 1)
-						this.valueDisplay.setSource('Images/ButnOnF.png');
+				onFocus: function() {
+					if ( parseInt( this.getValue(), 10 ) === 1 )
+						this.valueDisplay.setSource( 'Images/ButnOnF.png' );
 					else
-						this.valueDisplay.setSource('Images/ButnOffF.png');
+						this.valueDisplay.setSource( 'Images/ButnOffF.png' );
 				},
-				onBlur: function (event){
-					if (parseInt(this.getValue(), 10) === 1)
-						this.valueDisplay.setSource('Images/ButnOn.png');
+				onBlur: function() {
+					if ( parseInt( this.getValue(), 10 ) === 1 )
+						this.valueDisplay.setSource( 'Images/ButnOn.png' );
 					else
-						this.valueDisplay.setSource('Images/ButnOff.png');
+						this.valueDisplay.setSource( 'Images/ButnOff.png' );
 				},
-				onValueChanged: function (event) {
-					var value = parseInt(event.payload.value, 10);
-					log('onValueChanged function ImageToggleButton', value);
-					this.valueDisplay.setSource(value === 1 ? 'Images/ButnOnF.png' : 'Images/ButnOffF.png');
-					event.stop(); // Prevent default behaviour
+				onValueChanged: function( event ) {
+					var value = parseInt( event.payload.value, 10 );
+
+					log( 'onValueChanged function ImageToggleButton', value );
+
+					this.valueDisplay.setSource( value === 1 ? 'Images/ButnOnF.png' : 'Images/ButnOffF.png' );
+
+					// Prevent default behaviour
+					event.stop();
+					// event.stop(); calls both event.preventDefault() and event.stopPropagation();
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var toggleButtonLabel = new MAF.element.Text({
-			label: $_('MAF.control.ToggleButton'),
+		var toggleButtonLabel = new MAF.element.Text( {
+			label: $_( 'MAF.control.ToggleButton' ),
 			styles: {
 				height: textButtonLabel.height,
 				width: textButtonLabel.width,
 				hOffset: textButtonLabel.hOffset,
 				vOffset: imageToggleButton.outerHeight + 40
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Create a ToggleButton
-		var toggleButton = new MAF.control.ToggleButton({
-			label: $_('ToggleButton'),
+		// Since we do not reference it later, we do not need to store it in a variable
+		new MAF.control.ToggleButton( {
+			label: $_( 'ToggleButton' ),
 			value: '0',
 			styles: {
 				height: textButton.height,
@@ -180,61 +182,59 @@ var ExampleView1 = new MAF.Class({
 				vOffset: toggleButtonLabel.outerHeight
 			},
 			options: [
-				{ value: "0", label: $_('Option1') },
-				{ value: "1", label: $_('Option2') }
+				{ value: '0', label: $_( 'Option1' ) },
+				{ value: '1', label: $_( 'Option2' ) }
 			],
 			events: {
-				onValueChanged : function (event) {
-					var value = parseInt(event.payload.value, 10);
-					log('onValueChanged function ToggleButton', value);
+				onValueChanged: function( event ) {
+					var value = parseInt( event.payload.value, 10 );
+					log( 'onValueChanged function ToggleButton', value );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Create a TextButton to load the next view, by adding it into
 		// the view.controls object and adding an unique guid the focus
 		// will be remembered by the view
-		var nextView = view.controls.nextView = new MAF.control.TextButton({
+		this.controls.nextView = new MAF.control.TextButton( {
 			guid: 'loadExampleView2',
-			label: $_('ExampleView2'),
+			label: $_( 'ExampleView2' ),
 			styles: {
 				width: textButtonLabel.width,
 				height: textButton.height,
 				hOffset: textButtonLabel.hOffset,
-				vOffset: view.height - 100
+				vOffset: this.height - 100
 			},
-			textStyles:{
+			textStyles: {
 				hOffset: 10
 			},
 			content: [
-				new MAF.element.Text({
-					label: FontAwesome.get('chevron-right'), // Create a FontAwesome icon 
+				new MAF.element.Text( {
+					label: FontAwesome.get( 'chevron-right' ), // Create a FontAwesome icon
 					styles: {
 						height: 'inherit',
 						width: 'inherit',
 						hOffset: -10,
 						anchorStyle: 'rightCenter'
 					}
-				})
+				} )
 			],
 			events: {
-				onSelect: function () {
+				onSelect: function() {
 					// Load next Example view with data
-					MAF.application.loadView('view-ExampleView2', {
-						myData: [1, 2, 3]
-					});
+					MAF.application.loadView( 'Example2', {
+						myData: [ 1, 2, 3 ]
+					} );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 	},
 
-	// After create view and when returning to the view
-	// the update view is called
-	updateView: function () {
-		// Data from previous view 
-		var view = this,
-			myBackData = view.backParams && view.backParams.myBackData;
-		if (myBackData)
-			log('updateView recieved data from previous view', myBackData);
+	// After create view and when returning to the view the update view is called
+	updateView: function() {
+		// Data transfered from the previous view
+		var myBackData = this.backParams.myBackData;
+		if ( myBackData )
+			log( 'updateView recieved data from previous view', myBackData );
 	}
-});
+} );
