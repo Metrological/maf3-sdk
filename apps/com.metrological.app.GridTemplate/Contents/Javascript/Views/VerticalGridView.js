@@ -1,110 +1,101 @@
-var VerticalGridView = new MAF.Class({
+var VerticalGridView = new MAF.Class( {
 	ClassName: 'VerticalGridView',
 
 	Extends: MAF.system.SidebarView,
 
-	// Add array of items on constructor of the class
-	initialize: function () {
-		var view = this;
-		view.parent();
-		view.items = [
-			{ title: $_('Cell1') },
-			{ title: $_('Cell2') },
-			{ title: $_('Cell3') },
-			{ title: $_('Cell4') },
-			{ title: $_('Cell5') },
-			{ title: $_('Cell6') }
-		];
-	},
+	items: [
+		{ title: $_( 'Cell1' ) },
+		{ title: $_( 'Cell2' ) },
+		{ title: $_( 'Cell3' ) },
+		{ title: $_( 'Cell4' ) },
+		{ title: $_( 'Cell5' ) },
+		{ title: $_( 'Cell6' ) }
+	],
 
-	createView: function () {
-		var view = this;
+	createView: function() {
+		var backButton = new MAF.control.BackButton( {
+			label: $_( 'BACK' )
+		} ).appendTo( this );
 
-		var backButton = new MAF.control.BackButton({
-			label: $_('BACK')
-		}).appendTo(view);
-
-		var scroller = new MAF.control.ScrollIndicator({
+		var scroller = new MAF.control.ScrollIndicator( {
 			theme: false,
 			styles: {
 				width: 23,
-				height: view.height - backButton.outerHeight,
+				height: this.height - backButton.outerHeight,
 				vOffset: backButton.outerHeight,
 				hAlign: 'right'
 			},
-			events:{
-				onFocus: function () {
-					this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
+			events: {
+				onFocus: function() {
+					this.setStyle( 'backgroundColor', Theme.getStyles( 'BaseFocus', 'backgroundColor' ) );
 				},
-				onBlur: function () {
-					this.setStyle('backgroundColor', null);
+				onBlur: function() {
+					this.setStyle( 'backgroundColor', null );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		var verticalGrid = view.elements.verticalGrid = new MAF.element.Grid({
+		var verticalGrid = this.elements.verticalGrid = new MAF.element.Grid( {
 			rows: 2,
 			columns: 1,
 			orientation: 'vertical',
 			styles: {
-				width: view.width - scroller.width,
-				height: view.height - backButton.outerHeight,
+				width: this.width - scroller.width,
+				height: this.height - backButton.outerHeight,
 				vOffset: backButton.outerHeight
 			},
-			cellCreator: function () {
-				var cell = new MAF.element.GridCell({
+			cellCreator: function() {
+				var cell = new MAF.element.GridCell( {
 					styles: this.getCellDimensions(),
-					events:{
-						onSelect: function () {
-							log('onSelect GridCell', this.getCellIndex());
+					events: {
+						onSelect: function() {
+							log( 'onSelect GridCell', this.getCellIndex() );
 						},
-						onFocus: function () {
-							this.animate({
-								backgroundColor: '#8101b1',
+						onFocus: function() {
+							this.title.animate( {
 								duration: 0.3,
-								scale: 1.2
-							});
+								scale: 3
+							} );
+							this.setStyle( 'backgroundColor', Theme.getStyles( 'BaseFocus', 'backgroundColor' ) );
 						},
-						onBlur: function () {
-							this.animate({
-								backgroundColor: null,
+						onBlur: function() {
+							this.title.animate( {
 								duration: 0.3,
 								scale: 1.0
-							});
+							} );
+							this.setStyle( 'backgroundColor', null );
 						}
 					}
-				});
+				} );
 
-				cell.title = new MAF.element.Text({
+				cell.title = new MAF.element.Text( {
 					styles: {
 						width: cell.width,
 						height: cell.height,
-						color: 'white',
+						color: '#F1F1F1',
 						fontSize: 30,
 						anchorStyle: 'center',
 						wrap: true
 					}
-				}).appendTo(cell);
+				} ).appendTo( cell );
 
 				return cell;
 			},
-			cellUpdater: function (cell, data) {
-				cell.title.setText(data.title);
+			cellUpdater: function( cell, data ) {
+				cell.title.setText( data.title );
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
-		scroller.attachToSource(verticalGrid);
+		scroller.attachToSource( verticalGrid );
 	},
 
-	updateView: function () {
-		var view = this;
-		view.elements.verticalGrid.changeDataset(view.items, true);
+	updateView: function() {
+		this.elements.verticalGrid.changeDataset( this.items, true );
 	},
 
-	// When closing the application make sure you unreference 
+	// When closing the application make sure you unreference
 	// your objects and arrays from the view
-	destroyView: function () {
-		var view = this;
-		delete view.items;
+	destroyView: function() {
+		delete this.items;
 	}
-});
+} );

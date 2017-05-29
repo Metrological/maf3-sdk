@@ -1,37 +1,27 @@
-// Include your views
-include('Javascript/Views/MainView.js');
-include('Javascript/Views/ControlGridView.js');
-include('Javascript/Views/ElementGridView.js');
-include('Javascript/Views/HorizontalGridView.js');
-include('Javascript/Views/VerticalGridView.js');
-include('Javascript/Views/SlideCarouselView.js');
+// Include your views, styles and other things you need
+// The Contents folder is used as root here
+include( 'Javascript/Theme.js' );
+include( 'Javascript/Views/MainView.js' );
+include( 'Javascript/Views/ControlGridView.js' );
+include( 'Javascript/Views/ElementGridView.js' );
+include( 'Javascript/Views/HorizontalGridView.js' );
+include( 'Javascript/Views/VerticalGridView.js' );
+include( 'Javascript/Views/SlideCarouselView.js' );
+include( 'Javascript/Views/TwoDimensionalSlideCarouselView.js' );
 
-// Set base glow and focus theme
-Theme.set({
-	BaseGlow: {
-		styles: {
-			color: 'white',
-			backgroundColor: 'transparent'
-		}
-	},
-	BaseFocus: {
-		styles: {
-			backgroundColor: '#5f429c'
-		}
-	}
-});
 
 // Init application with view config
-MAF.application.init({
+MAF.application.init( {
 	views: [
-		{ id: 'view-MainView', viewClass: MainView },
-		{ id: 'view-ControlGridView', viewClass: ControlGridView },
-		{ id: 'view-ElementGridView', viewClass: ElementGridView },
-		{ id: 'view-HorizontalGridView', viewClass: HorizontalGridView },
-		{ id: 'view-VerticalGridView', viewClass: VerticalGridView },
-		{ id: 'view-SlideCarouselView', viewClass: SlideCarouselView },
-		{ id: 'view-About', viewClass: MAF.views.AboutBox } // Use standard About view
+		{ id: 'Main', viewClass: MainView },
+		{ id: 'ControlGrid', viewClass: ControlGridView },
+		{ id: 'ElementGrid', viewClass: ElementGridView },
+		{ id: 'HorizontalGrid', viewClass: HorizontalGridView },
+		{ id: 'VerticalGrid', viewClass: VerticalGridView },
+		{ id: 'SlideCarousel', viewClass: SlideCarouselView },
+		{ id: 'TwoDimensionalSlideCarousel', viewClass: TwoDimensionalSlideCarouselView },
+		{ id: 'About', viewClass: MAF.views.AboutBox } // Use standard About view
 	],
-	defaultViewId: 'view-MainView',
-	settingsViewId: 'view-About'
-});
+	defaultViewId: 'Main',
+	settingsViewId: 'About'
+} );

@@ -1,32 +1,33 @@
-var MainView = new MAF.Class({
+var MainView = new MAF.Class( {
 	ClassName: 'MainView',
 
 	Extends: MAF.system.SidebarView,
 
-	createView: function () {
-		var view = this,
-			buttons = [
-				{ label: $_('Control Grid'), view: 'view-ControlGridView' },
-				{ label: $_('Element Grid'), view: 'view-ElementGridView' },
-				{ label: $_('Horizontal Grid'), view: 'view-HorizontalGridView' },
-				{ label: $_('Vertical Grid'), view: 'view-VerticalGridView' },
-				{ label: $_('Slide Carousel'), view: 'view-SlideCarouselView' }
-			];
-
+	createView: function() {
+		var buttons = [
+			{ label: $_( 'Control Grid' ), view: 'ControlGrid' },
+			{ label: $_( 'Element Grid' ), view: 'ElementGrid' },
+			{ label: $_( 'Horizontal Grid' ), view: 'HorizontalGrid' },
+			{ label: $_( 'Vertical Grid' ), view: 'VerticalGrid' },
+			{ label: $_( 'Slide Carousel' ), view: 'SlideCarousel' },
+			{ label: $_( 'Two Dimensional SlideCarousel' ), view: 'TwoDimensionalSlideCarousel' }
+		];
+		
 		// Create a list of buttons based on an array and
 		// set guid for keeping focus state on previous view
-		buttons.forEach(function (button, i) {
+		buttons.forEach( function( button, i ) {
 			// Generate a unqiue name for the view.controls and the guid
 			var id = 'myButton' + i;
-			view.controls[id] = new MAF.control.TextButton({
+
+			this.controls[ id ] = new MAF.control.TextButton( {
 				guid: id,
-				theme: false, // Remove default theme
 				label: button.label,
+				view: button.view || null,
 				styles: {
 					height: 80,
-					width: 400,
-					vOffset: 150 + (i * 100),
-					hOffset: (view.width - 400) / 2,
+					width: 450,
+					vOffset: 150 + ( i * 100 ),
+					hOffset: ( this.width - 450 ) / 2,
 					borderRadius: 10
 				},
 				textStyles: {
@@ -34,17 +35,11 @@ var MainView = new MAF.Class({
 					anchorStyle: 'center'
 				},
 				events: {
-					onFocus: function () {
-						this.setStyle('backgroundColor', Theme.getStyles('BaseFocus', 'backgroundColor'));
-					},
-					onBlur: function () {
-						this.setStyle('backgroundColor', null);
-					},
-					onSelect: function (event) {
-						MAF.application.loadView(button.view);
+					onSelect: function() {
+						if ( this.config.view ) return MAF.application.loadView( this.config.view );
 					}
 				}
-			}).appendTo(view);
-		});
+			} ).appendTo( this );
+		}, this );
 	}
-});
+} );
