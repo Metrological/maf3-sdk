@@ -1,0 +1,17 @@
+{
+	"identifier": "com.metrological.app.ExtendTemplate",
+	"name": "Extend Template",
+	"version": "0.0.2",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to learn how to extend Components and Views",
+	"categories": [ "video" ],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"about": "Images/Icon.png",
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
