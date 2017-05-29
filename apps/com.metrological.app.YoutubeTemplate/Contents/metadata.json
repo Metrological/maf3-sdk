@@ -1,0 +1,17 @@
+{
+	"identifier": "com.metrological.app.YoutubeTemplate",
+	"name": "Youtube Template",
+	"version": "1.0.1",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "Two easy templates to get a Youtube playlist into an App.",
+	"keywords": "youtube",
+	"categories": [ "video" ],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Images/youtube_icon.png"
+		}
+	}
+}
