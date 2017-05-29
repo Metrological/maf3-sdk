@@ -37,9 +37,9 @@ define('MAF.control.ScrollIndicator', function () {
 								break;
 							}
 							event.preventDefault();
-							if(!this.source.orientation || this.source.orientation === 'horizontal')
+							if(!this.source.config || !this.source.config.orientation || this.source.config.orientation === 'horizontal')
 								return this.shiftSource(event.detail.direction === 'up' ? 'left' : 'right');
-							else if(this.source.orientation === 'vertical')
+							else if(this.source.config && this.source.config.orientation === 'vertical')
 								return this.shiftSource(event.detail.direction);
 								
 						}

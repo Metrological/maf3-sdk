@@ -112,3 +112,11 @@
  * @param {String|Array} parts Path to take when walking the object.
  * @returns {*} The value from the specified path.
  */
+
+ /**
+ * Determines whether two values are the same value.
+ * @method Object.is
+ * @param {*} value1 The first value to compare.
+ * @param {*} value2 The second value to compare.
+ * @returns {Boolean} A Boolean indicating whether or not the two arguments are the same value.
+ */

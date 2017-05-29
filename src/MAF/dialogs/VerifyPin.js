@@ -82,6 +82,8 @@ define('MAF.dialogs.VerifyPin', function () {
 					errorMessage: this.config.errorMessage,
 					type: this.config.type,
 					profileId: this.config.profileId,
+					data: this.config.data,
+					pinOnly: this.config.pinOnly,
 					ignoreBackKey: this.config.isModal
 				}
 			};

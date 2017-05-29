@@ -16,3 +16,24 @@
  * @param {Number} max Upper boundary.
  * @returns {Number} The random number.
  */
+
+/**
+ * Determines whether the passed value is a finite number.
+ * @method Number.isFinite
+ * @param {Number} value The value to be tested for finiteness.
+ * @returns {Boolean} A Boolean indicating whether or not the given value is a finite number.
+ */
+
+/**
+ * Determines whether the passed value is an integer.
+ * @method Number.isInteger
+ * @param {Number} value The value to be tested for being an integer.
+ * @returns {Boolean} A Boolean indicating whether or not the given value is an integer.
+ */
+
+ /**
+ * Determines whether the passed value is NaN and its type is Number. It is a more robust version of the original, global isNaN().
+ * @method Number.isNaN
+ * @param {Number} value The value to be tested for NaN.
+ * @returns {Boolean} true if the given value is NaN and its type is Number; otherwise, false.
+ */

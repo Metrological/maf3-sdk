@@ -177,7 +177,7 @@ define('MAF.control.TabStrip', function () {
 				this.config.tabs = tabs && tabs.length ? tabs : [];
 				var active = this.activeIndex,
 					bodyStyles = Theme.getStyles(this.ClassName + 'Container'),
-					w = bodyStyles && bodyStyles.paddingRight || 0,
+					w = bodyStyles && bodyStyles.paddingRight || 1,
 					noimages = !this.config.tabs.filter(function (t) {
 						return t.src || t.source;
 					}).length;

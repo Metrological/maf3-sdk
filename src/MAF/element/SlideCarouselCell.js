@@ -179,7 +179,7 @@ define('MAF.element.SlideCarouselCell', function () {
 		 * @method MAF.element.SlideCarouselCell#setOffset
 		 */
 		setOffset: function(offsetX, offsetY, offsetZ){
-			this.setStyle('transform', getSetting('gpu') === false ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
+			this.setStyle('transform', (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
 		},
 		suicide: function () {
 			delete this.grid;

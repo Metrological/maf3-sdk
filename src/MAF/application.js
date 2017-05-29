@@ -23,7 +23,7 @@
  * @method MAF.application#loadView
  * @param {String} id View identifier, needs to be unique.
  * @param {Object} [params] Data you want to send to the view. (view.persist)
- * @param {Boolean} [nosave] This will prevent that the loaded view will be stored in history.
+ * @param {Boolean} [nosave] This will prevent that the current view will be stored in history.
  */
 /**
  * The currently active view will be reloaded. This will not call the createView, but it will call updateView.

@@ -205,7 +205,7 @@ define('MAF.element.SlideCarousel', function () {
 		},
 
 		setOffset: function(offsetX, offsetY, offsetZ){
-			this.setStyle('transform', getSetting('gpu') === false ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
+			this.setStyle('transform', (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate('+offsetX+'px, '+offsetY+'px)' : 'translate3d('+offsetX+'px, '+offsetY+'px, '+offsetZ+'px)');
 		},
 
 		suicide: function () {
@@ -268,7 +268,7 @@ define('MAF.element.SlideCarousel', function () {
 					if (parent.config.slideDuration > 0 && parent.config.animate){
 						cell.animate({
 							visible: cell.visible,
-							transform: getSetting('gpu') === false ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)',
+							transform: (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)',
 							duration: parent.config.slideDuration,
 							timingFunction: parent.config.slideEase,
 							events: {
@@ -282,7 +282,7 @@ define('MAF.element.SlideCarousel', function () {
 					else {
 						cell.setStyles({
 							visible: cell.visible,
-							transform: getSetting('gpu') === false ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)'
+							transform: (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)'
 						});
 						afterReposition(cell, i);
 					}
@@ -326,7 +326,8 @@ define('MAF.element.SlideCarousel', function () {
 					this.navigating = true;
 					this.animating = true;
 					var dir = event.detail.direction,
-						pos = this.cells.indexOf(this.getCurrentCell()),
+						actualPos = this.cells.indexOf(this.getCurrentCell()),
+						pos = (actualPos >= this.config.visibleCells) ? this.config.visibleCells : actualPos,
 						tar = pos,
 						dyn = this.config.dynamicFocus,
 						fi = this.config.focusIndex,
@@ -524,7 +525,7 @@ define('MAF.element.SlideCarousel', function () {
 				var vOffset = (or === 'vertical') ? -cd.height + pos * cd.height : 0;
 				var hOffset = (or === 'horizontal') ? -cd.width + pos * cd.width : 0;
 				var dims = Object.merge(cd, {
-					transform: getSetting('gpu') === false ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)'
+					transform: (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate('+hOffset+'px,'+vOffset+'px)' : 'translate3d('+hOffset+'px,'+vOffset+'px, 0)'
 				});
 				if (this.config.subCells > 1) {
 					cell = new ParentCell({
@@ -534,7 +535,7 @@ define('MAF.element.SlideCarousel', function () {
 					cell.subCells = [];
 					for (var i = 0; i < this.config.subCells; i++) {
 						var tmp = Object.merge(scDims, {
-							transform: getSetting('gpu') === false ? 'translate(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px)' : 'translate3d(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px, 0)'
+							transform: (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translate(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px)' : 'translate3d(' + ((or === 'vertical') ? scDims.width * i : 0) + 'px,' + ((or === 'horizontal') ? scDims.height * i : 0) + 'px, 0)'
 						});
 						var tmpCell = this.config.cellCreator.call(this).setStyles(tmp);
 						tmpCell.grid = this;
@@ -586,7 +587,7 @@ define('MAF.element.SlideCarousel', function () {
 			dynamicFocusStart: 0,
 			dynamicFocusEnd: 0,
 			styles:{
-				transform: 'translateZ(0)'
+				transform: (getSetting('gpu') === false && !Browser.wpeCisco) ? 'translateZ(0)' : ''
 			}
 		},
 		initialize: function () {

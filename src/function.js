@@ -23,12 +23,14 @@
 /**
  * #### Unsubscribes a method from a list of events
  * @example
- *  var differentScope = {
- *     version: 112
- *  };
- *  var publisher = {
- *     version: 102
- *  };
+ *  var differentScope = new new MAF.Class({ // Create and initialize a new MAF.Class in one go.
+ *    version: 123
+ *  });
+ *
+ *  var publisher = new new MAF.Class({  // Create and initialize a new MAF.Class in one go.
+ *    version: 321
+ *  });
+ *
  *  var fnOriginal = function (ev) {
  *     switch (ev.type) {
  *        case 'withScope':

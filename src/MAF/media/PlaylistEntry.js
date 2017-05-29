@@ -59,7 +59,9 @@ define('MAF.media.PlaylistEntry', function () {
 			bitrate: 0,
 			asset: null,
 			streams: null,
-			startTime: 0
+			startTime: 0,
+			customData: null,
+			handleKey: null
 		},
 
 		initialize: function () {
@@ -68,7 +70,9 @@ define('MAF.media.PlaylistEntry', function () {
 				streams.push({
 					url: this.config.url,
 					bitrate: this.config.bitrate,
-					startTime: this.config.startTime % 1 === 0 && this.config.startTime || 0
+					startTime: this.config.startTime % 1 === 0 && this.config.startTime || 0,
+					customData: this.config.customData || null,
+					handleKey: this.config.handleKey || null
 				});
 			}
 
@@ -78,7 +82,9 @@ define('MAF.media.PlaylistEntry', function () {
 						streams.push({
 							url: stream.url,
 							bitrate: stream.bitrate || this.config.bitrate,
-							startTime: stream.startTime % 1 === 0 && stream.startTime || 0
+							startTime: stream.startTime % 1 === 0 && stream.startTime || 0,
+							customData: this.config.customData || null,
+							handleKey: this.config.handleKey || null
 						});
 					}
 				}, this);

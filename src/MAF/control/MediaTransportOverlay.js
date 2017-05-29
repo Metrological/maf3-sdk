@@ -203,7 +203,10 @@ define('MAF.control.MediaTransportOverlay', function () {
 					case 'onTimeIndexChanged':
 						var states = MAF.mediaplayer.constants.states;
 						if ([states.PLAY, states.FORWARD, states.REWIND].contains(MAF.mediaplayer.player.currentPlayerState)) {
+							//screen.log('UPDATE MTO');
 							this.updateTimeIndexDisplay();
+							//screen.log('MOVE INDEX: ' + event.payload.timeIndex);
+							//screen.log('MOVE INDEX: ' + event.payload.duration);
 							this.moveProgressBar(Math.round((Math.ceil(event.payload.timeIndex) / Math.ceil(event.payload.duration)) * settings[this._classID].steps));
 						}
 						break;
@@ -381,6 +384,9 @@ define('MAF.control.MediaTransportOverlay', function () {
 
 			updateTimeIndexDisplay: function (force) {
 				if (this.visible || force) {
+					//screen.log('MTO DURATION')
+					//screen.log('TIME INDEX: ' + MAF.mediaplayer.player.currentTimeIndex);
+					//screen.log('MEDIA DURATION: ' + MAF.mediaplayer.player.currentMediaDuration);
 					if (MAF.mediaplayer.player.currentTimeIndex <= MAF.mediaplayer.player.currentMediaDuration) {
 						this.controls.intervalText.setText(this.formatTime(MAF.mediaplayer.player.currentTimeIndex));
 						this.controls.durationText.setText(this.formatTime(MAF.mediaplayer.player.currentMediaDuration));
@@ -390,6 +396,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 
 			moveProgressBar: function (step) {
 				var increment = this.progressBar.width / settings[this._classID].steps;
+				//screen.log('MOVE: ' + Math.round(step * increment));
 				this.controls.troth.setStyles({
 					width: Math.round(step * increment),
 					hOffset: 0
@@ -412,6 +419,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 		},
 
 		show: function () {
+			//screen.log('SHOW MTO');
 			this.updateTimeIndexDisplay(true);
 			this.parent();
 		},
@@ -425,6 +433,7 @@ define('MAF.control.MediaTransportOverlay', function () {
 				this.show();
 			}
 			this.updateState(MAF.mediaplayer.constants.states.PAUSE);
+			//screen.log('RESET MTO');
 			this.updateTimeIndexDisplay(true);
 			this.moveProgressBar(0);
 			this.focus();

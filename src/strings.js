@@ -125,3 +125,27 @@
  * @method String#dasherize
  * @returns {String} The dasherized string.
  */
+
+/**
+ * Determines whether a string ends with the characters of a specified string, returning true or false as appropriate.
+ * @method String#endsWith
+ * @param {String} searchString The characters to be searched for at the end of this string.
+ * @param {Number} [position] If provided starts the match from the length of the string minus the second argument. If omitted, the default value is the length of the string.
+ * @returns {Boolean} true if the given characters are found at the end of the string; otherwise, false.
+ */
+
+/**
+ * Determines whether one string may be found within another string, returning true or false as appropriate.
+ * @method String#includes
+ * @param {String} searchString A string to be searched for within this string.
+ * @param {Number} [position=0] The position within the string at which to begin searching for searchString.
+ * @returns {Boolean} true if the given string is found anywhere within the search string; otherwise, false if not.
+ */
+
+ /**
+ * Determines whether a string begins with the characters of a specified string, returning true or false as appropriate.
+ * @method String#startsWith
+ * @param {String} searchString The characters to be searched for at the start of this string.
+ * @param {Number} [position=0] The position in this string at which to begin searching for searchString.
+ * @returns {Boolean} true if the given characters are found at the beginning of the string; otherwise, false.
+ */
