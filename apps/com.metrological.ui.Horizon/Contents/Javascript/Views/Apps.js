@@ -16,21 +16,25 @@ var AppsView = new MAF.Class({
 	disableResetFocus: true,
 	maxRecently: 13,
 	maxFavorites: 22,
+	isHelios: widget.getSetting('isHelios'),
 	isBoot: window.boot,
 
 	initialize: function () {
 		var view = this;
 		view.parent();
 		view.registerMessageCenterListenerCallback(view.dataHasChanged);
-		view.onActivateBackButton = view.handleFavoriteBack.subscribeTo(MAF.application, 'onActivateBackButton', view);
+		view.netflixFactoryResetSequence = ["7", "8", "9", "0"];
+		view.netflixFactoryResetPressed = [];
+		view.netflixFactoryResetTimer = null;
+		view.onActivateButton = view.handleButtons.subscribeTo(MAF.application, ['onActivateBackButton', 'onInfoKeyPress', 'onWidgetKeyPress'], view);
 		view.skipTOS = widget.getSetting('tos') === false || currentAppConfig.get('tos') === TOS;
 	},
 
 	dataHasChanged: function (event) {
+		var view = this,
+			elements = view.elements,
+			controls = view.controls;
 		if (event.payload.value && event.payload.key === 'myApps') {
-			var view = this,
-				elements = view.elements,
-				controls = view.controls;
 			if (!view.ready) return view.appsReady();
 			elements.categories.eliminate('active');
 			elements.categories.changeDataset(ApplicationManager.getCategories(), true);
@@ -38,26 +42,64 @@ var AppsView = new MAF.Class({
 		}
 	},
 
-	handleFavoriteBack: function (event) {
-		var view = this;
-		if (view.state !== null) {
-			var data;
-			view.state = null;
-			if (view.category === 'favorites') {
-				delete view.reodered;
-				delete view.reorder;
-				delete view.cell;
-				delete view.icon;
-				data = view.getFavoritesCategory();
-			} else {
-				data = ApplicationManager.getApplicationsByCategory(view.category);
-			}
-			view.controls.apps.changeDataset(data, true);
-		} else if (!view.frozen && !Browser.metrological) {
-			ApplicationManager.exit();
+	handleButtons: function (event) { // eslint-disable-line complexity
+		var view = this,
+			grid = view.controls.apps,
+			index = grid.getFocusIndex(),
+			cell = grid.cells[index] || null,
+		  data = cell && cell.getCellDataItem(),
+		  backData, esn, desc;
+		switch(event.type) {
+			case 'onInfoKeyPress':
+				if (data && data === 'com.metrological.app.NetflixHorizon') {
+					esn = profile.netflixESN;
+					desc = ApplicationManager.getMetadataByKey(data, 'description') || '';
+					if (view.elements.appDescription.data === esn)
+						view.elements.appDescription.setText(desc + (desc.length === 0 || (desc[desc.length - 1] === '.' || desc[desc.length - 1] === '!' || desc[desc.length - 1] === '?') ? '' : '.'));
+					else
+						view.elements.appDescription.setText(esn);
+				}
+				break;
+			case 'onActivateBackButton':
+				if (view.state !== null) {
+					view.state = null;
+					if (view.category === 'favorites') {
+						delete view.reodered;
+						delete view.reorder;
+						delete view.cell;
+						delete view.icon;
+						backData = view.getFavoritesCategory();
+					} else {
+						backData = ApplicationManager.getApplicationsByCategory(view.category);
+					}
+					view.controls.apps.changeDataset(backData, true);
+				} else if (!view.frozen && !Browser.metrological) {
+					ApplicationManager.exit();
+				}
+				event.stopPropagation();
+				event.preventDefault();
+				break;
+			case 'onWidgetKeyPress':
+				if (data && data === 'com.metrological.app.NetflixHorizon' && (parseInt(event.payload.key, 10) === 1)) {
+					profile.changeFrameRate(view.elements.appDescription);
+				} else {
+					if (!data || data !== 'com.metrological.app.NetflixHorizon' || typeof profile.netflixFactoryReset !== 'function') return;
+					this.netflixFactoryResetPressed.push(event.payload.key);
+					if (this.netflixFactoryResetTimer) clearTimeout(this.netflixFactoryResetTimer);
+					if (this.netflixFactoryResetSequence.diff(this.netflixFactoryResetPressed).length === 0) {
+						view.elements.appDescription.setText($_('NetflixReset'));
+						profile.netflixFactoryReset();
+					}
+					this.netflixFactoryResetTimer = setTimeout(this.resetNetflixFactoryResetTimer.bind(this), 3000);
+				}
+				break;
+			default:
+				break;
 		}
-		event.stopPropagation();
-		event.preventDefault();
+	},
+
+	resetNetflixFactoryResetTimer: function() {
+		this.netflixFactoryResetPressed = [];
 	},
 
 	getFavorites: function () {
@@ -105,13 +147,14 @@ var AppsView = new MAF.Class({
 	},
 
 	getFavoritesCategory: function () {
-		var view = this;
+		var view = this,
+			favo;
 		switch (view.state) {
 			case 'addfavo':
 			case 'reorderfavo':
 				return view.getFavorites().concat([view.state]);
 			default:
-				var favo = view.getFavorites().concat(['addfavo']);
+				favo = view.getFavorites().concat(['addfavo']);
 				if (favo.length > 2) return favo.concat(['reorderfavo']);
 				return favo;
 		}
@@ -131,17 +174,30 @@ var AppsView = new MAF.Class({
 		return this.getFavorites().indexOf(id);
 	},
 
-	showTOS: function () {
-		if (widget.getElementById('tos')) return;
+	showMessage: function (message) {
+		if (message === 'proximity' && widget.getElementById('tos')) {
+			this.showTos = true;
+			this.elements.tosContainer.suicide();
+		} else if (widget.getElementById('tos')) { return; }
+
 		var view = this,
 			apps = view.controls.apps,
 			categories = view.elements.categories,
 			tos;
+
+		if (message === 'proximity') {
+			view.elements.categories.visible = false;
+			view.controls.apps.visible = false;
+			Horizon.setText('');
+		}
+
 		try {
 			tos = filesystem.readFile('About/' + profile.locale + '/tos.txt', true);
 		} catch(err) {}
+
 		if (!tos) return categories.focus();
-		var tosContainer = new MAF.element.Container({
+
+		var tosContainer = view.elements.tosContainer = new MAF.element.Container({
 			styles: {
 				width: view.width,
 				height: view.height,
@@ -164,8 +220,18 @@ var AppsView = new MAF.Class({
 			}
 		}).appendTo(tosContainer);
 
+		var body;
+		switch(message) {
+			case 'tos':
+				body = tos;
+				break;
+			case 'proximity':
+				body = $_('proximityFailed');
+				break;
+		}
+
 		var tosBody = new MAF.element.TextGrid({
-			label: tos,
+			label: body,
 			styles: {
 				fontSize: 27,
 				fontFamily: 'UPCDigital-Regular',
@@ -178,7 +244,7 @@ var AppsView = new MAF.Class({
 
 		var tosAccept = new MAF.control.TextButton({
 			id: 'tos',
-			label: $_('AGREE').toUpperCase(),
+			label: (message === 'tos') ? $_('AGREE').toUpperCase() : $_('OK').toUpperCase(),
 			theme: false,
 			styles: {
 				fontFamily: 'InterstatePro-ExtraLight',
@@ -187,24 +253,33 @@ var AppsView = new MAF.Class({
 				width: tosBody.width,
 				height: 90,
 				hOffset: tosBody.hOffset,
-				vOffset: (tosBody.textHeight > 252) ? tosBody.outerHeight + 25 : 590
+				vOffset: view.isHelios ? 700 : ((tosBody.textHeight > 252) ? tosBody.outerHeight + 25 : 590),
+				visible: message === 'tos'
 			},
 			textStyles: {
 				hOffset: -10
 			},
 			events: {
 				onSelect: function () {
+					var id,
+						params;
 					tosContainer.suicide();
-					view.skipTOS = true;
-					currentAppConfig.set('tos', TOS);
 					categories.setDisabled(false);
 					apps.setDisabled(false);
-					if (view.data.startApp) {
-						var id = view.data.startApp.id,
+					view.elements.categories.visible = true;
+					view.controls.apps.visible = true;
+					if (message === 'tos') {
+						view.skipTOS = true;
+						currentAppConfig.set('tos', TOS);
+						if (view.data.startApp) {
+							id = view.data.startApp.id;
 							params = view.data.startApp.params;
-						ApplicationManager.load(id);
-						ApplicationManager.open(id, params);
-						delete view.data.startApp;
+							ApplicationManager.load(id);
+							ApplicationManager.open(id, params);
+							delete view.data.startApp;
+						} else {
+							categories.focus();
+						}
 					} else {
 						categories.focus();
 					}
@@ -231,15 +306,30 @@ var AppsView = new MAF.Class({
 				width: tosAccept.width,
 				height: 75,
 				hOffset: tosAccept.hOffset,
-				vOffset: tosAccept.outerHeight + 2
+				vOffset: tosAccept.outerHeight + 2,
+				visible: message === 'tos'
 			},
 			textStyles: {
 				hOffset: -10
 			},
 			events: {
 				onSelect: function () {
-					delete view.data;
-					ApplicationManager.exit();
+					if (message === 'tos') {
+						delete view.data;
+						view.skipTOS = false;
+						currentAppConfig.remove('tos');
+						view.elements.categories.visible = true;
+						view.controls.apps.visible = true;
+						if (view.isHelios)
+							ApplicationManager.exit.defer(1000);
+						else
+							ApplicationManager.exit();
+					} else {
+						tosContainer.suicide();
+						view.elements.categories.visible = true;
+						view.controls.apps.visible = true;
+						categories.focus();
+					}
 				},
 				onFocus: function () {
 					this.setStyle('fontFamily', 'InterstatePro-Bold');
@@ -267,7 +357,26 @@ var AppsView = new MAF.Class({
 			controls.apps.setDisabled(false);
 			elements.categories.setDisabled(false).focus();
 		}
-		if (window.boot) ApplicationManager.exit(true);
+		//if (window.boot) ApplicationManager.exit(true);
+	},
+
+	proximityFailed: function() {
+		this.showMessage('proximity');
+	},
+
+	proximitySucceeded: function() {
+		this.elements.tosContainer.suicide();
+		if (this.showTos) {
+			this.elements.categories.visible = true;
+			this.showTos = false;
+			this.showMessage('tos');
+		} else {
+			this.elements.categories.setDisabled(false);
+			this.controls.apps.setDisabled(false);
+			this.elements.categories.visible = true;
+			this.controls.apps.visible = true;
+			this.elements.categories.focus();
+		}
 	},
 
 	createView: function () {
@@ -296,7 +405,8 @@ var AppsView = new MAF.Class({
 								grid = cell.grid,
 								apps = controls.apps,
 								direction = apps.retrieve('navigating'),
-								active = grid.retrieve('active');
+								active = grid.retrieve('active'),
+								currentCoordinates, data, idx, columns, rows, page, currentFocusIndex, first, forceFocus;
 							if (cell.category.element.textWidth > cell.category.width)
 								cell.category.scrolling = true;
 							if (!direction) cell.setStyle('transform', 'scale(1.2)');
@@ -305,8 +415,8 @@ var AppsView = new MAF.Class({
 								active.setStyle('fontFamily', 'InterstatePro-ExtraLight');
 							grid.store('active', cell.category);
 							if (view.category !== category) {
-								var first = view.category === undefined,
-									forceFocus = false;
+								first = view.category === undefined;
+								forceFocus = false;
 								if (first && view.getFavorites().length === 0) {
 									view.category = category;
 									view.first = true;
@@ -325,7 +435,6 @@ var AppsView = new MAF.Class({
 									if (!view.categoryTimer) return;
 									delete view.categoryTimer;
 									if (view.category !== category) return;
-									var data;
 									switch (category) {
 										case 'favorites':
 											data = view.getFavoritesCategory();
@@ -342,19 +451,19 @@ var AppsView = new MAF.Class({
 									}
 									apps.changeDataset(data || [], true);
 									if (direction) {
-										var idx = 0,
-											columns = apps.config.columns,
-											rows = apps.config.rows;
+										idx = 0;
+										columns = apps.config.columns;
+										rows = apps.config.rows;
 										switch (direction) {
 											case 'up':
-												var page = Math.ceil(data.length / (columns * rows)) - 1;
+												page = Math.ceil(data.length / (columns * rows)) - 1;
 												if (page > 0) apps.changePage(page);
-												var currentFocusIndex = apps.getFocusIndex() || 0;
+												currentFocusIndex = apps.getFocusIndex() || 0;
 												if (columns < apps.getVisibleCellCount()) currentFocusIndex += columns;
 												idx = Math.min(data.length, currentFocusIndex);
 												break;
 											case 'down':
-												var currentCoordinates = apps.getFocusCoordinates() || { column: 0 };
+												currentCoordinates = apps.getFocusCoordinates() || { column: 0 };
 												idx = Math.min(data.length, currentCoordinates.column);
 												break;
 											default:
@@ -407,8 +516,8 @@ var AppsView = new MAF.Class({
 			events: {
 				onNavigateOutOfBounds: function (event) {
 					var direction = event.payload.direction;
+					var apps = controls.apps;
 					if (direction === 'right' || direction === 'left') {
-						var apps = controls.apps;
 						apps.focus();
 						apps.focusCell(direction === 'left' ? Math.min(apps.cells.length, apps.config.columns - 1) : 0);
 						event.preventDefault();
@@ -451,9 +560,10 @@ var AppsView = new MAF.Class({
 						zOrder: 1
 					}),
 					events: {
-						onSelect: function (event) {
+						onSelect: function () {
 							var id = cell.getCellDataItem(),
-								grid = cell.grid;
+								grid = cell.grid,
+								recently, curId, isFavorite, i;
 							if (id === 'addfavo') {
 								if (view.state === id) {
 									view.state = null;
@@ -481,7 +591,7 @@ var AppsView = new MAF.Class({
 								grid.changeDataset(view.getFavoritesCategory(), true);
 								grid.focusCell(grid.cells.length - 1);
 							} else if (view.state !== null) {
-								var i = view.getFavoriteIndex(id);
+								i = view.getFavoriteIndex(id);
 								switch (view.state) {
 									case 'addfavo':
 										if ((i === -1) && (view.getFavorites().length < view.maxFavorites)) {
@@ -491,7 +601,7 @@ var AppsView = new MAF.Class({
 											view.removeFavorite(id);
 											cell.overlay.setSource('Images/AddFavoIcon.png');
 										}
-										var isFavorite = view.getFavorites().indexOf(id) !== -1;
+										isFavorite = view.getFavorites().indexOf(id) !== -1;
 										elements.appTitle.setText($_(isFavorite ? 'REMOVEFAVO_APP' : 'ADDFAVO_APP', [ApplicationManager.getMetadataByKey(id, 'name')]));
 										elements.appDescription.setText($_(isFavorite ? 'CONFIRM_REMOVEFAVO' : 'CONFIRM_ADDFAVO'));
 										break;
@@ -516,8 +626,8 @@ var AppsView = new MAF.Class({
 										break;
 								}
 							} else {
-								var recently = currentAppConfig.get('recentlyApps') || [],
-									curId = recently.indexOf(id);
+								recently = currentAppConfig.get('recentlyApps') || [];
+								curId = recently.indexOf(id);
 								if (curId !== -1) recently.splice(curId, 1);
 								recently.push(id);
 								if (recently.length === view.maxRecently) recently.shift();
@@ -527,9 +637,10 @@ var AppsView = new MAF.Class({
 								Horizon.setText('');
 							}
 						},
-						onFocus: function () {
+						onFocus: function () { // eslint-disable-line complexity
 							var id = cell.getCellDataItem(),
-								isFavorite = view.getFavorites().indexOf(id) !== -1;
+								isFavorite = view.getFavorites().indexOf(id) !== -1,
+								currentIcon, desc;
 							cell.focus.element.opacity = 1;
 							cell.setStyles({
 								transform: 'scale(1.25)',
@@ -549,11 +660,12 @@ var AppsView = new MAF.Class({
 								elements.appDescription.setText($_(!view.reorder ? 'START_REORDERFAVO' : 'STOP_REORDERFAVO'));
 							} else {
 								elements.appTitle.setText(ApplicationManager.getMetadataByKey(id, 'name') + ' ' + (isFavorite ? FontAwesome.get(['star', 'half', 'middle']) : ''));
-								var desc = ApplicationManager.getMetadataByKey(id, 'description') || '';
+								desc = ApplicationManager.getMetadataByKey(id, 'description') || '';
 								elements.appDescription.setText(desc + (desc.length === 0 || (desc[desc.length - 1] === '.' || desc[desc.length - 1] === '!' || desc[desc.length - 1] === '?') ? '' : '.'));
+								elements.appVersion.setText(widget.getSetting('showAppVersion') ? ApplicationManager.getMetadataByKey(id, 'version') || '' : '');
 							}
 							if (view.reorder && view.cell && cell.retrieve('favbutton') !== true) {
-								var currentIcon = cell.icon.source;
+								currentIcon = cell.icon.source;
 								view.reodered = cell.getCellDataIndex();
 								cell.setStyle('backgroundImage', 'Images/IconMove.png');
 								if (view.cell === cell) {
@@ -573,7 +685,6 @@ var AppsView = new MAF.Class({
 							}
 						},
 						onBlur: function () {
-							var id = cell.getCellDataItem();
 							cell.focus.element.opacity = 0;
 							cell.setStyles({
 								transform: 'scale(1)',
@@ -581,6 +692,7 @@ var AppsView = new MAF.Class({
 							});
 							elements.appTitle.setText('');
 							elements.appDescription.setText('');
+							elements.appVersion.setText('');
 							if (view.reorder) cell.setStyle('backgroundImage', null);
 							if (view.reorder && view.cell && cell.original && cell.retrieve('favbutton') !== true)
 								view.cell = cell;
@@ -623,9 +735,9 @@ var AppsView = new MAF.Class({
 				return cell;
 			},
 			cellUpdater: function (cell, id) {
-				var view = cell.grid.owner,
-					coords = cell.getCellCoordinates(),
-					origin = [];
+				var coords = cell.getCellCoordinates(),
+					origin = [],
+					i;
 				if (coords.column === 0) {
 					origin.push('left');
 				} else if (coords.column === (coords.columns - 1)) {
@@ -659,7 +771,7 @@ var AppsView = new MAF.Class({
 					cell.eliminate('favbutton');
 					cell.icon.setSource(ApplicationManager.getIcon(id) || '');
 					if (view.state === 'addfavo') {
-						var i = view.getFavoriteIndex(id);
+						i = view.getFavoriteIndex(id);
 						if (view.category === 'favorites' || i !== -1) {
 							cell.overlay.setSource('Images/RemoveFavoIcon.png');
 						} else {
@@ -673,7 +785,7 @@ var AppsView = new MAF.Class({
 				}
 			},
 			styles: {
-//				transform: 'translateZ(0)',
+				transform: 'translateZ(0)',
 				width: (cellSize - 7) * cellColumns,
 				height: cellSize * cellRows,
 				hOffset: elements.categories.outerWidth,
@@ -696,20 +808,19 @@ var AppsView = new MAF.Class({
 				},
 				onNavigateOutOfBounds: function (event) {
 					var cats = elements.categories,
-						direction = event.payload.direction;
+						direction = event.payload.direction,
+						max, page, lastpage, idx, catsCurrentPage, catsRows, catsPage;
 					if (view.state !== 'reorderfavo' && (direction === 'right' || direction === 'left')) {
 						cats.setDisabled(false);
 						cats.focus();
 						event.preventDefault();
 					} else {
-						var categories = ApplicationManager.getCategories(),
-							max = categories.length - 1,
-							page = this.getCurrentPage() || 0,
-							lastpage = Math.max(0, this.getPageCount() - 1),
-							idx = categories.indexOf(view.category),
-							catsCurrentPage = cats.getCurrentPage(),
-							catsRows = cats.config.rows,
-							catsPage;
+							max = categories.length - 1;
+							page = this.getCurrentPage() || 0;
+							lastpage = Math.max(0, this.getPageCount() - 1);
+							idx = categories.indexOf(view.category);
+							catsCurrentPage = cats.getCurrentPage();
+							catsRows = cats.config.rows;
 						if (direction === 'down') {
 							if (page !== lastpage) return;
 							catsPage = Math.floor((idx+1)/catsRows);
@@ -755,18 +866,37 @@ var AppsView = new MAF.Class({
 				fontFamily: 'UPCDigital-Regular',
 				wrap: true/*,
 				truncation: 'end'*/
+			},
+			methods: {
+				setFramerate: function(fr) {
+					this.setText($_('FramerateUpdate') + fr + ' fps');
+				}
 			}
 		}).appendTo(view);
 
-		if (view.skipTOS !== true) view.showTOS();
+		elements.appVersion = new MAF.element.Text({
+			styles: {
+				transform: 'translateZ(0)',
+				hOffset: elements.appDescription.hOffset,
+				vOffset: elements.appDescription.outerHeight + 15,
+				fontFamily: 'UPCDigital-Bold',
+				fontSize: '1em'
+			}
+		}).appendTo(view);
+
+		if (view.skipTOS !== true) view.showMessage('tos');
 	},
 
 	updateView: function () {
 		var view = this;
-		if (view.isBoot) {
+//		view.freeze();
+		console.log('UI updateView');
+		if (view.isBoot && window.hidden) {
+			console.log('EXIT from UI');
 			Horizon.exit();
-			view.isBoot = false;
+			ApplicationManager.exit(true);
 		} else if (ApplicationManager.exited) {
+			console.log('resume from UI');
 			Horizon.resume();
 		} else {
 			Horizon.show();
@@ -783,11 +913,13 @@ var AppsView = new MAF.Class({
 	},
 
 	selectView: function () {
-		var view = this;
+		var tos,
+			view = this;
 		view.hasbeenfocused = true;
-		if (ApplicationManager.exited && !ApplicationManager.resuming) return;
-		if (view.skipTOS !== true) {
-			var tos = widget.getElementById('tos');
+		if (view.isBoot || (ApplicationManager.exited && !ApplicationManager.resuming)) {
+			view.isBoot = false;
+		} else if (view.skipTOS !== true) {
+			tos = widget.getElementById('tos');
 			if (tos) tos.focus();
 		} else if (MAF.messages.exists('myApps') && !view.ready) {
 			view.appsReady();
@@ -800,6 +932,15 @@ var AppsView = new MAF.Class({
 				restoreFocus.call(view.controls.apps);
 			}).delay(Horizon.isHidden() || ApplicationManager.exited ? view.delayedInitialFocus : 150);
 		}
+		MAF.mediaplayer.setViewportBounds(0, 0, 1920, 1080);
+		Horizon.setPortalBackground();
+		if (view.data && view.data.proximityData) {
+			if (view.data.proximityData.failed)
+				view.proximityFailed();
+			else
+				view.proximitySucceeded();
+		}
+
 	},
 
 	hideView: function () {
@@ -807,6 +948,7 @@ var AppsView = new MAF.Class({
 			el = view.elements;
 		el.appTitle.setText('');
 		el.appDescription.setText('');
+		el.appVersion.setText('');
 		if (ApplicationManager.exiting) {
 			Horizon.exit();
 		} else {
@@ -817,13 +959,22 @@ var AppsView = new MAF.Class({
 
 	destroyView: function () {
 		var view = this;
-		view.onActivateBackButton.unsubscribeFrom(MAF.application, 'onActivateBackButton');
-		delete view.onActivateBackButton;
+		view.onActivateButton.unsubscribeFrom(MAF.application, ['onActivateBackButton', 'onInfoKeyPress', 'onWidgetKeyPress']);
+		delete view.onActivateButton;
 		delete view.skipTOS;
 		delete view.reodered;
 		delete view.reorder;
 		delete view.cell;
 		delete view.icon;
 		delete view.category;
+		if (view.resetNetflixFactoryResetTimer) clearTimeout(view.netflixFactoryResetTimer);
+		delete view.netflixFactoryResetTimer;
+		delete view.netflixFactoryResetPressed;
+		delete view.netflixFactoryResetSequence;
+		delete view.showTos;
+		try {
+			if (Horizon) Horizon.destroy();
+		} catch(err) {}
+		Horizon = restoreFocus = showEutos = loadTemplate = null;
 	}
 });

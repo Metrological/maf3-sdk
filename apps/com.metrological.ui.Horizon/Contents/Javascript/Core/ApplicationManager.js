@@ -22,9 +22,15 @@ var loadTemplate = (function () {
 		'profile-pincreation',
 		'profile-pin'
 	];
-	return function (data) {
+	return function (data) {// eslint-disable-line complexity
 		var type = data.type,
-			id = data.id;
+			id = data.id,
+			currentView, home, defaultViewId, focusEl, i, pinDots, cleanButton, input,
+			nextBtn, dialogKey, onPinDone, keyboard, dialogFocus, keyboardContainer,
+			dialogMessage, messageLabel, contentFrame, dialogConfig, profiles, fragment,
+			smallSpinner, viewType, isDefaultView, hacks, sidebarButtons, last, btnId,
+			dialogElement, currentStyle, focusAfterDialog, totalHeight, buttons, isKeyboard,
+			KeyboardValueManager, max = maxProfiles;
 		if (!type) {
 			return;
 		}
@@ -38,21 +44,20 @@ var loadTemplate = (function () {
 			return;
 		}
 		if (!template) {
-			var fragment;
 			if (type !== 'waitIndicator') {
 				fragment = widget.createDocumentFragment();
 			}
 			switch (type) {
 				case 'waitIndicator':
-					var viewType = current[identifier];
+					viewType = current[identifier];
 					if (viewType !== 'sidebar' || identifier !== ApplicationManager.active) return;
-					var smallSpinner = viewType && getElementById('@' + viewType + '-home')/*,
+					smallSpinner = viewType && getElementById('@' + viewType + '-home')/*,
 						largeSpinner = viewType && getElementById('@' + viewType + '-loading')*/;
 					switch (data.id) {
 						case '0':
 							if (viewType === 'sidebar' && smallSpinner) {
-								var isDefaultView = app.MAF.application.isDefaultView(),
-									hacks = app.widget.hacks;
+								isDefaultView = app.MAF.application.isDefaultView();
+								hacks = app.widget.hacks;
 								smallSpinner.text = FontAwesome.get('home');
 								if (hacks && hacks.home === false) {
 									smallSpinner.frozen = true;
@@ -93,11 +98,11 @@ var loadTemplate = (function () {
 					}
 					return;
 				case 'sidebar':
-					var sidebarButtons = [
+					sidebarButtons = [
 						{ value: '@AppButtonSidebarClose', label: 'times', action: 'close-all' },
 						{ value: '@AppButtonSidebarSettings', label: 'cog', action: 'app-settings' },
 						{ value: '@AppButtonSidebarVideoSize', label: 'arrows-alt', action: 'viewport-toggle' }
-					], last;
+					];
 
 					if (app.widget.dialogs !== false) {
 						if (app.widget.profile !== false) {
@@ -117,7 +122,7 @@ var loadTemplate = (function () {
 					template = new View({
 						id: '@' + type,
 						styles: {
-							transform: forceTranslateZ ? 'translateZ(0)' : null,
+							transform: 'translateZ(0)',
 							overflow: 'visible',
 							backgroundColor: 'rgba(34,34,34,.93)',
 							borderRadius: '10px',
@@ -131,7 +136,7 @@ var loadTemplate = (function () {
 							select: function (event) {
 								var target = event.target;
 								if (target) {
-									var btnId = Array.pluck(sidebarButtons, 'value').indexOf(target.getAttribute('id'));
+									btnId = Array.pluck(sidebarButtons, 'value').indexOf(target.getAttribute('id'));
 									if (isNumber(btnId) && btnId !== -1) {
 										ApplicationManager.fire(identifier, 'onActivateAppButton', {
 											type: sidebarButtons[btnId].action
@@ -193,9 +198,9 @@ var loadTemplate = (function () {
 								});
 							},
 							navigate: function (event) {
-								var current = this.retrieve('current');
-								if (current && event.detail.direction === 'down') {
-									getElementById(current).element.navigate('down', [0, 0]);
+								var currentRetrieve = this.retrieve('current');
+								if (currentRetrieve && event.detail.direction === 'down') {
+									getElementById(currentRetrieve).element.navigate('down', [0, 0]);
 								}
 								event.preventDefault();
 							}
@@ -219,7 +224,7 @@ var loadTemplate = (function () {
 					}).appendTo(template);
 */
 					sidebarButtons.forEach(function (btnConfig, key) {
-						var max = sidebarButtons.length - 1;
+						var nrOfButtons = sidebarButtons.length - 1;
 						new Text({
 							id: btnConfig.value,
 							focus: true,
@@ -234,8 +239,8 @@ var loadTemplate = (function () {
 								anchorStyle: 'center',
 								borderTopLeftRadius: key === 0 ? '6px' : null,
 								borderBottomLeftRadius: key === 0 ? '6px' : null,
-								borderTopRightRadius: key === max ? '6px' : null,
-								borderBottomRightRadius: key === max ? '6px' : null,
+								borderTopRightRadius: key === nrOfButtons ? '6px' : null,
+								borderBottomRightRadius: key === nrOfButtons ? '6px' : null,
 								backgroundImage: widget.getPath('Images/SidebarButton.png'),
 								fontSize: 16
 							},
@@ -292,13 +297,13 @@ var loadTemplate = (function () {
 					body.appendChild(fragment);
 					break;
 				case 'dialog':
-					var dialogElement = getElementById('@' + current[identifier]), 
-						currentStyle = dialogElement && dialogElement.style || {},
-						focusAfterDialog = app.document.activeElement,
-						totalHeight = 0,
-						buttons = [],
-						isKeyboard = keyboardDialogs.indexOf(id) !== -1,
-						KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
+					dialogElement = getElementById('@' + current[identifier]);
+					currentStyle = dialogElement && dialogElement.style || {};
+					focusAfterDialog = app.document.activeElement;
+					totalHeight = 0;
+					buttons = [];
+					isKeyboard = keyboardDialogs.indexOf(id) !== -1;
+					KeyboardValueManager = isKeyboard && new MAF.keyboard.KeyboardValueManager();
 
 					if (!dialogElement) return;
 
@@ -316,11 +321,10 @@ var loadTemplate = (function () {
 							buttons.push({ value: '$cancel', label: 'CANCEL' });
 							break;
 						case 'profile':
-							var profiles = ProfileManager.getProfiles();
+							profiles = ProfileManager.getProfiles();
 							profiles.forEach(function (name) {
 								buttons.push({ value: '$profile-options', label: name });
 							});
-							var max = maxProfiles;
 							if (!ProfileManager.isFamily) {
 								buttons.push({ value: '$logout', label: 'LOGOUT' });
 								max = (max - 1);
@@ -373,14 +377,14 @@ var loadTemplate = (function () {
 							break;
 					}
 
-					var dialogConfig = Object.merge({buttons: buttons}, data.conf);
+					dialogConfig = Object.merge({buttons: buttons}, data.conf);
 					template = new Dialog({
 						id: '@' + (data.key ? data.key : type),
 						styles: {
 							overflow: currentStyle.overflow,
 							backgroundColor: 'rgba(0,0,0,.5)',
 							border: currentStyle.border,
-							borderRadius: currentStyle.width !== 1920 ? '15px' : null,
+							borderRadius: currentStyle.width !== '1920px' ? '15px' : null,
 							width: currentStyle.width,
 							height: currentStyle.height,
 							top: currentStyle.top,
@@ -392,10 +396,10 @@ var loadTemplate = (function () {
 								var target = event.target,
 									selectedValue = target && target.retrieve('value'),
 									selectedLabel = target && target.retrieve('label'),
-									dialogKey = this.retrieve('key');
+									key = this.retrieve('key'),
+									keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
 								if (target && target.id && target.id.indexOf('button') > 0) {
 									event.preventDefault();
-									var keyboardValue = KeyboardValueManager && KeyboardValueManager.value;
 									if (keyboard) {
 										keyboard.suicide();
 										keyboard = null;
@@ -411,59 +415,59 @@ var loadTemplate = (function () {
 									}
 									switch (selectedValue) {
 										case '$forgot':
-											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, success: false, forgot: true });
+											ApplicationManager.fire(identifier, 'onDialogDone', { key: key, success: false, forgot: true });
 											break;
 										case '$ok':
-											ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, response: keyboardValue });
+											ApplicationManager.fire(identifier, 'onDialogDone', { key: key, response: keyboardValue });
 											break;
 										case '$cancel':
-											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogCancelled', { key: key, previousDialog: data.previousDialog });
 											break;
 										case '$logout':
 											ProfileManager.logout();
-											ApplicationManager.fire(identifier, 'onDialogProfile', { key: dialogKey, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfile', { key: key, previousDialog: data.previousDialog });
 											break;
 										case '$profile':
-											ApplicationManager.fire(identifier, 'onDialogProfile', { key: dialogKey, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfile', { key: key, previousDialog: data.previousDialog });
 											break;
 										case '$profile-switch':
-											ApplicationManager.fire(identifier, 'onDialogProfileSwitch', { key: dialogKey, previousDialog: data });
+											ApplicationManager.fire(identifier, 'onDialogProfileSwitch', { key: key, previousDialog: data });
 											break;
 										case '$profile-create':
-											ApplicationManager.fire(identifier, 'onDialogProfileCreate', { key: dialogKey, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfileCreate', { key: key, previousDialog: data.previousDialog });
 											break;
 										case '$profile-options':
-											ApplicationManager.fire(identifier, 'onDialogProfileOptions', { key: dialogKey, profile: selectedLabel, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfileOptions', { key: key, profile: selectedLabel, previousDialog: data.previousDialog });
 											break;
 										case '$profile-remove':
-											ApplicationManager.fire(identifier, 'onDialogProfileRemove', { key: dialogKey, profile: data.conf.profile, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfileRemove', { key: key, profile: data.conf.profile, previousDialog: data.previousDialog });
 											break;
 										case '$profile-pincreation':
-											ApplicationManager.fire(identifier, 'onDialogProfileCreatePIN', { key: dialogKey, profile: keyboardValue, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfileCreatePIN', { key: key, profile: keyboardValue, previousDialog: data.previousDialog });
 											break;
 										case '$profile-pincreated':
-											ApplicationManager.fire(identifier, 'onDialogProfileCreated', { key: dialogKey, profile: data.conf.profile, pin: keyboardValue, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfileCreated', { key: key, profile: data.conf.profile, pin: keyboardValue, previousDialog: data.previousDialog });
 											break;
 										case '$profile-pin':
-											ApplicationManager.fire(identifier, 'onDialogProfilePIN', { key: dialogKey, profile: data.conf.profile, previousDialog: data.previousDialog });
+											ApplicationManager.fire(identifier, 'onDialogProfilePIN', { key: key, profile: data.conf.profile, previousDialog: data.previousDialog });
 											break;
 										default:
 											if (data.previousDialog) {
-												ApplicationManager.fire(identifier, 'onDialogPrevious', { key: dialogKey, previousDialog: data.previousDialog });
+												ApplicationManager.fire(identifier, 'onDialogPrevious', { key: key, previousDialog: data.previousDialog });
 											} else {
-												ApplicationManager.fire(identifier, 'onDialogDone', { key: dialogKey, selectedValue: selectedValue });
+												ApplicationManager.fire(identifier, 'onDialogDone', { key: key, selectedValue: selectedValue });
 											}
 											break;
 									}
 								}
 							},
 							back: function (event) {
+								var key = this.retrieve('key');
 								if (!dialogConfig.ignoreBackKey) {
 									if (keyboard) {
 										keyboard.suicide();
 										keyboard = null;
 									}
-									var dialogKey = this.retrieve('key');
 									event.preventDefault();
 									event.stopPropagation();
 									this.destroy();
@@ -471,7 +475,7 @@ var loadTemplate = (function () {
 										focusAfterDialog.focus();
 										focusAfterDialog = null;
 									}
-									ApplicationManager.fire(identifier, 'onDialogCancelled', { key: dialogKey });
+									ApplicationManager.fire(identifier, 'onDialogCancelled', { key: key });
 									if (KeyboardValueManager) {
 										KeyboardValueManager.suicide();
 										KeyboardValueManager = null;
@@ -487,8 +491,9 @@ var loadTemplate = (function () {
 					// Keeps track of which dialog send this.
 					template.store('key', dialogConfig.key);
 
-					var contentFrame = new Frame({
+					contentFrame = new Frame({
 						styles: {
+							transform: Browser.wpeCisco ? 'none' : 'translateZ(0)',
 							width: 568,
 							height: 666,
 							hAlign: 'center',
@@ -527,7 +532,6 @@ var loadTemplate = (function () {
 						}).appendTo(contentFrame);
 					}
 
-					var messageLabel;
 					switch (id) {
 						case 'facebook-login':
 							if (!ProfileManager.isFamily) {
@@ -559,10 +563,11 @@ var loadTemplate = (function () {
 							break;
 					}
 
-					var dialogMessage = new Text({
+					dialogMessage = new Text({
 						id: '@' + type + '-message',
 						label: messageLabel,
 						styles: {
+							transform: 'translateZ(0)',
 							width: '100%',
 							paddingLeft: 10,
 							paddingRight: 10,
@@ -571,7 +576,6 @@ var loadTemplate = (function () {
 						}
 					}).appendTo(contentFrame);
 
-					var keyboardContainer;
 					if (isKeyboard) {
 						keyboardContainer = new Frame({
 							id: '@' + type + '-keyboard',
@@ -596,6 +600,7 @@ var loadTemplate = (function () {
 							id: '@' + type + '-button' + key,
 							focus: true,
 							styles: {
+								transform: 'translateZ(0)',
 								height: 51,
 								width: contentFrame.width - 34,
 								borderRadius: '15px',
@@ -644,9 +649,6 @@ var loadTemplate = (function () {
 							case '$profile-remove':
 								buttonLabel = FontAwesome.get('trash-o') + ' ' + widget.getLocalizedString(btnConfig.label);
 								break;
-							case '$profile-remove':
-								buttonLabel = FontAwesome.get('trash-o') + ' ' + widget.getLocalizedString(btnConfig.label);
-								break;
 							case '$profile':
 								if (id && id.indexOf('profile-') === 0) {
 									buttonLabel = FontAwesome.get('rotate-left') + ' ' + widget.getLocalizedString(btnConfig.label);
@@ -674,12 +676,11 @@ var loadTemplate = (function () {
 
 					totalHeight += (dialogConfig.buttons.length * 56) + 66 + 50;
 
-					var dialogFocus = 'button0';
+					dialogFocus = 'button0';
 					if (isKeyboard) {
-						var keyboard;
-						var onPinDone = function (authorized) {
+						onPinDone = function (authorized) {
 							if (authorized) {
-								var dialogKey = template.retrieve('key');
+								dialogKey = template.retrieve('key');
 								if (keyboard) {
 									keyboard.suicide();
 									keyboard = null;
@@ -700,36 +701,34 @@ var loadTemplate = (function () {
 								KeyboardValueManager.value = '';
 							}
 						};
-						(function (event) {
+						(function (event) {// eslint-disable-line complexity
+							function appendPinDot(nr) {
+								if (this.value && this.value.length && this.value.length === nr+1) {
+									pinDots.childNodes[nr].data = FontAwesome.get('circle');
+								}
+							}
+
 							var payload = event.payload || {},
-								i;
+								j;
 							if (event.type === 'valuechanged') {
 								switch (id) {
 									case 'profile-pincreation':
-										for (i=0; i<4; i++) {
-											if (payload.value.length > i) {
-												pinDots.childNodes[i].data = (payload.value.length===i+1) ? payload.value.substring(i, i+1) : FontAwesome.get('circle');
-												(function (nr) {
-													if (this.value && this.value.length && this.value.length === nr+1) {
-														pinDots.childNodes[nr].data = FontAwesome.get('circle');
-													}
-												}).delay(2000, this, [i]);
+										for (j=0; j<4; j++) {
+											if (payload.value.length > j) {
+												pinDots.childNodes[j].data = (payload.value.length===j+1) ? payload.value.substring(j, j+1) : FontAwesome.get('circle');
+												appendPinDot.delay(2000, this, [j]);
 											} else {
-												pinDots.childNodes[i].data = '';
+												pinDots.childNodes[j].data = '';
 											}
 										}
 										break;
 									case 'profile-pin':
-										for (i=0; i<4; i++) {
-											if (payload.value.length > i) {
-												pinDots.childNodes[i].data = (payload.value.length===i+1) ? payload.value.substring(i, i+1) : FontAwesome.get('circle');
-												(function (nr) {
-													if (this.value && this.value.length && this.value.length === nr+1) {
-														pinDots.childNodes[nr].data = FontAwesome.get('circle');
-													}
-												}).delay(2000, this, [i]);
+										for (j=0; j<4; j++) {
+											if (payload.value.length > j) {
+												pinDots.childNodes[j].data = (payload.value.length===j+1) ? payload.value.substring(j, j+1) : FontAwesome.get('circle');
+												appendPinDot.delay(2000, this, [j]);
 											} else {
-												pinDots.childNodes[i].data = '';
+												pinDots.childNodes[j].data = '';
 											}
 										}
 										if (payload.value.length === 4) {
@@ -741,11 +740,11 @@ var loadTemplate = (function () {
 										}
 										break;
 									case 'pin':
-										for (i=0; i<4; i++) {
-											if (payload.value.length > i) {
-												pinDots.childNodes[i].data = FontAwesome.get('circle');
+										for (j=0; j<4; j++) {
+											if (payload.value.length > j) {
+												pinDots.childNodes[j].data = FontAwesome.get('circle');
 											} else {
-												pinDots.childNodes[i].data = '';
+												pinDots.childNodes[j].data = '';
 											}
 										}
 										if (payload.value.length === 4) {
@@ -761,7 +760,7 @@ var loadTemplate = (function () {
 									case 'profile-create':
 										if (input) {
 											input.data = (payload.value || '').htmlEscape();
-											var nextBtn = getElementById('@' + type + '-button0');
+											nextBtn = getElementById('@' + type + '-button0');
 											if (input.data && input.data.length > 0) {
 												if (ProfileManager.exists(input.data)) {
 													getElementById('@' + type + '-title').setStyle('backgroundColor', 'red');
@@ -808,7 +807,7 @@ var loadTemplate = (function () {
 								keyboardContainer.setStyle('height', keyboard.height || 0);
 								keyboard.hAlign = 'center';
 
-								var input = new Text({
+								input = new Text({
 									editable: true,
 									styles: {
 										vAlign: 'bottom',
@@ -827,10 +826,11 @@ var loadTemplate = (function () {
 									}
 								}).appendTo(contentFrame);
 
-								var cleanButton = new Frame({
+								cleanButton = new Frame({
 									id: '@' + type + '-clear',
 									focus: true,
 									styles: {
+										transform: 'translateZ(0)',
 										border: '2px solid white',
 										borderRadius: '10px',
 										width: 60,
@@ -887,7 +887,7 @@ var loadTemplate = (function () {
 								keyboardContainer.setStyle('height', keyboard.height || 0);
 								keyboard.hAlign = 'center';
 
-								var pinDots = new Frame({
+								pinDots = new Frame({
 									styles: {
 										hAlign: 'center',
 										vAlign: 'bottom',
@@ -898,7 +898,7 @@ var loadTemplate = (function () {
 									}
 								}).appendTo(contentFrame);
 
-								for (var i = 0; i < 4; i++) {
+								for (i = 0; i < 4; i++) {
 									new Text({
 										styles: {
 											fontSize: 50,
@@ -959,7 +959,7 @@ var loadTemplate = (function () {
 					contentFrame.height = totalHeight + ((dialogMessage.totalLines - 0.5) * dialogMessage.lineHeight);
 					contentFrame.visible = true;
 
-					var focusEl = getElementById('@' + type + '-' + dialogFocus);
+					focusEl = getElementById('@' + type + '-' + dialogFocus);
 					if (focusEl && focusEl.focus && focusEl.focus.call) {
 						focusEl.focus();
 					} else {
@@ -972,8 +972,8 @@ var loadTemplate = (function () {
 			}
 		} else {
 			if (type === 'sidebar') {
-				var home = getElementById('@' + type + '-home'),
-					defaultViewId = app && app.MAF.application.getDefaultViewId();
+				home = getElementById('@' + type + '-home');
+				defaultViewId = app && app.MAF.application.getDefaultViewId();
 				home.store('current', id);
 				if (defaultViewId === id || (app.widget.hacks && app.widget.hacks.home === false)) {
 					home.wantsFocus = false;
@@ -986,7 +986,7 @@ var loadTemplate = (function () {
 			template.frozen = false;
 		}
 		if (current[identifier] && current[identifier] !== type) {
-			var currentView = getElementById('@' + current[identifier]);
+			currentView = getElementById('@' + current[identifier]);
 			if (currentView) {
 				currentView.frozen = true;
 			}
@@ -1005,7 +1005,7 @@ var loadTemplate = (function () {
 
 widget.handleChildEvent = function (event) {
 	//log('handleChildEvent', event.subject, event);
-	var data;
+	var data, dialogWindow, dialog;
 	switch(event.subject) {
 		case 'loadView':
 			if (event.error) {
@@ -1028,9 +1028,9 @@ widget.handleChildEvent = function (event) {
 			loadTemplate.call(this, data);
 			break;
 		case 'hideDialog':
-			var dialog = event.getData();
+			dialog = event.getData();
 			if (dialog && this.widget) {
-				var dialogWindow = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
+				dialogWindow = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
 				if (dialogWindow) {
 					dialogWindow.destroy();
 				}
@@ -1054,9 +1054,9 @@ widget.handleChildEvent = function (event) {
 	return true;
 };
 
-widget.handleHostEvent = function (event) {
+widget.handleHostEvent = function (event) { // eslint-disable-line complexity
 	//log('handleHostEvent', event.id, event.subject, event.data);
-	var data;
+	var data, dlg, dialog, isFullscreen, mediaplayer, bounds;
 	switch(event.subject) {
 		case 'onActivateColorButton':
 		case 'onActivateAppButton':
@@ -1075,10 +1075,10 @@ widget.handleHostEvent = function (event) {
 					break;
 				case 'blue':
 				case 'viewport-toggle':
-					var mediaplayer = this.MAF.mediaplayer,
-						bounds = mediaplayer && mediaplayer.getViewportBounds();
+					mediaplayer = this.MAF.mediaplayer;
+					bounds = mediaplayer && mediaplayer.getViewportBounds();
 					if (this.MAF.application.isSidebarView()) {
-						var isFullscreen = bounds && bounds.height === 1080;
+						isFullscreen = bounds && bounds.height === 1080;
 						if (isFullscreen) {
 							mediaplayer.setViewportBounds(624, 176, 1280, 720);
 						} else {
@@ -1188,9 +1188,9 @@ widget.handleHostEvent = function (event) {
 			loadTemplate.call(this, data);
 			break;
 		case 'hideDialog':
-			var dialog = event.getData();
+			dialog = event.getData();
 			if (dialog && this.widget) {
-				var dlg = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
+				dlg = this.widget.getElementById('@' + (dialog.conf && dialog.conf.key || 'dialog'));
 				if (dlg) {
 					dlg.destroy();
 				}
@@ -1212,9 +1212,32 @@ widget.handleHostEvent = function (event) {
 			if (widget.getSetting('tos') !== false && currentAppConfig.get('tos') !== TOS) {
 				showEutos(data.id, data.params);
 			} else {
+				try {
+					MAF.system.setState('resume');
+				} catch(err) {}
 				ApplicationManager.load(data.id);
 				ApplicationManager.open(data.id, data.params);
 			}
+			break;
+		case 'proximityFailed':
+			ApplicationManager.fire(widget.identifier, 'onSelect', {
+				id: ApplicationManager.getCurrentViewId(),
+				data: {
+					proximityData: {
+						failed: true
+					}
+				}
+			});
+			break;
+		case 'proximitySucceeded':
+			ApplicationManager.fire(widget.identifier, 'onSelect', {
+				id: ApplicationManager.getCurrentViewId(),
+				data: {
+					proximityData: {
+						failed: false
+					}
+				}
+			});
 			break;
 		default:
 			break;

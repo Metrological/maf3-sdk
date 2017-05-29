@@ -16,9 +16,9 @@
 "CLOSE" = "CLOSE";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APP STORE";
-"TOS_HEADER" = "TV App Store";
+"TOS_HEADER" = "App Store";
 "ALL_APPS" = "ALL APPS";
-"NOW_PLAYING" = "NOW PLAYING";
+"NOW_PLAYING" = "NOW PLAYING -";
 "LIVE_TV" = "LIVE TV";
 "FORGOT_PIN" = "FORGOT PIN?";
 "ADD_PROFILE" = "ADD PROFILE";
@@ -56,7 +56,7 @@
 "TWITTER_EMAIL" = "Please enter your e-mail address below. An e-mail will be sent to this address containing a link to the code required to complete the setup.";
 "TWITTER_EMAIL_FROM" = "no-reply@horizon.tv";
 "TWITTER_EMAIL_SUBJECT" = "Activation code for your Twitter-app";
-"TWITTER_EMAIL_BODY" = "You have informed us that you want to use the Twitter-app on your Horizon TV HD+ Box. A 7-digit code is needed to activate the App. Click the link below to receive the 7-digit code required to activate the Twitter app on your Horizon TV HD+ Box. %s We hope you enjoy the Twitter app. Kind regards, Ziggo";
+"TWITTER_EMAIL_BODY" = "You have informed us that you want to use the Twitter-app on your Horizon TV HD+ Box. A 7-digit code is needed to activate the App. Click the link below to receive the 7-digit code required to activate the Twitter app on your Horizon TV HD+ Box. %s We hope you enjoy the Twitter app. Kind regards, UPC";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Goto facebook.com/device and use code: %s";
 "CATEGORY_FAVORITES" = "FAVOURITES";
@@ -103,5 +103,3 @@
 "PaymentCode420" = "You have reached your creditlimit.";
 "PaymentCode500" = "Something went wrong, please try again or contact your provider.";
 "PaymentCode409" = "You already own this app.";
-"NetflixReset" = "Your Netflix has been reset";
-"proximityFailed" = "Your IPC is out of range, please move it closer";

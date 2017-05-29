@@ -56,7 +56,7 @@
 "TWITTER_EMAIL" = "Ingresa tu dirección de e-mail abajo. Un correo electrónico será enviado a esta dirección que contiene un enlace al código requerido para completar la configuración.";
 "TWITTER_EMAIL_FROM" = "no-reply@vtr.tv";
 "TWITTER_EMAIL_SUBJECT" = "Código de activación para tu app Twitter";
-"TWITTER_EMAIL_BODY" = "Nos has informado que deseas utilizar la App Twitter en tu d-BOX. Se necesita un código de 7 dígitos para activar la aplicación. Haz clic en el enlace de abajo para recibir el código de 7 dígitos necesario para activar Twitter en tu d-BOX. \n%s \nEsperamos que disfrutes de la aplicación de Twitter. \n\nSaludos cordiales, VTR";
+"TWITTER_EMAIL_BODY" = "Nos has informado que deseas utilizar la App Twitter en tu d-BOX. Se necesita un código de 7 dígitos para activar la aplicación. Haz clic en el enlace de abajo para recibir el código de 7 dígitos necesario para activar Twitter en tu d-BOX. %s Esperamos que disfrutes de la aplicación de Twitter. Saludos cordiales, VTR";
 "FB_CONNECT" = "Facebook";
 "FB_CODE" = "Ingresa a facebook.com/device y usa el código: %s";
 "CATEGORY_FAVORITES" = "FAVORITOS";

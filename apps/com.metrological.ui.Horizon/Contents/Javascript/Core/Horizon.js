@@ -4,10 +4,15 @@ var Horizon = (function (body) {
 		portalFade = widget.getSetting('portal') === 'fade',
 		hidden = false,
 		showing = true,
-		visible = true,
 		sideBySide = false,
-		exited = false,
-		isBoot = window.boot;
+		isBlocked = false,
+		translate3d = 'translateZ(0)',
+		isBoot = window.boot,
+		exited = isBoot,
+		noLive = widget.getSetting('noLive') || false,
+		isHelios = widget.getSetting('isHelios'),
+		isSD = ApplicationManager.isSD(),
+		clockInterval, animationTimer;
 
 	Theme.Fonts.add('InterstatePro-Bold', 'Fonts/InterstatePro-Bold');
 	Theme.Fonts.add('InterstatePro-ExtraLight', 'Fonts/InterstatePro-ExtraLight');
@@ -21,16 +26,20 @@ var Horizon = (function (body) {
 
 	MAF.mediaplayer.init();
 
-	body.setStyles({
-		opacity: portalFade ? (isBoot ? 0 : 1) : null,
+	function setVisibility(obj, value) {
+		obj[portalFade ? 'opacity' : 'display'] = portalFade ? value : ((value === 0) ? 'none' : null);
+		return obj;
+	}
+
+	body.setStyles(setVisibility({
 		transform: portalFade && isBoot ? 'scale(0.8)' : 'scale(1)',
 		transformOrigin: '50% 50%',
-		transition: isBoot ? 'none' : 'all 0.4s ease'
-	});
+		transition: portalFade ? 'all 0.4s ease' : null
+	}, portalFade ? (isBoot ? 0 : 1) : (isBoot ? 0 : null)));
 
 	var background = new Frame({
 		styles: {
-			transform: portalFade ? 'translate3d(0,0,0)' : null,
+			transform: portalFade ? 'translate3d(0,0,0)' : (Browser.cisco ? 'translateZ(0)' : null),
 			width: 1920,
 			height: 1080,
 			backgroundImage: widget.getPath('Images/Horizon/PortalBackground.png'),
@@ -40,6 +49,7 @@ var Horizon = (function (body) {
 
 	var blockedText = new Text({
 		label: $_('BLOCKEDTEXT'),
+		frozen: true,
 		styles: {
 			width: 1920 - 664,
 			hOffset: 644,
@@ -47,8 +57,7 @@ var Horizon = (function (body) {
 			color: fontColor,
 			fontFamily: 'InterstatePro-Light',
 			fontSize: '1.15em',
-			textAlign: 'center',
-			visible: false
+			textAlign: 'center'
 		}
 	}).inject(body);
 
@@ -56,6 +65,7 @@ var Horizon = (function (body) {
 		styles: {
 			width: 1920,
 			height: 284,
+			transform: translate3d,
 			backgroundRepeat: 'no-repeat'/*,
 			backgroundPosition: '50% 0%'*/
 		}
@@ -64,8 +74,9 @@ var Horizon = (function (body) {
 	var title = new Text({
 		label: $_('APP_STORE'),
 		styles: {
+			transform: translate3d,
 			hOffset: 134,
-			vOffset: 47,
+			vOffset: (isHelios && isSD) ? 64 : 47,
 			color: fontColor,
 			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize
@@ -75,7 +86,7 @@ var Horizon = (function (body) {
 	var subtitle = new Text({
 		label: $_('ALL_APPS'),
 		styles: {
-			transform: 'translateZ(0)',
+			transform: translate3d,
 			hOffset: title.hOffset,
 			vOffset: title.height + title.vOffset,
 			fontFamily: 'InterstatePro-Light',
@@ -83,10 +94,20 @@ var Horizon = (function (body) {
 		}
 	}).inject(header);
 
+	function getDate(){
+		var offset = widget.getSetting('dateOffset');
+		var date = new Date();
+		if(offset) {
+			date = new Date(date.getTime() + offset);
+		}
+		return date;
+	}
+
+
 	var clock = new Text({
-		label: Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase(),
+		label: Date.format(getDate(), 'HH:mm') + '<br/>' + Date.format(getDate(), 'ddd D MMM').toUpperCase(),
 		styles: {
-			transform: 'translateZ(0)',
+			transform: translate3d,
 			hAlign: 'right',
 			hOffset: 134,
 			vOffset: title.vOffset,
@@ -97,17 +118,21 @@ var Horizon = (function (body) {
 		}
 	}).inject(header);
 
-	(function updateClock() {
-		clock.data = Date.format(new Date(), 'HH:mm') + '<br/>' + Date.format(new Date(), 'ddd D MMM').toUpperCase();
-	}).periodical(60000);
+	function updateClock() {
+		if (!showing) return;
+		var d = getDate();
+		clock.data = Date.format(d, 'HH:mm') + '<br/>' + Date.format(d, 'ddd D MMM').toUpperCase();
+	}
+
+	clockInterval = updateClock.periodical(60000);
 
 	var playing = new Text({
 		styles: {
-			transform: 'translateZ(0)',
+			transform: translate3d,
 			width: 800,
 			height: 40,
 			hOffset: 560,
-			vOffset: 47,
+			vOffset: (isHelios && isSD) ? 64 : 47,
 			fontFamily: 'InterstatePro-Light',
 			fontSize: fontSize,
 			color: fontColor,
@@ -116,55 +141,70 @@ var Horizon = (function (body) {
 		}
 	}).inject(header);
 
+	function setPortalBackground() {
+		background.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
+	}
+
 	function updateNowPlaying() {
-		var title = MAF.mediaplayer.currentAsset.title,
+		if (noLive) return;
+		var assetTitle = MAF.mediaplayer.currentAsset.title,
 			now = '';
-		if (title) {
+		if (assetTitle) {
 			now += $_('NOW_PLAYING') + ' ';
 			if (MAF.mediaplayer.isTVActive) {
 				now += $_('LIVE_TV');
 			} else {
 				now += $_('APPS');
 			}
-			now += ' - ' + title;
+			now += ' - ' + assetTitle;
 		}
 		playing.data = now;
 	}
 
-	function blocked() {
-		return !showing && MAF.mediaplayer.isTVActive && widget.getSetting('blocked') && !MAF.mediaplayer.currentAsset.title;
-	}
+	var stateBackground = 0;
 
-	function updateHeader() {
-		if (blocked()) {
+	function updateBackground() {
+		var prevStateBackground = stateBackground * 1;
+		if (!showing && MAF.mediaplayer.isTVActive && widget.getSetting('blocked') && !MAF.mediaplayer.currentAsset.title) {
+			if (stateBackground === 2) return;
+			isBlocked = true;
+			stateBackground = 2;
 			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
-			blockedText.visible = !showing;
-		} else if (!showing && sideBySide) {
-			blockedText.visible = false;
-			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/SidebarBackground.png'));
-		} else if (!showing && !visible) {
-			blockedText.visible = false;
-			background.setStyle('backgroundImage', null);
+			blockedText.frozen = false;
+		} else if (!showing) {
+			if ((stateBackground === 1 && sideBySide) || (stateBackground === 3 && !sideBySide)) return;
+			isBlocked = false;
+			stateBackground = sideBySide ? 1 : 3;
+			blockedText.frozen = true;
+			background.setStyle('backgroundImage', sideBySide ? widget.getPath('Images/Horizon/SidebarBackground.png') : null);
+		} else if (showing) {
+			if (stateBackground === 0) return;
+			isBlocked = false;
+			stateBackground = 0;
+			blockedText.frozen = true;
+			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
+		}
+		if (!showing && prevStateBackground !== 2 && prevStateBackground !== 1 && prevStateBackground !== 3) {
+			header.setStyle('backgroundImage', widget.getPath('Images/Horizon/Header.png'));
+		} else if (showing && prevStateBackground !== 0) {
+			header.setStyle('backgroundImage', null);
 		}
 	}
 
-	var animationTimer;
-
 	function hideNowPlaying(callback) {
-		if (!sideBySide && !blocked() && !Browser.activevideo) {
-			updateHeader();
+		if (!sideBySide && !isBlocked && !Browser.activevideo) {
+			updateBackground();
 			if (animationTimer) {
 				clearTimeout(animationTimer);
 				animationTimer = undefined;
 			}
 			animationTimer = (function () {
-				if (visible) return;
+				if (showing) return;
 				animationTimer = undefined;
 				hidden = true;
-				body.setStyles({
-					transform: 'scale(1.6)',
-					opacity: portalFade ? 0 : null
-				});
+				body.setStyles(setVisibility({
+					transform: 'scale(1.6)'
+				}, 0));
 				if (callback && callback.call) requestAnimationFrame(callback);
 			}).delay(3000);
 		} else if (callback && callback.call) {
@@ -174,19 +214,18 @@ var Horizon = (function (body) {
 
 	function showNowPlaying(callback) {
 		if (!Browser.activevideo) {
-			updateHeader();
+			updateBackground();
 			if (animationTimer) {
 				clearTimeout(animationTimer);
 				animationTimer = undefined;
 			}
-			body.setStyles({
-				transform: 'scale(1)',
-				opacity: portalFade ? 1 : null
-			});
+			body.setStyles(setVisibility({
+				transform: 'scale(1)'
+			}, 1));
 			(function () {
 				hidden = false;
 				if (callback && callback.call) requestAnimationFrame(callback);
-			}).delay(600);
+			}).delay(portalFade ? 600 : 0);
 		} else if (callback && callback.call) {
 			callback();
 		}
@@ -201,57 +240,47 @@ var Horizon = (function (body) {
 			case states.STOP:
 			case states.PAUSE:
 			case states.PLAY:
-				updateNowPlaying.delay(300);
+				updateNowPlaying();
 				showNowPlaying(hideNowPlaying);
 				break;
 		}
 	}).subscribeTo(MAF.mediaplayer, 'onStateChange');
 
 	(function channelEvents() {
-		if (exited) return;
+		if (exited || !showing) return;
 		if (animationTimer) {
 			clearTimeout(animationTimer);
 			animationTimer = undefined;
 		}
 		updateNowPlaying();
-		if (showing) return;
-		showNowPlaying(hideNowPlaying);
+		if (!showing) showNowPlaying(hideNowPlaying);
 	}).subscribeTo(MAF.mediaplayer, 'onChannelChange');
 
 	function hide() {
 		if (!showing) return;
 		sideBySide = false;
 		showing = false;
-		visible = false;
-		if (!MAF.mediaplayer.currentAsset.title && MAF.mediaplayer.isTVActive && !visible) {
-			background.setStyle('backgroundImage', widget.getPath('Images/Horizon/BlockedBackground.png'));
-		} else {
-			background.setStyle('backgroundImage', null);
-		}
-		header.setStyle('backgroundImage', widget.getPath('Images/Horizon/Header.png'));
 		requestAnimationFrame(hideNowPlaying);
 	}
 
 	function show() {
 		if (showing) return;
+		sideBySide = false;
 		showing = true;
-		visible = true;
-		header.setStyle('backgroundImage', null);
-		background.setStyle('backgroundImage', widget.getPath('Images/Horizon/PortalBackground.png'));
 		requestAnimationFrame(showNowPlaying);
+		updateClock();
 	}
 
-	function setSidebarBackground(show) {
-		sideBySide = show;
+	function setSidebarBackground(showBackground) {
+		sideBySide = showBackground;
 		if (animationTimer) {
 			clearTimeout(animationTimer);
 			animationTimer = undefined;
 		}
-		if (show) {
+		if (showBackground)
 			showNowPlaying();
-		} else {
+		else
 			hideNowPlaying();
-		}
 	}
 
 	function resume() {
@@ -262,19 +291,27 @@ var Horizon = (function (body) {
 		try {
 			MAF.system.setState('resume');
 		} catch(err) {}
-		if (!visible) show();
-		if (portalFade) body.setStyles({ transition: 'all 0.4s ease', transform: 'scale(1)', opacity: 1 });
+		if (!showing) show();
+		body.setStyles(setVisibility({ transform: 'scale(1)' }, 1));
 	}
 
 	function exit() {
 		if (exited) return;
 		exited = true;
-		if (portalFade && !isBoot) {
-			body.setStyles({ transform: 'scale(1.6)', opacity: 0 });
-			body.setStyles.delay(400, body, [{ transition: null, transform: 'scale(0.8)' }]);
-		}
+		body.setStyles(setVisibility({ transform: 'scale(1.6)' }, 0));
+		if (portalFade)
+			body.setStyles.delay(500, body, [{ transform: 'scale(0.8)' }]);
+		if (!isBoot)
+			(function () {
+				try {
+					MAF.system.setState('paused');
+				} catch(err) {}
+			}).delay(portalFade ? 400 : 0);
+	}
+
+	if (!isBoot) {
 		try {
-			if (!isBoot) MAF.system.setState('paused');
+			MAF.system.setState('resume');
 		} catch(err) {}
 	}
 
@@ -285,12 +322,24 @@ var Horizon = (function (body) {
 		show: show,
 		resume: resume,
 		exit: exit,
+		setPortalBackground: setPortalBackground,
 		setSidebarBackground: setSidebarBackground,
 		isHidden: function () {
 			return hidden;
 		},
 		setText: function (s) {
-			subtitle.data = s;
+			if (subtitle.data !== s) subtitle.data = s;
+		},
+		destroy: function () {
+			background = blockedText = header = title = subtitle = clock = playing = null;
+			if (animationTimer) {
+				clearTimeout(animationTimer);
+				animationTimer = undefined;
+			}
+			if (clockInterval) {
+				clearInterval(clockInterval);
+				clockInterval = undefined;
+			}
 		}
 	};
 }.call(window, document.body));

@@ -16,7 +16,7 @@
 "CLOSE" = "ZAVŘÍT";
 "IMPRESSUM" = "IMPRESSUM";
 "APP_STORE" = "APLIKACE";
-"TOS_HEADER" = "App Store";
+"TOS_HEADER" = "APLIKACE";
 "ALL_APPS" = "VŠECHNY APLIKACE";
 "NOW_PLAYING" = "PŘEHRÁVÁ SE";
 "LIVE_TV" = "ŽIVÉ VYSÍLÁNÍ";
@@ -92,7 +92,7 @@
 "START_REORDERFAVO" = "Zvolte OK pro zařazení aplikace mezi OBLÍBENÉ. Stiskněte ZPĚT pro zrušení";
 "STOP_REORDERFAVO" = "Zvolte NAHORU, DOLEVA, DOPRAVA nebo DOLŮ pro přesun aplikace a stiskněte OK pro potvrzení nové pozice. Stiskněte ZPĚT pro zrušení";
 "BLOCKEDTEXT" = "Stiskněte ZPĚT pro navrácení do sekce ŽIVÉ VYSÍLÁNÍ";
-"PaymentCode400" = "Vámi zvolená "služba" přestala fungovat, kontaktujte svého poskytovatele.”;
-"PaymentCode420" = "Dosáhli jste povoleného denního limitu (nedostatek prostředků)."
-"PaymentCode500" = "Vámi zvolená "služba" přestala fungovat, kontaktujte svého poskytovatele.”;
+"PaymentCode400" = "Vámi zvolená \"služba\" přestala fungovat, kontaktujte svého poskytovatele.";
+"PaymentCode420" = "Dosáhli jste povoleného denního limitu (nedostatek prostředků).";
+"PaymentCode500" = "Vámi zvolená \"služba\" přestala fungovat, kontaktujte svého poskytovatele.";
 "PaymentCode409" = "Tuto aplikaci již máte k dispozici.";
