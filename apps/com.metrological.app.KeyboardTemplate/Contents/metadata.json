@@ -1,0 +1,17 @@
+{
+	"identifier": "com.metrological.app.KeyboardTemplate",
+	"name": "Keyboard Template",
+	"version": "0.0.3",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get a keyboard into an App.",
+	"categories": [ "video" ],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"about": "Images/Icon.png",
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
