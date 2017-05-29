@@ -1,14 +1,12 @@
 {
 	"identifier": "com.metrological.app.EmptyTemplate",
 	"name": "Empty App Template",
-	"version": "0.0.1",
-	"author": "Metrological Widgets",
-	"company": "Metrological Widgets",
-	"copyright": "Metrological Widgets 2014",
-	"description": "A clean App structure",
-	"categories": [
-		"video"
-	],
+	"version": "0.0.2",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "A clean App structure.",
+	"categories": [ "video" ],
 	"scripts": "Javascript/init.js",
 	"images": {
 		"about": "Images/Icon.png",
