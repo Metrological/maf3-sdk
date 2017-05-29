@@ -1,6 +1,28 @@
 node_modules
+*.tmp
 *.DS_Store
 *.svn
 *.orig
 *.rej
 *~
+npm-debug.log
+yarn-error.log
+
+# Sublime Text specific
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# TextMate specific
+*.tmproj
+*.tmproject
+tmtags
+
+# JetBrains / WebStorm specific
+.idea
+*.iws
+
+# Visual Studio Code
+.vscode

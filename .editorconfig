@@ -1,0 +1,6 @@
+[*]
+end_of_line = lf
+
+[*.{js,json,html,css}]
+charset = utf-8
+trim_trailing_whitespace = true
