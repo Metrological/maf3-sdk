@@ -1,0 +1,18 @@
+{
+	"identifier": "com.metrological.app.VASTTemplate",
+	"name": "VASTTemplate",
+	"version": "0.0.1",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"description": "An easy template to get ads into a video playblack App.",
+	"keywords": "video",
+	"categories": [ "video" ],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"about": "Images/Icon.png",
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
