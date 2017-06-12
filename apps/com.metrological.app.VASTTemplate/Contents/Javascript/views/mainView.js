@@ -97,6 +97,8 @@ var MainView = new MAF.Class( {
 
 		this.VAST.get( button.adUri, function( err, vast ) {
 
+			if ( err ) log( err );
+
 	    if ( !err && vast )
 	      vast.ads.some( function( ad ) {
 	        return ad.creatives.some( function( creative ) {
@@ -211,6 +213,7 @@ var MainView = new MAF.Class( {
 
 		Object.forEach( this.buttons, function( k, button ) {
 			if ( button.tracker ) button.tracker.suicide();
+			button.tracker = null;
 		} );
 
 		this.buttons = null;
