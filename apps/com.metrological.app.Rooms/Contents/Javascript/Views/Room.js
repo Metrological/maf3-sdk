@@ -1,180 +1,223 @@
-// Create a class and extended it from the MAF.system.SidebarView
-var Room = new MAF.Class({
+// Create a new View class and extend it from the MAF.system.FullscreenView
+var Room = new MAF.Class( {
 	ClassName: 'Room',
 
 	Extends: MAF.system.FullscreenView,
 
-	initialize: function () {
-		var view = this;
-		view.parent();
+	// Keep track of the clients connected
+	clients: {},
+
+	initView: function() {
+		log( 'CREATE ROOM' );
 		// Create a Room across all households
-//		view.room = new MAF.Room(view.ClassName);
+		// this.room = new MAF.Room( this.ClassName );
+
 		// Create a Room for this specific household
-		view.room = new MAF.PrivateRoom(view.ClassName);
+		this.room = new MAF.PrivateRoom( this.ClassName );
 	},
 
 	// Create your view template
-	createView: function () {
-		var view = this,
-			room = view.room,
-			clients = {}; // Keep track of the clients connected
+	createView: function() {
+		var clients = this.clients;
 
 		// Create a Canvas element
-		var canvas = new MAF.element.Core({
+		var canvas = new MAF.element.Core( {
 			element: Canvas,
 			styles: {
-				width: view.width - 620,
-				height: view.height,
+				width: this.width - 620,
+				height: this.height,
 				hOffset: 620
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Get Context of Canvas
-		var ctx = canvas.element.getContext('2d');
-		if (ctx) {
+		var ctx = canvas.element.getContext( '2d' );
+		if ( ctx ) {
 			ctx.lineJoin = 'round';
 			ctx.lineCap = 'round';
 		}
 
 		// Create a placeholder for the QRCode image
-		var qrcode = new MAF.element.Image({
+		var qrcode = new MAF.element.Image( {
 			styles: {
 				vAlign: 'bottom',
 				vOffset: 50,
 				hOffset: 50
+			},
+			events: {
+				onLoaded: function() {
+					log( 'LOADED IMAGE' );
+				},
+				onError: function() {
+					log( 'ERROR LOADING IMAGE' );
+				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Adding a button to clear the canvas
-		var clear = new MAF.control.TextButton({
-			label: $_('Clear'),
+		var clear = new MAF.control.TextButton( {
+			label: $_( 'Clear' ),
 			styles: {
-				width: view.width - canvas.width - 100,
+				width: this.width - canvas.width - 100,
 				height: 60,
 				hOffset: 50,
 				vOffset: 50
 			},
-			textStyles: {
-				anchorStyle: 'center'
-			},
+			textStyles: { anchorStyle: 'center' },
 			events: {
-				onSelect: function () {
+				onSelect: function() {
 					// Send clear to all devices
-					if (room.joined) room.send({e: 'clear'});
+					if ( this.room.joined ) this.room.send( { e: 'clear' } );
 				}
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Close button
-		new MAF.control.TextButton({
-			label: $_('Close'),
+		new MAF.control.TextButton( {
+			label: $_( 'Close' ),
 			styles: {
 				width: clear.width,
 				height: clear.height,
 				hOffset: clear.hOffset,
 				vOffset: clear.outerHeight + 20
 			},
-			textStyles: {
-				anchorStyle: 'center'
-			},
+			textStyles: { anchorStyle: 'center' },
 			events: {
-				onSelect: function () {
-					MAF.application.exit();
-				}
+				onSelect: function() { MAF.application.exit(); }
 			}
-		}).appendTo(view);
+		} ).appendTo( this );
 
 		// Reset the Canvas
 		function reset() {
-			if (ctx) {
-				ctx.setTransform(1, 0, 0, 1, 0, 0);
-				ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+			if ( ctx ) {
+				ctx.setTransform( 1, 0, 0, 1, 0, 0 );
+				ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
 			}
 		}
 
 		// Draw to Canvas function
-		function draw(c, k, x, y) {
-			switch (k) {
-				case 'start':
-					clients[c] = { x: x, y: y };
-					return;
-				case 'end':
-					delete clients[c];
-					return;
-				case 'paint':
-					if (!clients[c] || !clients[c].x && !clients[c].y) {
-						clients[c] = { x: x, y: y };
-					} else {
-						var prev = clients[c];
-						ctx.beginPath();
-						ctx.lineWidth = 7.0;
-						ctx.strokeStyle = c;
-						ctx.moveTo(prev.x, prev.y);
-						ctx.lineTo(x, y);
-						ctx.closePath();
-						ctx.stroke();
-						clients[c] = { x: x, y: y };
-					}
-					return;
+		function draw( c, k, x, y ) {
+			var prev;
+
+			if ( k === 'start' ) {
+				clients[ c ] = { x: x, y: y };
+				return;
+			} else if ( k === 'end' ) {
+				delete clients[ c ];
+				return;
+			} else if ( k === 'paint' ) {
+				if ( !clients[ c ] || !clients[ c ].x && !clients[ c ].y )
+					clients[ c ] = { x: x, y: y };
+				else {
+					prev = clients[ c ];
+					ctx.beginPath();
+					ctx.lineWidth = 7.0;
+					ctx.strokeStyle = c;
+					ctx.moveTo( prev.x, prev.y );
+					ctx.lineTo( x, y );
+					ctx.closePath();
+					ctx.stroke();
+					clients[ c ] = { x: x, y: y };
+				}
+				return;
 			}
 		}
 
 		// Set listeners for Room and Connection
-		(function (event) {
+		function roomListener( event ) {
 			var payload = event.payload;
-			switch (event.type) {
-				case 'onConnected':
-					log('room connected');
+			var eventType = eventType;
+			var data = payload.data;
+			var url;
+
+			log( 'ROOM TYPE: ' + eventType );
+
+			if ( eventType === 'onConnected' ) {
+					log( 'room connected' );
+
 					// If connected but room not joined make sure to join it automaticly
-					if (!room.joined) room.join();
-					return;
-				case 'onDisconnected':
-					clients = {}; // Reset clients
-					log('connection lost waiting for reconnect and automaticly rejoin');
-					return;
-				case 'onCreated':
+					if ( !this.room.joined ) return this.room.join();
+
+			} else if ( eventType === 'onDisconnected' ) {
+					// Reset clients
+					this.clients = {};
+
+					return log( 'connection lost waiting for reconnect and automaticly rejoin' );
+
+			} else if ( eventType === 'onCreated' ) {
 					// Create an url to the client application and pass the hash as querystring
-					var url = widget.getUrl('Client/draw.html?hash=' + payload.hash);
-					qrcode.setSource(QRCode.get(url));
-					log('room created', payload.hash, url);
-					return;
-				case 'onDestroyed':
-					clients = {}; // Reset clients
-					log('room destroyed', payload.hash);
-					return;
-				case 'onJoined':
-					// If user is not the app then log the user
-					if (payload.user !== room.user)
-						log('user joined', payload.user);
-					return;
-				case 'onHasLeft':
-					// If user is not the app then log the user
-					if (payload.user !== room.user)
-						log('user has left', payload.user);
-					return;
-				case 'onData':
-					var data = payload.data;
-					if (data.e === 'draw')
-						return draw(data.c, data.k, data.x, data.y);
-					if (data.e === 'clear')
-						return reset();
-					break;
-				default:
-					log(event.type, payload);
-					break;
+					url = widget.getUrl( 'Client/draw.html?hash=' + payload.hash );
+
+					qrcode.setSource( QRCode.get( url ) );
+
+					return log( 'room created', payload.hash, url );
+			} else if ( eventType === 'onDestroyed' ) {
+				clients = {}; // Reset clients
+
+				return log( 'room destroyed', payload.hash );
+			} else if ( eventType === 'onJoined' ) {
+				// If user is not the app then log the user
+				if ( payload.user !== this.room.user )
+					log( 'user joined', payload.user );
+
+				return;
+			} else if ( eventType === 'onHasLeft' ) {
+				// If user is not the app then log the user
+				if ( payload.user !== this.room.user )
+					log( 'user has left', payload.user );
+
+				return;
+			} else if ( eventType === 'onData' ) {
+
+				if ( data.e === 'draw' )
+					return draw( data.c, data.k, data.x, data.y );
+
+				if ( data.e === 'clear' )
+					return reset();
 			}
-		}).subscribeTo(room, ['onConnected', 'onDisconnected', 'onCreated', 'onDestroyed', 'onJoined', 'onHasLeft', 'onData', 'onError']);
+
+			log( eventType, payload );
+		}
+
+		this.onRoomEvent = roomListener.subscribeTo( this.room, [
+			'onConnected',
+		  'onDisconnected',
+		  'onCreated',
+		  'onDestroyed',
+		  'onJoined',
+		  'onHasLeft',
+		  'onData',
+		  'onError'
+		], this );
 
 		// If Room socket is connected create and join room
-		if (room.connected) room.join();
+		if ( this.room.connected ) this.room.join();
 	},
 
 	destroyView: function () {
-		var view = this;
-		if (view.room) {
-			view.room.leave(); // Leave room, will trigger an onLeaved of the app user
-			view.room.destroy(); // Destroy the room
-			delete view.room; // Unreference from view for GC
+		this.onRoomEvent.unsubscribeFrom( this.room, [
+			'onConnected',
+		  'onDisconnected',
+		  'onCreated',
+		  'onDestroyed',
+		  'onJoined',
+		  'onHasLeft',
+		  'onData',
+		  'onError'
+		] );
+
+		if ( this.room ) {
+
+			// Leave room, will trigger an onLeaved of the app user
+			this.room.leave();
+
+			// Destroy the room
+			this.room.destroy();
+
+			// Unreference from view for GC
+			delete this.room;
 		}
+
+		log( 'EXIT APP' );
 	}
-});
+} );
