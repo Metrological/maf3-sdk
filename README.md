@@ -94,7 +94,7 @@ Please read and agree the the [LICENSE](LICENSE) before using the SDK.
 Support
 -------
 
-For support, please contact us via our [Helpdesk](https://sdk.metrological.com/support "Helpdesk").
+For support, please contact us via our [Helpdesk](https://metrological.atlassian.net/servicedesk/customer/portal/1 "Helpdesk").
 
 Contribute
 ----------
