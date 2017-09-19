@@ -126,7 +126,7 @@ var Room = new MAF.Class( {
 		// Set listeners for Room and Connection
 		function roomListener( event ) {
 			var payload = event.payload;
-			var eventType = eventType;
+			var eventType = event.type;
 			var data = payload.data;
 			var url;
 
