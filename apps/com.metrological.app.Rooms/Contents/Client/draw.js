@@ -1,6 +1,6 @@
-function () {
+(function () {
 	// Create Canvas API
-	var Canvas = function () {
+	var Canvas = (function () {
 		var canvas;
 		var ctx;
 		var clients = {};
@@ -30,7 +30,6 @@ function () {
 			var prev;
 
 			if ( !ctx ) setup( c );
-
 			if ( k === 'start' ) clients[ c ] = { x: x, y: y };
 			if ( k === 'end' ) delete clients[c];
 			if ( k === 'paint' ) {
@@ -63,7 +62,7 @@ function () {
 			draw: draw,
 			clear: clear
 		};
-	}();
+	})();
 
 	// Random color helper
 	function getRandomColor() {
@@ -78,7 +77,7 @@ function () {
 	}
 
 	// Draw API
-	var Draw = function( c ) {
+	var Draw = (function( c ) {
 		var enabled = false;
 		var room = new MAF.Room();
 
@@ -117,7 +116,7 @@ function () {
 			end: end,
 			paint: paint
 		};
-	}( getRandomColor() );
+	}( getRandomColor() ));
 
 	// Implement cross device xy conversion
 	function getXY( e ) {
@@ -151,4 +150,4 @@ function () {
 			event.preventDefault();
 		}, false );
 	} );
-}();
+}());
