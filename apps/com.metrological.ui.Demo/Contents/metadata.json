@@ -1,0 +1,16 @@
+{
+	"identifier": "com.metrological.ui.Demo",
+	"name": "Demo UI",
+	"version": "1.1.6",
+	"author": "Metrological",
+	"company": "Metrological",
+	"copyright": "Metrological",
+	"ui": true,
+	"description": "Demo UI",
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
