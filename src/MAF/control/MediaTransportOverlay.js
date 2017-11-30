@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
-/** 
+/**
  * @class MAF.control.MediaTransportOverlay
  * @extends MAF.element.Container
  * @example
@@ -27,45 +27,41 @@
 	events: {
 		onTransportButtonPress: function (event) {
 			var timeIndex;
-			switch(event.payload.button) {
-				case 'forward':
+      var button = event.payload.button;
+
+			if ( button === 'forward' ) {
 					event.stop();
 					MAF.mediaplayer.control.seek(60);
-					break;
-				case 'rewind':
+			} else if ( button === 'rewind' ) {
 					event.stop();
-					timeindex = MAF.mediaplayer.player && MAF.mediaplayer.player.currentTimeIndex || null;
-					if (timeindex && (timeindex - (60*1000)) < 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
+					timeindex = MAF.mediaplayer.player.currentTimeIndex || null;
+					if (timeindex && (timeindex - (60*1000)) &lt; 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
 						MAF.mediaplayer.playlist.previousEntry();
 					} else if (view.visible && MAF.mediaplayer.player.currentPlayerState === MAF.mediaplayer.constants.states.PLAY) {
 						MAF.mediaplayer.control.seek(-60);
 					}
-					break;
-				case 'forwardseek':
+			} else if ( button ==='forwardseek' ) {
 					event.stop();
 					MAF.mediaplayer.control.forward();
-					break;
-				case 'backwardseek':
+			} else if ( button === 'backwardseek' ) {
 					event.stop();
-					timeindex = MAF.mediaplayer.player && MAF.mediaplayer.player.currentTimeIndex || null;
-					if (timeindex && (timeindex - (600*1000)) < 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
-						MAF.mediaplayer.playlist.previousEntry();
+					timeindex = MAF.mediaplayer.player.currentTimeIndex || null;
+          if (timeindex && (timeindex - (600*1000)) &lt; 0 && MAF.mediaplayer.playlist.currentIndex > 0) {
+          	MAF.mediaplayer.playlist.previousEntry();
 					} else {
 						MAF.mediaplayer.control.rewind();
 					}
-					break;
-				case 'stop':
+      } else if ( button === 'stop' ) {
 					if (!view.frozen) {
 						MAF.application.previousView();
 					}
-					break;
-			}
+      }
 		}
 	}
 }).appendTo(this);
  */
 /**
- * @cfg {Array} buttonOrder Order of the buttons to be shown in this component. 
+ * @cfg {Array} buttonOrder Order of the buttons to be shown in this component.
  * @example
  * var player = new MAF.control.MediaTransportOverlay({
  *    buttonOrder: ['backwardseekButton', 'rewindButton', 'playButton', 'forwardButton', 'forwardseekButton', 'stopButton', 'infoButton', 'resizeButton']
@@ -106,7 +102,7 @@
  */
 
 /**
- * Fired when a 
+ * Fired when a
  * @event MAF.control.MediaTransportOverlay#onTransportButtonPress
  */
 define('MAF.control.MediaTransportOverlay', function () {
@@ -243,8 +239,8 @@ define('MAF.control.MediaTransportOverlay', function () {
 					ClassName: this.ClassName + 'ProgressBar'
 				}).appendTo(this.body);
 
-				this.controls.troth = new MAF.element.Container({ 
-					ClassName: this.ClassName + 'ProgressBarTroth' 
+				this.controls.troth = new MAF.element.Container({
+					ClassName: this.ClassName + 'ProgressBarTroth'
 				}).appendTo(this.progressBar);
 
 				this.controlBar = new MAF.element.Container({
