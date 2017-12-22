@@ -1,0 +1,15 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Jasper Vermeulen -- Developer
+
+# THANKS
+
+    Metrological
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5
+    jQuery, Bootstrap
