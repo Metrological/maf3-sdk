@@ -1,7 +1,7 @@
 {
   "short_name": "MAF Documentation \ud83d\udcd6",
   "name": "MAF Documentation \ud83d\udcd6",
-  "start_url": "/api/?utm_source=web_app_manifest",
+  "start_url": "/?utm_source=web_app_manifest",
   "icons": [ {
     "src": "/img/android-chrome-192x192.png",
     "sizes": "192x192",
