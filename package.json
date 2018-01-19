@@ -1,6 +1,7 @@
 {
   "name": "maf3-sdk",
   "version": "1.0.0",
+  "main": "sdk.js",
   "dependencies": {
     "body-parser": "~1.6.6",
     "compression": "~1.0.11",
