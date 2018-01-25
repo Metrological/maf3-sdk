@@ -233,6 +233,6 @@ var MainView = new MAF.Class( {
 	destroyView: function() {
 		MAF.mediaplayer.control.stop();
 		MAF.messages.reset();
-		delete this.defaultData;
+		this.defaultData = null;
 	}
 } );

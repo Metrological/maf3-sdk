@@ -189,6 +189,6 @@ var MainView = new MAF.Class( {
 	// When closing the application make sure you unreference
 	// your objects and arrays from the view
 	destroyView: function() {
-		delete this.tabs;
+		this.tabs = null;
 	}
 });

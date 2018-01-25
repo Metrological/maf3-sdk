@@ -186,6 +186,6 @@ var VideoView = new MAF.Class( {
 	// When closing the application make sure you unreference your objects and arrays
 	destroyView: function() {
 		this.hideView();
-		delete this.stateChange;
+		this.stateChange = null;
 	}
 } );

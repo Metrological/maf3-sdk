@@ -215,7 +215,7 @@ var Room = new MAF.Class( {
 			this.room.destroy();
 
 			// Unreference from view for GC
-			delete this.room;
+			this.room = null;
 		}
 
 		log( 'EXIT APP' );

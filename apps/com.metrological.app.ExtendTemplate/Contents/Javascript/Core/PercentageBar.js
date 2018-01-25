@@ -37,7 +37,7 @@ var PercentageBar = new MAF.Class( {
 			item = null;
 		} );
 
-		delete this.elements;
+		this.elements = null;
 
 		// Call MAF.element.Container's suicide function
 		this.parent();
