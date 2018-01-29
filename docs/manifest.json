@@ -1,8 +1,12 @@
 {
-  "short_name": "MAF Documentation \ud83d\udcd6",
-  "name": "MAF Documentation \ud83d\udcd6",
-  "start_url": "/?utm_source=web_app_manifest",
+  "short_name": "MAF SDK \ud83d\udcd6",
+  "name": "MAF SDK \ud83d\udcd6",
+  "start_url": "/index.html?utm_source=web_app_manifest",
   "icons": [ {
+    "src": "/img/android-chrome-512x512.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }, {
     "src": "/img/android-chrome-192x192.png",
     "sizes": "192x192",
     "type": "image/png"
