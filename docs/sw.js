@@ -12,7 +12,7 @@ workboxSW.precache([
   },
   {
     "url": "docs.min.js",
-    "revision": "4b377986a77684f2e55c9f4a1b0884f9"
+    "revision": "864370352370397e367cae38816f0430"
   },
   {
     "url": "sw.js",
