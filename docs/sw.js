@@ -12,367 +12,367 @@ workboxSW.precache([
   },
   {
     "url": "api/Array/index.html",
-    "revision": "87b400f73ca10d766794b241ec81a26a"
+    "revision": "f943fc8b07c6b3536ceccac0e06cf806"
   },
   {
     "url": "api/Date/index.html",
-    "revision": "e6e3782f0969c78bac46c6abb09a33f3"
+    "revision": "c4b66813b279ab486424f348ceaac71a"
   },
   {
     "url": "api/Facebook/index.html",
-    "revision": "2b968d7b126a26a2c691896572a80a86"
+    "revision": "b76d00a49d86c67f5612fe1d1850c115"
   },
   {
     "url": "api/FontAwesome/index.html",
-    "revision": "bee18fa3612d030db89aba7d3997d71f"
+    "revision": "a3449616de25f33f98611ae2713b752d"
   },
   {
     "url": "api/Function/index.html",
-    "revision": "81b5f5c9e9afe56c0070ccf9569904e9"
+    "revision": "f4fab24ec5f1bba07f4be82d9c51d705"
   },
   {
     "url": "api/Globals/index.html",
-    "revision": "d0da2c9414bb99f9a1da6fefc1766cd0"
+    "revision": "66b31a1a6cda3aad906efeb533b0a0d2"
   },
   {
     "url": "api/JSON/index.html",
-    "revision": "facb2705ede4151f690a02a3bce34b9f"
+    "revision": "c1e015e7df4a0404c54b01e60ebdeb8d"
   },
   {
     "url": "api/Library.DOM/index.html",
-    "revision": "882c059b340c6977e81cc647a71c2e29"
+    "revision": "01719d832dc290b99eaa4c633651a99a"
   },
   {
     "url": "api/Library.Storage/index.html",
-    "revision": "f9f079da7d9551909b24d3a31970811c"
+    "revision": "e60a862e547da936f764fb4d081528c5"
   },
   {
     "url": "api/Library.Styles/index.html",
-    "revision": "e69e59ea50d24abba9f25576832f1697"
+    "revision": "706c97180e84eed23d930bc3c67254ec"
   },
   {
     "url": "api/Library.Themes/index.html",
-    "revision": "b8478022a9167bae7ca196f3ab06e62c"
+    "revision": "61c1e3b3d2a2a5c0bf82832fc5bd02be"
   },
   {
     "url": "api/MAF.application/index.html",
-    "revision": "9085cee1ac16972007907bdfbb887647"
+    "revision": "31f4212603b44c97fb1b6d231285230f"
   },
   {
     "url": "api/MAF.control.BackButton/index.html",
-    "revision": "db3421c57fa7f79f79ce1aa1834e3411"
+    "revision": "a03f085e8050e005861fe6e906630a37"
   },
   {
     "url": "api/MAF.control.Button/index.html",
-    "revision": "a81437c91f1d60789a055c14d8dc1b79"
+    "revision": "f40a4bca21e875a3080c0fd58d8f07ee"
   },
   {
     "url": "api/MAF.control.EmptySpace/index.html",
-    "revision": "67514355b106ab9f74f92b7fe801223f"
+    "revision": "0f71a1d992212a660d3ca170efb0ec82"
   },
   {
     "url": "api/MAF.control.FixedTab/index.html",
-    "revision": "60bf9f0f8dfe1d6f4e91aa7908211162"
+    "revision": "946d6807f02da7dbe7324443dbab09f5"
   },
   {
     "url": "api/MAF.control.Grid/index.html",
-    "revision": "5d74bfcf549d6dc9eed15bde3434dd81"
+    "revision": "74a204948bd5f979351d3171deb13a55"
   },
   {
     "url": "api/MAF.control.GridCell/index.html",
-    "revision": "42902cfa6279b8517549bb712058a362"
+    "revision": "9d37ac0ddc5dfa62594b73858403bb76"
   },
   {
     "url": "api/MAF.control.Header/index.html",
-    "revision": "1f2098915b9a45c7560a717243333bb5"
+    "revision": "61c6ceb1fcd56e304ef78718f865af47"
   },
   {
     "url": "api/MAF.control.ImageToggleButton/index.html",
-    "revision": "9f1ff1219ac1e51adebee1939f6d7045"
+    "revision": "572ab5f843f506d25a5ab10e6ed728de"
   },
   {
     "url": "api/MAF.control.InputButton/index.html",
-    "revision": "416e591d349b0abe08f4f62586d9eb8f"
+    "revision": "b1ac276526eb40c796e8eb46eb1abeeb"
   },
   {
     "url": "api/MAF.control.Keyboard/index.html",
-    "revision": "7d1007dacd8fffd59d566b506cc65fca"
+    "revision": "30c9c14203a9e3a11580b1adae5ad424"
   },
   {
     "url": "api/MAF.control.MediaTransportOverlay/index.html",
-    "revision": "fbdb4f40e6fc9be1d93f3ee10696f01f"
+    "revision": "5874074fc7eecd8e336d73d5b6013921"
   },
   {
     "url": "api/MAF.control.MetadataDisplay/index.html",
-    "revision": "5ffe1ebc7d1ee1662a94d3d172711fe2"
+    "revision": "1d3eaa228d696f87a3be63ca827a977a"
   },
   {
     "url": "api/MAF.control.PageIndicator/index.html",
-    "revision": "402e2c705c7218d1640aa16d98d35706"
+    "revision": "bf4cd59afac35435bcd7bdf1550e002a"
   },
   {
     "url": "api/MAF.control.PhotoBackButton/index.html",
-    "revision": "8e3d87ba972c4c9750b0097ac2a341bd"
+    "revision": "4eca71dedbeba967352a33def6f94c53"
   },
   {
     "url": "api/MAF.control.PhotoGridCell/index.html",
-    "revision": "f54a4c55ead9d48e89e7110a91f73b49"
+    "revision": "85becc31cb92e1d4567f9f31291ceb14"
   },
   {
     "url": "api/MAF.control.PromptButton/index.html",
-    "revision": "077c6f5a3107b1178abc3485b73e6973"
+    "revision": "115e7bef6dffd6c4ef41464470c927ec"
   },
   {
     "url": "api/MAF.control.ScrollIndicator/index.html",
-    "revision": "29f0388604057a7d919ddfd49e9748e3"
+    "revision": "bf3d7934d8236983249089483e4f9f39"
   },
   {
     "url": "api/MAF.control.SelectButton/index.html",
-    "revision": "109db75419991bdb0e5c1d618dd02bf3"
+    "revision": "8b6674d247704577cfab40d223a92d78"
   },
   {
     "url": "api/MAF.control.SingleTab/index.html",
-    "revision": "0e53be90a63d614f9275b70723a09694"
+    "revision": "7b36f6742a3b7ead5e94a1bad21cb29c"
   },
   {
     "url": "api/MAF.control.TabPipe/index.html",
-    "revision": "bb641beb2dbb7d428eac45a4dee07826"
+    "revision": "920c8b29e1b1d51e1a4866dbc6bdf1d0"
   },
   {
     "url": "api/MAF.control.TabPipeButton/index.html",
-    "revision": "d612dc6378bc4665a4c69921e8b6991a"
+    "revision": "dfa457986fc7e8194d08367a58daadaf"
   },
   {
     "url": "api/MAF.control.TabStrip/index.html",
-    "revision": "d66ee4dc47d73d653bbaf509c093061c"
+    "revision": "90ccc11b0c2c7cc6dccf689e5a13279d"
   },
   {
     "url": "api/MAF.control.TabStripButton/index.html",
-    "revision": "d0e76ec0c683e1525e9c09a4d7fc7f57"
+    "revision": "a9ce14ead44bc4ae3f5b10f8603bd5e6"
   },
   {
     "url": "api/MAF.control.TextButton/index.html",
-    "revision": "9ee8bec6f5f4f7169c73187e884aead6"
+    "revision": "1502bc88a867200b431e400c7dc79682"
   },
   {
     "url": "api/MAF.control.TextEntryButton/index.html",
-    "revision": "deccfdb23b805cb0dbb835329b5cd5e7"
+    "revision": "e1fb068575ef50b4a636c3d60a769495"
   },
   {
     "url": "api/MAF.control.TextEntryOverlay/index.html",
-    "revision": "25d7f40423535c540a8f2e802c83374c"
+    "revision": "c5b6cbd7cd470aa4a1fe193f54d4d29e"
   },
   {
     "url": "api/MAF.control.ToggleButton/index.html",
-    "revision": "5026c69821720750546d957b607f36e4"
+    "revision": "c473c169dee133e692aa0142e555ece4"
   },
   {
     "url": "api/MAF.control.ValueDisplay/index.html",
-    "revision": "473289ba0a56f6fa73d183b4957a1661"
+    "revision": "6496939cbb87ee9d3789da4fe933951b"
   },
   {
     "url": "api/MAF.dialogs.Alert/index.html",
-    "revision": "473ef09eff848643c8ce356d3b79c6b7"
+    "revision": "18e8ec0197cbe2e98ebb7eb79720e9cb"
   },
   {
     "url": "api/MAF.dialogs.BaseDialogImplementation/index.html",
-    "revision": "ec442379df3176686c3cab15e157d485"
+    "revision": "b9b9dbceecd002d921baeeb0a81dba04"
   },
   {
     "url": "api/MAF.dialogs.Login/index.html",
-    "revision": "658f83a894b353877246525c48eb7980"
+    "revision": "07d01930d8c1a5830df331c6c49f9e8b"
   },
   {
     "url": "api/MAF.dialogs.TextEntry/index.html",
-    "revision": "df0a899237cb86847326c0e25cba4665"
+    "revision": "85549be2c956b57e0e1bf28239e7fea8"
   },
   {
     "url": "api/MAF.dialogs.VerifyPin/index.html",
-    "revision": "e6402ccb3e6ab98760b20fbe260fedb8"
+    "revision": "beba44f325025394775cfd808c0da71e"
   },
   {
     "url": "api/MAF.element.Button/index.html",
-    "revision": "ee63e6ec66cf5a1a74746000626b7cba"
+    "revision": "96f5eb2f56311aec650b064b9736b685"
   },
   {
     "url": "api/MAF.element.Container/index.html",
-    "revision": "0f7fb49d08f639ebf6d8947773aa9b30"
+    "revision": "17413e63c48096173ff2b75b049983a0"
   },
   {
     "url": "api/MAF.element.Core/index.html",
-    "revision": "ebd37c70b201defea3ffa01e21dcfd4e"
+    "revision": "6f6d52d00b61625d4fb52328f99374a6"
   },
   {
     "url": "api/MAF.element.Grid/index.html",
-    "revision": "9069538202173bcbfa5c305ab5353f72"
+    "revision": "401646d07446f59683d83ef8f494f745"
   },
   {
     "url": "api/MAF.element.GridCell/index.html",
-    "revision": "7d6ea906cf7540733da0d5f4a8e64053"
+    "revision": "b68b7be8a87db3852231077a93f3c422"
   },
   {
     "url": "api/MAF.element.Image/index.html",
-    "revision": "5b1d5fd30e7940faa016b40090f38766"
+    "revision": "fc6a9629e5b56b041d05e25230631ad1"
   },
   {
     "url": "api/MAF.element.SlideCarousel/index.html",
-    "revision": "67c76ebb58e54986e07735a47a80daf9"
+    "revision": "f98fa888c676fd96a49fa07a36150429"
   },
   {
     "url": "api/MAF.element.SlideCarouselCell/index.html",
-    "revision": "de55662cff764701f330f6843a508527"
+    "revision": "4b420a0cde8475a22acb6dccb72ed24d"
   },
   {
     "url": "api/MAF.element.Text/index.html",
-    "revision": "1c9eb4ce07d010ba45ef0c0502fbda66"
+    "revision": "d88d279165984908859c512469adf9a3"
   },
   {
     "url": "api/MAF.element.TextField/index.html",
-    "revision": "f2c36096527743475f4a868e6f11f4a3"
+    "revision": "5468b8ba6c86e99967b3db16afcf0be2"
   },
   {
     "url": "api/MAF.element.TextGrid/index.html",
-    "revision": "c946a5fa20e330c636012de5c6e19fc2"
+    "revision": "0995f7eb004a53ffadc3a73d22bfe8ae"
   },
   {
     "url": "api/MAF.media.Asset/index.html",
-    "revision": "9bf199d4b4083bd22368833beb746fa2"
+    "revision": "25d41fdb2f90dc724ffc7bad0b3e607c"
   },
   {
     "url": "api/MAF.media.Playlist/index.html",
-    "revision": "e4407f06d9b1be911fafce0490f07703"
+    "revision": "ca3f1120bcf3f54fb633e76943e03586"
   },
   {
     "url": "api/MAF.media.PlaylistEntry/index.html",
-    "revision": "341939137eb7dc422f529b5489df8883"
+    "revision": "a4bbeba1f8ff56112928cf0af322d90a"
   },
   {
     "url": "api/MAF.mediaplayer/index.html",
-    "revision": "10ad417bcbeaced81d5b36135f89a8d0"
+    "revision": "1d0f2707ef1642a3cbd85bb17216402e"
   },
   {
     "url": "api/MAF.messages/index.html",
-    "revision": "ef25dfb4cce2c08d5a083f0aebf52130"
+    "revision": "c7214781116c783ad86d715d60f5ba2e"
   },
   {
     "url": "api/MAF.PrivateRoom/index.html",
-    "revision": "74dbb01d0938f74e74549caf40de53b9"
+    "revision": "06cfcd1679d3e52f7475a3352e287090"
   },
   {
     "url": "api/MAF.Room/index.html",
-    "revision": "094ae8d969a75ecbac5809866f8ba2ac"
+    "revision": "78e212914375a851cd1acada53e2843a"
   },
   {
     "url": "api/MAF.system.BaseView/index.html",
-    "revision": "cb2243f151fdbab517cd747b8dbbfedd"
+    "revision": "d91537fc77d982c81d6e85d9be84a531"
   },
   {
     "url": "api/MAF.system.FullscreenView/index.html",
-    "revision": "2d052ed800c67f5426ffcf5c57524593"
+    "revision": "46ce83c8561d9e403f86e5b4f39db723"
   },
   {
     "url": "api/MAF.system.OptionSelectView/index.html",
-    "revision": "c85733bb4e33c35042cad4701b64fdfb"
+    "revision": "5b631340a165adebeff72d702293df65"
   },
   {
     "url": "api/MAF.system.SidebarView/index.html",
-    "revision": "0065fc28b03901cb2f38e0db6ccb2ebe"
+    "revision": "1b5472a2079d96b24fdb5f2d847de4f2"
   },
   {
     "url": "api/MAF.system.WindowedView/index.html",
-    "revision": "91936ff4f3c8bd48bca5d07d9e0dd3b2"
+    "revision": "346340883a01327a116de6ba0e4078a8"
   },
   {
     "url": "api/MAF.utility.Pager/index.html",
-    "revision": "afe2cec27b743ab17661ade38e252dfa"
+    "revision": "b2c306efc4b301d55bd8e127e400d06b"
   },
   {
     "url": "api/MAF.utility.PagerStorageClass/index.html",
-    "revision": "43caf8bd43d76eece25b7f6ab839e534"
+    "revision": "a4a4bc50e647032651614eaf11819812"
   },
   {
     "url": "api/MAF.utility.timer/index.html",
-    "revision": "2b4d2da0c35ff5e63eaf6b38b2df8183"
+    "revision": "52c68a3b6b6e9996aaa8836801c4d727"
   },
   {
     "url": "api/MAF.utility.WaitIndicator/index.html",
-    "revision": "2b917a068a41113255af30bdbb2fe495"
+    "revision": "8bcbd3287d0bda979300808f62559b9a"
   },
   {
     "url": "api/MAF.utility/index.html",
-    "revision": "74f2c074dfb717c9be7e52feaebaced5"
+    "revision": "a02b3d80a862831ced69a421243471e9"
   },
   {
     "url": "api/MAF.VAST.Tracker/index.html",
-    "revision": "506a153ce2895adf04c142c30b8c423e"
+    "revision": "4ca0c7e0f2aef9a41a036247038d34be"
   },
   {
     "url": "api/MAF.VAST/index.html",
-    "revision": "73ebccee29d88a03562b6b79c2d82f7a"
+    "revision": "a286a0cea8e6e5044dc1db1c755141fd"
   },
   {
     "url": "api/MAF.views.AboutBox/index.html",
-    "revision": "5533ac32cde0a2c3688b195bf9819c5a"
+    "revision": "bfc6880593f47cbca2370aa4db5314c7"
   },
   {
     "url": "api/MAF.views.AboutDocView/index.html",
-    "revision": "9e627d44871d6f108a67bf6f378f9247"
+    "revision": "37fa9a5d1a4eaa1d0471d70682ca7117"
   },
   {
     "url": "api/MAF.views.SearchSuggest/index.html",
-    "revision": "e564007d3f6312c8ddf8875724f10fe1"
+    "revision": "6b250f3d416f139d9462acc468852f40"
   },
   {
     "url": "api/Number/index.html",
-    "revision": "f07e9de2d2bab46fb302cf701d08bd76"
+    "revision": "4fcc3cf3902a22fcc5e8b62b1e5e24f8"
   },
   {
     "url": "api/Object/index.html",
-    "revision": "c4e3328cc3aeb0ae5000483f4a633eda"
+    "revision": "fe34b3090173edac2b79a066a01f5238"
   },
   {
     "url": "api/profile/index.html",
-    "revision": "1d5168a1ef4dd1a9efa030e9479aeb22"
+    "revision": "33e22cb5e173c653bead4785281761f8"
   },
   {
     "url": "api/QRCode/index.html",
-    "revision": "6f0222e0a35628d0e91756104bb9cc93"
+    "revision": "3926f9819a04bb0a5919ffa001fa711e"
   },
   {
     "url": "api/Request/index.html",
-    "revision": "e14cd8819a8c90dabd7be39b1479f421"
+    "revision": "8aae0d7cb84d78070013d8f53bbcd3ac"
   },
   {
     "url": "api/sha1/index.html",
-    "revision": "cce62b152b8804325e9accf74b9be604"
+    "revision": "110ba6525b33e7d09a051e91f83f20ac"
   },
   {
     "url": "api/String/index.html",
-    "revision": "7db77bea650c5476fdfce95ac55f799f"
+    "revision": "edd7dbacb5ceb90afb41e0687628a1ea"
   },
   {
     "url": "api/Theme/index.html",
-    "revision": "68e60fa14652643ad4e51d51b0441fde"
+    "revision": "dfd3a92e06d02dc56a04025b9819c477"
   },
   {
     "url": "api/Timer/index.html",
-    "revision": "d71a4a4227179268b23b5d43130fe7f8"
+    "revision": "6385f557c230ab8bbd4650fdc5c55273"
   },
   {
     "url": "api/Twitter/index.html",
-    "revision": "ae6f730f0e8fb9713638d76f2e680400"
+    "revision": "a957610ebe963622da66edea5e5fb4c2"
   },
   {
     "url": "api/widget/index.html",
-    "revision": "24acbd7d7efc4f97214cccaa7faa5ce0"
+    "revision": "ba4e82e66ab12739aaf23780d6401722"
   },
   {
     "url": "api/Youtube/index.html",
-    "revision": "afe79efa2885ab51c56ed07b40dea61d"
+    "revision": "5790834c104528138389ab4a5215b661"
   },
   {
     "url": "design-guide/index.html",
-    "revision": "6ee9abc57a7e890ef830d889d810f2c3"
+    "revision": "bee9649eb3a8db48faf3e6c65913f6a1"
   },
   {
     "url": "docs.min.css",
@@ -384,7 +384,7 @@ workboxSW.precache([
   },
   {
     "url": "faq/index.html",
-    "revision": "d2f3f14130b4a3c977f616bc8aca357d"
+    "revision": "20cac58fe8751d1f576aaac73ef18200"
   },
   {
     "url": "favicon.ico",
@@ -392,7 +392,7 @@ workboxSW.precache([
   },
   {
     "url": "getting-started/index.html",
-    "revision": "9edcdc7927c6ed0e4767a8d897849ce6"
+    "revision": "a3006c816d5e2d92bf56e35fc2ed561a"
   },
   {
     "url": "hljs.js",
@@ -580,7 +580,7 @@ workboxSW.precache([
   },
   {
     "url": "index.html",
-    "revision": "aa1231fdd00cfa3a9ec00eedb53079d1"
+    "revision": "9a0fa382730cc88850d3a08d5b17a7b7"
   },
   {
     "url": "manifest.json",
@@ -592,7 +592,7 @@ workboxSW.precache([
   },
   {
     "url": "review-guidelines/index.html",
-    "revision": "b531e0664c37ba44ac51032c13b4c015"
+    "revision": "14f6769049ce84e1510fb500e3e7b55e"
   },
   {
     "url": "robots.txt",
