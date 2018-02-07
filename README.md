@@ -6,7 +6,7 @@ The Metrological Application Framework SDK enables you to develop TV Apps
 Getting Started
 ---------------
 
-The getting started, design guidelines and API docs can be found on our [SDK](https://sdk.metrological.com/getting-started) website.
+The getting started, design guidelines and API docs can be found on our [SDK](https://mafsdk.tv/getting-started/#introduction) website.
 
 Create an App
 -------------
