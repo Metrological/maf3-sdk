@@ -240,7 +240,7 @@ workboxSW.precache([
   },
   {
     "url": "api/MAF.media.Playlist/index.html",
-    "revision": "ca3f1120bcf3f54fb633e76943e03586"
+    "revision": "81f9f2edb4ba6991508bf42e21dc1479"
   },
   {
     "url": "api/MAF.media.PlaylistEntry/index.html",
@@ -392,7 +392,7 @@ workboxSW.precache([
   },
   {
     "url": "getting-started/index.html",
-    "revision": "a3006c816d5e2d92bf56e35fc2ed561a"
+    "revision": "af57695fdc9d4dd4b3afca3a5c88a013"
   },
   {
     "url": "hljs.js",
