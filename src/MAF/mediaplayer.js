@@ -6,7 +6,7 @@
  * (function (event) {
  *    log(event.payload);
  * }).subscribeTo(MAF.mediaplayer, 'onStateChange');
- * 
+ *
  * var playlist = new MAF.media.Playlist();
  * playlist.addEntryByURL('http://my.url.com/video.mp4');
  * MAF.mediaplayer.playlist.set(playlist);
@@ -67,20 +67,20 @@
 /**
  * Here are the possible enumeration constants for the player states.
  *
- * | Constant  | Description |
- * | ------------- | ------------- |
- * | BUFFEREMPTY  | The buffer is completely empty. The media may pause because there is no data in the buffer. BUFFERING should start. |
- * | BUFFERING  | Media is currently buffering. |
- * | EOF | The player has reached the end of the media file. |
- * | ERROR | The player gave an error while trying to playback a media file. |
- * | FORWARD | The media is moving forward on a increased speed. |
- * | INFOLOADED | Information about the media has been loaded, including header file information and media data. |
- * | INIT | The player is initializing. |
- * | PAUSE | The media file is paused. |
- * | PLAY | The media file is playing. |
- * | REWIND | The media file is rewinding. |
- * | STOP | The media file is stopped. |
- * | UNKNOWN | The player triggered a state unknown to the MAF.mediaplayer |
+ * | Constant  | Value | Description |
+ * | ------------- | ------------- | ------------- |
+ * | BUFFEREMPTY | 6 | The buffer is completely empty. The media may pause because there is no data in the buffer. BUFFERING should start. |
+ * | BUFFERING | 5 | Media is currently buffering. |
+ * | EOF | 8 | The player has reached the end of the media file. |
+ * | ERROR | 10 | The player gave an error while trying to playback a media file. |
+ * | FORWARD | 2 | The media is moving forward on a increased speed. |
+ * | INFOLOADED | 7 | Information about the media has been loaded, including header file information and media data. |
+ * | INIT | -1 | The player is initializing. |
+ * | PAUSE | 1 | The media file is paused. |
+ * | PLAY | 0 | The media file is playing. |
+ * | REWIND | 3 | The media file is rewinding. |
+ * | STOP | 4 | The media file is stopped. |
+ * | UNKNOWN | 9 | The player triggered a state unknown to the MAF.mediaplayer |
  * @name 'constants.states'
  * @type {Object}
  * @memberof MAF.mediaplayer
@@ -182,6 +182,7 @@
  * * name - Channel name
  * * description - Description of the channel
  * * number - Number of the channel
+ * * entitled - Returns if the user is entitled for the channel (boolean)
  */
 /**
  * This will give information about a current program the tv is currently tuned to.

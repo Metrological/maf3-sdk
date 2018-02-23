@@ -40,6 +40,12 @@
  * @cfg {Boolean} carousel Defines if the grid needs to behave like a carousel. True will show the first view again after the last view has passed. Default false.
  * @memberof MAF.element.TextGrid
  */
+
+/**
+ * @cfg {Integer} scrolling Enables you to scroll through the page line by line instead of paging.
+ * @memberof MAF.element.TextGrid
+ */
+
 define('MAF.element.TextGrid', function () {
 	return new MAF.Class({
 		ClassName: 'BaseTextGrid',
@@ -62,6 +68,7 @@ define('MAF.element.TextGrid', function () {
 			this.parent();
 			this.element.allowChangeEvents = true;
 			this.element.textPaging = true;
+			this.currentPage = 0;
 		},
 
 		/**
@@ -69,7 +76,7 @@ define('MAF.element.TextGrid', function () {
 		 * @return {Number} The page the component is currently on. Pages start at 0.
 		 */
 		getCurrentPage: function () {
-			return Math.ceil(this.getPageCount() * this.firstLine / this.totalLines);
+			return this.currentPage;
 		},
 
 		/**
@@ -77,7 +84,22 @@ define('MAF.element.TextGrid', function () {
 		 * @return {Number} The number of pages this component has.
 		 */
 		getPageCount: function () {
-			return Math.floor(this.totalLines / this.visibleLines);
+			if (!this.totalLines){
+				return 1;
+			}
+			
+			var linesPerPage = this.height / this.lineHeight;
+			var pages = (this.totalLines - 1) / (linesPerPage - 1);
+			var lastPagePercentage = pages - Math.floor(pages);
+			var percentageLastLine = ((this.height * lastPagePercentage) > this.lineHeight ? (this.height * lastPagePercentage) - this.lineHeight : (this.height * lastPagePercentage)) / this.lineHeight;
+			var returnPages = Math.ceil(pages);
+			
+			if (this.config.scrolling){
+				returnPages = Math.ceil(this.totalLines - (linesPerPage - 1));
+			} else if (percentageLastLine > 0 && percentageLastLine <= 0.2){
+				returnPages--;
+			}
+			return returnPages || 1;
 		},
 
 		/**
@@ -95,19 +117,27 @@ define('MAF.element.TextGrid', function () {
 		 * @return {Class} This component.
 		 */
 		shift: function (direction) {
-			var current = this.getCurrentPage(),
-				lastpage = this.getPageCount(),
+			var current = this.currentPage,
+				pages = this.getPageCount(),
 				target;
+			
+			if(!this.config.scrolling){
+				this.element.lastChild.height = this.element.height*pages;
+			}
 
 			switch (direction) {
 				case 'left':
 					target = Math.max(current - 1, 0);
 					break;
 				case 'right':
-					target = Math.min(current + 1, lastpage - 1);
+					target = Math.min(current + 1, pages - 1);
 					break;
 			}
-			this.firstLine = this.getStartLine(target);
+
+			var scrollTop = (this.element.lastChild.height/pages) * target;
+			this.element.scrollTop = this.config.scrolling ? scrollTop : scrollTop - (this.element.lastChild.lineHeight*target);
+			this.currentPage = target;
+
 			return this;
 		},
 
@@ -142,6 +172,7 @@ define('MAF.element.TextGrid', function () {
 		 */
 		setText: function (text) {
 			this.firstLine = 0;
+			this.currentPage = 0;
 			this.parent(text);
 		}
 	});
