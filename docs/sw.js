@@ -248,47 +248,47 @@ workboxSW.precache([
   },
   {
     "url": "api/MAF.mediaplayer/index.html",
-    "revision": "1d0f2707ef1642a3cbd85bb17216402e"
+    "revision": "e6518d5fb0d1953913a548f063912ac2"
   },
   {
     "url": "api/MAF.messages/index.html",
-    "revision": "c7214781116c783ad86d715d60f5ba2e"
+    "revision": "6ce6f53ab57d880dbead8bd5cc772e85"
   },
   {
     "url": "api/MAF.PrivateRoom/index.html",
-    "revision": "06cfcd1679d3e52f7475a3352e287090"
+    "revision": "c7ce4083d7ea451a097649fc1d2739c3"
   },
   {
     "url": "api/MAF.Room/index.html",
-    "revision": "78e212914375a851cd1acada53e2843a"
+    "revision": "6dd5e17d8176136b984a30338649356b"
   },
   {
     "url": "api/MAF.system.BaseView/index.html",
-    "revision": "d91537fc77d982c81d6e85d9be84a531"
+    "revision": "f8ac2077e52affa0d48af71107a3b64e"
   },
   {
     "url": "api/MAF.system.FullscreenView/index.html",
-    "revision": "46ce83c8561d9e403f86e5b4f39db723"
+    "revision": "1e636ff1c7be0eb8d48708da9be8c786"
   },
   {
     "url": "api/MAF.system.OptionSelectView/index.html",
-    "revision": "5b631340a165adebeff72d702293df65"
+    "revision": "71815880d48175da20394e3a1d513a5f"
   },
   {
     "url": "api/MAF.system.SidebarView/index.html",
-    "revision": "1b5472a2079d96b24fdb5f2d847de4f2"
+    "revision": "28072fb14985fe8982bcd7cee492cbce"
   },
   {
     "url": "api/MAF.system.WindowedView/index.html",
-    "revision": "346340883a01327a116de6ba0e4078a8"
+    "revision": "b54b09acdcbf1cde98ecd1b5667ee1e7"
   },
   {
     "url": "api/MAF.utility.Pager/index.html",
-    "revision": "b2c306efc4b301d55bd8e127e400d06b"
+    "revision": "bc5eacb20546de4571336230032efd7a"
   },
   {
     "url": "api/MAF.utility.PagerStorageClass/index.html",
-    "revision": "a4a4bc50e647032651614eaf11819812"
+    "revision": "c70dc299ed283c244aff5ad47bae07ba"
   },
   {
     "url": "api/MAF.utility.timer/index.html",
@@ -304,23 +304,23 @@ workboxSW.precache([
   },
   {
     "url": "api/MAF.VAST.Tracker/index.html",
-    "revision": "4ca0c7e0f2aef9a41a036247038d34be"
+    "revision": "67a834d4b5b55f6b23a355d3a91de389"
   },
   {
     "url": "api/MAF.VAST/index.html",
-    "revision": "a286a0cea8e6e5044dc1db1c755141fd"
+    "revision": "50294219999d247e3556c785f14948cb"
   },
   {
     "url": "api/MAF.views.AboutBox/index.html",
-    "revision": "bfc6880593f47cbca2370aa4db5314c7"
+    "revision": "30c778483a19b287544efa2a858ea48d"
   },
   {
     "url": "api/MAF.views.AboutDocView/index.html",
-    "revision": "37fa9a5d1a4eaa1d0471d70682ca7117"
+    "revision": "da6ef4fef3513dda17ec746a7a8495b9"
   },
   {
     "url": "api/MAF.views.SearchSuggest/index.html",
-    "revision": "6b250f3d416f139d9462acc468852f40"
+    "revision": "30e178e7ec510053dbbfc588d420c5bc"
   },
   {
     "url": "api/Number/index.html",
@@ -336,11 +336,11 @@ workboxSW.precache([
   },
   {
     "url": "api/QRCode/index.html",
-    "revision": "3926f9819a04bb0a5919ffa001fa711e"
+    "revision": "1dd36f5bde75bef0b1fea72a423d2c73"
   },
   {
     "url": "api/Request/index.html",
-    "revision": "8aae0d7cb84d78070013d8f53bbcd3ac"
+    "revision": "4b01251e0f189c7ed304b0ee6ad73110"
   },
   {
     "url": "api/sha1/index.html",
@@ -352,7 +352,7 @@ workboxSW.precache([
   },
   {
     "url": "api/Theme/index.html",
-    "revision": "dfd3a92e06d02dc56a04025b9819c477"
+    "revision": "0fb81845d1bc0c40e8e89eedf2796d3e"
   },
   {
     "url": "api/Timer/index.html",
@@ -360,15 +360,15 @@ workboxSW.precache([
   },
   {
     "url": "api/Twitter/index.html",
-    "revision": "a957610ebe963622da66edea5e5fb4c2"
+    "revision": "f9d6e6e0ee73397041823e8548a6793b"
   },
   {
     "url": "api/widget/index.html",
-    "revision": "ba4e82e66ab12739aaf23780d6401722"
+    "revision": "93087bb8d0defc68bcde87bff4994766"
   },
   {
     "url": "api/Youtube/index.html",
-    "revision": "5790834c104528138389ab4a5215b661"
+    "revision": "fb411211a25f240625416c8b7fe90e4f"
   },
   {
     "url": "design-guide/index.html",
