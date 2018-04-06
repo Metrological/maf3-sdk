@@ -2,571 +2,571 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sdk.metrological.com/api/Array/</loc>
-    <lastmod>2018-02-23T08:16:05.518Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.001Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Date/</loc>
-    <lastmod>2018-02-23T08:16:04.019Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.695Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Facebook/</loc>
-    <lastmod>2018-02-23T08:16:03.118Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.172Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/FontAwesome/</loc>
-    <lastmod>2018-02-23T08:16:03.190Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.248Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Function/</loc>
-    <lastmod>2018-02-23T08:16:08.226Z</lastmod>
+    <lastmod>2018-04-06T07:56:07.438Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Globals/</loc>
-    <lastmod>2018-02-23T08:16:04.940Z</lastmod>
+    <lastmod>2018-04-06T07:56:07.288Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/JSON/</loc>
-    <lastmod>2018-02-23T08:16:04.099Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.768Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Library.DOM/</loc>
-    <lastmod>2018-02-23T08:16:03.691Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.398Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Library.Storage/</loc>
-    <lastmod>2018-02-23T08:16:03.773Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.554Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Library.Styles/</loc>
-    <lastmod>2018-02-23T08:16:03.861Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.476Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Library.Themes/</loc>
-    <lastmod>2018-02-23T08:16:03.943Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.625Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.PrivateRoom/</loc>
-    <lastmod>2018-02-23T08:16:06.843Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.486Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.Room/</loc>
-    <lastmod>2018-02-23T08:16:07.045Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.602Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.VAST.Tracker/</loc>
-    <lastmod>2018-02-23T08:16:07.640Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.635Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.VAST/</loc>
-    <lastmod>2018-02-23T08:16:06.427Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.541Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.application/</loc>
-    <lastmod>2018-02-23T08:15:58.767Z</lastmod>
+    <lastmod>2018-04-06T07:55:58.285Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.BackButton/</loc>
-    <lastmod>2018-02-23T08:16:04.610Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.354Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.Button/</loc>
-    <lastmod>2018-02-23T08:15:59.243Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.455Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.EmptySpace/</loc>
-    <lastmod>2018-02-23T08:15:59.354Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.541Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.FixedTab/</loc>
-    <lastmod>2018-02-23T08:15:59.488Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.643Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.Grid/</loc>
-    <lastmod>2018-02-23T08:15:59.652Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.799Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.GridCell/</loc>
-    <lastmod>2018-02-23T08:15:59.764Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.899Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.Header/</loc>
-    <lastmod>2018-02-23T08:15:59.866Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.994Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.ImageToggleButton/</loc>
-    <lastmod>2018-02-23T08:16:00.001Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.122Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.InputButton/</loc>
-    <lastmod>2018-02-23T08:16:00.168Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.248Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.Keyboard/</loc>
-    <lastmod>2018-02-23T08:16:00.288Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.342Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.MediaTransportOverlay/</loc>
-    <lastmod>2018-02-23T08:16:00.404Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.435Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.MetadataDisplay/</loc>
-    <lastmod>2018-02-23T08:16:00.535Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.544Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.PageIndicator/</loc>
-    <lastmod>2018-02-23T08:16:00.662Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.652Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.PhotoBackButton/</loc>
-    <lastmod>2018-02-23T08:16:00.772Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.759Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.PhotoGridCell/</loc>
-    <lastmod>2018-02-23T08:16:00.877Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.858Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.PromptButton/</loc>
-    <lastmod>2018-02-23T08:16:00.996Z</lastmod>
+    <lastmod>2018-04-06T07:56:00.980Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.ScrollIndicator/</loc>
-    <lastmod>2018-02-23T08:16:01.094Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.101Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.SelectButton/</loc>
-    <lastmod>2018-02-23T08:16:01.231Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.226Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.SingleTab/</loc>
-    <lastmod>2018-02-23T08:16:01.333Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.175Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TabPipe/</loc>
-    <lastmod>2018-02-23T08:16:01.432Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.258Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TabPipeButton/</loc>
-    <lastmod>2018-02-23T08:16:01.518Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.355Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TabStrip/</loc>
-    <lastmod>2018-02-23T08:16:01.608Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.444Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TabStripButton/</loc>
-    <lastmod>2018-02-23T08:16:01.696Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.575Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TextButton/</loc>
-    <lastmod>2018-02-23T08:16:01.811Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.569Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TextEntryButton/</loc>
-    <lastmod>2018-02-23T08:16:01.934Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.696Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.TextEntryOverlay/</loc>
-    <lastmod>2018-02-23T08:16:02.026Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.680Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.ToggleButton/</loc>
-    <lastmod>2018-02-23T08:16:02.152Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.818Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.control.ValueDisplay/</loc>
-    <lastmod>2018-02-23T08:16:02.242Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.781Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.dialogs.Alert/</loc>
-    <lastmod>2018-02-23T08:16:02.332Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.869Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.dialogs.BaseDialogImplementation/</loc>
-    <lastmod>2018-02-23T08:16:02.419Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.951Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.dialogs.Login/</loc>
-    <lastmod>2018-02-23T08:16:02.497Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.062Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.dialogs.TextEntry/</loc>
-    <lastmod>2018-02-23T08:16:02.593Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.155Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.dialogs.VerifyPin/</loc>
-    <lastmod>2018-02-23T08:16:02.689Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.243Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Button/</loc>
-    <lastmod>2018-02-23T08:16:02.868Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.912Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Container/</loc>
-    <lastmod>2018-02-23T08:16:02.776Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.341Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Core/</loc>
-    <lastmod>2018-02-23T08:16:02.958Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.458Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Grid/</loc>
-    <lastmod>2018-02-23T08:16:05.090Z</lastmod>
+    <lastmod>2018-04-06T07:56:07.177Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.GridCell/</loc>
-    <lastmod>2018-02-23T08:16:04.272Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.323Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Image/</loc>
-    <lastmod>2018-02-23T08:16:05.196Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.418Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.SlideCarousel/</loc>
-    <lastmod>2018-02-23T08:16:05.635Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.614Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.SlideCarouselCell/</loc>
-    <lastmod>2018-02-23T08:16:05.289Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.503Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.Text/</loc>
-    <lastmod>2018-02-23T08:16:05.383Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.701Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.TextField/</loc>
-    <lastmod>2018-02-23T08:16:05.790Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.786Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.element.TextGrid/</loc>
-    <lastmod>2018-02-23T08:16:06.677Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.886Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.media.Asset/</loc>
-    <lastmod>2018-02-23T08:16:05.702Z</lastmod>
+    <lastmod>2018-04-06T07:56:01.959Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.media.Playlist/</loc>
-    <lastmod>2018-02-23T08:16:08.144Z</lastmod>
+    <lastmod>2018-04-06T07:56:07.362Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.media.PlaylistEntry/</loc>
-    <lastmod>2018-02-23T08:16:05.945Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.118Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.mediaplayer/</loc>
-    <lastmod>2018-02-23T08:16:08.065Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.247Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.messages/</loc>
-    <lastmod>2018-02-23T08:16:06.025Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.323Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.system.BaseView/</loc>
-    <lastmod>2018-02-23T08:16:06.933Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.694Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.system.FullscreenView/</loc>
-    <lastmod>2018-02-23T08:16:07.141Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.796Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.system.OptionSelectView/</loc>
-    <lastmod>2018-02-23T08:16:07.235Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.893Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.system.SidebarView/</loc>
-    <lastmod>2018-02-23T08:16:07.328Z</lastmod>
+    <lastmod>2018-04-06T07:56:02.985Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.system.WindowedView/</loc>
-    <lastmod>2018-02-23T08:16:07.536Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.089Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.utility.Pager/</loc>
-    <lastmod>2018-02-23T08:16:07.420Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.250Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.utility.PagerStorageClass/</loc>
-    <lastmod>2018-02-23T08:16:06.195Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.323Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.utility.WaitIndicator/</loc>
-    <lastmod>2018-02-23T08:16:06.350Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.469Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.utility.timer/</loc>
-    <lastmod>2018-02-23T08:16:06.277Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.395Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.utility/</loc>
-    <lastmod>2018-02-23T08:16:06.114Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.162Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.views.AboutBox/</loc>
-    <lastmod>2018-02-23T08:16:07.740Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.723Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.views.AboutDocView/</loc>
-    <lastmod>2018-02-23T08:16:07.837Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.831Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/MAF.views.SearchSuggest/</loc>
-    <lastmod>2018-02-23T08:16:07.937Z</lastmod>
+    <lastmod>2018-04-06T07:56:03.926Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Number/</loc>
-    <lastmod>2018-02-23T08:16:03.036Z</lastmod>
+    <lastmod>2018-04-06T07:55:59.089Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Object/</loc>
-    <lastmod>2018-02-23T08:16:04.387Z</lastmod>
+    <lastmod>2018-04-06T07:55:58.741Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/QRCode/</loc>
-    <lastmod>2018-02-23T08:16:06.584Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.083Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Request/</loc>
-    <lastmod>2018-02-23T08:16:03.291Z</lastmod>
+    <lastmod>2018-04-06T07:56:05.994Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/String/</loc>
-    <lastmod>2018-02-23T08:16:04.495Z</lastmod>
+    <lastmod>2018-04-06T07:55:58.853Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Theme/</loc>
-    <lastmod>2018-02-23T08:16:03.380Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.084Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Timer/</loc>
-    <lastmod>2018-02-23T08:16:03.454Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.167Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Twitter/</loc>
-    <lastmod>2018-02-23T08:16:03.529Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.318Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/Youtube/</loc>
-    <lastmod>2018-02-23T08:16:03.609Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.242Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/profile/</loc>
-    <lastmod>2018-02-23T08:16:06.516Z</lastmod>
+    <lastmod>2018-04-06T07:56:04.014Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/sha1/</loc>
-    <lastmod>2018-02-23T08:16:04.177Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.840Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/api/widget/</loc>
-    <lastmod>2018-02-23T08:16:04.708Z</lastmod>
+    <lastmod>2018-04-06T07:56:06.953Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/design-guide/</loc>
-    <lastmod>2018-02-23T08:15:55.438Z</lastmod>
+    <lastmod>2018-04-06T07:55:55.135Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/faq/</loc>
-    <lastmod>2018-02-23T08:15:58.820Z</lastmod>
+    <lastmod>2018-04-06T07:55:58.339Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/getting-started/</loc>
-    <lastmod>2018-02-23T08:15:59.076Z</lastmod>
+    <lastmod>2018-04-06T07:55:58.590Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/</loc>
-    <lastmod>2018-02-23T08:15:55.479Z</lastmod>
+    <lastmod>2018-04-06T07:55:55.184Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://sdk.metrological.com/review-guidelines/</loc>
-    <lastmod>2018-02-23T08:15:55.586Z</lastmod>
+    <lastmod>2018-04-06T07:55:55.029Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
