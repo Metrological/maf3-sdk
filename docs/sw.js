@@ -380,7 +380,7 @@ workboxSW.precache([
   },
   {
     "url": "docs.min.js",
-    "revision": "b172fe2ec0e046eb9a89814412334322"
+    "revision": "67e7429deb62f269a134838fd6723101"
   },
   {
     "url": "faq/index.html",
