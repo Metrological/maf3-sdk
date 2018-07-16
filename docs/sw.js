@@ -392,7 +392,7 @@ workboxSW.precache([
   },
   {
     "url": "getting-started/index.html",
-    "revision": "fbbe398141440465c18bd2824dcd8a36"
+    "revision": "915068868e0c21f457581b0af5e51731"
   },
   {
     "url": "hljs.js",
