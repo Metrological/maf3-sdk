@@ -7,8 +7,6 @@ include( 'Javascript/Views/ElementGridView.js' );
 include( 'Javascript/Views/HorizontalGridView.js' );
 include( 'Javascript/Views/VerticalGridView.js' );
 include( 'Javascript/Views/SlideCarouselView.js' );
-include( 'Javascript/Views/TwoDimensionalSlideCarouselView.js' );
-
 
 // Init application with view config
 MAF.application.init( {

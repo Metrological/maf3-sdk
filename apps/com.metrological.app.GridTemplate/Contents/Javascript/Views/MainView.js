@@ -9,10 +9,9 @@ var MainView = new MAF.Class( {
 			{ label: $_( 'Element Grid' ), view: 'ElementGrid' },
 			{ label: $_( 'Horizontal Grid' ), view: 'HorizontalGrid' },
 			{ label: $_( 'Vertical Grid' ), view: 'VerticalGrid' },
-			{ label: $_( 'Slide Carousel' ), view: 'SlideCarousel' },
-			{ label: $_( 'Two Dimensional SlideCarousel' ), view: 'TwoDimensionalSlideCarousel' }
+			{ label: $_( 'Slide Carousel' ), view: 'SlideCarousel' }
 		];
-		
+
 		// Create a list of buttons based on an array and
 		// set guid for keeping focus state on previous view
 		buttons.forEach( function( button, i ) {
