@@ -17,6 +17,7 @@
  **/
 /**
  * @class MAF.element.Grid
+ * @classdesc <p>This component is intended for single use only. Please do not nest the component in itself or other complex components.</p>
  * @extends MAF.element.Container
  * @classdesc > The Grid object extends the Container object.
  * > * Each cell is fixed in size.

@@ -216,7 +216,7 @@ workboxSW.precache([
   },
   {
     "url": "api/MAF.element.SlideCarousel/index.html",
-    "revision": "4ee00805bc32209841b92742549cd9ac"
+    "revision": "c04aceeb242c047d2d2c8c097fce0965"
   },
   {
     "url": "api/MAF.element.SlideCarouselCell/index.html",
@@ -356,7 +356,7 @@ workboxSW.precache([
   },
   {
     "url": "api/Timer/index.html",
-    "revision": "1af3505f1968799af6a3757bf01b1436"
+    "revision": "0a878fd8f71ddf1ebcc1e2d445b86cc5"
   },
   {
     "url": "api/Twitter/index.html",
@@ -376,7 +376,7 @@ workboxSW.precache([
   },
   {
     "url": "docs.min.css",
-    "revision": "eceb4613d1dcbb89b146e2bb1130282f"
+    "revision": "5cc61904d5502b2f7de7d061cb0dc315"
   },
   {
     "url": "docs.min.js",
@@ -592,7 +592,7 @@ workboxSW.precache([
   },
   {
     "url": "review-guidelines/index.html",
-    "revision": "0c2aeeebaf89cc33e4e12d43d0d95558"
+    "revision": "17ad5793439f2441d8d0aa6c20480be7"
   },
   {
     "url": "robots.txt",

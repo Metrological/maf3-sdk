@@ -18,6 +18,7 @@
  /**
  * @class MAF.element.SlideCarousel
  * @extends MAF.element.Container
+ * @classdesc <p>This component is intended for single use only. Please do not nest the component in itself or other complex components to create an two dimentional navigation. If this is the design you need, please contact us.</p>
  * * All cells are based on descendants of MAF.element.SlideCarouselCell
  * * cellCreator() is a required method that returns a cell with no data.
  * * cellUpdater() is a required method that will update a cell with data.
