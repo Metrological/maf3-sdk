@@ -17,9 +17,8 @@
  **/
 /**
  * @class MAF.element.Grid
- * @classdesc <p>This component is intended for single use only. Please do not nest the component in itself or other complex components.</p>
  * @extends MAF.element.Container
- * @classdesc > The Grid object extends the Container object.
+ * @classdesc > This component is intended for single use only. Please do not nest the component to create an two dimentional navigation. If this is the design you need, please contact us.
  * > * Each cell is fixed in size.
  * * The grid is a container recieving info from its cells to have a single entry point to listen on.
  * * All cells are based on descendants of MAF.element.GridCell
