@@ -449,6 +449,7 @@ var loadTemplate = (function () {
 											var confData = data.conf.data,
 												dialogKey = data.conf.key,
 												allowedFields = [
+													'subscription',
 													'adult',
 													'currency',
 													'description',
