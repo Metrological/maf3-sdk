@@ -384,7 +384,7 @@ workboxSW.precache([
   },
   {
     "url": "faq/index.html",
-    "revision": "550a16cdbb20680c1464de1735c8d196"
+    "revision": "d84f569faf1c3217860d5909fa50c71a"
   },
   {
     "url": "favicon.ico",
@@ -392,7 +392,7 @@ workboxSW.precache([
   },
   {
     "url": "getting-started/index.html",
-    "revision": "915068868e0c21f457581b0af5e51731"
+    "revision": "da88f7290c6d69dd8bf5117edb4bf084"
   },
   {
     "url": "hljs.js",
